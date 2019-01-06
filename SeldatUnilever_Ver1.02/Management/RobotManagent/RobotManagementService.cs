@@ -29,9 +29,8 @@ namespace SeldatMRMS.Management.RobotManagent
         public Dictionary<String,RobotUnity>  RobotUnityRegistedList = new Dictionary<string, RobotUnity>();
         public Dictionary<String, RobotUnity> RobotUnityWaitTaskList = new Dictionary<string, RobotUnity>();
         public Dictionary<String, RobotUnity> RobotUnityReadyList = new Dictionary<string, RobotUnity>();
-        public RobotManagementService() {
+        public RobotManagementService(Canvas canvas) {
            LoadRobotUnityConfigure();
-          
             PropertiesRobotUnity_List = new List<PropertiesRobotUnity>();
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
          //   LoadConfigure();
@@ -200,6 +199,31 @@ namespace SeldatMRMS.Management.RobotManagent
         public void RemoveRobotUnityReadyList(String nameID)
         {
             RobotUnityReadyList.Remove(nameID);
+        }
+        public void StopAt(String nameID)
+        {
+            if (RobotUnityRegistedList.ContainsKey(nameID))
+                RobotUnityRegistedList[nameID].SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+        }
+        public void RunAt(String nameID)
+        {
+            if (RobotUnityRegistedList.ContainsKey(nameID))
+                RobotUnityRegistedList[nameID].SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+        }
+        public void Stop()
+        {
+            foreach (RobotUnity r in RobotUnityReadyList.Values)
+                r.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+        }
+        public void Run()
+        {
+            foreach (RobotUnity r in RobotUnityReadyList.Values)
+                r.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+        }
+        public void RemoveRobotUnityRegistedList(String nameID)
+        {
+            if (RobotUnityRegistedList.ContainsKey(nameID))
+                RobotUnityRegistedList.Remove(nameID);
         }
     }
 }

@@ -12,7 +12,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace SeldatUnilever_Ver1._02
+namespace SeldatMRMS
 {
     public static class Global_Object
     {

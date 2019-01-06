@@ -1,6 +1,7 @@
 ﻿using SeldatMRMS.Management.DoorServices;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SeldatUnilever_Ver1._02;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using SelDatUnilever_Ver1._00.Management.UnityService;
@@ -21,10 +22,11 @@ namespace SeldatMRMS.Management.UnityService
         AssigmentTaskService assigmentTaskService { get; set; }
         DeviceRegistrationService deviceRegistrationService { get; set; }
         public ChargerManagementService chargerService;
-        public UnityManagementService() { }
+        private MainWindow mainWindow;
+        public UnityManagementService(MainWindow mainWindow ) { this.mainWindow = mainWindow; }
         public void Initialize()
         {
-            robotManagementService = new RobotManagementService();
+            robotManagementService = new RobotManagementService(this.mainWindow.map);
             doorManagementService = new DoorManagementService();
             procedureManagementService = new ProcedureManagementService();
             chargerService = new ChargerManagementService();

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeldatUnilever_Ver1._02
+namespace SeldatMRMS
 {
     public static class Global_Mouse
     {

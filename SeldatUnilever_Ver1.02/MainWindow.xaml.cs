@@ -1,5 +1,7 @@
-﻿using SeldatUnilever_Ver1._02.Form;
-using SeldatUnilever_Ver1._02.Shape;
+﻿using SeldatMRMS;
+using SeldatMRMS.Management.RobotManagent;
+using SeldatMRMS.Management.UnityService;
+using SeldatUnilever_Ver1._02.Form;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +30,8 @@ namespace SeldatUnilever_Ver1._02
         public System.Timers.Timer stationTimer;
 
         public bool drag = true;
-        CanvasControlService canvasControlService;
+        private UnityManagementService unityService;
+        private CanvasControlService canvasControlService;
 
         public MainWindow()
         {
@@ -85,6 +88,10 @@ namespace SeldatUnilever_Ver1._02
             if (Global_Object.userLogin <= 2)
             {
                 myManagementWindow.Visibility = Visibility.Visible;
+                unityService = new UnityManagementService(this);
+                unityService.Initialize();
+                RobotUnity robot = new RobotUnity(map);
+                robot.Initialize();
             }
         }
 

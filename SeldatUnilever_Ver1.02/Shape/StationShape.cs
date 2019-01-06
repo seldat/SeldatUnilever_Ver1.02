@@ -15,7 +15,7 @@ using System.Timers;
 using System.Threading;
 using SeldatUnilever_Ver1._02.DTO;
 
-namespace SeldatUnilever_Ver1._02.Shape
+namespace SeldatMRMS
 {
     public class StationShape : Border
     {

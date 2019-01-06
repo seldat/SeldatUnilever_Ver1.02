@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace SeldatUnilever_Ver1._02.Shape
+namespace SeldatMRMS
 {
     public class PalletShape : Border
     {

@@ -215,6 +215,7 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.pose.Position = new Point(posX, posY);
             properties.pose.AngleW = posTheta;
             PoseHandler(properties.pose, this);
+            Draw();
         }
         private void FinishedStatesHandler(Communication.Message message)
         {
@@ -305,5 +306,6 @@ namespace SeldatMRMS.Management.RobotManagent
             ConnectionStatusHandler(this, ConnectionStatus.CON_CLOSED);
             
         }
+        public virtual void Draw() { }
     }
 }

@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace SeldatUnilever_Ver1._02.Shape
+namespace SeldatMRMS
 {
     public class RobotShape : Border
     {

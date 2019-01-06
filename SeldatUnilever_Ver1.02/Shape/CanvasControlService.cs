@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SeldatUnilever_Ver1._02;
 using SeldatUnilever_Ver1._02.DTO;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-namespace SeldatUnilever_Ver1._02.Shape
+namespace SeldatMRMS
 {
     public class CanvasControlService
     {

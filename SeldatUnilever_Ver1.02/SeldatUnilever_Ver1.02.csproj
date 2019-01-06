@@ -60,6 +60,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -69,9 +72,58 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Communication\BridgeNodeServerCtrl.cs" />
+    <Compile Include="Communication\HttpBridge\BridgeClientRequest.cs" />
+    <Compile Include="Communication\HttpServerRounter\BridgeServer.cs" />
+    <Compile Include="Communication\HttpServerRounter\HttpProcessor.cs" />
+    <Compile Include="Communication\HttpServerRounter\HttpServer.cs" />
+    <Compile Include="Communication\JObjectExtensions.cs" />
+    <Compile Include="Communication\Message.cs" />
+    <Compile Include="Communication\MessageTypes.cs" />
+    <Compile Include="Communication\Operation.cs" />
+    <Compile Include="Communication\RosSocket.cs" />
     <Compile Include="DTO\dtBuffer.cs" />
     <Compile Include="DTO\dtPallet.cs" />
     <Compile Include="Global_Mouse.cs" />
+    <Compile Include="Management\ChargerCtrl\ChargerCtrl.cs" />
+    <Compile Include="Management\ChargerCtrl\ChargerManagementService.cs" />
+    <Compile Include="Management\ComSocket\RouterComPort.cs" />
+    <Compile Include="Management\ComSocket\TranferData.cs" />
+    <Compile Include="Management\DeviceManagement\DeviceItem.cs" />
+    <Compile Include="Management\DeviceManagement\DeviceRegistrationService.cs" />
+    <Compile Include="Management\DoorServices\DoorElevator.cs" />
+    <Compile Include="Management\DoorServices\DoorManagementService.cs" />
+    <Compile Include="Management\DoorServices\DoorService.cs" />
+    <Compile Include="Management\ExtensionService.cs" />
+    <Compile Include="Management\NotifyUIBase.cs" />
+    <Compile Include="Management\ProcedureServices\CollectionDataService.cs" />
+    <Compile Include="Management\ProcedureServices\ControlService.cs" />
+    <Compile Include="Management\ProcedureServices\DBProcedureService.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureBufferToMachine.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureBufferToReturn.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureControlServices.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureForkLiftToBuffer.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureMachineToReturn.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureManagementService.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureMessages.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureReturnToGate.cs" />
+    <Compile Include="Management\ProcedureServices\ProcedureRobotToChargeReady.cs" />
+    <Compile Include="Management\ProcedureServices\RegisterProcedureService.cs" />
+    <Compile Include="Management\RobotManagent\old\RobotUnityService.cs" />
+    <Compile Include="Management\RobotManagent\RobotBaseService.cs" />
+    <Compile Include="Management\RobotManagent\RobotManagementService.cs" />
+    <Compile Include="Management\RobotManagent\RobotUnity.cs" />
+    <Compile Include="Management\RobotManagent\RobotUnityControl.cs" />
+    <Compile Include="Management\RobotManagent\RobotUnityService.cs" />
+    <Compile Include="Management\RobotManagent\TrafficRobotUnity.cs" />
+    <Compile Include="Management\TrafficManager\TrafficManagementService.cs" />
+    <Compile Include="Management\TrafficManager\TrafficRounterService.cs" />
+    <Compile Include="Management\UnityService\AssigmentTaskService.cs" />
+    <Compile Include="Management\UnityService\ConfigUnities.xaml.cs">
+      <DependentUpon>ConfigUnities.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\UnityService\TaskRounterService.cs" />
+    <Compile Include="Management\UnityService\UnityManagementService.cs" />
     <Compile Include="Shape\CanvasControlService.cs" />
     <Compile Include="Shape\PalletShape.cs" />
     <Compile Include="Shape\RobotShape.cs" />
@@ -117,6 +169,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Management\UnityService\ConfigUnities.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -136,6 +192,20 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Communication\Communication.zip" />
+    <None Include="Management\ChargerCtrl\ChargerCtrl.cs.orig" />
+    <None Include="Management\ChargerCtrl\ChargerManagementService.cs.orig" />
+    <None Include="Management\DeviceManagement\Machine.Json" />
+    <None Include="Management\DoorServices\DoorService.cs.orig" />
+    <None Include="Management\DoorServices\DoorServices.zip" />
+    <None Include="Management\Media\8400001A_small5M2.stl" />
+    <None Include="Management\ProcedureServices\CollectionDataService.cs.orig" />
+    <None Include="Management\ProcedureServices\ProcedureBufferToReturn.cs.orig" />
+    <None Include="Management\ProcedureServices\RegisterProcedureService.cs.orig" />
+    <None Include="Management\RobotManagent\RobotManagementService.cs.orig" />
+    <None Include="Management\TrafficManager\Configure.xlsx" />
+    <None Include="Management\UnityService\AssigmentTaskService.cs.orig" />
+    <None Include="Management\UnityService\UnityManagementService.cs.orig" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -279,6 +349,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\unilever_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Management\LogText\" />
+    <Folder Include="Management\OrderService\" />
+    <Folder Include="Management\Store\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Management\Media\3d.png" />
+    <Content Include="Management\RobotManagent\SelfDriving.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,62 @@
+﻿using SeldatMRMS.Management.DoorServices;
+using SeldatMRMS.Management.RobotManagent;
+using SeldatMRMS.Management.TrafficManager;
+using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
+using SelDatUnilever_Ver1._00.Management.DeviceManagement;
+using SelDatUnilever_Ver1._00.Management.UnityService;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SeldatMRMS.Management.UnityService
+{
+    public class UnityManagementService
+    {
+        public RobotManagementService robotManagementService { get; set; }
+<<<<<<< HEAD
+        public DoorManagementService doorManagementService { get; set; }
+=======
+        DoorManagementService doorManagementService { get; set; }
+>>>>>>> chau_test
+        ProcedureManagementService procedureManagementService { get; set; }
+        public TrafficManagementService trafficService { get; set; }
+        AssigmentTaskService assigmentTaskService { get; set; }
+        DeviceRegistrationService deviceRegistrationService { get; set; }
+<<<<<<< HEAD
+        public ChargerManagementService chargerService;
+=======
+        ChargerManagementService chargerService;
+        //public ChargerManagementService chargerService; /* chau test */
+>>>>>>> chau_test
+        public UnityManagementService() { }
+        public void Initialize()
+        {
+            robotManagementService = new RobotManagementService();
+            doorManagementService = new DoorManagementService();
+            procedureManagementService = new ProcedureManagementService();
+            chargerService = new ChargerManagementService();
+            trafficService = new TrafficManagementService();
+            deviceRegistrationService = new DeviceRegistrationService(11000);
+
+            assigmentTaskService = new AssigmentTaskService();
+            trafficService = new TrafficManagementService();
+            assigmentTaskService.RegistryService(robotManagementService);
+            assigmentTaskService.RegistryService(procedureManagementService);
+            assigmentTaskService.RegistryService(deviceRegistrationService.GetDeviceItemList());
+            assigmentTaskService.RegistryService(trafficService);
+            procedureManagementService.RegistryService(trafficService);
+            procedureManagementService.RegistryService(robotManagementService);
+            procedureManagementService.RegistryService(doorManagementService);
+            procedureManagementService.RegistryService(chargerService);
+            procedureManagementService.RegistryService(deviceRegistrationService);
+            deviceRegistrationService.listen();
+            assigmentTaskService.Start();
+        }
+        public void Dispose()
+        {
+
+        }
+    }
+}

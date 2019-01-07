@@ -32,7 +32,7 @@ namespace SeldatUnilever_Ver1._02
         public bool drag = true;
         private UnityManagementService unityService;
         private CanvasControlService canvasControlService;
-
+        CtrlRobot ctrR;
         public MainWindow()
         {
             InitializeComponent();
@@ -84,14 +84,15 @@ namespace SeldatUnilever_Ver1._02
             //frm1.ShowDialog();
             myManagementWindow.Visibility = Visibility.Hidden;
             LoginForm frm = new LoginForm(Thread.CurrentThread.CurrentCulture.ToString());
-            frm.ShowDialog();
-            if (Global_Object.userLogin <= 2)
+            //frm.ShowDialog();
+            //if (Global_Object.userLogin <= 2)
             {
                 myManagementWindow.Visibility = Visibility.Visible;
                 unityService = new UnityManagementService(this);
                 unityService.Initialize();
                 RobotUnity robot = new RobotUnity(map);
                 robot.Initialize();
+                ctrR = new CtrlRobot(unityService.robotManagementService);
             }
         }
 
@@ -176,6 +177,20 @@ namespace SeldatUnilever_Ver1._02
         private void Btn_MapReCenter_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Ctrl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+           
+        }
+
+        private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ctrR.Show();
+            }
+            catch { }
         }
     }
 }

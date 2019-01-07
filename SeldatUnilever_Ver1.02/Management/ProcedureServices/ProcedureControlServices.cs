@@ -1,11 +1,10 @@
-﻿using SeldatMRMS.Management.RobotManagent;
+﻿using System;
+using System.Threading;
+using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
-using System;
 
-namespace SeldatMRMS
-{
-    public class ProcedureControlServices : ControlService
-    {
+namespace SeldatMRMS {
+    public class ProcedureControlServices : ControlService {
         public String ProcedureID { get; set; }
         public String DeliveryInfo { get; set; }
         public const long TIME_OUT_WAIT_GOTO_FRONTLINE = 240000;
@@ -13,12 +12,12 @@ namespace SeldatMRMS
         public struct ContentDatabase { }
         public virtual event Action<Object> ReleaseProcedureHandler;
         public virtual event Action<Object> ErrorProcedureHandler;
+
         public ProcedureCode procedureCode;
-        public virtual ContentDatabase RequestDataFromDataBase() { return new ContentDatabase(); }
+        public virtual ContentDatabase RequestDataFromDataBase () { return new ContentDatabase (); }
         protected RobotUnity robot;
-        public enum ProcedureCode
-        {
-            PROC_CODE_BUFFER_TO_MACHINE=0,
+        public enum ProcedureCode {
+            PROC_CODE_BUFFER_TO_MACHINE = 0,
             PROC_CODE_FORKLIFT_TO_BUFFER,
             PROC_CODE_BUFFER_TO_RETURN,
             PROC_CODE_MACHINE_TO_RETURN,
@@ -26,10 +25,10 @@ namespace SeldatMRMS
             PROC_CODE_ROBOT_TO_READY,
             PROC_CODE_ROBOT_TO_CHARGE,
         }
-        public enum ErrorCode
-        {
+        public enum ErrorCode {
             RUN_OK = 0,
             DETECT_LINE_ERROR,
+            DETECT_LINE_CHARGER_ERROR,
             CONNECT_DOOR_ERROR,
             OPEN_DOOR_ERROR,
             CLOSE_DOOR_ERROR,
@@ -37,23 +36,23 @@ namespace SeldatMRMS
             CONTACT_CHARGER_ERROR,
             LASER_CONTROL_ERROR,
             CAN_NOT_GET_DATA,
+            ROBOT_CANNOT_CONNECT_SERVER_AFTER_CHARGE,
+            CAN_NOT_TURN_OFF_PC
         }
 
         public ErrorCode errorCode;
-        public void RegistrationTranfficService(TrafficManagementService TrafficService)
-        {
+        public void RegistrationTranfficService (TrafficManagementService TrafficService) {
             this.TrafficService = TrafficService;
 
         }
-        public enum ForkLiftToBuffer
-        {
+        public enum ForkLiftToBuffer {
             FORBUF_IDLE,
             FORBUF_ROBOT_GOTO_CHECKIN_GATE, // vị trí check in liệu có quy trình nào tại cổng
             FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
             FORBUF_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
             FORBUF_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
             FORBUF_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
-            FORBUF_ROBOT_WAITTING_OPEN_DOOR,  //doi mo cong
+            FORBUF_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
             FORBUF_ROBOT_OPEN_DOOR_SUCCESS, // mo cua thang cong ,gui toa do line de robot di vao gap hang
             // FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_PALLET_IN, //robot da den dau line , chuyen mode do line
             // FORBUF_ROBOT_CAME_FRONTLINE_PALLET_IN, //robot da den dau line , chuyen mode do line
@@ -72,8 +71,7 @@ namespace SeldatMRMS
             FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER, // doi robot di den dau line buffer.
             FORBUF_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
-        public enum BufferToMachine
-        {
+        public enum BufferToMachine {
             BUFMAC_IDLE,
             BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER,
             BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
@@ -97,8 +95,7 @@ namespace SeldatMRMS
             BUFMAC_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
-        public enum BufferToReturn
-        {
+        public enum BufferToReturn {
             BUFRET_IDLE,
             BUFRET_ROBOT_GOTO_CHECKIN_BUFFER,
             BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
@@ -113,7 +110,7 @@ namespace SeldatMRMS
             BUFRET_ROBOT_GOTO_CHECKIN_RETURN, //cho
             BUFRET_ROBOT_CAME_CHECKIN_RETURN, // đã đến vị trí
 
-            BUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET,  // cho phép dò line vàthả pallet
+            BUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET, // cho phép dò line vàthả pallet
             // BUFRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET, // đang trong tiến trình dò line và thả pallet
             // BUFRET_ROBOT_WAITTING_GOTO_POINT_DROP_PALLET, // hoàn thành dò line và thả pallet
 
@@ -122,8 +119,7 @@ namespace SeldatMRMS
             BUFRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
-        public enum MachineToReturn
-        {
+        public enum MachineToReturn {
             MACRET_IDLE,
             MACRET_ROBOT_GOTO_FRONTLINE_MACHINE,
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
@@ -142,8 +138,7 @@ namespace SeldatMRMS
             MACRET_ROBOT_WAITTING_GOTO_FRONTLINE,
             MACRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
-        public enum ReturnToGate
-        {
+        public enum ReturnToGate {
             RETGATE_IDLE,
             RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_RETURN, // doi robot di den khu vuc checkin cua vung buffer
             RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY, // doi khu vuc buffer san sang de di vao
@@ -157,7 +152,7 @@ namespace SeldatMRMS
             RETGATE_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
             RETGATE_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
             RETGATE_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
-            RETGATE_ROBOT_WAITTING_OPEN_DOOR,  //doi mo cong
+            RETGATE_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
             // RETGATE_ROBOT_OPEN_DOOR_SUCCESS, // mo cua thang cong ,gui toa do line de robot di vao gap hang
             // RETGATE_ROBOT_GOTO_POSITION_PALLET_RETURN, //cho robot den toa do pallet
             RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN, // doi robot gap hang
@@ -165,8 +160,7 @@ namespace SeldatMRMS
             RETGATE_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
         }
 
-        public enum RobotGoToCharge
-        {
+        public enum RobotGoToCharge {
             ROBCHAR_IDLE,
             // ROBCHAR_CHARGER_CHECKSTATUS, //kiểm tra kết nối và trạng thái sạc
             ROBCHAR_ROBOT_GOTO_CHARGER, //robot be lai vao tram sac
@@ -177,12 +171,11 @@ namespace SeldatMRMS
             ROBCHAR_WAITTING_CHARGEBATTERY, //dợi charge battery và thông tin giao tiếp server và trạm sạc
             ROBCHAR_FINISHED_CHARGEBATTERY, //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc
             ROBCHAR_ROBOT_WAITING_RECONNECTING, //Robot mở nguồng và đợi connect lại
-            ROBCHAR_ROBOT_STATUS_GOOD_OPERATION, //điều kiện hoạt động tốt 
-            ROBCHAR_ROBOT_STATUS_BAD_OPERATION, //điều kiện hoạt động không tốt thông tin về procedure management chuyển sang quy trình xử lý sự cố
+            // ROBCHAR_ROBOT_STATUS_GOOD_OPERATION, //điều kiện hoạt động tốt 
+            // ROBCHAR_ROBOT_STATUS_BAD_OPERATION, //điều kiện hoạt động không tốt thông tin về procedure management chuyển sang quy trình xử lý sự cố
             ROBCHAR_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
-        public enum RobotGoToReady
-        {
+        public enum RobotGoToReady {
             ROBREA_IDLE,
             ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION, // ROBOT cho tiến vào vị trí đầu line charge su dung laser
             ROBREA_ROBOT_WAITTING_GOTO_READYSTATION, // hoàn thành đến vùng check in/ kiểm tra có robot đang làm việc vùng này và lấy vị trí line và pallet
@@ -190,17 +183,42 @@ namespace SeldatMRMS
             ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION, // đến vị 
             ROBREA_ROBOT_RELEASED
         }
-        public ProcedureControlServices(RobotUnity robot) : base(robot)
-        {
+        public ProcedureControlServices (RobotUnity robot) : base (robot) {
             this.robot = robot;
+            this.selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
         }
-        public RobotUnity GetRobotUnity()
-        {
+        public RobotUnity GetRobotUnity () {
             return this.robot;
         }
         public bool ProRun;
+
+        public enum SelectHandleError {
+            CASE_ERROR_EXIT = 0,
+            CASE_ERROR_CONTINUOUS,
+            CASE_ERROR_WAITTING,
+        }
+
+        public SelectHandleError selectHandleError;
+
+        protected SelectHandleError CheckUserHandleError (object obj) {
+            ErrorProcedureHandler (obj);
+            while (selectHandleError == SelectHandleError.CASE_ERROR_WAITTING) {
+                switch (selectHandleError) {
+                    case SelectHandleError.CASE_ERROR_WAITTING:
+                        Thread.Sleep (1000);
+                        break;
+                    case SelectHandleError.CASE_ERROR_CONTINUOUS:
+                        ProRun = true;
+                        break;
+                    case SelectHandleError.CASE_ERROR_EXIT:
+                        robot.PreProcedureAs = robot.ProcedureAs;
+                        ProRun = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return selectHandleError;
+        }
     }
 }
-
-
-

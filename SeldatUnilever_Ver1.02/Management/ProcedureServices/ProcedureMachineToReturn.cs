@@ -23,7 +23,7 @@ namespace SeldatMRMS {
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
         public override event Action<Object> ReleaseProcedureHandler;
-        public override event Action<Object> ErrorProcedureHandler;
+        // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureMachineToReturn (RobotUnity robot, TrafficManagementService traffiicService) : base (robot) {
             StateMachineToReturn = MachineToReturn.MACRET_IDLE;
             this.robot = robot;
@@ -67,12 +67,12 @@ namespace SeldatMRMS {
                                         break;
                                     } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                         errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                                        CheckUserHandleError(this);
                                         break;
                                     }
                                     if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE) {
                                         errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                                        CheckUserHandleError(this);
                                         break;
                                     }
                                     Thread.Sleep (100);
@@ -84,7 +84,7 @@ namespace SeldatMRMS {
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
@@ -96,11 +96,11 @@ namespace SeldatMRMS {
                                 StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                 errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                                CheckUserHandleError(this);
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                         // case MachineToReturn.MACRET_ROBOT_GOTO_PICKUP_PALLET_MACHINE:
@@ -118,7 +118,7 @@ namespace SeldatMRMS {
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE: // đợi
@@ -129,11 +129,11 @@ namespace SeldatMRMS {
                                 StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN;
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                 errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                                CheckUserHandleError(this);
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN: // dang di
@@ -144,11 +144,11 @@ namespace SeldatMRMS {
                                 StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_DROPDOWN_PALLET;
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                 errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                                CheckUserHandleError(this);
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                         // case MachineToReturn.MACRET_ROBOT_CAME_CHECKIN_RETURN: // đã đến vị trí
@@ -184,7 +184,7 @@ namespace SeldatMRMS {
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_GOTO_FRONTLINE;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_WAITTING_GOTO_FRONTLINE:
@@ -193,16 +193,16 @@ namespace SeldatMRMS {
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_RETURN;
-                        if (errorCode == ErrorCode.RUN_OK) {
+                        // if (errorCode == ErrorCode.RUN_OK) {
                             ReleaseProcedureHandler (this);
-                        } else {
-                            ErrorProcedureHandler (this);
-                        }
+                        // } else {
+                        //     ErrorProcedureHandler (this);
+                        // }
                         ProRun = false;
                         break;
                     default:

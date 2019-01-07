@@ -32,7 +32,7 @@ namespace SeldatMRMS {
         const UInt32 TIME_OUT_CLOSE_DOOR = 600000; /* ms */
 
         public override event Action<Object> ReleaseProcedureHandler;
-        public override event Action<Object> ErrorProcedureHandler;
+        // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureReturnToGate (RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base (robot) {
             StateReturnToGate = ReturnToGate.RETGATE_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -79,12 +79,12 @@ namespace SeldatMRMS {
                                         break;
                                     } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                         errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                                        CheckUserHandleError(this);
                                         break;
                                     }
                                     if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE) {
                                         errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                                        CheckUserHandleError(this);
                                         break;
                                     }
                                     Thread.Sleep (100);
@@ -96,7 +96,7 @@ namespace SeldatMRMS {
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY: // doi khu vuc buffer san sang de di vao
@@ -107,7 +107,7 @@ namespace SeldatMRMS {
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_CAME_FRONTLINE_RETURN:
@@ -119,11 +119,11 @@ namespace SeldatMRMS {
                                 StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN;
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                 errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                                CheckUserHandleError(this);
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                         // case ReturnToGate.RETGATE_ROBOT_GOTO_PICKUP_PALLET_RETURN:
@@ -141,7 +141,7 @@ namespace SeldatMRMS {
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_RETURN;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_RETURN: // đợi
@@ -151,7 +151,7 @@ namespace SeldatMRMS {
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                         // case ReturnToGate.RETGATE_ROBOT_GOTO_CHECKIN_GATE: //gui toa do di den khu vuc checkin cong
@@ -181,7 +181,7 @@ namespace SeldatMRMS {
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_OPEN_DOOR;
                         } else {
                             errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
@@ -190,7 +190,7 @@ namespace SeldatMRMS {
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN;
                         } else {
                             errorCode = ErrorCode.OPEN_DOOR_ERROR;
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                         // case ReturnToGate.RETGATE_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao
@@ -212,7 +212,7 @@ namespace SeldatMRMS {
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE:
@@ -222,11 +222,11 @@ namespace SeldatMRMS {
                                 StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_CLOSE_GATE;
                             } else {
                                 errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                                StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                                CheckUserHandleError(this);
                             }
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
@@ -234,17 +234,17 @@ namespace SeldatMRMS {
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
                         } else {
                             errorCode = ErrorCode.CLOSE_DOOR_ERROR;
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
 
                     case ReturnToGate.RETGATE_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_RETURN_TO_GATE;
-                        if (errorCode == ErrorCode.RUN_OK) {
+                        // if (errorCode == ErrorCode.RUN_OK) {
                             ReleaseProcedureHandler (this);
-                        } else {
-                            ErrorProcedureHandler (this);
-                        }
+                        // } else {
+                            // ErrorProcedureHandler (this);
+                        // }
                         ProRun = false;
                         break;
                     default:

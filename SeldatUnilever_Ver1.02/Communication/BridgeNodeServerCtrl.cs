@@ -33,7 +33,5 @@ namespace SeldatMRMS.Communication
 			Console.WriteLine(" >> " + "exit");
 			Console.ReadLine();
 		}
-	
 	}
-
 }

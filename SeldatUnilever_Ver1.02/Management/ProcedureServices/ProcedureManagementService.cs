@@ -28,6 +28,7 @@ namespace SeldatMRMS
                         profbDataItems.StartTaskTime = DateTime.Now;
                         RegisterProcedureItem itemprocfb = new RegisterProcedureItem() { item = procfb, robot = robot, procedureDataItems = profbDataItems };
                         procfb.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                        procfb.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                         RegisterProcedureItemList.Add(itemprocfb);
                         procfb.AssignAnOrder(orderItem);
                         procfb.Start();
@@ -38,6 +39,7 @@ namespace SeldatMRMS
                         prcobmDataItems.StartTaskTime = DateTime.Now;
                         RegisterProcedureItem itemprocbm = new RegisterProcedureItem() { item = procbm, robot = robot, procedureDataItems = prcobmDataItems };
                         procbm.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                        procbm.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                         RegisterProcedureItemList.Add(itemprocbm);
                         procbm.AssignAnOrder(orderItem);
                         procbm.Start();
@@ -48,6 +50,7 @@ namespace SeldatMRMS
                         prcobrDataItems.StartTaskTime = DateTime.Now;
                         RegisterProcedureItem itemprocbr = new RegisterProcedureItem() { item = procbr, robot = robot, procedureDataItems = prcobrDataItems };
                         procbr.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                        procbr.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                         RegisterProcedureItemList.Add(itemprocbr);
                         procbr.AssignAnOrder(orderItem);
                         procbr.Start();
@@ -58,6 +61,7 @@ namespace SeldatMRMS
                         prcomrDataItems.StartTaskTime = DateTime.Now;
                         RegisterProcedureItem itemprocmr = new RegisterProcedureItem() { item = procmr, robot = robot, procedureDataItems = prcomrDataItems };
                         procmr.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                        procmr.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                         RegisterProcedureItemList.Add(itemprocmr);
                         procmr.AssignAnOrder(orderItem);
                         procmr.Start();
@@ -68,6 +72,7 @@ namespace SeldatMRMS
                         prorgDataItems.StartTaskTime = DateTime.Now;
                         RegisterProcedureItem itemprocrg = new RegisterProcedureItem() { item = procrg, robot = robot, procedureDataItems = prorgDataItems };
                         procrg.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                        procrg.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                         RegisterProcedureItemList.Add(itemprocrg);
                         procrg.AssignAnOrder(orderItem);
                         procrg.Start();
@@ -78,6 +83,7 @@ namespace SeldatMRMS
                         procrcDataItems.StartTaskTime = DateTime.Now;
                         RegisterProcedureItem itemprocrc = new RegisterProcedureItem() { item = procrc, robot = robot, procedureDataItems = procrcDataItems};
                         procrc.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                        procrc.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                         RegisterProcedureItemList.Add(itemprocrc);
                         procrc.Start();
                     break;
@@ -87,6 +93,7 @@ namespace SeldatMRMS
                         procrrDataItems.StartTaskTime = DateTime.Now;
                         RegisterProcedureItem itemprocrr = new RegisterProcedureItem() { item = procrr, robot = robot, procedureDataItems = procrrDataItems };
                         procrr.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                        procrr.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                         RegisterProcedureItemList.Add(itemprocrr);
                         procrr.Start();
                     break;
@@ -122,6 +129,16 @@ namespace SeldatMRMS
                  element.procedureDataItems.StatusProcedureDelivered = "OK";
                  RegisterProcedureItemList.Remove(element);
              });
+        }
+
+        protected override void ErrorApprearInProcedureItem(Object item)
+        {
+
+            // chờ xử lý // error staus is true;
+            // báo sự cố cho lớp robotmanagement // đợi cho chờ xử lý// hủy bỏ quy trình 
+            // add order lại list device
+            ProcedureControlServices procItem = item as ProcedureControlServices;
+            RestoreOrderItem(procItem.order);
         }
    
     }

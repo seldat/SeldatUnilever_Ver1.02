@@ -101,8 +101,8 @@
                                     <materialDesign:PackIcon
                                         Kind="Stop" Margin="-10"/>
                                 </ListBoxItem>
-                                <ListBoxItem>
-                                    <materialDesign:PackIcon
+                                <ListBoxItem Selected="ListBoxItem_Selected">
+                                    <materialDesign:PackIcon Name="ctrl"
                                         Kind="Play" Margin="-10"/>
                                 </ListBoxItem>
                             </ListBox>

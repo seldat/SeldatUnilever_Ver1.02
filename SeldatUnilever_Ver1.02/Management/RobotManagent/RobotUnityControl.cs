@@ -292,7 +292,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         protected override void OnClosedEvent(object sender, CloseEventArgs e)
         {
-            ConnectionStatusHandler(this, ConnectionStatus.CON_FAILED);
+            //ConnectionStatusHandler(this, ConnectionStatus.CON_FAILED);
             properties.IsConnected = false;
             this.url = properties.URL;
             base.OnClosedEvent(sender, e);
@@ -303,7 +303,7 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             properties.pose.Destroy();
             base.Dispose();
-            ConnectionStatusHandler(this, ConnectionStatus.CON_CLOSED);
+           // ConnectionStatusHandler(this, ConnectionStatus.CON_CLOSED);
             
         }
         public virtual void Draw() { }

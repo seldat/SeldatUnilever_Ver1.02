@@ -28,6 +28,13 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             // ST_CONTACT_FAIL /* 07 */
         }
 
+        public enum  ErrorCodeCharger
+        {
+            TRUE = 0,
+            FALSE,
+            ERROR_CONNECT
+        }
+
         private enum CmdCharge
         {
             CMD_GET_ID = 0x01,
@@ -164,9 +171,9 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             return ret;
         }
 
-        public bool WaitState(ChargerState status, UInt32 timeOut)
+        public ErrorCodeCharger WaitState(ChargerState status, UInt32 timeOut)
         {
-            bool result = true;
+            ErrorCodeCharger result = ErrorCodeCharger.TRUE;
             Stopwatch sw = new Stopwatch();
             DataReceive st = new DataReceive();
             sw.Start();
@@ -175,23 +182,25 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
                 Thread.Sleep(1000);
                 if (sw.ElapsedMilliseconds > timeOut)
                 {
-                    result = false;
+                    result = ErrorCodeCharger.FALSE;
                     break;
                 }
-                this.GetState(ref st);
+                if(!this.GetState(ref st)){
+                    result = ErrorCodeCharger.ERROR_CONNECT;
+                }
             } while (st.data[0] != (byte)status);
             sw.Stop();
             return result;
         }
-        public bool GetBatteryAndStatus(ref RobotUnity rb,ref DataReceive batLevel,ref DataReceive status)
+        public ErrorCodeCharger GetBatteryAndStatus(ref DataReceive batLevel,ref DataReceive status)
         {
-            bool result = false;
+            ErrorCodeCharger result = ErrorCodeCharger.TRUE;
             Thread.Sleep(5000);
-            this.GetState(ref status);
-            this.GetBatteryLevel(ref batLevel);
-            if ((batLevel.data[0] == 100)||(status.data[0] == (byte)ChargerState.ST_CHARGE_FULL))
-            {
-                result = true;   
+            if(!this.GetState(ref status)){
+                result = ErrorCodeCharger.ERROR_CONNECT;
+            }
+            if(!this.GetBatteryLevel(ref batLevel)){
+                result = ErrorCodeCharger.ERROR_CONNECT;
             }
             return result;
         }

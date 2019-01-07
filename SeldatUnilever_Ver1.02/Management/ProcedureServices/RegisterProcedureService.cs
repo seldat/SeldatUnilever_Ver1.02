@@ -99,13 +99,14 @@ namespace SeldatMRMS
                 RegisterProcedureItemList.Remove(element);
             });*/
         }
-        protected virtual void ErrorApprearInProcedureItem(ProcedureControlServices item)
+        protected virtual void ErrorApprearInProcedureItem(Object item)
         {
-
+            /*
             // chờ xử lý // error staus is true;
             // báo sự cố cho lớp robotmanagement // đợi cho chờ xử lý// hủy bỏ quy trình 
             // add order lại list device
             RestoreOrderItem(item.order);
+             */
         }
         public void RestoreOrderItem(OrderItem item)
         {

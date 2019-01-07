@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SeldatMRMS;
 using SeldatMRMS.Management;
 using SelDatUnilever_Ver1._00.Communication.HttpBridge;
 using SelDatUnilever_Ver1._00.Management.ProcedureServices;
@@ -35,7 +36,8 @@ namespace SelDatUnilever_Ver1
         // public int timeWorkID;
         public List<Pose> checkInBuffer = new List<Pose>();
         protected BridgeClientRequest clientRequest;
-        public const String UrlServer = "http://192.168.1.22:8081";
+        public const String UrlServer = "http://192.168.1.16:8081";
+        protected int palletId { get; set; }
         public CollectionDataService()
         {
             clientRequest = new BridgeClientRequest();
@@ -181,11 +183,12 @@ namespace SelDatUnilever_Ver1
 
                         var bufferResults = result["buffers"][0];
                         var palletInfo = bufferResults["pallets"][0];
+                        palletId = (int)palletInfo["palletId"];
                         JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
                         int row = (int)stuff["pallet"]["row"];
                         int bay = (int)stuff["pallet"]["bay"];
                         int direct = (int)stuff["pallet"]["direct"];
-
+                   
                         infoPallet.pallet = pisCtrl; /* dropdown */
                         infoPallet.bay = bay;
                         infoPallet.hasSubLine = "yes"; /* no */
@@ -222,6 +225,7 @@ namespace SelDatUnilever_Ver1
                 JArray results = JArray.Parse(collectionData);
                 var bufferResults = results[0];
                 var palletInfo = bufferResults["pallets"][0];
+                palletId = (int)palletInfo["palletId"];
                 JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
                 int row = (int)stuff["pallet"]["row"];
                 int bay = (int)stuff["pallet"]["bay"];
@@ -241,15 +245,16 @@ namespace SelDatUnilever_Ver1
         {
             String url = UrlServer + "/robot/rest/pallet/updatePalletStatus";
             dynamic product = new JObject();
-            product.palletId = order.palletId;
+            product.palletId = palletId;
             product.palletStatus = palletStatus.ToString();
-            product.updUsrId = order.updUsrId;
+            product.updUsrId = Global_Object.userLogin;
             var data = clientRequest.PostCallAPI(url, product.ToString());
             if (data.Result == null)
             {
                 ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);
             }
         }
+ 
         protected virtual void ReceiveResponseHandler(String msg) { }
         protected virtual void ErrorHandler(ProcedureMessages.ProcMessage procMessage) { }
     }

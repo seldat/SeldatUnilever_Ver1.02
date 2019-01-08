@@ -38,10 +38,12 @@ namespace SelDatUnilever_Ver1
         protected BridgeClientRequest clientRequest;
         public const String UrlServer = "http://192.168.1.16:8081";
         protected int palletId { get; set; }
+        protected int planId { get; set; }
         public CollectionDataService()
         {
             clientRequest = new BridgeClientRequest();
             clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
+            planId = -1;
         }
         public CollectionDataService(OrderItem order)
         {
@@ -84,6 +86,7 @@ namespace SelDatUnilever_Ver1
                         double y = (double)stuff["y"];
                         double angle = (double)stuff["angle"];
                         poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
+                        planId = order.planId;
                         break;
 
                     }
@@ -139,6 +142,7 @@ namespace SelDatUnilever_Ver1
                 double y = (double)stuff["y"];
                 double angle = (double)stuff["angle"];
                 poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
+                
             }
             return poseTemp;
         }
@@ -246,6 +250,7 @@ namespace SelDatUnilever_Ver1
             String url = UrlServer + "/robot/rest/pallet/updatePalletStatus";
             dynamic product = new JObject();
             product.palletId = palletId;
+            product.planId = planId;
             product.palletStatus = palletStatus.ToString();
             product.updUsrId = Global_Object.userLogin;
             var data = clientRequest.PostCallAPI(url, product.ToString());

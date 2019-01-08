@@ -234,8 +234,8 @@ namespace SeldatMRMS
 
         public void ReDraw() //random
         {
-            Dispatcher.BeginInvoke(new ThreadStart(() =>
-            {
+           // Dispatcher.BeginInvoke(new ThreadStart(() =>
+           // {
                 //Random rotate = new Random();
                 //int rotateInt = rotate.Next(0, 360); //for ints
                 //int rotateRange = 360;
@@ -257,7 +257,7 @@ namespace SeldatMRMS
 
                 ChangeTask("22");
                 Draw();
-            }));
+           // }));
         }
 
         public void Draw()

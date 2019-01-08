@@ -109,6 +109,9 @@
     <Compile Include="Management\ProcedureServices\ProcedureReturnToGate.cs" />
     <Compile Include="Management\ProcedureServices\ProcedureRobotToChargeReady.cs" />
     <Compile Include="Management\ProcedureServices\RegisterProcedureService.cs" />
+    <Compile Include="Management\ProcedureServices\SolvedProblem.xaml.cs">
+      <DependentUpon>SolvedProblem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Management\RobotManagent\old\RobotUnityService.cs" />
     <Compile Include="Management\RobotManagent\RobotBaseService.cs" />
     <Compile Include="Management\RobotManagent\RobotManagementService.cs" />
@@ -169,6 +172,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Management\ProcedureServices\SolvedProblem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Management\UnityService\ConfigUnities.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

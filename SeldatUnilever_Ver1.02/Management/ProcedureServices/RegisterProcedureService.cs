@@ -28,7 +28,7 @@ namespace SeldatMRMS
         {
             public OrderItem orderItem;
             public ProcedureControlServices item;
-            public ProcedureDataItems procedureDataItems;
+              public ProcedureDataItems procedureDataItems;
             public RobotUnity robot;
             public static bool currentErrorStatus = false;
             public void Start()

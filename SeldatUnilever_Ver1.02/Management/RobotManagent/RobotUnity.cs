@@ -302,6 +302,14 @@ namespace SeldatMRMS.Management.RobotManagent
         //    }
         //   // catch { }
         //}
+        public Point CirclePoint(double radius, double angleInDegrees, Point origin)
+        {
+            double x = (double)(radius * Math.Cos(angleInDegrees * Math.PI / 180)) + origin.X;
+            double y = (double)(radius * Math.Sin(angleInDegrees * Math.PI / 180)) + origin.Y;
+
+            return new Point(x, y);
+        }
+
         public void initialPos(double xx, double yy)
         {
             x = xx;
@@ -415,13 +423,6 @@ namespace SeldatMRMS.Management.RobotManagent
             props.canvas.Children.Remove(border);
             RemoveHandle(props.name);
         }      
-        public Point CirclePoint(double radius, double angleInDegrees, Point origin)
-        {
-            double x = (double)(radius * Math.Cos(angleInDegrees * Math.PI / 180)) + origin.X;
-            double y = (double)(radius * Math.Sin(angleInDegrees * Math.PI / 180)) + origin.Y;
-
-            return new Point(x, y);
-        }
         public override void Draw()
         {
            

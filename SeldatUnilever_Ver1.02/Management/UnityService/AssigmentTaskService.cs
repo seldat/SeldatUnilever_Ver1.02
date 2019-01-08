@@ -58,7 +58,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 if (result.onReristryCharge)
                                 {
                                     // registry charge procedure
-                                    procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_CHARGE, robot, null);
+                                    procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
                                 }
                                 else
                                 {

@@ -2,6 +2,7 @@
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.UnityService;
 using SeldatUnilever_Ver1._02.Form;
+using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace SeldatUnilever_Ver1._02
     public partial class MainWindow : Window
     {
         public System.Timers.Timer stationTimer;
+        public System.Timers.Timer robotTimer;
 
         public bool drag = true;
         private UnityManagementService unityService;
@@ -46,24 +48,17 @@ namespace SeldatUnilever_Ver1._02
             map.Height = img.ImageSource.Height;
             map.Background = img;
             canvasControlService = new CanvasControlService(this);
-
-            stationTimer = new System.Timers.Timer();
-            stationTimer.Interval = 1000;
-            stationTimer.Elapsed += OnTimedRedrawStationEvent;
-            stationTimer.AutoReset = true;
-            stationTimer.Enabled = true;
-
-            canvasControlService.ReloadAllStation();
-
         }
 
         private void OnTimedRedrawStationEvent(object sender, ElapsedEventArgs e)
         {
             canvasControlService.RedrawAllStation();
         }
+        
 
         private void OnTimedRedrawRobotEvent(object sender, ElapsedEventArgs e)
         {
+           //Task.Run(()=> canvasControlService.RedrawAllStation());
             canvasControlService.RedrawAllRobot();
         }
 
@@ -88,11 +83,42 @@ namespace SeldatUnilever_Ver1._02
             if (Global_Object.userLogin <= 2)
             {
                 myManagementWindow.Visibility = Visibility.Visible;
-                unityService = new UnityManagementService(this);
-                unityService.Initialize();
-                RobotUnity robot = new RobotUnity(map);
-                robot.Initialize();
+                // unityService = new UnityManagementService(this);
+                //  unityService.Initialize();
+                // RobotUnity robot = new RobotUnity(map);
+                //  robot.Initialize();
             }
+
+            
+
+           /* stationTimer = new System.Timers.Timer();
+            stationTimer.Interval = 5000;
+            stationTimer.Elapsed += OnTimedRedrawStationEvent;
+            stationTimer.AutoReset = true;
+            stationTimer.Enabled = true;*/
+
+           canvasControlService.ReloadAllStation();
+
+            Dispatcher.BeginInvoke(new ThreadStart(() =>
+            {
+                for (int i = 1; i < 5; i++)
+                {
+                    Random posX = new Random();
+                    RobotShape rbot = new RobotShape(map);
+                    rbot.rad = posX.Next(50, 120);
+                    rbot.org = new Point(600 + posX.Next(10, 50), 386 + posX.Next(10, 50));
+                    rbot.anglestep = posX.NextDouble() + 0.2;
+                    rbot.ReDraw(new Point(0, 0), 0);
+                    //rbot.ChangeTask("22");
+                    canvasControlService.list_Robot.Add(i.ToString(), rbot);
+                    Thread.Sleep(100);
+                }
+            }));
+            robotTimer = new System.Timers.Timer();
+            robotTimer.Interval = 50;
+            robotTimer.Elapsed += OnTimedRedrawRobotEvent;
+            robotTimer.AutoReset = true;
+            robotTimer.Enabled = true;
         }
 
 

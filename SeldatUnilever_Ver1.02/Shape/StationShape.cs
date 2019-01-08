@@ -240,8 +240,9 @@ namespace SeldatMRMS
 
         public void ReDraw()
         {
-            Dispatcher.BeginInvoke(new ThreadStart(() =>
-            {
+            
+                //Dispatcher.BeginInvoke(new ThreadStart(() =>
+                // {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "buffer/getListBuffer");
                 request.Method = "GET";
                 request.ContentType = @"application/json";
@@ -338,7 +339,8 @@ namespace SeldatMRMS
                 props._posision = Global_Object.CoorCanvas(new Point(((bufferData != null) ? (((double)bufferData.x)) : 0), ((bufferData != null) ? (((double)bufferData.y)) : 0)));
                 props._rotate = (bufferData != null) ? (((double)bufferData.angle)) : 0;
                 Draw();
-            }));
+                // }));
+         
         }
 
         public void Draw()
@@ -398,7 +400,7 @@ namespace SeldatMRMS
 
 
                     }
-                }
+               }
 
 
                 props._myRotateTransform.Angle = props._rotate;
@@ -418,7 +420,7 @@ namespace SeldatMRMS
                 props._eightCorner[5] = CoorPointAtBorder(new Point((Width), (Height)));        //bot-right
                 props._eightCorner[6] = CoorPointAtBorder(new Point((Width / 2), (Height)));      //bot-mid
                 props._eightCorner[7] = CoorPointAtBorder(new Point((0), (Height)));            //bot-left
-            }));
+           }));
 
             if (statuspallet == "F")
             {

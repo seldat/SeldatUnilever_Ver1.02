@@ -5,7 +5,7 @@ namespace SeldatMRMS
 {
     public class ControlService:DBProcedureService
     {
-       public ControlService(RobotUnity robot)
+       public ControlService(RobotUnity robot):base(robot)
        {
             if (robot != null)
             {

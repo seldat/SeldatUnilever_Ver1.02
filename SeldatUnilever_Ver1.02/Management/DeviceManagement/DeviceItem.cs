@@ -53,6 +53,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public OrderItem() { }
             public String OrderId;
             public int planId { get; set; }
+            public int deviceId;
             public int productId { get; set; }
             public int productDetailID { get; set; }
             public TyeRequest typeReq; // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
@@ -66,6 +67,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public bool status = false; // chua hoan thanh
             public DataPallet palletAtMachine;
             public String userName;
+            public int bufferId;
         }
         public string userName { get; set; } // dia chi Emei
         public string codeID { get; set; }
@@ -131,6 +133,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 order.productDetailID = (int)results["productDetailId"];
                 order.productId = (int)results["productId"];
                 order.planId = (int)results["planId"];
+                order.deviceId =(int)results["deviceId"];
                 order.timeWorkId = (int)results["timeWorkId"];
                 order.activeDate = (string)results["activeDate"];
                // order.palletStatus = (String)results["palletStatus"];
@@ -156,6 +159,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.productDetailID = (int)results["productDetailId"];
                     order.productId = (int)results["productId"];
                     order.planId=(int)results["planId"];
+                    order.deviceId = (int)results["deviceId"];
                     order.timeWorkId = (int)results["timeWorkId"];
                     order.activeDate = (string)results["activeDate"];
                    // order.palletStatus = (String)results["palletStatus"];
@@ -188,6 +192,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.typeReq = (TyeRequest)typeReq;
                     order.userName = (String)results["userName"];
                     order.activeDate = (string)results["activeDate"];
+                    order.deviceId = (int)results["deviceId"];
                     //order.palletStatus = (String)results["palletStatus"];
                     String jsonDPst = (string)results["datapallet"][i];
                     JObject stuffPallet = JObject.Parse(jsonDPst);
@@ -213,6 +218,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 OrderItem order = new OrderItem();
                 order.typeReq = (TyeRequest)typeReq;
                 order.userName = (String)results["userName"];
+                order.deviceId = (int)results["deviceId"];
                 order.productDetailID = (int)results["productDetailId"];
                 order.productId = (int)results["productId"];
                 order.timeWorkId = (int)results["timeWorkId"];

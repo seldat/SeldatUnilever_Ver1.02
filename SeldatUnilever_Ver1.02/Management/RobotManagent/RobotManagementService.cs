@@ -113,7 +113,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 RobotUnity robot1 = new RobotUnity();
                 //robot.Initialize(row);
                 robot1.properties.NameID = "1";
-                robot1.Start("ws://192.168.80.131:9090");
+                //robot1.Start("ws://192.168.80.131:9090");
                 RobotUnityRegistedList.Add(robot1.properties.NameID, robot1);
                 robot1.ConnectionStatusHandler += ConnectionStatusHandler;
                 AddRobotUnityReadyList(robot1);

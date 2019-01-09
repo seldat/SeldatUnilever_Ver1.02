@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SeldatMRMS.Management.UnityService
 {
@@ -46,6 +47,17 @@ namespace SeldatMRMS.Management.UnityService
             procedureManagementService.RegistryService(deviceRegistrationService);
             deviceRegistrationService.listen();
             assigmentTaskService.Start();
+            
+           
+                RobotUnity robot = robotManagementService.RobotUnityRegistedList.ElementAt(0).Value;
+
+                ProcedureForkLiftToBuffer pp = new ProcedureForkLiftToBuffer(robot, doorManagementService, trafficService);
+            DeviceItem.OrderItem order = new DeviceItem.OrderItem();
+            MessageBox.Show(order.bufferId+"");
+            pp.AssignAnOrder(order);
+                SeldatUnilever_Ver1._02.Management.ProcedureServices.SolvedProblem sf = new SeldatUnilever_Ver1._02.Management.ProcedureServices.SolvedProblem(pp);
+                sf.Show();
+           
         }
         public void Dispose()
         {

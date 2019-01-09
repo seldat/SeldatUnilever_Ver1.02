@@ -48,6 +48,8 @@ namespace SeldatUnilever_Ver1._02
             map.Height = img.ImageSource.Height;
             map.Background = img;
             canvasControlService = new CanvasControlService(this);
+
+     
         }
 
         private void OnTimedRedrawStationEvent(object sender, ElapsedEventArgs e)
@@ -83,8 +85,8 @@ namespace SeldatUnilever_Ver1._02
             if (Global_Object.userLogin <= 2)
             {
                 myManagementWindow.Visibility = Visibility.Visible;
-                // unityService = new UnityManagementService(this);
-                //  unityService.Initialize();
+                unityService = new UnityManagementService(this);
+                unityService.Initialize();
                 // RobotUnity robot = new RobotUnity(map);
                 //  robot.Initialize();
             }
@@ -97,9 +99,9 @@ namespace SeldatUnilever_Ver1._02
             stationTimer.AutoReset = true;
             stationTimer.Enabled = true;*/
 
-           canvasControlService.ReloadAllStation();
+         //  canvasControlService.ReloadAllStation();
 
-            Dispatcher.BeginInvoke(new ThreadStart(() =>
+         /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
                 for (int i = 1; i < 5; i++)
                 {
@@ -113,12 +115,12 @@ namespace SeldatUnilever_Ver1._02
                     canvasControlService.list_Robot.Add(i.ToString(), rbot);
                     Thread.Sleep(100);
                 }
-            }));
-            robotTimer = new System.Timers.Timer();
+            }));*/
+           /* robotTimer = new System.Timers.Timer();
             robotTimer.Interval = 50;
             robotTimer.Elapsed += OnTimedRedrawRobotEvent;
             robotTimer.AutoReset = true;
-            robotTimer.Enabled = true;
+            robotTimer.Enabled = true;*/
         }
 
 

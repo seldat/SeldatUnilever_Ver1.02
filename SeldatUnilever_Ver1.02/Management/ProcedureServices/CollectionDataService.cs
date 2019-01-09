@@ -29,7 +29,7 @@ namespace SelDatUnilever_Ver1
         //public int planID { get; set; }
         // public int productID { get; set; }
         // public int planID { get; set; }
-        public OrderItem order;
+        protected OrderItem order;
         //public String typeRequest; // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
         //public String activeDate;
         // public int timeWorkID;
@@ -47,7 +47,7 @@ namespace SelDatUnilever_Ver1
             clientRequest = new BridgeClientRequest();
             clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
         }
-        public void AssignAnOrder(OrderItem order)
+        public virtual void AssignAnOrder(OrderItem order)
         {
             this.order = order;
         }

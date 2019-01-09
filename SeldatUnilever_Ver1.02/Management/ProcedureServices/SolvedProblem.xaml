@@ -5,10 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Management.ProcedureServices"
         mc:Ignorable="d"
-        Title="SolvedProblem" Height="535.2" Width="704.208">
-    <Grid>
-        <Button Content="Hủy Quy Trình" HorizontalAlignment="Left" Margin="528,448,0,0" VerticalAlignment="Top" Width="160"/>
-        <GroupBox Header="Nội Dung Sự Cố"  HorizontalAlignment="Left" Height="100" Margin="12,155,0,0" VerticalAlignment="Top" Width="676" BorderBrush="#FFD7D5E5" >
+        Title="SolvedProblem" Height="916.2" Width="704.208">
+    <Grid Margin="0,0,0,40">
+        <Button Name="cancelProcBtn" Click="cancelProcBtn_Click"  Content="Hủy Quy Trình" HorizontalAlignment="Left" Margin="448,194,0,0" VerticalAlignment="Top" Width="160"/>
+        <GroupBox Header="Nội Dung Sự Cố"  HorizontalAlignment="Left" Height="149" Margin="10,405,0,0" VerticalAlignment="Top" Width="676" BorderBrush="#FFD7D5E5" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <RichTextBox Grid.Column="0" Grid.Row="0" Name="detailInfo">
+                    <FlowDocument>
+                        <Paragraph >
+                            <Run Text="điền đầy đủ thông tin"/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Nội Dung Giải Quyết Sự Cố" HorizontalAlignment="Left" Height="162" Margin="10,560,0,0" VerticalAlignment="Top" Width="676">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
@@ -26,31 +45,30 @@
 
             </Grid>
         </GroupBox>
-
-        <GroupBox Header="Nội Dung Giải Quyết Sự Cố" HorizontalAlignment="Left" Height="162" Margin="12,260,0,0" VerticalAlignment="Top" Width="676">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <RichTextBox Grid.Column="0" Grid.Row="0">
-                    <FlowDocument>
-                        <Paragraph>
-                            <Run Text="điền đầy đủ thông tin"/>
-                        </Paragraph>
-                    </FlowDocument>
-                </RichTextBox>
-
-            </Grid>
-        </GroupBox>
-        <Button Content="Tiếp Tục Quy Trình" HorizontalAlignment="Left" Margin="338,448,0,0" VerticalAlignment="Top" Width="170"/>
+        <Button Content="Tiếp Tục Quy Trình" HorizontalAlignment="Left" Margin="330,743,0,0" VerticalAlignment="Top" Width="170"/>
         <Image HorizontalAlignment="Left" Height="67" Margin="12,427,0,0" VerticalAlignment="Top" Width="100"/>
         <Label Content="Robot NameID:" HorizontalAlignment="Left" Margin="12,25,0,0" VerticalAlignment="Top" RenderTransformOrigin="-10.579,-1.885"/>
         <Label Content="Procedure NameID:" HorizontalAlignment="Left" Margin="12,56,0,0" VerticalAlignment="Top" RenderTransformOrigin="-10.579,-1.885"/>
         <Label Content="Error Code:" HorizontalAlignment="Left" Margin="12,87,0,0" VerticalAlignment="Top" RenderTransformOrigin="-10.579,-1.885"/>
         <Label Content="Date:" HorizontalAlignment="Left" Margin="12,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="-10.579,-1.885"/>
+        <GroupBox Header="Nội Dung Sự Cố"  HorizontalAlignment="Left" Margin="10,251,0,0" Width="676" BorderBrush="#FFD7D5E5" Height="149" VerticalAlignment="Top" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <RichTextBox Grid.Column="0" Grid.Row="0">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text="điền đầy đủ thông tin"/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+
+            </Grid>
+        </GroupBox>
 
 
     </Grid>

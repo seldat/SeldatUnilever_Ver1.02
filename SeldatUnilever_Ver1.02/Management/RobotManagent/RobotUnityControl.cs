@@ -90,9 +90,9 @@ namespace SeldatMRMS.Management.RobotManagent
             public double Width { get => _Width; set { _Width = value; RaisePropertyChanged("Width"); } }
             public double Length { get => _Length; set { _Length = value; RaisePropertyChanged("Length"); } }
             public double Height { get => _Height; set { _Height = value; RaisePropertyChanged("Height"); } }
-            public String ProblemContent { get; set; }
-            public String SolvedProblemContent { get; set; }
-
+            public String problemContent;
+            public String solvedProblemContent;
+            public String detailInfo;
         }
         public enum RequestCommandLineDetect
         {

@@ -1,6 +1,7 @@
 ﻿using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using System;
+using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatMRMS
 {
@@ -16,6 +17,11 @@ namespace SeldatMRMS
         public ProcedureCode procedureCode;
         public virtual ContentDatabase RequestDataFromDataBase() { return new ContentDatabase(); }
         protected RobotUnity robot;
+        public ProcedureDataItemsDB procedureDataItemsDB;
+        public GateTaskDB gateTaskDB;
+        public RobotTaskDB robotTaskDB;
+        public ChargerProcedureDB chargerProcedureDB;
+        public OrderItem order;
         public enum ProcedureCode
         {
             PROC_CODE_BUFFER_TO_MACHINE=0,
@@ -40,6 +46,18 @@ namespace SeldatMRMS
         }
 
         public ErrorCode errorCode;
+        public ProcedureControlServices(RobotUnity robot) : base(robot)
+        {
+            this.robot = robot;
+            procedureDataItemsDB = new ProcedureDataItemsDB(procedureCode, robot);
+            robotTaskDB = new RobotTaskDB(robot);
+        }
+        public override void AssignAnOrder(OrderItem order)
+        {
+            this.order = order;
+            procedureDataItemsDB.SetOrderItem(order);
+            base.AssignAnOrder(order);
+        }
         public void RegistrationTranfficService(TrafficManagementService TrafficService)
         {
             this.TrafficService = TrafficService;
@@ -190,10 +208,7 @@ namespace SeldatMRMS
             ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION, // đến vị 
             ROBREA_ROBOT_RELEASED
         }
-        public ProcedureControlServices(RobotUnity robot) : base(robot)
-        {
-            this.robot = robot;
-        }
+      
         public RobotUnity GetRobotUnity()
         {
             return this.robot;

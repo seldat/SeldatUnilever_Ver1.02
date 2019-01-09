@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SeldatMRMS;
 using SeldatMRMS.Management.RobotManagent;
 using SelDatUnilever_Ver1;
@@ -10,40 +11,47 @@ using System.Windows;
 using static SeldatMRMS.ProcedureControlServices;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
-namespace SelDatUnilever_Ver1
+namespace SeldatMRMS
 {
     public class DBProcedureService:CollectionDataService
     {
-        public ProcedureDataItemsDB procedureDataItemsDB;
-        public GateTaskDB gateTaskDB;
-        public RobotTaskDB robotTaskDB;
-        public ChargerProcedureDB chargerProcedureDB;
+        public enum ProcessStatus
+        {
+            F=0, // failed
+            S=1 //Sucess
+        }
+
         public DBProcedureService(RobotUnity robot) {
+            
+
 
         }
         public void SendHttpProcedureDataItem(ProcedureDataItemsDB procedureDataItemsDB)
         {
-            String url= Global_Object.url +"/ robot/rest/reportRobot/getListRobotProcess";
-            new BridgeClientRequest().PostCallAPI(url,JsonConvert.SerializeObject(procedureDataItemsDB));
+            String url= Global_Object.url + "/robot/rest/reportRobot/insertUpdateListRobotProcess";
+            List<ProcedureDataItemsDB> listproc = new List<ProcedureDataItemsDB>();
+            listproc.Add(procedureDataItemsDB);         
+            new BridgeClientRequest().PostCallAPI(url, JsonConvert.SerializeObject(listproc).ToString());
         }
         public void SendHttpRobotTaskItem(RobotTaskDB robotTaskDB)
         {
-            String url = Global_Object.url+"/robot/rest/reportRobot/insertUpdateListRobotTask";
-            new BridgeClientRequest().PostCallAPI(url, JsonConvert.SerializeObject(robotTaskDB));
+            String url = Global_Object.url+ "/robot/rest/reportRobot/insertUpdateListRobotTask";
+            List<RobotTaskDB> listrot = new List<RobotTaskDB>();
+            listrot.Add(robotTaskDB);
+            new BridgeClientRequest().PostCallAPI(url, JsonConvert.SerializeObject(listrot));
         }
         public class ProcedureDataItemsDB
         {
             ProcedureCode prcode;
             OrderItem order;
             RobotUnity robot;
-            public ProcedureDataItemsDB(ProcedureCode prcode,OrderItem order,RobotUnity robot) {
+            public ProcedureDataItemsDB(ProcedureCode prcode,RobotUnity robot) {
                 this.prcode = prcode;
                 this.order = order;
                 this.robot = robot;
-                rpBeginDatetime = DateTime.Now.ToString("yy//MM/dd hh:mm tt");
+                rpBeginDatetime = DateTime.Now.ToString("yyyyMMddHHmmss");
                 creUsrId = Global_Object.userLogin;
                 updUsrId = Global_Object.userLogin;
-                robotProcessId = robot.properties.NameID;
                 robotTaskId = robot.properties.NameID;
             }
             public String robotProcessId { get; set; }
@@ -59,10 +67,14 @@ namespace SelDatUnilever_Ver1
             public string rpBeginDatetime { get; set; }
             public string rpEndDatetime { get; set; }
             public string orderContent { get; set; }
-            public int robotProcessStastus { get; set; }
+            public String robotProcessStastus { get; set; }
             public int creUsrId { get; set; }
             public int updUsrId { get; set; }
-            public void GetParams(int status)
+            public void SetOrderItem(OrderItem order)
+            {
+                this.order = order;
+            }
+            public void GetParams(String status)
             {
                 planId = order.planId;
                 deviceId = order.deviceId;
@@ -72,7 +84,7 @@ namespace SelDatUnilever_Ver1
                 bufferId = order.bufferId;
                 operationType = prcode.ToString() ;
                 orderContent = JsonConvert.SerializeObject(order);
-                rpEndDatetime = DateTime.Now.ToString("yy//MM/dd hh:mm tt");
+                rpEndDatetime = DateTime.Now.ToString("yyyyMMddHHmmss");
                 robotProcessStastus = status;
             }
         }
@@ -91,13 +103,16 @@ namespace SelDatUnilever_Ver1
                 robotTaskId = robot.properties.NameID;
                 creUsrId = Global_Object.userLogin;
                 updUsrId = Global_Object.userLogin;
-            }
+              }
               public String robotTaskId { get; set; }
               public String robotId { get; set; }
               public String procedureContent{ get; set; }
               public int creUsrId { get; set; }
               public int updUsrId { get ; set; }
-              
+             /* public String detailInfo;
+              public String problemContent;
+              public String solvedProblemContent;*/
+
         }
         public class ProcedureDataItems
         {

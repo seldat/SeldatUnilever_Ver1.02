@@ -26,7 +26,7 @@ namespace SeldatMRMS
         // DataForkLiftToBuffer points;
         ForkLiftToBuffer StateForkLiftToBuffer;
         Thread ProForkLiftToBuffer;
-        RobotUnity robot;
+        public RobotUnity robot;
         DoorService door;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;

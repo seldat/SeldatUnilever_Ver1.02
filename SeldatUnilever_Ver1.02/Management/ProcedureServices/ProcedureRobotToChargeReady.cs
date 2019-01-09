@@ -42,7 +42,7 @@ namespace SeldatMRMS
             statusCharger = new DataReceive();
             this.robot = robot;
             chargerCtrl = charger.ChargerStationList[id];
-
+            chargerProcedureDB = new ChargerProcedureDB(chargerCtrl);
             //ChargerId id_t = id;
             //switch (id_t)
             //{

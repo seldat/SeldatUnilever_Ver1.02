@@ -12,13 +12,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
+using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 
 namespace SeldatMRMS.Management.RobotManagent
 {
     public class RobotManagementService
     {
         public const Int32 AmountofRobotUnity = 3;
-        public class ResultRobotReady
+        public class ResultRobot
         {
             public RobotUnity robot;
             public bool onReristryCharge = false;
@@ -113,6 +114,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 RobotUnity robot1 = new RobotUnity();
                 //robot.Initialize(row);
                 robot1.properties.NameID = "1";
+                robot1.properties.chargeID = ChargerId.CHARGER_ID_1;
                 robot1.Start("ws://192.168.80.131:9090");
                 RobotUnityRegistedList.Add(robot1.properties.NameID, robot1);
                 robot1.ConnectionStatusHandler += ConnectionStatusHandler;
@@ -163,9 +165,9 @@ namespace SeldatMRMS.Management.RobotManagent
             }
    
         }
-        public ResultRobotReady GetRobotUnityWaitTaskItem0()
+        public ResultRobot GetRobotUnityWaitTaskItem0()
         {
-            ResultRobotReady result = null;
+            ResultRobot result = null;
             if (RobotUnityWaitTaskList.Count > 0)
             {
                 RobotUnity robot = RobotUnityWaitTaskList.ElementAt(0).Value;
@@ -173,7 +175,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     RemoveRobotUnityWaitTaskList(robot.properties.NameID);
                 }
-                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                result = new ResultRobot() { robot = robot, onReristryCharge = robot.getBattery() };
             }
             return result;
         }
@@ -182,9 +184,9 @@ namespace SeldatMRMS.Management.RobotManagent
             RobotUnityReadyList.Add(robot.properties.NameID,robot);
         }
         
-        public ResultRobotReady GetRobotUnityReadyItem0()
+        public ResultRobot GetRobotUnityReadyItem0()
         {
-            ResultRobotReady result = null;
+            ResultRobot result = null;
             if (RobotUnityReadyList.Count > 0)
             {
                 RobotUnity robot = RobotUnityReadyList.ElementAt(0).Value;
@@ -192,7 +194,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     RemoveRobotUnityReadyList(robot.properties.NameID);
                 }
-                result = new ResultRobotReady() {robot=robot, onReristryCharge=robot.getBattery()};
+                result = new ResultRobot() {robot=robot, onReristryCharge=robot.getBattery()};
             }
             return result;
         }

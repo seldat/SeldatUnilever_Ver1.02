@@ -20,10 +20,11 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
         public enum ChargerState
         {
             ST_READY = 0x01,
-            ST_CHARGING,/* 02 */
+            //ST_CHARGING,/* 02 */
             ST_ERROR, /* 03 */
             ST_CHARGE_FULL, /* 04 */
             ST_PUSH_PISTON, /* 05 */
+            ST_CHARGING,
             // ST_CONTACT_GOOD, /* 06 */
             // ST_CONTACT_FAIL /* 07 */
         }
@@ -80,7 +81,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
         public ChargerInfoConfig cf;
         public ChargerCtrl(ChargerInfoConfig cf) : base(cf.Ip, cf.Port)
         {
-            this.SetId(cf.Id);
+            //this.SetId(cf.Id);
             this.cf = cf;
         }
         public bool GetId(ref DataReceive data)

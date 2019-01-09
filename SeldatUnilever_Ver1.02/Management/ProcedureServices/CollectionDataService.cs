@@ -36,7 +36,7 @@ namespace SelDatUnilever_Ver1
         // public int timeWorkID;
         public List<Pose> checkInBuffer = new List<Pose>();
         protected BridgeClientRequest clientRequest;
-        public const String UrlServer = "http://192.168.1.16:8081";
+        public const String UrlServer = "http://localhost:8085";
         protected int palletId { get; set; }
         protected int planId { get; set; }
         public CollectionDataService()

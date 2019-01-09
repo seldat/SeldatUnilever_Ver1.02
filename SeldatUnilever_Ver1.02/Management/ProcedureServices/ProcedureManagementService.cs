@@ -6,6 +6,7 @@ using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using System;
 using System.Threading.Tasks;
 using static SeldatMRMS.DBProcedureService;
+using static SeldatMRMS.ProcedureControlServices;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatMRMS
@@ -121,7 +122,6 @@ namespace SeldatMRMS
                  {
                      RobotUnity robot = procItem.GetRobotUnity();
                      robotManagementService.AddRobotUnityWaitTaskList(robot);
-
                  }
 
                  var element = RegisterProcedureItemList.Find(e => e.item.procedureCode == procItem.procedureCode);
@@ -138,7 +138,15 @@ namespace SeldatMRMS
             // báo sự cố cho lớp robotmanagement // đợi cho chờ xử lý// hủy bỏ quy trình 
             // add order lại list device
             ProcedureControlServices procItem = item as ProcedureControlServices;
-            RestoreOrderItem(procItem.order);
+            if(procItem.procedureCode  == ProcedureCode.PROC_CODE_ROBOT_TO_READY){
+
+            }
+            else if(procItem.procedureCode  == ProcedureCode.PROC_CODE_ROBOT_TO_READY){
+
+            }
+            else{
+                RestoreOrderItem(procItem.order);
+            }
         }
    
     }

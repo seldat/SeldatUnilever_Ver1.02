@@ -51,14 +51,14 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             break;
                         case ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST:
 
-                            ResultRobotReady result = robotManageService.GetRobotUnityWaitTaskItem0();
+                            ResultRobot result = robotManageService.GetRobotUnityWaitTaskItem0();
                             if (result != null)
                             {
                                 robot = result.robot;
                                 if (result.onReristryCharge)
                                 {
                                     // registry charge procedure
-                                    procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_CHARGE, robot, null);
+                                    procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
                                 }
                                 else
                                 {
@@ -126,7 +126,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             break;
                         case ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST:
 
-                            ResultRobotReady result = robotManageService.GetRobotUnityReadyItem0();
+                            ResultRobot result = robotManageService.GetRobotUnityReadyItem0();
                             if(result!=null)
                             {
                                 robot = result.robot;
@@ -156,6 +156,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         case ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK:
                             Console.WriteLine(processAssignTaskReady);
                             SelectProcedureItem(robot, orderItem);
+                            deviceItemsList[0].RemoveFirstOrder();
                             MoveElementToEnd(); // sort Task List
                             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
                             break;

@@ -43,10 +43,10 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             if (!IsDisposed)
             {
-                Dispose();
-                Start();
-                //Close();
-                // webSocket.Connect();
+                //Dispose();
+                //Start();
+                Close();
+                webSocket.Connect();
             }
         }
         protected virtual void OnOpenedEvent() { }

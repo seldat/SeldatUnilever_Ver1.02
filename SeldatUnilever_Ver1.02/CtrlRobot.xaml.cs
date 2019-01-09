@@ -25,6 +25,7 @@ namespace SeldatUnilever_Ver1._02
         {
             InitializeComponent();
             this.rms = rms;
+            txtBat.Text = "5";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -49,12 +50,27 @@ namespace SeldatUnilever_Ver1._02
 
         private void CmdBatLevel_Click(object sender, RoutedEventArgs e)
         {
-
+            rms.RobotUnityRegistedList.ElementAt(0).Value.BatteryPublish(float.Parse(txtBat.Text));
         }
 
         private void CmdError_Click(object sender, RoutedEventArgs e)
         {
             rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3215);
+        }
+
+        private void CmdGetInCharger_Click(object sender, RoutedEventArgs e)
+        {
+            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3206);
+        }
+
+        private void CmdGetOutCharger_Click(object sender, RoutedEventArgs e)
+        {
+            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3207);
+        }
+
+        private void LineCamePoint_Click(object sender, RoutedEventArgs e)
+        {
+            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3205);
         }
     }
 }

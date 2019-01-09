@@ -64,6 +64,7 @@ namespace SeldatMRMS {
             StateRobotToCharge = state;
             ProRobotToCharger = new Thread (this.Procedure);
             ProRobotToCharger.Start (this);
+            procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE;
             ProRun = true;
         }
         public void Destroy () {
@@ -84,31 +85,44 @@ namespace SeldatMRMS {
                         //     }
                         //     break; //kiểm tra kết nối và trạng thái sạc
                     case RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER:
-                        rb.SendCmdLineDetectionCtrl (RequestCommandLineDetect.REQUEST_LINEDETECT_CHARGEAREA);
+                        rb.SendCmdLineDetectionCtrl (RequestCommandLineDetect.REQUEST_LINEDETECT_GETIN_CHARGER);
+                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE;
                         break;
                     case RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE:
-                        if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_CHARGEAREA) {
-                            if (true == chargerCtrl.StartCharge ()) {
-                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
-                            } else {
-                                errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
+                        try {
+                            if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETIN_CHARGER) {
+                                if (true == chargerCtrl.StartCharge ()) {
+                                    StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
+                                } else {
+                                    errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
+                                    CheckUserHandleError (this);
+                                }
+                            } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
+                                errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
                                 CheckUserHandleError (this);
                             }
-                        } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
-                            errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
+                        } catch (System.Exception) {
+                            Console.WriteLine ("ROBCHAR_ROBOT_START_CHARGE : CONNECT_CHARGER_ERROR");
+                            errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
                             CheckUserHandleError (this);
                         }
                         break;
                     case RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER:
-                        result = chargerCtrl.WaitState (ChargerState.ST_CHARGING, TIME_OUT_WAIT_STATE);
-                        if (ErrorCodeCharger.TRUE == result) {
-                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
-                        } else {
-                            if (result == ErrorCodeCharger.ERROR_CONNECT) {
-                                errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
+                        try {
+                            result = chargerCtrl.WaitState (ChargerState.ST_CHARGING, TIME_OUT_WAIT_STATE);
+                            if (ErrorCodeCharger.TRUE == result) {
+                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
                             } else {
-                                errorCode = ErrorCode.CONTACT_CHARGER_ERROR;
+                                if (result == ErrorCodeCharger.ERROR_CONNECT) {
+                                    errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
+                                } else {
+                                    errorCode = ErrorCode.CONTACT_CHARGER_ERROR;
+                                }
+                                CheckUserHandleError (this);
                             }
+                        } catch (System.Exception) {
+                            Console.WriteLine ("ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER : CONNECT_CHARGER_ERROR");
+                            errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
                             CheckUserHandleError (this);
                         }
                         break; //robot tiep xuc tram sac        
@@ -131,36 +145,53 @@ namespace SeldatMRMS {
                         }
                         break;
                     case RobotGoToCharge.ROBCHAR_WAITTING_CHARGEBATTERY:
-                        result = chargerCtrl.GetBatteryAndStatus (ref batLevel, ref statusCharger);
-                        if (ErrorCodeCharger.TRUE == result) {
-                            if ((batLevel.data[0] == 100) || (statusCharger.data[0] == (byte) ChargerState.ST_CHARGE_FULL)) {
-                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+#if false  //for test
+                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+#else
+                        try {
+                            result = chargerCtrl.GetBatteryAndStatus (ref batLevel, ref statusCharger);
+                            if (ErrorCodeCharger.TRUE == result) {
+                                if ((batLevel.data[0] == 100) || (statusCharger.data[0] == (byte) ChargerState.ST_CHARGE_FULL)) {
+                                    StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+                                }
+                            } else {
+                                if (result == ErrorCodeCharger.ERROR_CONNECT) {
+                                    errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
+                                }
+                                CheckUserHandleError (this);
                             }
-                        } else {
-                            if (result == ErrorCodeCharger.ERROR_CONNECT) {
-                                errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
-                            }
+                            rb.properties.BatteryLevelRb = (float) batLevel.data[0];
+                        } catch (System.Exception) {
+                            Console.WriteLine ("ROBCHAR_WAITTING_CHARGEBATTERY : CONNECT_CHARGER_ERROR");
+                            errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
                             CheckUserHandleError (this);
                         }
-                        rb.properties.BatteryLevelRb = (float) batLevel.data[0];
+#endif
                         break; //dợi charge battery và thông tin giao tiếp server và trạm sạc
+
                     case RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY:
-                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITING_RECONNECTING;
+                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING;
                         break; //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc
-                    case RobotGoToCharge.ROBCHAR_ROBOT_WAITING_RECONNECTING:
+                    case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING:
                         if (true == CheckReconnectServer (TIME_OUT_ROBOT_RECONNECT_SERVER)) {
-                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER;
                         } else {
                             errorCode = ErrorCode.ROBOT_CANNOT_CONNECT_SERVER_AFTER_CHARGE;
                             CheckUserHandleError (this);
                         }
                         break; //Robot mở nguồng và đợi connect lại
-                        // case RobotGoToCharge.ROBCHAR_ROBOT_STATUS_GOOD_OPERATION:
-                        //     StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
-                        //     break;
-                        // case RobotGoToCharge.ROBCHAR_ROBOT_STATUS_BAD_OPERATION:
-                        //     StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
-                        //     break;
+                    case RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER:
+                        rb.SendCmdLineDetectionCtrl (RequestCommandLineDetect.REQUEST_LINEDETECT_GETOUT_CHARGER);
+                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER;
+                        break;
+                    case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER:
+                        if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETOUT_CHARGER) {
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
+                        } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
+                            errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
+                            CheckUserHandleError (this);
+                        }
+                        break;
                     case RobotGoToCharge.ROBCHAR_ROBOT_RELEASED:
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_CHARGE;
                         // if (errorCode == ErrorCode.RUN_OK) {
@@ -248,6 +279,7 @@ namespace SeldatMRMS {
             StateRobotGoToReady = state;
             ProRobotToReady = new Thread (this.Procedure);
             ProRobotToReady.Start (this);
+            procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_READY;
             ProRun = true;
         }
         public void Destroy () {
@@ -295,7 +327,7 @@ namespace SeldatMRMS {
                     case RobotGoToReady.ROBREA_ROBOT_RELEASED:
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
                         // if (errorCode == ErrorCode.RUN_OK) {
-                            ReleaseProcedureHandler (this);
+                        ReleaseProcedureHandler (this);
                         // } else {
                         //     ErrorProcedureHandler (this);
                         // }

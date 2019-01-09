@@ -83,9 +83,9 @@ namespace SeldatUnilever_Ver1._02
             //TEST frm1 = new TEST();
             //frm1.ShowDialog();
             myManagementWindow.Visibility = Visibility.Hidden;
-            LoginForm frm = new LoginForm(Thread.CurrentThread.CurrentCulture.ToString());
-            frm.ShowDialog();
-            if (Global_Object.userLogin <= 2)
+            //LoginForm frm = new LoginForm(Thread.CurrentThread.CurrentCulture.ToString());
+            //frm.ShowDialog();
+            //if (Global_Object.userLogin <= 2)
             {
                 myManagementWindow.Visibility = Visibility.Visible;
                 unityService = new UnityManagementService(this);

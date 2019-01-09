@@ -170,7 +170,9 @@ namespace SeldatMRMS {
             ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC, //cho phép cắt nguồn robot
             ROBCHAR_WAITTING_CHARGEBATTERY, //dợi charge battery và thông tin giao tiếp server và trạm sạc
             ROBCHAR_FINISHED_CHARGEBATTERY, //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc
-            ROBCHAR_ROBOT_WAITING_RECONNECTING, //Robot mở nguồng và đợi connect lại
+            ROBCHAR_ROBOT_WAITTING_RECONNECTING, //Robot mở nguồng và đợi connect lại
+            ROBCHAR_ROBOT_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại
+            ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại
             // ROBCHAR_ROBOT_STATUS_GOOD_OPERATION, //điều kiện hoạt động tốt 
             // ROBCHAR_ROBOT_STATUS_BAD_OPERATION, //điều kiện hoạt động không tốt thông tin về procedure management chuyển sang quy trình xử lý sự cố
             ROBCHAR_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
@@ -205,6 +207,7 @@ namespace SeldatMRMS {
             while (selectHandleError == SelectHandleError.CASE_ERROR_WAITTING) {
                 switch (selectHandleError) {
                     case SelectHandleError.CASE_ERROR_WAITTING:
+                        Console.WriteLine("Waitting processing error ...................................");
                         Thread.Sleep (1000);
                         break;
                     case SelectHandleError.CASE_ERROR_CONTINUOUS:

@@ -1,0 +1,42 @@
+﻿<Window x:Class="SeldatUnilever_Ver1._02.Management.RobotManagent.ConfigureRobotUnity"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Management.RobotManagent"
+        mc:Ignorable="d"
+        Title="ConfigureRobotUnity" Height="450" Width="800">
+    <Grid>
+        <DataGrid Name="MainDataGrid"
+                      ItemsSource="{Binding Grouped_PropertiesRobotUnity}"
+                      CanUserAddRows="False"
+                          AutoGenerateColumns="False" Margin="0,0,0,67" >
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*" Header="Label" 
+                                        Binding="{Binding Path=Label, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <DataGridTextColumn Width="*" Header="Url" 
+                                        Binding="{Binding Path=Url, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            <DataGridTextColumn Width="*" Header="L1" 
+                                        Binding="{Binding Path=L1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+                <DataGridTextColumn Width="*" Header="L2" 
+                                        Binding="{Binding Path=L2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <DataGridTextColumn Width="*" Header="WS" 
+                                        Binding="{Binding Path=WS, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <DataGridTextColumn Width="*" Header="Width" 
+                                        Binding="{Binding Path=Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <DataGridTextColumn Width="*" Header="Length" 
+                                        Binding="{Binding Path=Length, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <DataGridTemplateColumn Header="Fixed">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Name="FixedBtn" Click="FixedBtn_Click">Get</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="Close" Name="btnClose" Click="btnClose_Click" HorizontalAlignment="Left" Margin="700,374,0,0" VerticalAlignment="Top" Width="75"/>
+    </Grid>
+</Window>

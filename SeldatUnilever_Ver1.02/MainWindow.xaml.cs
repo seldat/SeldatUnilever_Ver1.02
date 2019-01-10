@@ -87,8 +87,9 @@ namespace SeldatUnilever_Ver1._02
                 myManagementWindow.Visibility = Visibility.Visible;
                 unityService = new UnityManagementService(this);
                 unityService.Initialize();
-                // RobotUnity robot = new RobotUnity(map);
-                //  robot.Initialize();
+               // RobotUnity robot = new RobotUnity(map);
+              //  robot.Initialize();
+               // robot.Start(robot.properties.Url);
             }
 
             

@@ -104,7 +104,6 @@ namespace SeldatMRMS.Management.RobotManagent
             REQUEST_RETURN_LINE_CHARGEARE  = 1207,  
             REQUEST_LINEDETECT_READYAREA=1208,
         }
-
         public enum RequestCommandPosPallet{
             REQUEST_LINEDETECT_COMING_POSITION = 1205,
             REQUEST_TURN_LEFT = 1210,
@@ -153,11 +152,12 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_finishedStates;
         }
         ParamsRosSocket paramsRosSocket;
-        public PropertiesRobotUnity properties;
+        public PropertiesRobotUnity properties= new PropertiesRobotUnity();
         protected virtual void SupervisorTraffic() { }
         public RobotUnityControl()
         {
-            properties = new PropertiesRobotUnity();
+            properties.pose = new Pose();
+            
             properties.pose = new Pose();
             properties.NameID = Guid.NewGuid().ToString();
             properties.L1 = 40;
@@ -239,7 +239,23 @@ namespace SeldatMRMS.Management.RobotManagent
 
         }
 
-    
+        public void UpdateProperties(PropertiesRobotUnity proR)
+        {
+            properties.NameID = proR.NameID;
+            properties.L1 = proR.L1;
+            properties.L2 = proR.L2;
+            properties.WS = proR.WS;
+            properties.Label =proR.Label;
+            properties.BatteryLowLevel = proR.BatteryLowLevel;
+            properties.BatteryLevelRb = proR.BatteryLevelRb;
+            properties.Url =proR.Url;
+            properties.DistanceIntersection = proR.DistanceIntersection;
+            properties.BatteryLowLevel = proR.BatteryLowLevel;
+            properties.BatteryReadyWork =proR.BatteryReadyWork;
+            properties.Width = proR.Width;
+            properties.Height = proR.Height;
+            properties.Length = proR.Length;
+        }
         public void UpdateRiskAraParams(double L1,double L2,double WS, double distanceIntersection)
         {
             properties.L1 = L1;
@@ -294,7 +310,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         protected override void OnClosedEvent(object sender, CloseEventArgs e)
         {
-            ConnectionStatusHandler(this, ConnectionStatus.CON_FAILED);
+           // ConnectionStatusHandler(this, ConnectionStatus.CON_FAILED);
             properties.IsConnected = false;
             this.url = properties.URL;
             base.OnClosedEvent(sender, e);
@@ -303,9 +319,9 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public override void Dispose()
         {
-            properties.pose.Destroy();
+           
             base.Dispose();
-            ConnectionStatusHandler(this, ConnectionStatus.CON_CLOSED);
+       //     ConnectionStatusHandler(this, ConnectionStatus.CON_CLOSED);
             
         }
         public virtual void Draw() { }

@@ -49,12 +49,15 @@ namespace SeldatUnilever_Ver1._02
             map.Background = img;
             canvasControlService = new CanvasControlService(this);
 
-     
         }
 
         private void OnTimedRedrawStationEvent(object sender, ElapsedEventArgs e)
         {
-            canvasControlService.RedrawAllStation();
+            Parallel.Invoke(() =>
+            {
+                //Console.WriteLine("Begin first task...");
+                canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
+            });
         }
         
 
@@ -91,36 +94,36 @@ namespace SeldatUnilever_Ver1._02
                 //  robot.Initialize();
             }
 
-            
 
-           /* stationTimer = new System.Timers.Timer();
+
+            stationTimer = new System.Timers.Timer();
             stationTimer.Interval = 5000;
             stationTimer.Elapsed += OnTimedRedrawStationEvent;
             stationTimer.AutoReset = true;
-            stationTimer.Enabled = true;*/
+            stationTimer.Enabled = true;
 
-         //  canvasControlService.ReloadAllStation();
+            canvasControlService.ReloadAllStation();
 
-         /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
-            {
-                for (int i = 1; i < 5; i++)
-                {
-                    Random posX = new Random();
-                    RobotShape rbot = new RobotShape(map);
-                    rbot.rad = posX.Next(50, 120);
-                    rbot.org = new Point(600 + posX.Next(10, 50), 386 + posX.Next(10, 50));
-                    rbot.anglestep = posX.NextDouble() + 0.2;
-                    rbot.ReDraw(new Point(0, 0), 0);
-                    //rbot.ChangeTask("22");
-                    canvasControlService.list_Robot.Add(i.ToString(), rbot);
-                    Thread.Sleep(100);
-                }
-            }));*/
-           /* robotTimer = new System.Timers.Timer();
-            robotTimer.Interval = 50;
-            robotTimer.Elapsed += OnTimedRedrawRobotEvent;
-            robotTimer.AutoReset = true;
-            robotTimer.Enabled = true;*/
+            /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
+               {
+                   for (int i = 1; i < 5; i++)
+                   {
+                       Random posX = new Random();
+                       RobotShape rbot = new RobotShape(map);
+                       rbot.rad = posX.Next(50, 120);
+                       rbot.org = new Point(600 + posX.Next(10, 50), 386 + posX.Next(10, 50));
+                       rbot.anglestep = posX.NextDouble() + 0.2;
+                       rbot.ReDraw(new Point(0, 0), 0);
+                       //rbot.ChangeTask("22");
+                       canvasControlService.list_Robot.Add(i.ToString(), rbot);
+                       Thread.Sleep(100);
+                   }
+               }));*/
+            /* robotTimer = new System.Timers.Timer();
+             robotTimer.Interval = 50;
+             robotTimer.Elapsed += OnTimedRedrawRobotEvent;
+             robotTimer.AutoReset = true;
+             robotTimer.Enabled = true;*/
         }
 
 

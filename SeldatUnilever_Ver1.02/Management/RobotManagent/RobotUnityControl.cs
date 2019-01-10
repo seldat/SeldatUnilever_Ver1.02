@@ -16,7 +16,8 @@ namespace SeldatMRMS.Management.RobotManagent {
     public class RobotUnityControl : RosSocket {
 
         public event Action<int> FinishStatesCallBack;
-        public event Action<int> AGVStatusCallBack;
+        public event Action<LaserErrorCode> AGVLaserErrorCallBack;
+        public event Action<LaserWarningCode> AGVLaserWarningCallBack;
         public event Action<Pose, Object> PoseHandler;
         public event Action<Object, ConnectionStatus> ConnectionStatusHandler;
 
@@ -140,7 +141,25 @@ namespace SeldatMRMS.Management.RobotManagent {
             /*of chau test*/
             public int publication_finishedStates;
             public int publication_batteryvol;
+            public int publication_TestLaserError;
+            public int publication_TestLaserWarning;
         }
+
+        public struct LaserErrorCode {
+            public bool LaserErrorConnect;
+            public bool LaserErrorShutdown;
+            public bool LaserErrorLostSpeed;
+            public bool LaserErrorLostPath;
+        }
+
+        public struct LaserWarningCode {
+            public bool LaserWarningObstacle;
+            public bool LaserWarningLowBattey;
+            public bool LaserWarningCharging;
+            public bool LaserWarningHazardoes;
+            public bool LaserWarningBackward;
+        }
+
         ParamsRosSocket paramsRosSocket;
         public PropertiesRobotUnity properties;
         protected virtual void SupervisorTraffic () { }
@@ -171,10 +190,13 @@ namespace SeldatMRMS.Management.RobotManagent {
             paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet", "std_msgs/Int32");
             paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet", "std_msgs/String");
             float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Float32", BatteryVolHandler);
-            int subscription_AGV_Status = this.Subscribe ("/AGV_Status", "std_msgs/Int32", AGVStatusHandler);
+            int subscription_AGV_LaserError = this.Subscribe ("/AGV_LaserError", "std_msgs/String", AGVLaserErrorHandler);
+            int subscription_AGV_LaserWarning = this.Subscribe ("/AGV_LaserWarning", "std_msgs/String", AGVLaserWarningHandler);
             /*of chau test*/
             paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
             paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
+            paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
+            paramsRosSocket.publication_TestLaserWarning = this.Advertise ("/AGV_LaserWarning", "std_msgs/String");
         }
 
         private void BatteryVolHandler (Communication.Message message) {
@@ -208,16 +230,88 @@ namespace SeldatMRMS.Management.RobotManagent {
             FinishStatesCallBack (standard.data);
 
         }
-        private void AGVStatusHandler (Communication.Message message) {
-            StandardInt32 standard = (StandardInt32) message;
-            FinishStatesCallBack (standard.data);
+        private void AGVLaserErrorHandler (Communication.Message message) {
+            StandardString standard = (StandardString) message;
+            LaserErrorCode er = new LaserErrorCode ();
+            bool tamddd = standard.data[0].Equals('1');
+            try
+            {
+                if (standard.data[0].Equals('1')) {
+                    er.LaserErrorConnect = true;
+                } else {
+                    er.LaserErrorConnect = false;
+                }
+                if (standard.data[1].Equals ('1')) {
+                    er.LaserErrorShutdown = true;
+                } else {
+                    er.LaserErrorShutdown = false;
+                }
+                if (standard.data[2].Equals ('1')) {
+                    er.LaserErrorLostSpeed = true;
+                } else {
+                    er.LaserErrorLostSpeed = false;
+                }
+                if (standard.data[3].Equals ('1')) {
+                    er.LaserErrorLostPath = true;
+                } else {
+                    er.LaserErrorLostPath = false;
+                }
+            } catch (System.Exception) {
+                Console.WriteLine ("Cannot parse error laser");
+            }
+            // AGVLaserErrorCallBack (er);
+        }
+
+        private void AGVLaserWarningHandler (Communication.Message message) {
+            StandardString standard = (StandardString) message;
+            LaserWarningCode war = new LaserWarningCode ();
+            try {
+                if (standard.data[0].Equals ('1')) {
+                    war.LaserWarningObstacle = true;
+                } else {
+                    war.LaserWarningObstacle = false;
+                }
+                if (standard.data[1].Equals ('1')) {
+                    war.LaserWarningLowBattey = true;
+                } else {
+                    war.LaserWarningLowBattey = false;
+                }
+                if (standard.data[2].Equals ('1')) {
+                    war.LaserWarningCharging = true;
+                } else {
+                    war.LaserWarningCharging = false;
+                }
+                if (standard.data[3].Equals ('1')) {
+                    war.LaserWarningHazardoes = true;
+                } else {
+                    war.LaserWarningHazardoes = false;
+                }
+                if (standard.data[4].Equals ('1')) {
+                    war.LaserWarningHazardoes = true;
+                } else {
+                    war.LaserWarningHazardoes = false;
+                }
+            } catch (System.Exception) {
+                Console.WriteLine ("Cannot parse warning laser");
+            }
+            // AGVLaserWarningCallBack (war);
+        }
+
+        public void TestLaserError (String cmd) {
+            StandardString msg = new StandardString ();
+            msg.data = cmd;
+            this.Publish (paramsRosSocket.publication_TestLaserError, msg);
+        }
+        public void TestLaserWarning (String cmd) {
+            StandardString msg = new StandardString ();
+            msg.data = cmd;
+            this.Publish (paramsRosSocket.publication_TestLaserWarning, msg);
         }
 
         public void FinishedStatesPublish (int message) {
             StandardInt32 msg = new StandardInt32 ();
             msg.data = message;
             this.Publish (paramsRosSocket.publication_finishedStates, msg);
-
         }
 
         public void BatteryPublish (float message) {
@@ -242,7 +336,6 @@ namespace SeldatMRMS.Management.RobotManagent {
             data.pose.orientation.z = (float) Math.Sin (theta / 2);
             data.pose.orientation.w = (float) Math.Cos (theta / 2);
             this.Publish (paramsRosSocket.publication_robotnavigation, data);
-
         }
         public void SetSpeed (RobotSpeedLevel robotspeed) {
             StandardInt32 msg = new StandardInt32 ();

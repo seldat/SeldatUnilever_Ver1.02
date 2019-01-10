@@ -1,17 +1,13 @@
-﻿using SeldatMRMS.Management.RobotManagent;
-using System;
+﻿using System;
+using SeldatMRMS.Management.RobotManagent;
 
-namespace SeldatMRMS
-{
-    public class ControlService:DBProcedureService
-    {
-       public ControlService(RobotUnity robot)
-       {
-            if (robot != null)
-            {
-               // robot.ZoneHandler += ZoneHandler;
+namespace SeldatMRMS {
+    public class ControlService : DBProcedureService {
+        public ControlService (RobotUnity robot) {
+            if (robot != null) {
+                // robot.ZoneHandler += ZoneHandler;
                 robot.FinishStatesCallBack += FinishStatesCallBack;
-               // robot.AmclPoseHandler += AmclPoseHandler;
+                // robot.AmclPoseHandler += AmclPoseHandler;
                 //if(doorService!=null)
                 //    doorService.ReceiveRounterEvent += ReceiveRounterEvent;
             }
@@ -19,15 +15,15 @@ namespace SeldatMRMS
             //{
 
             //}
-       }
-       // robot control
-       public virtual void ZoneHandler(Communication.Message message) { }
-       public virtual void FinishStatesCallBack(Int32 message) { }
-       public virtual void AmclPoseHandler(Communication.Message message) { }
-       public virtual void CtrlRobotSpeed() { }
-       public virtual void MoveBaseGoal() { }
-       public virtual void AcceptDoSomething() { }
+        }
+        // robot control
+        public virtual void ZoneHandler (Communication.Message message) { }
+        public virtual void FinishStatesCallBack (Int32 message) { }
+        public virtual void AmclPoseHandler (Communication.Message message) { }
+        public virtual void CtrlRobotSpeed () { }
+        public virtual void MoveBaseGoal () { }
+        public virtual void AcceptDoSomething () { }
         // door control
-       public virtual void ReceiveRounterEvent(String message) { }
+        public virtual void ReceiveRounterEvent (String message) { }
     }
 }

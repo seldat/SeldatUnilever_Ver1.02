@@ -227,5 +227,6 @@ namespace SeldatMRMS.Management.RobotManagent
             if (RobotUnityRegistedList.ContainsKey(nameID))
                 RobotUnityRegistedList.Remove(nameID);
         }
+        
     }
 }

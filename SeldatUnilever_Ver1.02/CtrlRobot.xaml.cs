@@ -66,11 +66,15 @@ namespace SeldatUnilever_Ver1._02
         private void CmdGetOutCharger_Click(object sender, RoutedEventArgs e)
         {
             rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3207);
+            // String tamp = "1001";
+            // rms.RobotUnityRegistedList.ElementAt(0).Value.TestLaserError(tamp);
         }
 
         private void LineCamePoint_Click(object sender, RoutedEventArgs e)
         {
             rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3205);
+            // String tamp = "11010";
+            // rms.RobotUnityRegistedList.ElementAt(0).Value.TestLaserWarning(tamp);
         }
     }
 }

@@ -82,6 +82,9 @@
     <Compile Include="Communication\MessageTypes.cs" />
     <Compile Include="Communication\Operation.cs" />
     <Compile Include="Communication\RosSocket.cs" />
+    <Compile Include="CtrlRobot.xaml.cs">
+      <DependentUpon>CtrlRobot.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DTO\dtBuffer.cs" />
     <Compile Include="DTO\dtPallet.cs" />
     <Compile Include="Global_Mouse.cs" />
@@ -131,6 +134,10 @@
     <Compile Include="Shape\PalletShape.cs" />
     <Compile Include="Shape\RobotShape.cs" />
     <Compile Include="Shape\StationShape.cs" />
+    <Page Include="CtrlRobot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Form\ChangePassForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -200,19 +207,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Communication\Communication.zip" />
-    <None Include="Management\ChargerCtrl\ChargerCtrl.cs.orig" />
-    <None Include="Management\ChargerCtrl\ChargerManagementService.cs.orig" />
     <None Include="Management\DeviceManagement\Machine.Json" />
-    <None Include="Management\DoorServices\DoorService.cs.orig" />
     <None Include="Management\DoorServices\DoorServices.zip" />
     <None Include="Management\Media\8400001A_small5M2.stl" />
-    <None Include="Management\ProcedureServices\CollectionDataService.cs.orig" />
-    <None Include="Management\ProcedureServices\ProcedureBufferToReturn.cs.orig" />
-    <None Include="Management\ProcedureServices\RegisterProcedureService.cs.orig" />
-    <None Include="Management\RobotManagent\RobotManagementService.cs.orig" />
     <None Include="Management\TrafficManager\Configure.xlsx" />
-    <None Include="Management\UnityService\AssigmentTaskService.cs.orig" />
-    <None Include="Management\UnityService\UnityManagementService.cs.orig" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

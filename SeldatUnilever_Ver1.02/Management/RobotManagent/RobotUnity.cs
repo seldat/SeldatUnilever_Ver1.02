@@ -10,6 +10,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
+
 namespace SeldatMRMS.Management.RobotManagent
 {
     public class RobotUnity : RobotBaseService
@@ -53,7 +55,6 @@ namespace SeldatMRMS.Management.RobotManagent
             //DrawCircle();
             //th.IsBackground = true;
             //th.Start();
-           
         }
         public void Initialize()
         {

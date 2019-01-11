@@ -46,6 +46,7 @@ namespace SelDatUnilever_Ver1
             this.order = order;
             clientRequest = new BridgeClientRequest();
             clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
+            
         }
         public virtual void AssignAnOrder(OrderItem order)
         {

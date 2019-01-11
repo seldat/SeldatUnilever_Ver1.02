@@ -63,7 +63,7 @@ namespace SeldatMRMS
             public int productDetailId { get; set; }
             public int bufferId { get; set; }
             public int palletId { get; set; }
-            public string operationType { get; set; }
+            public int operationType { get; set; }
             public string rpBeginDatetime { get; set; }
             public string rpEndDatetime { get; set; }
             public string orderContent { get; set; }
@@ -82,7 +82,7 @@ namespace SeldatMRMS
                 productId = order.productId;
                 palletId = order.palletId;
                 bufferId = order.bufferId;
-                operationType = prcode.ToString() ;
+                operationType = (int)prcode ;
                 orderContent = JsonConvert.SerializeObject(order);
                 rpEndDatetime = DateTime.Now.ToString("yyyyMMddHHmmss");
                 robotProcessStastus = status;

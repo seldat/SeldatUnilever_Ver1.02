@@ -56,8 +56,8 @@ namespace SeldatMRMS.Management.DoorServices
             {
                 Id = DoorId.DOOR_MEZZAMINE_RETURN_BACK,
                 Ip = "192.168.1.2",
-                Port = 10001,
-                infoPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
+                Port = 8081,
+                infoPallet = "{\"pallet\":1,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
                 PointCheckInGateStr = "0.0,0.0,0.0"
             };
@@ -69,9 +69,9 @@ namespace SeldatMRMS.Management.DoorServices
             DoorInfoConfig doorICF_MRF = new DoorInfoConfig()
             {
                 Id = DoorId.DOOR_MEZZAMINE_RETURN_FRONT,
-                Ip = "192.168.1.2",
-                Port = 10001,
-                infoPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
+                Ip = "192.168.1.3",
+                Port = 8081,
+                infoPallet = "{\"pallet\":1,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
                 PointCheckInGateStr = "0.0,0.0,0.0"
             };
@@ -83,9 +83,9 @@ namespace SeldatMRMS.Management.DoorServices
             DoorInfoConfig doorICF_MUB = new DoorInfoConfig()
             {
                 Id = DoorId.DOOR_MEZZAMINE_UP_BACK,
-                Ip = "192.168.1.2",
-                Port = 10001,
-                infoPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
+                Ip = "192.168.1.4",
+                Port = 8081,
+                infoPallet = "{\"pallet\":0,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
                 PointCheckInGateStr = "0.0,0.0,0.0"
             };
@@ -97,9 +97,9 @@ namespace SeldatMRMS.Management.DoorServices
             DoorInfoConfig doorICF_MUF = new DoorInfoConfig()
             {
                 Id = DoorId.DOOR_MEZZAMINE_UP_FRONT,
-                Ip = "192.168.1.2",
-                Port = 10001,
-                infoPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
+                Ip = "192.168.1.5",
+                Port = 8081,
+                infoPallet = "{\"pallet\":0,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
                 PointCheckInGateStr = "0.0,0.0,0.0"
             };
@@ -153,8 +153,8 @@ namespace SeldatMRMS.Management.DoorServices
                 {
                     Id = DoorId.DOOR_MEZZAMINE_RETURN_BACK,
                     Ip = "192.168.1.2",
-                    Port = 10001,
-                    infoPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
+                    Port = 8081,
+                    infoPallet = "{\"pallet\":1,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}",
                     PointFrontLineStr = "1,2,3",
                     PointCheckInGateStr = "0.0,0.0,0.0"
                 };
@@ -169,8 +169,8 @@ namespace SeldatMRMS.Management.DoorServices
                 {
                     Id = DoorId.DOOR_MEZZAMINE_RETURN_FRONT,
                     Ip = "192.168.1.2",
-                    Port = 10001,
-                    infoPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
+                    Port = 8081,
+                    infoPallet = "{\"pallet\":1,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}",
                     PointFrontLineStr = "1,2,3",
                     PointCheckInGateStr = "0.0,0.0,0.0"
                 };
@@ -185,8 +185,8 @@ namespace SeldatMRMS.Management.DoorServices
                 {
                     Id = DoorId.DOOR_MEZZAMINE_UP_BACK,
                     Ip = "192.168.1.2",
-                    Port = 10001,
-                    infoPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
+                    Port = 8081,
+                    infoPallet = "{\"pallet\":0,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}",
                     PointFrontLineStr = "1,2,3",
                     PointCheckInGateStr = "0.0,0.0,0.0"
                 };
@@ -201,8 +201,8 @@ namespace SeldatMRMS.Management.DoorServices
                 {
                     Id = DoorId.DOOR_MEZZAMINE_UP_FRONT,
                     Ip = "192.168.1.2",
-                    Port = 10001,
-                    infoPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
+                    Port = 8081,
+                    infoPallet = "{\"pallet\":0,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}",
                     PointFrontLineStr = "1,2,3",
                     PointCheckInGateStr = "0.0,0.0,0.0"
                 };

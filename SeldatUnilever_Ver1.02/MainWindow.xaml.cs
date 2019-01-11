@@ -224,22 +224,22 @@ namespace SeldatUnilever_Ver1._02
 
         private void Btn_Robot_Click(object sender, RoutedEventArgs e)
         {
-            
+            unityService.OpenConfigureForm("RCF");
         }
 
         private void Btn_Area_Click(object sender, RoutedEventArgs e)
         {
-
+            unityService.OpenConfigureForm("ACF");
         }
 
         private void Btn_Charge_Click(object sender, RoutedEventArgs e)
         {
-
+            unityService.OpenConfigureForm("CCF");
         }
 
         private void Btn_Door_Click(object sender, RoutedEventArgs e)
         {
-
+            unityService.OpenConfigureForm("DCF");
         }
 
         private void Btn_Statistics_Click(object sender, RoutedEventArgs e)

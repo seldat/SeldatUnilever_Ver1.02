@@ -64,5 +64,23 @@ namespace SeldatMRMS.Management.UnityService
         {
 
         }
+        public void OpenConfigureForm(String frm)
+        {
+            switch(frm)
+            {
+                case "ACF":
+                    trafficService.configureArea.Show();
+                    break;
+                case "CCF":
+                    chargerService.configureForm.Show();
+                    break;
+                case "DCF":
+                    doorManagementService.doorConfigure.Show();
+                    break;
+                case "RCF":
+                    robotManagementService.configureForm.Show();
+                    break;
+            }
+        }
     }
 }

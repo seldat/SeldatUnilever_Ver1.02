@@ -32,16 +32,15 @@ namespace SeldatMRMS.Management.RobotManagent
         public Dictionary<String,RobotUnity>  RobotUnityRegistedList = new Dictionary<string, RobotUnity>();
         public Dictionary<String, RobotUnity> RobotUnityWaitTaskList = new Dictionary<string, RobotUnity>();
         public Dictionary<String, RobotUnity> RobotUnityReadyList = new Dictionary<string, RobotUnity>();
-        ConfigureRobotUnity ConfigureForm;
+        public ConfigureRobotUnity configureForm;
         private TrafficManagementService trafficManagementService;
         public RobotManagementService(Canvas canvas) {
           
            //LoadRobotUnityConfigure();
             PropertiesRobotUnity_List = new List<PropertiesRobotUnity>();
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
-            ConfigureForm = new ConfigureRobotUnity(this);
+            configureForm = new ConfigureRobotUnity(this);
             LoadConfigure();
-            ConfigureForm.Show();
             //   LoadConfigure();
         }
         public void Initialize()

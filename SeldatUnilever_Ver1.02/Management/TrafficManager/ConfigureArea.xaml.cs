@@ -20,10 +20,10 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
     /// <summary>
     /// Interaction logic for ConfigureTraffic.xaml
     /// </summary>
-    public partial class ConfigureTraffic : Window
+    public partial class ConfigureArea : Window
     {
         TrafficRounterService trafficRounterService;
-        public ConfigureTraffic(TrafficRounterService trafficRounterService)
+        public ConfigureArea(TrafficRounterService trafficRounterService)
         {
             InitializeComponent();
             this.trafficRounterService = trafficRounterService;

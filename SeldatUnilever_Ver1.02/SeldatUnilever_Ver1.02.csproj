@@ -156,8 +156,8 @@
       <DependentUpon>Statistics.xaml</DependentUpon>
     </Compile>
     <Compile Include="Management\Statistics\StatisticsModel.cs" />
-    <Compile Include="Management\TrafficManager\ConfigureTraffic.xaml.cs">
-      <DependentUpon>ConfigureTraffic.xaml</DependentUpon>
+    <Compile Include="Management\TrafficManager\ConfigureArea.xaml.cs">
+      <DependentUpon>ConfigureArea.xaml</DependentUpon>
     </Compile>
     <Compile Include="Management\TrafficManager\TrafficManagementService.cs" />
     <Compile Include="Management\TrafficManager\TrafficRounterService.cs" />
@@ -236,7 +236,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Management\TrafficManager\ConfigureTraffic.xaml">
+    <Page Include="Management\TrafficManager\ConfigureArea.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

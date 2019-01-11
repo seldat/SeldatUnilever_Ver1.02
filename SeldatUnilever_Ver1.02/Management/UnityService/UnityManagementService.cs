@@ -35,7 +35,6 @@ namespace SeldatMRMS.Management.UnityService
             deviceRegistrationService = new DeviceRegistrationService(12000);
 
             assigmentTaskService = new AssigmentTaskService();
-            trafficService = new TrafficManagementService();
             assigmentTaskService.RegistryService(robotManagementService);
             assigmentTaskService.RegistryService(procedureManagementService);
             assigmentTaskService.RegistryService(deviceRegistrationService.GetDeviceItemList());

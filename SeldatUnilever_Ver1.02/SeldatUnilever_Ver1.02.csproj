@@ -131,6 +131,9 @@
     <Compile Include="Management\RobotManagent\RobotUnityControl.cs" />
     <Compile Include="Management\RobotManagent\RobotUnityService.cs" />
     <Compile Include="Management\RobotManagent\TrafficRobotUnity.cs" />
+    <Compile Include="Management\TrafficManager\ConfigureTraffic.xaml.cs">
+      <DependentUpon>ConfigureTraffic.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Management\TrafficManager\TrafficManagementService.cs" />
     <Compile Include="Management\TrafficManager\TrafficRounterService.cs" />
     <Compile Include="Management\UnityService\AssigmentTaskService.cs" />
@@ -201,6 +204,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Management\RobotManagent\ConfigureRobotUnity.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\TrafficManager\ConfigureTraffic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SeldatMRMS;
 using SeldatMRMS.Management.RobotManagent;
+using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,15 +16,15 @@ using System.Windows.Data;
 
 namespace SelDatUnilever_Ver1._00.Management.TrafficManager
 {
-   public class TrafficRounterService
+    public class TrafficRounterService
     {
         public ListCollectionView Grouped_PropertiesTrafficZoneList { get; private set; }
         public List<ZoneRegister> PropertiesTrafficZoneList;
         protected List<RobotUnity> RobotUnityListOnTraffic = new List<RobotUnity>();
         public class ZoneRegister : NotifyUIBase
         {
-            private String _NameID;
-            public String NameID { get => _NameID; set { _NameID = value; RaisePropertyChanged("NameID"); } }
+            private String _NameId;
+            public String NameId { get => _NameId; set { _NameId = value; RaisePropertyChanged("NameId"); } }
             private String _TypeZone;
             public String TypeZone { get => _TypeZone; set { _TypeZone = value; RaisePropertyChanged("TypeZone"); } }
             private int _Index;
@@ -44,28 +45,47 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
         }
         public Dictionary<String, ZoneRegister> ZoneRegisterList = new Dictionary<string, ZoneRegister>();
-        public TrafficRounterService() {
+        public TrafficRounterService()
+        {
             PropertiesTrafficZoneList = new List<ZoneRegister>();
             Grouped_PropertiesTrafficZoneList = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesTrafficZoneList);
-
+            LoadConfigure();
+            ConfigureTraffic configureTraffic = new ConfigureTraffic(this);
+            configureTraffic.Show();
+        }
+        public void Initialize()
+        {
+            ZoneRegister ptemp = new ZoneRegister();
+            ptemp.NameId = "OPA" + ZoneRegisterList.Count;
+            ptemp.Point1 = new Point(0, 0);
+            ptemp.Point2 = new Point(10, 10);
+            ptemp.Point3 = new Point(3, 4);
+            ptemp.Point4 = new Point(5, 5);
+            PropertiesTrafficZoneList.Add(ptemp);
+            Grouped_PropertiesTrafficZoneList.Refresh();
+            ZoneRegisterList.Add(ptemp.NameId, ptemp);
         }
         public void AddConfig()
         {
             ZoneRegister ptemp = new ZoneRegister();
+            ptemp.NameId = "OPA" + ZoneRegisterList.Count;
             PropertiesTrafficZoneList.Add(ptemp);
             Grouped_PropertiesTrafficZoneList.Refresh();
+            ZoneRegisterList.Add(ptemp.NameId, ptemp);
+            SaveConfig(JsonConvert.SerializeObject(PropertiesTrafficZoneList, Formatting.Indented).ToString());
         }
-        public void SaveConfig(DataGrid datagrid)
+        public void SaveConfig(String data)
         {
             String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigTrafficZone.json");
-            System.IO.File.WriteAllText(path, JsonConvert.SerializeObject(datagrid.ItemsSource, Formatting.Indented));
+            System.IO.File.WriteAllText(path, data);
         }
         public bool LoadConfigure()
         {
             String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigTrafficZone.json");
             if (!File.Exists(path))
             {
-                File.Create(path);
+                Initialize();
+                SaveConfig(JsonConvert.SerializeObject(PropertiesTrafficZoneList, Formatting.Indented).ToString());
                 return false;
             }
             else
@@ -76,7 +96,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                     if (data.Length > 0)
                     {
                         List<ZoneRegister> tempPropertiestcharge = JsonConvert.DeserializeObject<List<ZoneRegister>>(data);
-                        tempPropertiestcharge.ForEach(e => PropertiesTrafficZoneList.Add(e));
+                        tempPropertiestcharge.ForEach(e => { PropertiesTrafficZoneList.Add(e); ZoneRegisterList.Add(e.NameId, e); });
                         Grouped_PropertiesTrafficZoneList.Refresh();
                         return true;
                     }
@@ -88,7 +108,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
         public void LoadConfigureZone()
         {
             string name = "Area";
-            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(),"Configure.xlsx");
+            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Configure.xlsx");
             MessageBox.Show(path);
             string constr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +
                             path +
@@ -104,7 +124,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             foreach (DataRow row in data.Rows)
             {
                 ZoneRegister zone = new ZoneRegister();
-                zone.NameID = row.Field<string>("Name");
+                zone.NameId = row.Field<string>("Name");
                 zone.Index = int.Parse(row.Field<string>("Index"));
                 x = double.Parse(row.Field<string>("Point1").Split(',')[0]);
                 y = double.Parse(row.Field<string>("Point1").Split(',')[1]);
@@ -119,7 +139,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 y = double.Parse(row.Field<string>("Point4").Split(',')[1]);
                 zone.Point4 = new Point(x, y);
                 zone.Detail = row.Field<string>("Detail_vn");
-                ZoneRegisterList.Add(zone.NameID, zone);
+                ZoneRegisterList.Add(zone.NameId, zone);
             }
             con.Close();
         }
@@ -157,7 +177,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
 
                 if (ExtensionService.IsInPolygon(r.GetZone(), position))
                 {
-                    zoneName = r.NameID;
+                    zoneName = r.NameId;
                     break;
                 }
             }
@@ -172,7 +192,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
 
                 if (ExtensionService.IsInPolygon(r.GetZone(), goal))
                 {
-                    zoneName = r.NameID;
+                    zoneName = r.NameId;
                     break;
                 }
             }
@@ -205,7 +225,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             bool ret = false;
             foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
             {
-                if (r.NameID.Equals(AreaName))
+                if (r.NameId.Equals(AreaName))
                 {
                     if (ExtensionService.IsInPolygon(r.GetZone(), position))
                     {
@@ -215,6 +235,17 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 }
             }
             return ret;
+        }
+        public void FixedPropertiesZoneRegister(String nameID)
+        {
+       
+        }
+        public void ClearZoneRegister(String nameID)
+        {
+            ZoneRegisterList.Remove(nameID);
+            int index=PropertiesTrafficZoneList.FindIndex(e => e.NameId.Equals(nameID));
+            PropertiesTrafficZoneList.RemoveAt(index);
+            Grouped_PropertiesTrafficZoneList.Refresh();
         }
     }
 }

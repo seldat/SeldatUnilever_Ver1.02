@@ -169,7 +169,18 @@ namespace SeldatMRMS.Management
                     // Find condition priority
                     // index level of road
                     // procedure Flag is set
-                    if(prioritLevel.IndexOnMainRoad<robot.prioritLevel.IndexOnMainRoad)
+                    if(prioritLevel.IndexOnMainRoad==robot.prioritLevel.IndexOnMainRoad)
+                    {
+                       if(robot.prioritLevel.OnAuthorizedPriorityProcedure)
+                        {
+                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                        }
+                        else
+                        {
+                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                        }
+                    }
+                    else if(prioritLevel.IndexOnMainRoad < robot.prioritLevel.IndexOnMainRoad)
                     {
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                     }

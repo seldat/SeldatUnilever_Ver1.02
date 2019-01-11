@@ -17,6 +17,12 @@ namespace SeldatMRMS
     public static class Global_Object
     {
 
+        public enum PRIORITYLOGIN
+        {
+            PRIORITYLOGIN_ADMIN0=0,
+            PRIORITYLOGIN_ADMIN1 = 1,
+            PRIORITYLOGIN_GUEST = 2,
+        }
         //#######################################
         public static bool IsEngLish = false;
 

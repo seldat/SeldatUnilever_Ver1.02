@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SeldatUnilever_Ver1._02.DTO
 {
@@ -29,6 +26,6 @@ namespace SeldatUnilever_Ver1._02.DTO
         public int deviceId { get => pDeviceId; set => pDeviceId = value; }
         public string deviceName { get => pDeviceName; set => pDeviceName = value; }
         public string userPasswordOld { get => pUserPasswordOld; set => pUserPasswordOld = value; }
-
+        
     }
 }

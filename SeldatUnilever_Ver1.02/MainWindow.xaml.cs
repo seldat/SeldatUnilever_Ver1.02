@@ -3,6 +3,7 @@ using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.UnityService;
 using SeldatUnilever_Ver1._02.Form;
 using SeldatUnilever_Ver1._02.Management.ProcedureServices;
+using SeldatUnilever_Ver1._02.Management.Statistics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -219,6 +220,32 @@ namespace SeldatUnilever_Ver1._02
                 ctrR.Show();
             }
             catch { }
+        }
+
+        private void Btn_Robot_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void Btn_Area_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Btn_Charge_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Btn_Door_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Btn_Statistics_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics();
+            statistics.ShowDialog();
         }
     }
 }

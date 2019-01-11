@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SeldatUnilever_Ver1._02.DTO
+﻿namespace SeldatUnilever_Ver1._02.DTO
 {
-    public class userModel : NotifyUIBase//INotifyPropertyChanged
+    public class userModel: NotifyUIBase//INotifyPropertyChanged
     {
         private int pCreUsrId;
         private string pCreDt;

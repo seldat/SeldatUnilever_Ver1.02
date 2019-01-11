@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SeldatUnilever_Ver1._02.DTO
+﻿namespace SeldatUnilever_Ver1._02.DTO
 {
     public class dtPallet : userModel
     {
@@ -41,6 +35,8 @@ namespace SeldatUnilever_Ver1._02.DTO
         public string productName { get => pProductName; set { pProductName = value; RaisePropertyChanged("productName"); } }
         public int productDetailId { get => pProductDetailId; set { pProductDetailId = value; RaisePropertyChanged("productDetailId"); } }
         public string productDetailName { get => pProductDetailName; set { pProductDetailName = value; RaisePropertyChanged("productDetailName"); } }
+
+
 
     }
 }

@@ -95,7 +95,19 @@
       <DependentUpon>CtrlRobot.xaml</DependentUpon>
     </Compile>
     <Compile Include="DTO\dtBuffer.cs" />
+    <Compile Include="DTO\dtDevice.cs" />
+    <Compile Include="DTO\dtDeviceBuffer.cs" />
+    <Compile Include="DTO\dtDevicePallet.cs" />
+    <Compile Include="DTO\dtDeviceProduct.cs" />
+    <Compile Include="DTO\dtOperationType.cs" />
     <Compile Include="DTO\dtPallet.cs" />
+    <Compile Include="DTO\dtPlan.cs" />
+    <Compile Include="DTO\dtProduct.cs" />
+    <Compile Include="DTO\dtProductDetail.cs" />
+    <Compile Include="DTO\dtRobotProcess.cs" />
+    <Compile Include="DTO\dtTimeWork.cs" />
+    <Compile Include="DTO\RptProcessChargeDTO.cs" />
+    <Compile Include="DTO\RptProcessRobotDTO.cs" />
     <Compile Include="Global_Mouse.cs" />
     <Compile Include="Management\ChargerCtrl\ChargerCtrl.cs" />
     <Compile Include="Management\ChargerCtrl\ChargerManagementService.cs" />
@@ -140,6 +152,10 @@
     <Compile Include="Management\RobotManagent\RobotUnityControl.cs" />
     <Compile Include="Management\RobotManagent\RobotUnityService.cs" />
     <Compile Include="Management\RobotManagent\TrafficRobotUnity.cs" />
+    <Compile Include="Management\Statistics\Statistics.xaml.cs">
+      <DependentUpon>Statistics.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\Statistics\StatisticsModel.cs" />
     <Compile Include="Management\TrafficManager\ConfigureTraffic.xaml.cs">
       <DependentUpon>ConfigureTraffic.xaml</DependentUpon>
     </Compile>
@@ -213,6 +229,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Management\RobotManagent\ConfigureRobotUnity.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\Statistics\Statistics.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

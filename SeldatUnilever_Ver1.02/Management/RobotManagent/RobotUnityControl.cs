@@ -172,7 +172,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
 
         ParamsRosSocket paramsRosSocket;
-        public PropertiesRobotUnity properties= new PropertiesRobotUnity();
+        public PropertiesRobotUnity properties = new PropertiesRobotUnity();
         protected virtual void SupervisorTraffic() { }
         public RobotUnityControl()
         {

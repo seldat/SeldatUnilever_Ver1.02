@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -169,7 +170,7 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpServerRounter
                 ms.Seek(0, SeekOrigin.Begin);
             }
             srv.handlePOSTRequest(this, new StreamReader(ms));
-
+            handlePOSTResponse(this, new StreamReader(ms));
         }
         public void handlePostResponse()
         {
@@ -191,13 +192,13 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpServerRounter
         }
         public void handlePOSTResponse(HttpProcessor p, StreamReader inputData)
         {
-            Console.WriteLine("POST request: {0}", p.http_url);
-            string data = inputData.ReadToEnd();
-
             p.writeSuccess();
-            p.outputStream.WriteLine("<html><body><h1>test server</h1>");
-            p.outputStream.WriteLine("<a href=/test>return</a><p>");
-            p.outputStream.WriteLine("postbody: <pre>{0}</pre>", data);
+            // string text = System.IO.File.ReadAllText("C:\\Users\\luat.tran\\source\\repos\\TestServer\\TestServer\\HttpServerRounter\\datajson.json");
+
+            dynamic product = new JObject();
+            product.status = "OK";
+            Console.WriteLine("" + product.ToString());
+            p.outputStream.WriteLine(product.ToString());
         }
     }
 }

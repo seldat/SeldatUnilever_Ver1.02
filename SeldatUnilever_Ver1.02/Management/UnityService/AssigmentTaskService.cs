@@ -156,6 +156,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         case ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK:
                             Console.WriteLine(processAssignTaskReady);
                             SelectProcedureItem(robot, orderItem);
+                            deviceItemsList[0].RemoveFirstOrder();
                             MoveElementToEnd(); // sort Task List
                             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
                             break;

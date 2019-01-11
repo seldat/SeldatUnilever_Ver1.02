@@ -65,6 +65,7 @@ namespace SeldatMRMS.Management
             public String hasSubLine;
             public BrDirection direction;
             public Int32 row;
+            public Int32 palletId;
         }
         private List<RobotUnity> RobotUnitylist;
         private bool flagSupervisorTraffic;

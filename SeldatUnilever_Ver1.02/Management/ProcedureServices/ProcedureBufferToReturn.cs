@@ -25,7 +25,7 @@ namespace SeldatMRMS {
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
         public override event Action<Object> ReleaseProcedureHandler;
-        public override event Action<Object> ErrorProcedureHandler;
+        // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureBufferToReturn (RobotUnity robot, TrafficManagementService traffiicService) : base (robot) {
             StateBufferToReturn = BufferToReturn.BUFRET_IDLE;
             this.robot = robot;
@@ -68,12 +68,12 @@ namespace SeldatMRMS {
                                         break;
                                     } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                         errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                                        CheckUserHandleError(this);
                                         break;
                                     }
                                     if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE) {
                                         errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                                        CheckUserHandleError(this);
                                         break;
                                     }
                                     Thread.Sleep (100);
@@ -85,7 +85,7 @@ namespace SeldatMRMS {
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
 
                         break;
@@ -103,7 +103,7 @@ namespace SeldatMRMS {
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
@@ -115,7 +115,7 @@ namespace SeldatMRMS {
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                         // case BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_POINT_BRANCHING:
@@ -155,7 +155,7 @@ namespace SeldatMRMS {
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER: // đợi
@@ -166,11 +166,11 @@ namespace SeldatMRMS {
                                 StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_RETURN;
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                 errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                                CheckUserHandleError(this);
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_RETURN: // dang di
@@ -187,7 +187,7 @@ namespace SeldatMRMS {
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET:
@@ -199,7 +199,7 @@ namespace SeldatMRMS {
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                         // case BufferToReturn.BUFRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET:  // đang trong tiến trình dò line và thả pallet
@@ -221,7 +221,7 @@ namespace SeldatMRMS {
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_FRONTLINE;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_FRONTLINE:
@@ -230,16 +230,16 @@ namespace SeldatMRMS {
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;
-                        if (errorCode == ErrorCode.RUN_OK) {
+                        // if (errorCode == ErrorCode.RUN_OK) {
                             ReleaseProcedureHandler (this);
-                        } else {
-                            ErrorProcedureHandler (this);
-                        }
+                        // } else {
+                        //     ErrorProcedureHandler (this);
+                        // }
                         ProRun = false;
                         break;
                     default:

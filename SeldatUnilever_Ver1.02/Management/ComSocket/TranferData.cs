@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Threading;
 using DoorControllerService;
 
 namespace SelDatUnilever_Ver1._00.Management.ComSocket
 {
     public class TranferData : RouterComPort
     {
-        private const UInt32 TIME_OUT_WAIT_RESPONSE = 15000;
-        private const UInt32 RESENT_MAX_TIME = 3;
+        private const UInt32 TIME_OUT_WAIT_RESPONSE = 60000;
+        private const UInt32 RESENT_MAX_TIME = 10;
         private UInt32 numResent = 0;
         private const byte ACK = 0;
         private const byte NACK = 1;
@@ -58,43 +59,51 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 Console.WriteLine("Waitting response");
                 if (this.WaitForReadyRead(TIME_OUT_WAIT_RESPONSE))
                 {
-                    Console.WriteLine("have data receive");
-                    DataReceive dataRx = GetDataRec();
-                    byte[] data = new byte[dataRx.length];
-                    Buffer.BlockCopy(dataRx.data,0,data,0,dataRx.length);
-                    ResPacket resPaket = new ResPacket();
-                    resPaket.header = (UInt16)((data[1] << 8) | data[0]);
-                    resPaket.command = data[2];
-                    resPaket.length = (UInt16)((data[4] << 8) | data[3]);
-                    resPaket.ack = data[5];
-                    UInt16 len = (UInt16)(resPaket.length - 4);
-                    resPaket.data = new byte[len];
-                    Buffer.BlockCopy(data,6,resPaket.data,0,len);
-                    if (resPaket.header == 0x55FA)
+                    try
                     {
-                        Console.WriteLine("check header ok");
-                        if (resPaket.data[len - 1] == CalChecksum(data, (UInt32)(data.Length - 3)))
+                        Console.WriteLine("have data receive");
+                        DataReceive dataRx = GetDataRec();
+                        byte[] data = new byte[dataRx.length];
+                        Buffer.BlockCopy(dataRx.data,0,data,0,dataRx.length);
+                        ResPacket resPaket = new ResPacket();
+                        resPaket.header = (UInt16)((data[1] << 8) | data[0]);
+                        resPaket.command = data[2];
+                        resPaket.length = (UInt16)((data[4] << 8) | data[3]);
+                        resPaket.ack = data[5];
+                        UInt16 len = (UInt16)(resPaket.length - 4);
+                        resPaket.data = new byte[len];
+                        Buffer.BlockCopy(data,6,resPaket.data,0,len);
+                        if (resPaket.header == 0x55FA)
                         {
-                            Console.WriteLine("calChecksum ok");
-                            if (resPaket.ack == ACK)
+                            Console.WriteLine("check header ok");
+                            if (resPaket.data[len - 1] == CalChecksum(data, (UInt32)(data.Length - 3)))
                             {
-                                if (resPaket.command == (byte)(dataSend[2]+1))
+                                Console.WriteLine("calChecksum ok");
+                                if (resPaket.ack == ACK)
                                 {
-                                    if (len > 1)
+                                    if (resPaket.command == (byte)(dataSend[2]+1))
                                     {
-                                        dataRec.length = len - 1;
-                                        dataRec.data = new byte[dataRec.length];
-                                        Buffer.BlockCopy(resPaket.data, 0, dataRec.data, 0, len - 1);
+                                        if (len > 1)
+                                        {
+                                            dataRec.length = len - 1;
+                                            dataRec.data = new byte[dataRec.length];
+                                            Buffer.BlockCopy(resPaket.data, 0, dataRec.data, 0, len - 1);
+                                        }
+                                        result = true;
+                                        flagGetRespone = false;
+                                        Console.WriteLine("Send data success");
+                                        numResent = 0;
+                                        return true;
                                     }
-                                    result = true;
-                                    flagGetRespone = false;
-                                    Console.WriteLine("Send data success");
-                                    numResent = 0;
-                                    return true;
                                 }
                             }
-                        }
+                        }    
                     }
+                    catch (System.Exception)
+                    {
+                        Thread.Sleep(2000);   
+                    }
+                    
                 }
                 if (numResent < RESENT_MAX_TIME)
                 {

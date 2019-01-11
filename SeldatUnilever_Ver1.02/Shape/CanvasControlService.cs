@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SeldatUnilever_Ver1._02;
 using SeldatUnilever_Ver1._02.DTO;
 using System;
@@ -650,6 +651,119 @@ namespace SeldatMRMS
                 }
             }
             );
+        }
+
+        public void RedrawAllStation(List<dtBuffer> listBuffer)
+        {
+            for (int i = 0; i < list_Station.Count; i++)
+            {
+                foreach (dtBuffer buffer in listBuffer)
+                {
+                    if (buffer.bufferId == list_Station.ElementAt(i).Value.props.bufferDb.bufferId)
+                    {
+                        list_Station.ElementAt(i).Value.ReDraw(buffer);
+                    }
+                }
+            }
+        }
+
+        public List<dtBuffer> GetDataAllStation()
+        {
+            List<dtBuffer> listBuffer = new List<dtBuffer>();
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "buffer/getListBuffer");
+            request.Method = "GET";
+            request.ContentType = @"application/json";
+            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+            using (Stream responseStream = response.GetResponseStream())
+            {
+                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                string result = reader.ReadToEnd();
+
+                DataTable buffers = JsonConvert.DeserializeObject<DataTable>(result);
+                foreach (DataRow dr in buffers.Rows)
+                {
+                    dtBuffer tempBuffer = new dtBuffer
+                    {
+                        creUsrId = int.Parse(dr["creUsrId"].ToString()),
+                        creDt = dr["creDt"].ToString(),
+                        updUsrId = int.Parse(dr["updUsrId"].ToString()),
+                        updDt = dr["updDt"].ToString(),
+
+                        bufferId = int.Parse(dr["bufferId"].ToString()),
+                        bufferName = dr["bufferName"].ToString(),
+                        bufferNameOld = dr["bufferNameOld"].ToString(),
+                        bufferCheckIn = dr["bufferCheckIn"].ToString(),
+                        bufferData = dr["bufferData"].ToString(),
+                        maxRow = int.Parse(dr["maxRow"].ToString()),
+                        maxBay = int.Parse(dr["maxBay"].ToString()),
+                        maxRowOld = int.Parse(dr["maxRowOld"].ToString()),
+                        maxBayOld = int.Parse(dr["maxBayOld"].ToString()),
+                        bufferReturn = bool.Parse(dr["bufferReturn"].ToString()),
+                        bufferReturnOld = bool.Parse(dr["bufferReturnOld"].ToString()),
+                        //pallets
+                    };
+                    GetListPallet(tempBuffer);
+                    listBuffer.Add(tempBuffer);
+                }
+            }
+            return listBuffer;
+        }
+
+        public void GetListPallet(dtBuffer tempBuffer)
+        {
+            HttpWebRequest request2 = (HttpWebRequest)WebRequest.Create(Global_Object.url + "pallet/getListPalletBufferId");
+            request2.Method = "POST";
+            request2.ContentType = @"application/json";
+
+
+            dynamic postApiBody2 = new JObject();
+            postApiBody2.bufferId = tempBuffer.bufferId;
+            string jsonData2 = JsonConvert.SerializeObject(postApiBody2);
+
+
+            System.Text.UTF8Encoding encoding2 = new System.Text.UTF8Encoding();
+            Byte[] byteArray2 = encoding2.GetBytes(jsonData2);
+            request2.ContentLength = byteArray2.Length;
+            using (Stream dataStream2 = request2.GetRequestStream())
+            {
+                dataStream2.Write(byteArray2, 0, byteArray2.Length);
+                dataStream2.Flush();
+            }
+            HttpWebResponse response2 = request2.GetResponse() as HttpWebResponse;
+            using (Stream responseStream2 = response2.GetResponseStream())
+            {
+                StreamReader reader2 = new StreamReader(responseStream2, Encoding.UTF8);
+                string result2 = reader2.ReadToEnd();
+
+                DataTable pallets = JsonConvert.DeserializeObject<DataTable>(result2);
+                foreach (DataRow dr2 in pallets.Rows)
+                {
+                    dtPallet tempPallet = new dtPallet
+                    {
+                        creUsrId = int.Parse(dr2["creUsrId"].ToString()),
+                        creDt = dr2["creDt"].ToString(),
+                        updUsrId = int.Parse(dr2["updUsrId"].ToString()),
+                        updDt = dr2["updDt"].ToString(),
+                        palletId = int.Parse(dr2["palletId"].ToString()),
+                        deviceBufferId = int.Parse(dr2["deviceBufferId"].ToString()),
+                        bufferId = int.Parse(dr2["bufferId"].ToString()),
+                        planId = int.Parse(dr2["planId"].ToString()),
+                        row = int.Parse(dr2["row"].ToString()),
+                        bay = int.Parse(dr2["bay"].ToString()),
+                        dataPallet = dr2["dataPallet"].ToString(),
+                        palletStatus = dr2["palletStatus"].ToString(),
+                        deviceId = int.Parse(dr2["deviceId"].ToString()),
+                        deviceName = dr2["deviceName"].ToString(),
+                        productId = int.Parse(dr2["productId"].ToString()),
+                        productName = dr2["productName"].ToString(),
+                        productDetailId = int.Parse(dr2["productDetailId"].ToString()),
+                        productDetailName = dr2["productDetailName"].ToString(),
+                    };
+                    //props._palletList["Pallet" + "x" + tempPallet.bay + "x" + tempPallet.row].StatusChanged(tempPallet.palletStatus);
+                    tempBuffer.pallets.Add(tempPallet);
+                }
+            }
         }
 
         public void RedrawAllRobot()

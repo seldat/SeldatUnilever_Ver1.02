@@ -33,7 +33,7 @@ namespace SeldatMRMS
         const UInt32 TIME_OUT_OPEN_DOOR = 600000; /* ms */
         const UInt32 TIME_OUT_CLOSE_DOOR = 600000; /* ms */
         public override event Action<Object> ReleaseProcedureHandler;
-        public override event Action<Object> ErrorProcedureHandler;
+        // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureForkLiftToBuffer (RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base (robot) {
             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -87,12 +87,12 @@ namespace SeldatMRMS
                                     break;
                                 } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                     errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                    StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                                    CheckUserHandleError(this);
                                     break;
                                 }
                                 if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE) {
                                     errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                    StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                                    CheckUserHandleError(this);
                                     break;
                                 }
                                 Thread.Sleep (100);
@@ -131,7 +131,7 @@ namespace SeldatMRMS
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_OPEN_DOOR;
                         } else {
                             errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                            StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
@@ -139,7 +139,7 @@ namespace SeldatMRMS
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_OPEN_DOOR_SUCCESS;
                         } else {
                             errorCode = ErrorCode.OPEN_DOOR_ERROR;
-                            StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao gap hang
@@ -162,7 +162,7 @@ namespace SeldatMRMS
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE:
@@ -172,11 +172,11 @@ namespace SeldatMRMS
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CLOSE_GATE;
                             } else {
                                 errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                                StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                                CheckUserHandleError(this);
                             }
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
@@ -186,11 +186,11 @@ namespace SeldatMRMS
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
                             } else {
                                 errorCode = ErrorCode.CLOSE_DOOR_ERROR;
-                                StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                                CheckUserHandleError(this);
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
@@ -207,7 +207,7 @@ namespace SeldatMRMS
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
@@ -220,7 +220,7 @@ namespace SeldatMRMS
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
-                            StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                         // case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_POINT_BRANCHING:
@@ -260,7 +260,7 @@ namespace SeldatMRMS
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER: // đợi
@@ -269,16 +269,16 @@ namespace SeldatMRMS
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                            CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
-                        if (errorCode == ErrorCode.RUN_OK) {
+                        // if (errorCode == ErrorCode.RUN_OK) {
                             ReleaseProcedureHandler (this);
-                        } else {
-                            ErrorProcedureHandler (this);
-                        }
+                        // } else {
+                        //     ErrorProcedureHandler (this);
+                        // }
                         ProRun = false;
                         break;
                     default:

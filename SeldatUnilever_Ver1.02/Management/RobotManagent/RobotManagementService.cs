@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
+using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 
 namespace SeldatMRMS.Management.RobotManagent
 {
@@ -149,6 +150,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 RobotUnity robot1 = new RobotUnity();
                 //robot.Initialize(row);
                 robot1.properties.NameID = "1";
+                robot1.properties.chargeID = ChargerId.CHARGER_ID_1;
                 robot1.Start("ws://192.168.80.131:9090");
                 RobotUnityRegistedList.Add(robot1.properties.NameID, robot1);
                 robot1.ConnectionStatusHandler += ConnectionStatusHandler;

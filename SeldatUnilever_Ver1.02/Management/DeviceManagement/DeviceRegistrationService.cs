@@ -65,7 +65,6 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 deviceItem.ParseData(data);
                 deviceItemList.Add(deviceItem);
             }
-            p.writeSuccess();
         }
         public List<DeviceItem> GetDeviceItemList()
         {

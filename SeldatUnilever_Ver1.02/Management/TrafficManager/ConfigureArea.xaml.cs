@@ -44,9 +44,15 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
 
         private void RemoveBtn_Click(object sender, RoutedEventArgs e)
         {
+
             ZoneRegister zr = (sender as Button).DataContext as ZoneRegister;
             trafficRounterService.ClearZoneRegister(zr.NameId);
             trafficRounterService.SaveConfig(JsonConvert.SerializeObject(MainDataGrid.ItemsSource, Formatting.Indented));
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

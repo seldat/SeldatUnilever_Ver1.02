@@ -162,9 +162,6 @@
     <Compile Include="Management\TrafficManager\TrafficManagementService.cs" />
     <Compile Include="Management\TrafficManager\TrafficRounterService.cs" />
     <Compile Include="Management\UnityService\AssigmentTaskService.cs" />
-    <Compile Include="Management\UnityService\ConfigUnities.xaml.cs">
-      <DependentUpon>ConfigUnities.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Management\UnityService\TaskRounterService.cs" />
     <Compile Include="Management\UnityService\UnityManagementService.cs" />
     <Compile Include="Shape\CanvasControlService.cs" />
@@ -239,10 +236,6 @@
     <Page Include="Management\TrafficManager\ConfigureArea.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Management\UnityService\ConfigUnities.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

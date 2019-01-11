@@ -211,7 +211,7 @@ namespace SeldatMRMS.Management
                         RobotUnityRiskList.Clear();
                     }
                     TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
-                    TrafficBehavior(robot);
+                    TrafficBehavior(null);
                 }
             }
         }

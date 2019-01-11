@@ -53,9 +53,11 @@ namespace SeldatMRMS
             ProForkLiftToBuffer = new Thread (this.Procedure);
             ProForkLiftToBuffer.Start (this);
             ProRun = true;
+            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
         }
         public void Destroy () {
             // StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
         }
         public void Procedure (object ojb) {
@@ -111,11 +113,15 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            rb.UpdateRiskAraParams(0,rb.properties.L2,rb.properties.WS,rb.properties.DistanceIntersection);
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_CAME_CHECKIN_GATE;
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
                         if (false == Traffic.HasRobotUnityinArea (ds.config.PointFrontLine.Position)) {
+                            rb.UpdateRiskAraParams(40,rb.properties.L2,rb.properties.WS,rb.properties.DistanceIntersection);
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             rb.SendPoseStamped (ds.config.PointFrontLine);
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_GATE;
                         }
@@ -123,6 +129,7 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_GATE:
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_CAME_GATE_POSITION;
                         }
                         break;
@@ -182,6 +189,7 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
                         try {
                             if (true == ds.WaitClose (DoorService.DoorId.DOOR_MEZZAMINE_UP_BACK, TIME_OUT_CLOSE_DOOR)) {
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (FlToBuf.GetCheckInBuffer ());
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
                             } else {
@@ -196,12 +204,14 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY;
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try {
                             if (false == Traffic.HasRobotUnityinArea (FlToBuf.GetFrontLineBuffer ().Position)) {
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (FlToBuf.GetFrontLineBuffer ());
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
                             }
@@ -216,6 +226,7 @@ namespace SeldatMRMS
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.SendCmdAreaPallet (FlToBuf.GetInfoOfPalletBuffer (PistonPalletCtrl.PISTON_PALLET_DOWN));
                                 // rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_FORWARD_DIRECTION);
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;
                             }
                         } catch (System.Exception) {
@@ -266,6 +277,7 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER: // đợi
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;

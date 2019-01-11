@@ -66,9 +66,11 @@ namespace SeldatMRMS {
             ProRobotToCharger.Start (this);
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE;
             ProRun = true;
+            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
         }
         public void Destroy () {
             // StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
+            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
         }
         public void Procedure (object ojb) {
@@ -281,9 +283,11 @@ namespace SeldatMRMS {
             ProRobotToReady.Start (this);
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_READY;
             ProRun = true;
+            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
         }
         public void Destroy () {
             // StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
+            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
         }
 
@@ -303,6 +307,7 @@ namespace SeldatMRMS {
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                             rb.SendCmdAreaPallet (RbToRd.points.PointOfCharger);
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_READYAREA);
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION;
                         } else if (Traffic.RobotIsInArea ("", robot.properties.pose.Position)) {
@@ -318,6 +323,7 @@ namespace SeldatMRMS {
                         //     break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION: // đến vị trả robot về robotmanagement để nhận quy trình mới
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOTO_POSITION) {
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;

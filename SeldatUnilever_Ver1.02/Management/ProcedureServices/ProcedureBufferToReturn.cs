@@ -41,9 +41,11 @@ namespace SeldatMRMS {
             ProBuferToReturn = new Thread (this.Procedure);
             ProBuferToReturn.Start (this);
             ProRun = true;
+            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
         }
         public void Destroy () {
             // StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
         }
         public void Procedure (object ojb) {
@@ -92,12 +94,14 @@ namespace SeldatMRMS {
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY;
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try {
                             if (false == Traffic.HasRobotUnityinArea (BfToRe.GetFrontLineBuffer ().Position)) {
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (BfToRe.GetFrontLineBuffer ());
                                 StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
                             }
@@ -112,6 +116,7 @@ namespace SeldatMRMS {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.SendCmdAreaPallet (BfToRe.GetInfoOfPalletBuffer (PistonPalletCtrl.PISTON_PALLET_UP));
                                 StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -162,6 +167,7 @@ namespace SeldatMRMS {
                         try {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE) {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (BfToRe.GetCheckInReturn ());
                                 StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_RETURN;
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
@@ -176,12 +182,16 @@ namespace SeldatMRMS {
                     case BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_RETURN: // dang di
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            rb.UpdateRiskAraParams(0,rb.properties.L2,rb.properties.WS,rb.properties.DistanceIntersection);
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_CAME_CHECKIN_RETURN;
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_CAME_CHECKIN_RETURN: // đã đến vị trí
                         try {
                             if (false == Traffic.HasRobotUnityinArea (BfToRe.GetFrontLineReturn ().Position)) {
+                                rb.UpdateRiskAraParams(40,rb.properties.L2,rb.properties.WS,rb.properties.DistanceIntersection);
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (BfToRe.GetFrontLineReturn ());
                                 StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET;
                             }
@@ -196,6 +206,7 @@ namespace SeldatMRMS {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.SendCmdAreaPallet (BfToRe.GetInfoOfPalletReturn (PistonPalletCtrl.PISTON_PALLET_DOWN));
                                 StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -227,6 +238,7 @@ namespace SeldatMRMS {
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_FRONTLINE:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;

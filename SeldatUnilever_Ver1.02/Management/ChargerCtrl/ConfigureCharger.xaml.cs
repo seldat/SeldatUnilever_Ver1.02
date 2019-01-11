@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SeldatMRMS;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,29 @@ namespace SeldatUnilever_Ver1._02.Management.ChargerCtrl
             ChargerInfoConfig cf = (sender as Button).DataContext as ChargerInfoConfig;
             this.chargerManagementService.FixedConfigure(cf.Id,cf);
             this.chargerManagementService.SaveConfig(JsonConvert.SerializeObject(MainDataGrid.ItemsSource, Formatting.Indented));
+        }
+
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Global_Object.userLogin == (int)Global_Object.PRIORITYLOGIN.PRIORITYLOGIN_ADMIN0)
+            {
+                btnFixed.IsReadOnly = true;
+            }
+            else
+            {
+                btnFixed.IsReadOnly = false;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Hide();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }

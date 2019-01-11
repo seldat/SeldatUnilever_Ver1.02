@@ -7,7 +7,10 @@
         mc:Ignorable="d"
         Title="ConfigureRobotUnity" Height="450" Width="800"
         Closing="Window_Closing"
+        IsVisibleChanged="Window_IsVisibleChanged"
+        
         >
+   
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -35,7 +38,7 @@
                                         Binding="{Binding Path=Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Length" 
                                         Binding="{Binding Path=Length, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <DataGridTemplateColumn Header="Fixed">
+                    <DataGridTemplateColumn Header="Fixed" x:Name="btnFixed">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Name="FixedBtn" Click="FixedBtn_Click">Save</Button>

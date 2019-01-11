@@ -101,7 +101,12 @@ namespace SeldatUnilever_Ver1._02
             stationTimer.AutoReset = true;
             stationTimer.Enabled = true;
 
-            canvasControlService.ReloadAllStation();
+            Dispatcher.BeginInvoke(new ThreadStart(() =>
+            {
+                canvasControlService.ReloadAllStation();
+            }));
+           
+         
 
             /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
                {

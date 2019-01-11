@@ -159,6 +159,9 @@
     <Compile Include="Management\TrafficManager\ConfigureArea.xaml.cs">
       <DependentUpon>ConfigureArea.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Management\TrafficManager\ConfigureRiskZone.xaml.cs">
+      <DependentUpon>ConfigureRiskZone.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Management\TrafficManager\TrafficManagementService.cs" />
     <Compile Include="Management\TrafficManager\TrafficRounterService.cs" />
     <Compile Include="Management\UnityService\AssigmentTaskService.cs" />
@@ -234,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Management\TrafficManager\ConfigureArea.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\TrafficManager\ConfigureRiskZone.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

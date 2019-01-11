@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Management.DoorServices"
         mc:Ignorable="d"
-        Title="DoorConfigure" Height="450" Width="800">
+        Title="DoorConfigure" Height="450" Width="800"
+        IsVisibleChanged="Window_IsVisibleChanged"
+        Closing="Window_Closing"
+        >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"></RowDefinition>
@@ -37,7 +40,7 @@
 
                     <DataGridTextColumn Width="*" Header="PointOfPallet" 
                                         Binding="{Binding Path=infoPallet, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <DataGridTemplateColumn Header="Fixed">
+                    <DataGridTemplateColumn Header="Fixed" x:Name="btnFixed">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Name="FixedBtn" Click="FixedBtn_Click">Save</Button>
@@ -55,7 +58,7 @@
                 <Button 
                     Content="Close" 
                     Width="75"
-                    Height="20"/>
+                    Height="20" Click="Button_Click"/>
             </StackPanel>
         </Grid>
         

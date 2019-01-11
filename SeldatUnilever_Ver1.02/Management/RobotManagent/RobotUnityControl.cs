@@ -410,5 +410,6 @@ namespace SeldatMRMS.Management.RobotManagent
             base.Dispose ();
         }
         public virtual void Draw () { }
+        public virtual void TrafficUpdate() { }
     }
 }

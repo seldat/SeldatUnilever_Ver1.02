@@ -26,7 +26,7 @@ namespace SeldatMRMS.Management.TrafficManager
         public void PoseRobotHandler(Pose p, Object obj)
         {
             var robot = obj as RobotUnity;
-            robot.PrioritLevelRegister.IndexOnMainRoad = (int)FindIndexZoneRegister(p.Position);
+            robot.prioritLevel.IndexOnMainRoad = (int)FindIndexZoneRegister(p.Position);
         }
     }
 }

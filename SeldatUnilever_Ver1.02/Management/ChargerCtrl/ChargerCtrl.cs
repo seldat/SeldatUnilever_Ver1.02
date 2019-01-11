@@ -58,14 +58,15 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             public String Ip { get => _Ip; set { _Ip = value; RaisePropertyChanged("Ip"); } }
             private Int32 _Port;
             public Int32 Port { get => _Port; set { _Port = value; RaisePropertyChanged("Port"); } }
-            public ChargerId Id;
+            private  ChargerId _Id;
+            public ChargerId Id { get => _Id; set { _Id = value; RaisePropertyChanged("Id"); } }
             private Int32 _IdStr;
             public Int32 IdStr { get => _IdStr; set { _IdStr = value; RaisePropertyChanged("IdStr"); } }
             public Pose PointFrontLine;
             private String _PointFrontLineStr;
-            public String PointFrontLineStr { get => _PointFrontLineStr; set { _PointFrontLineStr = value; RaisePropertyChanged("PointFrontLine"); } }
+            public String PointFrontLineStr { get => _PointFrontLineStr; set { _PointFrontLineStr = value; RaisePropertyChanged("PointFrontLineStr"); } }
             private String _PointOfPallet;
-            public String PointOfPallet { get => _PointOfPallet; set { _PointOfPallet = value; RaisePropertyChanged("PointOfPallet"); } }
+            public String PointOfPallet{ get => _PointOfPallet; set { _PointOfPallet = value; RaisePropertyChanged("PointOfPalletStr"); } }
             public void ParsePointFrontLineValue(String value)
             {
                 try
@@ -82,6 +83,11 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
         public ChargerCtrl(ChargerInfoConfig cf) : base(cf.Ip, cf.Port)
         {
             //this.SetId(cf.Id);
+            this.cf = cf;
+        }
+        public void UpdateConfigure(ChargerInfoConfig cf)
+        {
+            this.cf = null;
             this.cf = cf;
         }
         public bool GetId(ref DataReceive data)

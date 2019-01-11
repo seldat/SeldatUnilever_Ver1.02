@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="SolvedProblem" Height="916.2" Width="704.208">
     <Grid Margin="0,0,0,40">
-        <Button Name="cancelProcBtn" Click="cancelProcBtn_Click"  Content="Hủy Quy Trình" HorizontalAlignment="Left" Margin="448,194,0,0" VerticalAlignment="Top" Width="160"/>
+        <Button Name="cancelProcBtn" Click="cancelProcBtn_Click"  Content="Hủy Quy Trình" HorizontalAlignment="Left" Margin="526,743,0,0" VerticalAlignment="Top" Width="160"/>
         <GroupBox Header="Nội Dung Sự Cố"  HorizontalAlignment="Left" Height="149" Margin="10,405,0,0" VerticalAlignment="Top" Width="676" BorderBrush="#FFD7D5E5" >
             <Grid>
                 <Grid.ColumnDefinitions>

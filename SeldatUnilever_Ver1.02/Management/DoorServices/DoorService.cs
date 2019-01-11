@@ -47,9 +47,8 @@ namespace DoorControllerService
             public String Ip { get => _Ip; set { _Ip = value; RaisePropertyChanged("Ip"); } }
             private Int32 _Port;
             public Int32 Port { get => _Port; set { _Port = value; RaisePropertyChanged("Port"); } }
-            public DoorId Id;
-            private Int32 _IdStr;
-            public Int32 IdStr { get => _IdStr; set { _IdStr = value; RaisePropertyChanged("IdStr"); } }
+            private DoorId _Id;
+            public DoorId Id { get => _Id; set { _Id = value; RaisePropertyChanged("Id"); } }
             public Pose PointCheckInGate;
             private String _PointCheckInGateStr;
             public String PointCheckInGateStr { get => _PointCheckInGateStr; set { _PointCheckInGateStr = value; RaisePropertyChanged("PointCheckInGateStr"); } }

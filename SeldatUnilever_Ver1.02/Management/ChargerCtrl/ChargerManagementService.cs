@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SeldatUnilever_Ver1._02.Management.ChargerCtrl;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,37 +27,50 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
         private List<ChargerInfoConfig> CfChargerStationList;
         public ChargerManagementService()
         {
-            LoadChargerConfigure();
-         /* CfChargerStationList = new List<ChargerInfoConfig>();
-            ChargerStation_1 = new ChargerCtrl(CfChargerStationList[0]);
-            ChargerStation_2 = new ChargerCtrl(CfChargerStationList[1]);
-            ChargerStation_3 = new ChargerCtrl(CfChargerStationList[2]);
+            //LoadChargerConfigure();
+          
             PropertiesCharge_List = new List<ChargerInfoConfig>();
             Grouped_PropertiesCharge = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesCharge_List);
-            LoadConfigure();*/
+            ChargerStationList = new Dictionary<ChargerId, ChargerCtrl>();
+            LoadConfigure();
+            ConfigureCharger configureForm = new ConfigureCharger(this);
+            configureForm.Show();
         }
         public void Initialize()
-        { 
-            PropertiesCharge_List.Add(new ChargerInfoConfig() {
-            IdStr = (PropertiesCharge_List.Count + 1),
-            Ip = "192.168.1.2",
-            Port = 10001,
-            PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
-            });
-            PropertiesCharge_List.Add(new ChargerInfoConfig()
-            {
-                IdStr = (PropertiesCharge_List.Count + 1),
-                Ip = "192.168.1.2",
-                Port = 10001,
-                PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
-            });
-            PropertiesCharge_List.Add(new ChargerInfoConfig()
-            {
-                IdStr = (PropertiesCharge_List.Count + 1),
-                Ip = "192.168.1.2",
-                Port = 10001,
-                PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}",
-            });
+        {
+            ChargerInfoConfig pchr1 = new ChargerInfoConfig();
+            pchr1.Id = ChargerId.CHARGER_ID_1;
+            pchr1.Ip = "192.168.1.2";
+            pchr1.Port = 10001;
+            pchr1.PointFrontLineStr = "1,2,3";
+            pchr1.ParsePointFrontLineValue(pchr1.PointFrontLineStr);
+            pchr1.PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}";
+            PropertiesCharge_List.Add(pchr1);
+            ChargerCtrl chargerStation1 = new ChargerCtrl(pchr1);
+            ChargerStationList.Add(chargerStation1.cf.Id, chargerStation1);
+
+            ChargerInfoConfig pchr2 = new ChargerInfoConfig();
+            pchr2.Id = ChargerId.CHARGER_ID_2;
+            pchr2.Ip = "192.168.1.2";
+            pchr2.Port = 10001;
+            pchr2.PointFrontLineStr = "1,2,3";
+            pchr2.ParsePointFrontLineValue(pchr2.PointFrontLineStr);
+            pchr2.PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}";
+            PropertiesCharge_List.Add(pchr2);
+            ChargerCtrl chargerStation2 = new ChargerCtrl(pchr2);
+            ChargerStationList.Add(chargerStation1.cf.Id, chargerStation2);
+
+            ChargerInfoConfig pchr3 = new ChargerInfoConfig();
+            pchr3.Id = ChargerId.CHARGER_ID_3;
+            pchr3.Ip = "192.168.1.2";
+            pchr3.Port = 10001;
+            pchr3.PointFrontLineStr = "1,2,3";
+            pchr3.ParsePointFrontLineValue(pchr3.PointFrontLineStr);
+            pchr3.PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}";
+            PropertiesCharge_List.Add(pchr3);
+            ChargerCtrl chargerStation3 = new ChargerCtrl(pchr3);
+            ChargerStationList.Add(chargerStation1.cf.Id, chargerStation3);
+
             Grouped_PropertiesCharge.Refresh();
         }
         public void AddCharger()
@@ -63,17 +78,18 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             PropertiesCharge_List.Add(new ChargerInfoConfig());
             Grouped_PropertiesCharge.Refresh();
         }
-        public void SaveConfig(DataGrid datagrid)
+        public void SaveConfig(String data)
         {
             String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigCharge.json");
-            System.IO.File.WriteAllText(path, JsonConvert.SerializeObject(datagrid.ItemsSource, Formatting.Indented));
+            System.IO.File.WriteAllText(path, data);
         }
         public bool LoadConfigure()
         {
             String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigCharge.json");
             if (!File.Exists(path))
             {
-                File.Create(path);
+                Initialize();
+                SaveConfig(JsonConvert.SerializeObject(PropertiesCharge_List, Formatting.Indented).ToString());
                 return false;
             }
             else
@@ -83,8 +99,22 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
                     String data = File.ReadAllText(path);
                     if (data.Length > 0)
                     {
-                        List<ChargerInfoConfig> tempPropertiestcharge = JsonConvert.DeserializeObject<List<ChargerInfoConfig>>(data);
-                        tempPropertiestcharge.ForEach(e => PropertiesCharge_List.Add(e));
+                        // List<ChargerInfoConfig> tempPropertiestcharge = JsonConvert.DeserializeObject<List<ChargerInfoConfig>>(data);
+                        //tempPropertiestcharge.ForEach(e => PropertiesCharge_List.Add(e));
+                        JArray results = JArray.Parse(data);
+                        foreach(var result in results)
+                        {
+                            ChargerInfoConfig pchr = new ChargerInfoConfig();
+                            pchr.Id = (ChargerId)((int)result["Id"]);
+                            pchr.Ip = (String)result["Ip"];
+                            pchr.Port = (int)result["Port"];
+                            pchr.PointFrontLineStr = (String)result["PointFrontLineStr"];
+                            pchr.ParsePointFrontLineValue(pchr.PointFrontLineStr);
+                            pchr.PointOfPallet = (String)result["PointOfPallet"];
+                            ChargerCtrl chargerStation = new ChargerCtrl(pchr);
+                            ChargerStationList.Add(chargerStation.cf.Id, chargerStation);
+                            PropertiesCharge_List.Add(pchr);
+                        }
                         Grouped_PropertiesCharge.Refresh();
                         return true;
                     }
@@ -122,6 +152,13 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
                 ChargerStationList.Add(chargerStation.cf.Id,chargerStation);
             }
             con.Close();
+        }
+        public void FixedConfigure(ChargerId id, ChargerInfoConfig chcf)
+        {
+            if(ChargerStationList.ContainsKey(id))
+            {
+                ChargerStationList[(ChargerId)id].UpdateConfigure(chcf);
+            }
         }
     }
 }

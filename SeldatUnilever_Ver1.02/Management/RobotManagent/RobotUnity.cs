@@ -23,6 +23,14 @@ namespace SeldatMRMS.Management.RobotManagent
         Rect area = new Rect(30, 30, 500, 500);
         Point loc = new Point(0, 0);
         public event Action<string> RemoveHandle;
+        public enum RobotStatusColorCode
+        {
+            ROBOT_STATUS_OK=0,
+            ROBOT_STATUS_ERROR,
+            ROBOT_STATUS_WITH_PRODUCT,
+            ROBOT_STATUS_WITHOUT_PRODUCT,
+
+        }
         public struct Props
         {
             public string name;
@@ -108,7 +116,7 @@ namespace SeldatMRMS.Management.RobotManagent
             border.Height = 15;
             border.BorderThickness = new Thickness(1);
             border.BorderBrush = new SolidColorBrush(Colors.Linen);
-            border.Background = new SolidColorBrush(Colors.Black);
+            border.Background = new SolidColorBrush(Colors.Red);
             border.CornerRadius = new CornerRadius(3);
             border.RenderTransformOrigin = new Point(0.5, 0.5);
             //mainGrid
@@ -197,16 +205,9 @@ namespace SeldatMRMS.Management.RobotManagent
         Ellipse ep6;
         TextBlock textblock;
         double x = 0, y = 0;
-        System.Windows.Threading.DispatcherTimer dispatcherTimer;
+
         public RobotUnity(Canvas canvas)
         {
-            #region Timer1
-            //dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            //dispatcherTimer.Tick += dispatcherTimer_Tick;
-            //dispatcherTimer.Interval = new TimeSpan(5000000);
-            #endregion
-
-
             this.canvas = canvas;
             /* properties.L1 = 30;
              properties.L2 = 30;
@@ -320,6 +321,19 @@ namespace SeldatMRMS.Management.RobotManagent
             textblock.Text = this.properties.NameID;
             textblock.FontSize = 8;
             textblock.RenderTransform = new TranslateTransform(xx + 5, yy);
+        }
+        public void setColorRobotStatus(RobotStatusColorCode rsc)
+        {
+            switch(rsc)
+            {
+                case RobotStatusColorCode.ROBOT_STATUS_OK:
+                    border.Background = new SolidColorBrush(Colors.Blue);
+                    break;
+                case RobotStatusColorCode.ROBOT_STATUS_ERROR:
+                    border.Background = new SolidColorBrush(Colors.Red);
+                    break;
+            }
+
         }
         public void setConner(Point p, double angle)
         {

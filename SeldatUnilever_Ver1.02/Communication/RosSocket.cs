@@ -25,6 +25,8 @@ using Newtonsoft.Json.Linq;
 using System.Text;
 using SeldatMRMS.Communication;
 using System.Windows;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace SeldatMRMS.Management.RobotManagent
 {
@@ -43,8 +45,6 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             if (!IsDisposed)
             {
-                //Dispose();
-                //Start();
                 Close();
                 webSocket.Connect();
             }
@@ -57,25 +57,19 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void Start(string url)
         {
-            this.url = url;
-            IsDisposed = false;
-            webSocket = new WebSocket(url);
-            webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
-            webSocket.OnClose += (sender, e) => OnClosedEvent((WebSocket)sender, e);
-            webSocket.OnOpen += (sender, e) => OnOpenedEvent();
-            webSocket.Connect();
+            new Thread(() =>
+            {
+                this.url = url;
+                IsDisposed = false;
+                webSocket = new WebSocket(url);
+                webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
+                webSocket.OnClose += (sender, e) => OnClosedEvent((WebSocket)sender, e);
+                webSocket.OnOpen += (sender, e) => OnOpenedEvent();
+                webSocket.Connect();
+            }).Start();
            
-        }
-        public void Start()
-        {
-          
-            IsDisposed = false;
-            webSocket = new WebSocket(url);
-            webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
-            webSocket.OnClose += (sender, e) => OnClosedEvent((WebSocket)sender, e);
-            webSocket.OnOpen += (sender, e) => OnOpenedEvent();
-            webSocket.Connect();
-
+        
+           
         }
         public virtual void Dispose()
         {

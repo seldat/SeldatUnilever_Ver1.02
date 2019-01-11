@@ -106,7 +106,8 @@ namespace SeldatMRMS.Management.RobotManagent
             REQUEST_LINEDETECT_READYAREA = 1208,
         }
 
-        public enum RequestCommandPosPallet {
+        public enum RequestCommandPosPallet{
+
             REQUEST_LINEDETECT_COMING_POSITION = 1205,
             REQUEST_TURN_LEFT = 1210,
             REQUEST_TURN_RIGHT = 1211,
@@ -171,11 +172,12 @@ namespace SeldatMRMS.Management.RobotManagent
         }
 
         ParamsRosSocket paramsRosSocket;
-        public PropertiesRobotUnity properties;
+        public PropertiesRobotUnity properties= new PropertiesRobotUnity();
         protected virtual void SupervisorTraffic() { }
         public RobotUnityControl()
         {
-            properties = new PropertiesRobotUnity();
+            properties.pose = new Pose();
+            
             properties.pose = new Pose();
             properties.NameID = Guid.NewGuid().ToString();
             properties.L1 = 40;
@@ -330,8 +332,25 @@ namespace SeldatMRMS.Management.RobotManagent
             msg.data = message;
             this.Publish (paramsRosSocket.publication_batteryvol, msg);
         }
-
-        public void UpdateRiskAraParams (double L1, double L2, double WS, double distanceIntersection) {
+        public void UpdateProperties(PropertiesRobotUnity proR)
+        {
+            properties.NameID = proR.NameID;
+            properties.L1 = proR.L1;
+            properties.L2 = proR.L2;
+            properties.WS = proR.WS;
+            properties.Label =proR.Label;
+            properties.BatteryLowLevel = proR.BatteryLowLevel;
+            properties.BatteryLevelRb = proR.BatteryLevelRb;
+            properties.Url =proR.Url;
+            properties.DistanceIntersection = proR.DistanceIntersection;
+            properties.BatteryLowLevel = proR.BatteryLowLevel;
+            properties.BatteryReadyWork =proR.BatteryReadyWork;
+            properties.Width = proR.Width;
+            properties.Height = proR.Height;
+            properties.Length = proR.Length;
+        }
+        public void UpdateRiskAraParams(double L1,double L2,double WS, double distanceIntersection)
+        {
             properties.L1 = L1;
             properties.L2 = L2;
             properties.WS = WS;
@@ -377,6 +396,7 @@ namespace SeldatMRMS.Management.RobotManagent
             createRosTerms ();
             //   ConnectionStatusHandler(this, ConnectionStatus.CON_OK);
         }
+
         protected override void OnClosedEvent (object sender, CloseEventArgs e) {
             //ConnectionStatusHandler(this, ConnectionStatus.CON_FAILED);
             properties.IsConnected = false;
@@ -384,11 +404,10 @@ namespace SeldatMRMS.Management.RobotManagent
             base.OnClosedEvent (sender, e);
 
         }
+
         public override void Dispose () {
             properties.pose.Destroy ();
             base.Dispose ();
-            // ConnectionStatusHandler(this, ConnectionStatus.CON_CLOSED);
-
         }
         public virtual void Draw () { }
     }

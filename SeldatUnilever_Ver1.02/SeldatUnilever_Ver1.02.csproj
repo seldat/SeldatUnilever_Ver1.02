@@ -90,10 +90,16 @@
     <Compile Include="Global_Mouse.cs" />
     <Compile Include="Management\ChargerCtrl\ChargerCtrl.cs" />
     <Compile Include="Management\ChargerCtrl\ChargerManagementService.cs" />
+    <Compile Include="Management\ChargerCtrl\ConfigureCharger.xaml.cs">
+      <DependentUpon>ConfigureCharger.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Management\ComSocket\RouterComPort.cs" />
     <Compile Include="Management\ComSocket\TranferData.cs" />
     <Compile Include="Management\DeviceManagement\DeviceItem.cs" />
     <Compile Include="Management\DeviceManagement\DeviceRegistrationService.cs" />
+    <Compile Include="Management\DoorServices\DoorConfigure.xaml.cs">
+      <DependentUpon>DoorConfigure.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Management\DoorServices\DoorElevator.cs" />
     <Compile Include="Management\DoorServices\DoorManagementService.cs" />
     <Compile Include="Management\DoorServices\DoorService.cs" />
@@ -114,6 +120,9 @@
     <Compile Include="Management\ProcedureServices\RegisterProcedureService.cs" />
     <Compile Include="Management\ProcedureServices\SolvedProblem.xaml.cs">
       <DependentUpon>SolvedProblem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\RobotManagent\ConfigureRobotUnity.xaml.cs">
+      <DependentUpon>ConfigureRobotUnity.xaml</DependentUpon>
     </Compile>
     <Compile Include="Management\RobotManagent\old\RobotUnityService.cs" />
     <Compile Include="Management\RobotManagent\RobotBaseService.cs" />
@@ -179,7 +188,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Management\ChargerCtrl\ConfigureCharger.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\DoorServices\DoorConfigure.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Management\ProcedureServices\SolvedProblem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\RobotManagent\ConfigureRobotUnity.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -356,7 +377,7 @@
     <None Include="Resources\unilever_logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Management\LogText\" />
+    <Folder Include="Log\" />
     <Folder Include="Management\OrderService\" />
     <Folder Include="Management\Store\" />
   </ItemGroup>

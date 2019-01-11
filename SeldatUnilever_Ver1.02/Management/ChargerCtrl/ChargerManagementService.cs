@@ -58,7 +58,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             pchr2.PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}";
             PropertiesCharge_List.Add(pchr2);
             ChargerCtrl chargerStation2 = new ChargerCtrl(pchr2);
-            ChargerStationList.Add(chargerStation1.cf.Id, chargerStation2);
+            ChargerStationList.Add(chargerStation2.cf.Id, chargerStation2);
 
             ChargerInfoConfig pchr3 = new ChargerInfoConfig();
             pchr3.Id = ChargerId.CHARGER_ID_3;
@@ -69,7 +69,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             pchr3.PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}";
             PropertiesCharge_List.Add(pchr3);
             ChargerCtrl chargerStation3 = new ChargerCtrl(pchr3);
-            ChargerStationList.Add(chargerStation1.cf.Id, chargerStation3);
+            ChargerStationList.Add(chargerStation3.cf.Id, chargerStation3);
 
             Grouped_PropertiesCharge.Refresh();
         }

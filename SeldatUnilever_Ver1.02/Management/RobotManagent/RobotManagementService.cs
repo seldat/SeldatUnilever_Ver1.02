@@ -56,18 +56,20 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.Url = "ws://192.168.1.200:9090";
             properties.DistanceIntersection = 40;
             properties.BatteryLowLevel = 25;
-            properties.BatteryReadyWork = false;
+            properties.RequestChargeBattery = false;
             properties.Width = 1.8;
             properties.Height = 2.5;
             properties.Length = 2.2;
             RobotUnity r1 = new RobotUnity();
             properties.NameID = Guid.NewGuid().ToString();
+            r1.properties.chargeID = ChargerId.CHARGER_ID_1;
             r1.UpdateProperties(properties);
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameID, r1);
             RobotUnity r2 = new RobotUnity();
             properties.NameID = Guid.NewGuid().ToString();
+            r2.properties.chargeID = ChargerId.CHARGER_ID_2;
             r2.UpdateProperties(properties);
             r2.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);
@@ -75,6 +77,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             RobotUnity r3 = new RobotUnity();
             properties.NameID = Guid.NewGuid().ToString();
+            r3.properties.chargeID = ChargerId.CHARGER_ID_3;
             r3.UpdateProperties(properties);
             r3.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);

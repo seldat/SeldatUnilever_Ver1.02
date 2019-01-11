@@ -342,9 +342,9 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.BatteryLowLevel = proR.BatteryLowLevel;
             properties.BatteryLevelRb = proR.BatteryLevelRb;
             properties.Url =proR.Url;
+            properties.chargeID = proR.chargeID;
             properties.DistanceIntersection = proR.DistanceIntersection;
             properties.BatteryLowLevel = proR.BatteryLowLevel;
-            properties.BatteryReadyWork =proR.BatteryReadyWork;
             properties.Width = proR.Width;
             properties.Height = proR.Height;
             properties.Length = proR.Length;

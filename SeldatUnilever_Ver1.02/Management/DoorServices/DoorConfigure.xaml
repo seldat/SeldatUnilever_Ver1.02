@@ -29,7 +29,7 @@
                 <DataGridTemplateColumn Header="Fixed">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Name="FixedBtn" Click="FixedBtn_Click">Get</Button>
+                            <Button Name="FixedBtn" Click="FixedBtn_Click">Save</Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

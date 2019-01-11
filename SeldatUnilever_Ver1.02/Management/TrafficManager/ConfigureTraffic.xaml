@@ -7,45 +7,70 @@
         mc:Ignorable="d"
         Title="ConfigureTraffic" Height="450" Width="800">
     <Grid>
-        <DataGrid Name="MainDataGrid"
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <DataGrid Name="MainDataGrid"
                       ItemsSource="{Binding Grouped_PropertiesTrafficZoneList}"
                       CanUserAddRows="False"
-                          AutoGenerateColumns="False" Margin="0,0,0,67" >
-            <DataGrid.Columns>
-            <DataGridTextColumn Width="*" Header="Name" 
+                          AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="Name" 
                                         Binding="{Binding Path=NameId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-            <DataGridTextColumn Width="*" Header="Index" 
+                    <DataGridTextColumn Width="*" Header="Index" 
                                         Binding="{Binding Path=Index, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-            <DataGridTextColumn Width="*" Header="Point1" 
+                    <DataGridTextColumn Width="*" Header="Point1" 
                                         Binding="{Binding Path=Point1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <DataGridTextColumn Width="*" Header="Point2" 
+                    <DataGridTextColumn Width="*" Header="Point2" 
                                         Binding="{Binding Path=Point2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <DataGridTextColumn Width="*" Header="Point3" 
+                    <DataGridTextColumn Width="*" Header="Point3" 
                                         Binding="{Binding Path=Point3, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-            <DataGridTextColumn Width="*" Header="Point4" 
+                    <DataGridTextColumn Width="*" Header="Point4" 
                                         Binding="{Binding Path=Point4, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <DataGridTextColumn Width="*" Header="Detail" 
+                    <DataGridTextColumn Width="*" Header="Detail" 
                                         Binding="{Binding Path=Detail, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                <DataGridTemplateColumn Header="Fixed">
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <Button Name="FixedBtn" Click="FixedBtn_Click">Save</Button>
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Remove">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Name="RemoveBtn" Click="RemoveBtn_Click">Remove</Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button Content="Close" HorizontalAlignment="Left" Margin="688,375,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Add" Name="addbtn" Click="addbtn_Click" HorizontalAlignment="Left" Margin="572,375,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-1.444,0.247"/>
-
+                    <DataGridTemplateColumn Header="Fixed">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Name="FixedBtn" Click="FixedBtn_Click">Save</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Remove">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Name="RemoveBtn" Click="RemoveBtn_Click">Remove</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Orientation="Horizontal">
+                <Button 
+                    Width="Auto"
+                    Height="20"
+                    Margin="5 0"
+                    Padding="5 0"
+                    Content="Close" />
+                <Button 
+                    Content="Add" 
+                    Height="20"
+                    Margin="5 0"
+                    Padding="5 0"
+                    Name="addbtn" 
+                    Click="addbtn_Click" />
+            </StackPanel>
+        </Grid>
+        
+        
     </Grid>
 </Window>

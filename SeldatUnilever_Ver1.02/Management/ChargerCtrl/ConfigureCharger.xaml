@@ -7,31 +7,50 @@
         mc:Ignorable="d"
         Title="ConfigureCharger" Height="450" Width="800">
     <Grid>
-        <DataGrid Name="MainDataGrid"
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <DataGrid Name="MainDataGrid"
                       ItemsSource="{Binding Grouped_PropertiesCharge}"
                       CanUserAddRows="False"
-                          AutoGenerateColumns="False" Margin="0,0,0,67" >
+                          AutoGenerateColumns="False">
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Width="*" Header="Id" 
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="Id" 
                                         Binding="{Binding Path=Id, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <DataGridTextColumn Width="*" Header="Ip" 
+                    <DataGridTextColumn Width="*" Header="Ip" 
                                         Binding="{Binding Path=Ip, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <DataGridTextColumn Width="*" Header="Port" 
+                    <DataGridTextColumn Width="*" Header="Port" 
                                         Binding="{Binding Path=Port, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <DataGridTextColumn Width="*" Header="PointFrontLine" 
+                    <DataGridTextColumn Width="*" Header="PointFrontLine" 
                                         Binding="{Binding Path=PointFrontLineStr, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <DataGridTextColumn Width="*" Header="PointOfPallet" 
+                    <DataGridTextColumn Width="*" Header="PointOfPallet" 
                                         Binding="{Binding Path=PointOfPallet, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <DataGridTemplateColumn Header="Fixed">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Name="FixedBtn" Click="FixedBtn_Click">Save</Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button Content="Close" HorizontalAlignment="Left" Margin="688,375,0,0" VerticalAlignment="Top" Width="75"/>
+                    <DataGridTemplateColumn Header="Fixed">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Name="FixedBtn" Click="FixedBtn_Click">Save</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Orientation="Horizontal">
+                <Button 
+                    Height="20"
+                    Margin="5 0"
+                    Padding="5 0"
+                    Content="Close"/>
+
+            </StackPanel>
+        </Grid>
+        
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SeldatMRMS.Management.TrafficManager;
 using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public Dictionary<String, RobotUnity> RobotUnityWaitTaskList = new Dictionary<string, RobotUnity>();
         public Dictionary<String, RobotUnity> RobotUnityReadyList = new Dictionary<string, RobotUnity>();
         ConfigureRobotUnity ConfigureForm;
+        private TrafficManagementService trafficManagementService;
         public RobotManagementService(Canvas canvas) {
           
            //LoadRobotUnityConfigure();
@@ -67,6 +69,8 @@ namespace SeldatMRMS.Management.RobotManagent
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameID, r1);
+            r1.Registry(trafficManagementService);
+
             RobotUnity r2 = new RobotUnity();
             properties.NameID = Guid.NewGuid().ToString();
             r2.properties.chargeID = ChargerId.CHARGER_ID_2;
@@ -74,6 +78,7 @@ namespace SeldatMRMS.Management.RobotManagent
             r2.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r2.properties.NameID, r2);
+            r2.Registry(trafficManagementService);
 
             RobotUnity r3 = new RobotUnity();
             properties.NameID = Guid.NewGuid().ToString();
@@ -82,7 +87,13 @@ namespace SeldatMRMS.Management.RobotManagent
             r3.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r3.properties.NameID, r3);
+            r3.Registry(trafficManagementService);
             Grouped_PropertiesRobotUnity.Refresh();
+
+        }
+        public void Registry(TrafficManagementService trafficManagementService)
+        {
+            this.trafficManagementService = trafficManagementService;
         }
         public void ConnectionStatusHandler(Object obj, RosSocket.ConnectionStatus status)
         {
@@ -124,7 +135,9 @@ namespace SeldatMRMS.Management.RobotManagent
                             PropertiesRobotUnity_List.Add(e);
                             RobotUnity robot = new RobotUnity();
                             robot.UpdateProperties(e);
+                            robot.Registry(trafficManagementService);
                             RobotUnityRegistedList.Add(e.NameID,robot);
+                            
                         }
                         Grouped_PropertiesRobotUnity.Refresh();
                         return true;
@@ -277,8 +290,10 @@ namespace SeldatMRMS.Management.RobotManagent
             RobotUnity rn = new RobotUnity();
             rn.UpdateProperties(properties);
             rn.Start(properties.Url);
+            rn.Registry(trafficManagementService);
             RobotUnityRegistedList.Add(nameID, rn);
             RobotUnityReadyList.Add(nameID, rn);
+           
         }
     }
 }

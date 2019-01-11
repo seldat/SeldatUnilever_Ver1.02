@@ -1,4 +1,5 @@
 ﻿using SeldatMRMS.Management.RobotManagent;
+using SeldatMRMS.Management.TrafficManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -71,15 +72,20 @@ namespace SeldatMRMS.Management
         private bool flagSupervisorTraffic;
         private Dictionary<String,RobotUnity> RobotUnityRiskList=new Dictionary<string, RobotUnity>();
         private TrafficBehaviorState TrafficBehaviorStateTracking;
+        private TrafficManagementService trafficManagementService;
         public TrafficRobotUnity() : base() {
             TurnOnSupervisorTraffic(false);
         }
-        public PriorityLevel PrioritLevelRegister;
+        public PriorityLevel prioritLevel;
         public void RegisteRobotInAvailable(List<RobotUnity> RobotUnitylist)
         {
             this.RobotUnitylist = RobotUnitylist;
             TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
-            PrioritLevelRegister = new PriorityLevel();
+            prioritLevel = new PriorityLevel();
+        }
+        public void Registry(TrafficManagementService trafficManagementService)
+        {
+            this.trafficManagementService = trafficManagementService;
         }
         public RobotUnity CheckIntersection()
         {
@@ -151,7 +157,7 @@ namespace SeldatMRMS.Management
                 }
           
         }
-        public void TrafficBehavior()
+        public void TrafficBehavior(RobotUnity robot)
         {
             switch(TrafficBehaviorStateTracking)
             {
@@ -163,6 +169,10 @@ namespace SeldatMRMS.Management
                     // Find condition priority
                     // index level of road
                     // procedure Flag is set
+                    if(prioritLevel.IndexOnMainRoad<robot.prioritLevel.IndexOnMainRoad)
+                    {
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    }
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_TAIL:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
@@ -178,6 +188,10 @@ namespace SeldatMRMS.Management
         {
             flagSupervisorTraffic = flagtraffic;
         }
+        public override void TrafficUpdate() {
+            prioritLevel.IndexOnMainRoad= trafficManagementService.FindIndexZoneRegister(properties.pose.Position);
+            SupervisorTraffic();
+        }
         protected override void SupervisorTraffic() {
             if (flagSupervisorTraffic)
             {
@@ -187,7 +201,7 @@ namespace SeldatMRMS.Management
                     if (robot != null)
                     {
                         DetectTouchedPosition(robot);
-                        TrafficBehavior();
+                        TrafficBehavior(robot);
                     }
                 }
                 else
@@ -197,7 +211,7 @@ namespace SeldatMRMS.Management
                         RobotUnityRiskList.Clear();
                     }
                     TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
-                    TrafficBehavior();
+                    TrafficBehavior(robot);
                 }
             }
         }

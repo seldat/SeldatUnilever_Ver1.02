@@ -66,14 +66,12 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         {
             if(Global_Object.userLogin==(int)Global_Object.PRIORITYLOGIN.PRIORITYLOGIN_ADMIN0)
             {
-                btnFixed.IsReadOnly = true;
-                btnRemove.IsReadOnly = true;
+                MainDataGrid.IsEnabled = true;
                 btn_addItem.IsEnabled = true;
             }
             else
             {
-                btnFixed.IsReadOnly = false;
-                btnRemove.IsReadOnly = false;
+                MainDataGrid.IsEnabled = false;
                 btn_addItem.IsEnabled = false;
             }
         }

@@ -19,7 +19,7 @@
             <DataGrid Name="MainDataGrid"
                       ItemsSource="{Binding Grouped_PropertiesTrafficZoneList}"
                       CanUserAddRows="False"
-                          AutoGenerateColumns="False">
+                          AutoGenerateColumns="False" >
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Header="Name" 
                                         Binding="{Binding Path=NameId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 
 namespace SeldatMRMS.Management
 {
@@ -201,6 +202,17 @@ namespace SeldatMRMS.Management
         }
         public override void TrafficUpdate() {
             prioritLevel.IndexOnMainRoad= trafficManagementService.FindIndexZoneRegister(properties.pose.Position);
+            // cập nhật vùng riskzone // update vùng risk area cho robot
+            RiskZoneRegister rZR=trafficManagementService.FindRiskZone(properties.pose.Position);
+            if (rZR != null)
+            {
+                UpdateRiskAraParams(rZR.L1, rZR.L2, rZR.WS, rZR.distance);
+            }
+            else
+            {
+                UpdateRiskAraParams(DfL1, DfL2, DfWS,DfDistanceInter);
+            }
+            // giám sát an toàn
             SupervisorTraffic();
         }
         protected override void SupervisorTraffic() {

@@ -38,11 +38,11 @@ namespace SeldatUnilever_Ver1._02.Management.DoorServices
         {
             if (Global_Object.userLogin == (int)Global_Object.PRIORITYLOGIN.PRIORITYLOGIN_ADMIN0)
             {
-                btnFixed.IsReadOnly = true;
+                MainDataGrid.IsEnabled = true;
             }
             else
             {
-                btnFixed.IsReadOnly = false;
+                MainDataGrid.IsEnabled = false;
             }
         }
 

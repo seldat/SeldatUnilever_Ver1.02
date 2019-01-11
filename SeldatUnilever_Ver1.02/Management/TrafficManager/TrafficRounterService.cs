@@ -170,8 +170,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                     String data = File.ReadAllText(path);
                     if (data.Length > 0)
                     {
-                        List<ZoneRegister> tempPropertiestcharge = JsonConvert.DeserializeObject<List<ZoneRegister>>(data);
-                        tempPropertiestcharge.ForEach(e => { PropertiesTrafficZoneList.Add(e); ZoneRegisterList.Add(e.NameId, e); });
+                        List<ZoneRegister> tempPropertiestZ = JsonConvert.DeserializeObject<List<ZoneRegister>>(data);
+                        tempPropertiestZ.ForEach(e => { PropertiesTrafficZoneList.Add(e); ZoneRegisterList.Add(e.NameId, e); });
                         Grouped_PropertiesTrafficZoneList.Refresh();
                         return true;
                     }
@@ -246,6 +246,20 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
             con.Close();
         }*/
+
+        public RiskZoneRegister FindRiskZone(Point p)
+        {
+            RiskZoneRegister trz = null;
+            foreach (var rz in RiskZoneRegisterList.Values)
+            {
+                if (ExtensionService.IsInPolygon(rz.GetZone(), p))
+                {
+                    trz = rz;
+                    break;
+                }
+            }
+            return trz;
+        }
         public int FindIndexZoneRegister(Point p)
         {
             int index = -1;

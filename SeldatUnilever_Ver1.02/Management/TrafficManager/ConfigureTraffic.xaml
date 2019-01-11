@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Management.TrafficManager"
         mc:Ignorable="d"
-        Title="ConfigureTraffic" Height="450" Width="800">
+        Title="ConfigureTraffic" Height="450" Width="800" >
+        
     <Grid>
         <DataGrid Name="MainDataGrid"
                       ItemsSource="{Binding Grouped_PropertiesTrafficZoneList}"

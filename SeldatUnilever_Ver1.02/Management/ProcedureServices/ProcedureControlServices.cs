@@ -142,7 +142,8 @@ namespace SeldatMRMS
             MACRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
 
             MACRET_ROBOT_GOTO_CHECKIN_RETURN, //cho
-            // MACRET_ROBOT_CAME_CHECKIN_RETURN, // đã đến vị trí
+            MACRET_ROBOT_CAME_CHECKIN_RETURN, // đã đến vị trí
+            MACRET_ROBOT_GOTO_FRONTLINE_RETURN,
 
             // MACRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET,  // cho phép dò line vàthả pallet
             // MACRET_ROBOT_CAME_FRONTLINE_DROPDOWN_PALLET, // đang trong tiến trình dò line và thả pallet

@@ -12,7 +12,7 @@ using static SelDatUnilever_Ver1.CollectionDataService;
 
 namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 {
-    public class DeviceItem
+    public class DeviceItem : NotifyUIBase
     {
         public enum PalletCtrl
         {
@@ -51,7 +51,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         public class OrderItem
         {
             public OrderItem() { }
-            public String OrderId;
+            public String OrderId { get; set; }
             public int planId { get; set; }
             public int deviceId;
             public int productId { get; set; }

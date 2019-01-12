@@ -34,7 +34,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         private void FixedBtn_Click(object sender, RoutedEventArgs e)
         {
             PropertiesRobotUnity properties = (sender as Button).DataContext as PropertiesRobotUnity;
-            robotManagementService.FixedPropertiesRobotUnity(properties.NameID,properties);
+            robotManagementService.FixedPropertiesRobotUnity(properties.NameId,properties);
             robotManagementService.SaveConfig(JsonConvert.SerializeObject(MainDataGrid.ItemsSource, Formatting.Indented));
         }
 

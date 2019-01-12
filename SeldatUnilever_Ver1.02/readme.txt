@@ -5,3 +5,5 @@
 - khi database chua ket noi loi http
 - chỉnh nội dung icon chinh
 - chỉnh giao dien 3d
+
+ door = doorservice.DoorMezzamineUpBack;

@@ -46,11 +46,11 @@ namespace SeldatMRMS.Management.RobotManagent
         public void Initialize()
         {
             PropertiesRobotUnity prop1 = new PropertiesRobotUnity();
-            prop1.NameID = Guid.NewGuid().ToString();
+            prop1.NameId = "RSD"+ RobotUnityRegistedList.Count;
             prop1.L1 = 40;
             prop1.L2 = 40;
             prop1.WS = 60;
-            prop1.Label = "Robot";
+            prop1.Label = "Robot1";
             prop1.BatteryLowLevel = 23;
             prop1.BatteryLevelRb = 40;
             prop1.Url = "ws://192.168.1.200:9090";
@@ -62,13 +62,20 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.Length = 2.2;
             prop1.ChargeID= ChargerId.CHARGER_ID_1;
             prop1.Scale = 10;
+            RobotUnity r1 = new RobotUnity();
+            r1.Initialize(this.canvas);
+            r1.UpdateProperties(prop1);
+            r1.ConnectionStatusHandler += ConnectionStatusHandler;
+            PropertiesRobotUnity_List.Add(r1.properties);
+            RobotUnityRegistedList.Add(r1.properties.NameId, r1);
+            r1.Registry(trafficManagementService);
 
             PropertiesRobotUnity prop2= new PropertiesRobotUnity();
-            prop2.NameID = Guid.NewGuid().ToString();
+            prop2.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop2.L1 = 40;
             prop2.L2 = 40;
             prop2.WS = 60;
-            prop2.Label = "Robot";
+            prop2.Label = "Robot2";
             prop2.BatteryLowLevel = 23;
             prop2.BatteryLevelRb = 40;
             prop2.Url = "ws://192.168.1.200:9090";
@@ -80,13 +87,20 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.Length = 2.2;
             prop2.ChargeID = ChargerId.CHARGER_ID_2;
             prop2.Scale = 10;
+            RobotUnity r2 = new RobotUnity();
+            r2.Initialize(this.canvas);
+            r2.UpdateProperties(prop2);
+            r2.ConnectionStatusHandler += ConnectionStatusHandler;
+            PropertiesRobotUnity_List.Add(r2.properties);
+            RobotUnityRegistedList.Add(r2.properties.NameId, r2);
+            r2.Registry(trafficManagementService);
 
             PropertiesRobotUnity prop3 = new PropertiesRobotUnity();
-            prop3.NameID = Guid.NewGuid().ToString();
+            prop3.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop3.L1 = 40;
             prop3.L2 = 40;
             prop3.WS = 60;
-            prop3.Label = "Robot";
+            prop3.Label = "Robot3";
             prop3.BatteryLowLevel = 23;
             prop3.BatteryLevelRb = 40;
             prop3.Url = "ws://192.168.1.200:9090";
@@ -99,30 +113,12 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.ChargeID = ChargerId.CHARGER_ID_3;
             prop3.Scale = 10;
 
-
-
-            RobotUnity r1 = new RobotUnity();
-            r1.Initialize(this.canvas);
-            r1.UpdateProperties(prop1);
-            r1.ConnectionStatusHandler += ConnectionStatusHandler;
-            PropertiesRobotUnity_List.Add(r1.properties);
-            RobotUnityRegistedList.Add(r1.properties.NameID, r1);
-            r1.Registry(trafficManagementService);
-
-            RobotUnity r2 = new RobotUnity();
-            r2.Initialize(this.canvas);
-            r2.UpdateProperties(prop2);
-            r2.ConnectionStatusHandler += ConnectionStatusHandler;
-            PropertiesRobotUnity_List.Add(r2.properties);
-            RobotUnityRegistedList.Add(r2.properties.NameID, r2);
-            r2.Registry(trafficManagementService);
-
             RobotUnity r3 = new RobotUnity();
             r3.Initialize(this.canvas);
             r3.UpdateProperties(prop3);
             r3.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);
-            RobotUnityRegistedList.Add(r3.properties.NameID, r3);
+            RobotUnityRegistedList.Add(r3.properties.NameId, r3);
             r3.Registry(trafficManagementService);
             Grouped_PropertiesRobotUnity.Refresh();
 
@@ -173,7 +169,7 @@ namespace SeldatMRMS.Management.RobotManagent
                             robot.Initialize(this.canvas);
                             robot.UpdateProperties(e);
                             robot.Registry(trafficManagementService);
-                            RobotUnityRegistedList.Add(e.NameID,robot);
+                            RobotUnityRegistedList.Add(e.NameId,robot);
                             
                         }
                         Grouped_PropertiesRobotUnity.Refresh();
@@ -202,10 +198,10 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 RobotUnity robot1 = new RobotUnity();
                 //robot.Initialize(row);
-                robot1.properties.NameID = "1";
+                robot1.properties.NameId = "1";
                 robot1.properties.ChargeID = ChargerId.CHARGER_ID_1;
                 robot1.Start("ws://192.168.80.131:9090");
-                RobotUnityRegistedList.Add(robot1.properties.NameID, robot1);
+                RobotUnityRegistedList.Add(robot1.properties.NameId, robot1);
                 robot1.ConnectionStatusHandler += ConnectionStatusHandler;
                 AddRobotUnityReadyList(robot1);
 
@@ -230,7 +226,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void AddRobotUnityWaitTaskList(RobotUnity robot)
         {
-           RobotUnityWaitTaskList.Add(robot.properties.NameID,robot);
+           RobotUnityWaitTaskList.Add(robot.properties.NameId,robot);
         }
         public void RemoveRobotUnityWaitTaskList(String NameID)
         {
@@ -262,7 +258,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 RobotUnity robot = RobotUnityWaitTaskList.ElementAt(0).Value;
                 if (robot.getBattery())
                 {
-                    RemoveRobotUnityWaitTaskList(robot.properties.NameID);
+                    RemoveRobotUnityWaitTaskList(robot.properties.NameId);
                 }
                 result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
             }
@@ -270,7 +266,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void AddRobotUnityReadyList(RobotUnity robot)
         {
-            RobotUnityReadyList.Add(robot.properties.NameID,robot);
+            RobotUnityReadyList.Add(robot.properties.NameId,robot);
         }
         
         public ResultRobotReady GetRobotUnityReadyItem0()
@@ -281,7 +277,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 RobotUnity robot = RobotUnityReadyList.ElementAt(0).Value;
                 if(robot.getBattery())
                 {
-                    RemoveRobotUnityReadyList(robot.properties.NameID);
+                    RemoveRobotUnityReadyList(robot.properties.NameId);
                 }
                 result = new ResultRobotReady() {robot=robot, onReristryCharge=robot.getBattery()};
             }

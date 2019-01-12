@@ -84,7 +84,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             deviceItemsList[0].RemoveFirstOrder();
                             MoveElementToEnd(); // sort Task List
                             // xoa khoi list cho
-                            robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameID);
+                            robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameId);
                             processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
                             break;
 
@@ -170,7 +170,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             if(!trafficService.RobotIsInArea("",robot.properties.pose.Position))
                             {
                                 // xoa khoi list cho
-                                robotManageService.RemoveRobotUnityReadyList(robot.properties.NameID);
+                                robotManageService.RemoveRobotUnityReadyList(robot.properties.NameId);
                                 processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
                             }
 

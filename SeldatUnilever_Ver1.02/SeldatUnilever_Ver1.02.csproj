@@ -166,6 +166,7 @@
     <Compile Include="Management\UnityService\AssigmentTaskService.cs" />
     <Compile Include="Management\UnityService\TaskRounterService.cs" />
     <Compile Include="Management\UnityService\UnityManagementService.cs" />
+    <Compile Include="ObjectDumper.cs" />
     <Compile Include="Shape\CanvasControlService.cs" />
     <Compile Include="Shape\PalletShape.cs" />
     <Compile Include="Shape\RobotShape.cs" />

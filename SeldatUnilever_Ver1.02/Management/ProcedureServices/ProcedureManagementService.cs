@@ -140,6 +140,8 @@ namespace SeldatMRMS
             ProcedureControlServices procItem = item as ProcedureControlServices;
             if(procItem.procedureCode  == ProcedureCode.PROC_CODE_ROBOT_TO_READY){
 
+
+
             }
             else if(procItem.procedureCode  == ProcedureCode.PROC_CODE_ROBOT_TO_READY){
 
@@ -147,6 +149,8 @@ namespace SeldatMRMS
             else{
                 RestoreOrderItem(procItem.order);
             }
+            SolvedProblem pSP = new SolvedProblem(item);
+            pSP.Show();
         }
    
     }

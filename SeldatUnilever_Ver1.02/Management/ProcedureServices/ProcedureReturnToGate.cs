@@ -24,8 +24,8 @@ namespace SeldatMRMS {
         // DataReturnToGate points;
         ReturnToGate StateReturnToGate;
         Thread ProReturnToGate;
-        RobotUnity robot;
-        DoorManagementService door;
+        public RobotUnity robot;
+        public DoorManagementService door;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
         const UInt32 TIME_OUT_OPEN_DOOR = 600000; /* ms */

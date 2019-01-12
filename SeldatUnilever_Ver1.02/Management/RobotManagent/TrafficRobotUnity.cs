@@ -116,9 +116,9 @@ namespace SeldatMRMS.Management
                     // if robot in list is near but add in risk list robot
 
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
-                    if(!RobotUnityRiskList.ContainsKey(r.properties.NameID))
+                    if(!RobotUnityRiskList.ContainsKey(r.properties.NameId))
                     {
-                        RobotUnityRiskList.Add(r.properties.NameID,r);
+                        RobotUnityRiskList.Add(r.properties.NameId,r);
                     }
                     // reduce speed robot control
                     iscloseDistance = true;
@@ -126,7 +126,7 @@ namespace SeldatMRMS.Management
                 else
                 {
                     // if robot in list is far but before registe in list, must remove in list
-                    RemoveRiskList(r.properties.NameID);
+                    RemoveRiskList(r.properties.NameId);
                 }
             }
             return iscloseDistance;

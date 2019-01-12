@@ -60,8 +60,8 @@ namespace SeldatMRMS.Management.RobotManagent
         public class PropertiesRobotUnity : NotifyUIBase
         {
             [CategoryAttribute("ID Settings"), DescriptionAttribute("Name of the customer")]
-            private String _NameID;
-            public String NameID { get => _NameID; set { _NameID = value; RaisePropertyChanged("NameID"); } }
+            private String _NameId;
+            public String NameId { get => _NameId; set { _NameId = value; RaisePropertyChanged("NameID"); } }
             private String _Label;
             public String Label { get => _Label; set { _Label = value; RaisePropertyChanged("Label"); } }
             private String _Url { get; set; }

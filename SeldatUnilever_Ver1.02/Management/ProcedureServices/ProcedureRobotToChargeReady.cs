@@ -17,10 +17,10 @@ namespace SeldatMRMS {
     public class ProcedureRobotToCharger : ProcedureControlServices {
 
         Thread ProRobotToCharger;
-        RobotUnity robot;
+        public RobotUnity robot;
         ResponseCommand resCmd;
         RobotGoToCharge StateRobotToCharge;
-        ChargerCtrl chargerCtrl;
+        public ChargerCtrl chargerCtrl;
         DataReceive batLevel;
         DataReceive statusCharger;
         Stopwatch sw = new Stopwatch ();
@@ -41,7 +41,7 @@ namespace SeldatMRMS {
             statusCharger = new DataReceive ();
             this.robot = robot;
             chargerCtrl = charger.ChargerStationList[id];
-            chargerProcedureDB = new ChargerProcedureDB(chargerCtrl);
+
             //ChargerId id_t = id;
             //switch (id_t)
             //{
@@ -58,6 +58,7 @@ namespace SeldatMRMS {
             //}
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE;
         }
+    
         public void Start (RobotGoToCharge state = RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER) {
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_CHARGE;
@@ -235,7 +236,7 @@ namespace SeldatMRMS {
         DataRobotToReady points;
         List<DataRobotToReady> DataRobotToReadyList;
         Thread ProRobotToReady;
-        RobotUnity robot;
+        public RobotUnity robot;
         ResponseCommand resCmd;
         RobotGoToReady StateRobotGoToReady;
         TrafficManagementService Traffic;

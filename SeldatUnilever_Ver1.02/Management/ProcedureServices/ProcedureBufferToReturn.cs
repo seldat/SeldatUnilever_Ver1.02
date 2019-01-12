@@ -21,7 +21,7 @@ namespace SeldatMRMS {
         // DataForkBufferToReturn points;
         BufferToReturn StateBufferToReturn;
         Thread ProBuferToReturn;
-        RobotUnity robot;
+        public RobotUnity robot;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
         public override event Action<Object> ReleaseProcedureHandler;

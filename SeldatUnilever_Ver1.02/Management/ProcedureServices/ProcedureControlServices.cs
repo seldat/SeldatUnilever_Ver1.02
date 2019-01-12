@@ -1,13 +1,12 @@
-﻿using SeldatMRMS.Management.RobotManagent;
-using SeldatMRMS.Management.TrafficManager;
-using System;
+﻿using System;
 using System.Threading;
+using SeldatMRMS.Management.RobotManagent;
+using SeldatMRMS.Management.TrafficManager;
+using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
-namespace SeldatMRMS
-{
-    public class ProcedureControlServices : ControlService
-    {
+namespace SeldatMRMS {
+    public class ProcedureControlServices : ControlService {
         public String ProcedureID { get; set; }
         public String DeliveryInfo { get; set; }
         public const long TIME_OUT_WAIT_GOTO_FRONTLINE = 240000;
@@ -16,15 +15,14 @@ namespace SeldatMRMS
         public virtual event Action<Object> ReleaseProcedureHandler;
         public virtual event Action<Object> ErrorProcedureHandler;
         public ProcedureCode procedureCode;
-        public virtual ContentDatabase RequestDataFromDataBase() { return new ContentDatabase(); }
+        public virtual ContentDatabase RequestDataFromDataBase () { return new ContentDatabase (); }
         protected RobotUnity robot;
         public ProcedureDataItemsDB procedureDataItemsDB;
         public GateTaskDB gateTaskDB;
         public RobotTaskDB robotTaskDB;
         public ReadyChargerProcedureDB readyChargerProcedureDB;
         public OrderItem order;
-        public enum ProcedureCode
-        {
+        public enum ProcedureCode {
             PROC_CODE_BUFFER_TO_MACHINE = 0,
             PROC_CODE_FORKLIFT_TO_BUFFER,
             PROC_CODE_BUFFER_TO_RETURN,
@@ -33,8 +31,7 @@ namespace SeldatMRMS
             PROC_CODE_ROBOT_TO_READY,
             PROC_CODE_ROBOT_TO_CHARGE,
         }
-        public enum ErrorCode
-        {
+        public enum ErrorCode {
             RUN_OK = 0,
             DETECT_LINE_ERROR,
             DETECT_LINE_CHARGER_ERROR,
@@ -50,13 +47,11 @@ namespace SeldatMRMS
         }
 
         public ErrorCode errorCode;
-        public void RegistrationTranfficService(TrafficManagementService TrafficService)
-        {
+        public void RegistrationTranfficService (TrafficManagementService TrafficService) {
             this.TrafficService = TrafficService;
 
         }
-        public enum ForkLiftToBuffer
-        {
+        public enum ForkLiftToBuffer {
             FORBUF_IDLE,
             FORBUF_ROBOT_GOTO_CHECKIN_GATE, // vị trí check in liệu có quy trình nào tại cổng
             FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
@@ -82,8 +77,7 @@ namespace SeldatMRMS
             FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER, // doi robot di den dau line buffer.
             FORBUF_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
-        public enum BufferToMachine
-        {
+        public enum BufferToMachine {
             BUFMAC_IDLE,
             BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER,
             BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
@@ -107,8 +101,7 @@ namespace SeldatMRMS
             BUFMAC_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
-        public enum BufferToReturn
-        {
+        public enum BufferToReturn {
             BUFRET_IDLE,
             BUFRET_ROBOT_GOTO_CHECKIN_BUFFER,
             BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER, // doi robot di den khu vuc checkin cua vung buffer
@@ -132,8 +125,7 @@ namespace SeldatMRMS
             BUFRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 
-        public enum MachineToReturn
-        {
+        public enum MachineToReturn {
             MACRET_IDLE,
             MACRET_ROBOT_GOTO_FRONTLINE_MACHINE,
             MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
@@ -153,8 +145,7 @@ namespace SeldatMRMS
             MACRET_ROBOT_WAITTING_GOTO_FRONTLINE,
             MACRET_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
-        public enum ReturnToGate
-        {
+        public enum ReturnToGate {
             RETGATE_IDLE,
             RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_RETURN, // doi robot di den khu vuc checkin cua vung buffer
             RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY, // doi khu vuc buffer san sang de di vao
@@ -176,8 +167,7 @@ namespace SeldatMRMS
             RETGATE_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
         }
 
-        public enum RobotGoToCharge
-        {
+        public enum RobotGoToCharge {
             ROBCHAR_IDLE,
             // ROBCHAR_CHARGER_CHECKSTATUS, //kiểm tra kết nối và trạng thái sạc
             ROBCHAR_ROBOT_GOTO_CHARGER, //robot be lai vao tram sac
@@ -194,8 +184,7 @@ namespace SeldatMRMS
             // ROBCHAR_ROBOT_STATUS_BAD_OPERATION, //điều kiện hoạt động không tốt thông tin về procedure management chuyển sang quy trình xử lý sự cố
             ROBCHAR_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
-        public enum RobotGoToReady
-        {
+        public enum RobotGoToReady {
             ROBREA_IDLE,
             ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION, // ROBOT cho tiến vào vị trí đầu line charge su dung laser
             ROBREA_ROBOT_WAITTING_GOTO_READYSTATION, // hoàn thành đến vùng check in/ kiểm tra có robot đang làm việc vùng này và lấy vị trí line và pallet
@@ -206,20 +195,18 @@ namespace SeldatMRMS
         public ProcedureControlServices (RobotUnity robot) : base (robot) {
             this.robot = robot;
             this.selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
-            robotTaskDB = new RobotTaskDB(robot);
-            procedureDataItemsDB = new ProcedureDataItemsDB(procedureCode, robotTaskDB.robotTaskId);
-            readyChargerProcedureDB = new ReadyChargerProcedureDB();
+            robotTaskDB = new RobotTaskDB (robot);
+            procedureDataItemsDB = new ProcedureDataItemsDB (procedureCode, robotTaskDB.robotTaskId);
+            readyChargerProcedureDB = new ReadyChargerProcedureDB ();
         }
 
-        public override void AssignAnOrder(OrderItem order)
-        {
+        public override void AssignAnOrder (OrderItem order) {
             this.order = order;
-           
-            procedureDataItemsDB.SetOrderItem(order);
-            base.AssignAnOrder(order);
+
+            procedureDataItemsDB.SetOrderItem (order);
+            base.AssignAnOrder (order);
         }
-        public RobotUnity GetRobotUnity()
-        {
+        public RobotUnity GetRobotUnity () {
             return this.robot;
         }
         public bool ProRun;
@@ -237,13 +224,24 @@ namespace SeldatMRMS
             while (selectHandleError == SelectHandleError.CASE_ERROR_WAITTING) {
                 switch (selectHandleError) {
                     case SelectHandleError.CASE_ERROR_WAITTING:
-                        Console.WriteLine("Waitting processing error ...................................");
+                        robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
+                            new Action (delegate () {
+                                robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_ERROR);
+                            }));
                         Thread.Sleep (1000);
                         break;
                     case SelectHandleError.CASE_ERROR_CONTINUOUS:
+                        robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
+                            new Action (delegate () {
+                                robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_RUNNING);
+                            }));
                         ProRun = true;
                         break;
                     case SelectHandleError.CASE_ERROR_EXIT:
+                        robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
+                            new Action (delegate () {
+                                robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX);
+                            }));
                         robot.PreProcedureAs = robot.ProcedureAs;
                         ProRun = false;
                         break;

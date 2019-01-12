@@ -34,6 +34,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             Grouped_PropertiesCharge = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesCharge_List);
             ChargerStationList = new Dictionary<ChargerId, ChargerCtrl>();
             LoadConfigure();
+
             configureForm = new ConfigureCharger(this);
         }
         public void Initialize()

@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using SeldatUnilever_Ver1._02;
 using SeldatUnilever_Ver1._02.DTO;
+using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,13 +14,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
 namespace SeldatMRMS
 {
-    public class CanvasControlService
+    public class CanvasControlService : NotifyUIBase
     {
+        public ListCollectionView GroupedDeviceItems { get; set; }
+        public ListCollectionView GroupedOrderItems { get; set; }
+        public List<DeviceItem> deviceItemsList;
+        public List<DeviceItem.OrderItem> orderItemsList;
         //=================VARIABLE==================
         private int stationCount = 0;
         //---------------MAP-------------------
@@ -50,6 +57,7 @@ namespace SeldatMRMS
         //public CanvasControlService(MainWindow mainWinDowIn, TreeView mainTreeViewIn)
         public CanvasControlService(MainWindow mainWinDowIn)
         {
+            
             mainWindow = mainWinDowIn;
             //mainTreeView = mainTreeViewIn;
             map = mainWindow.map;
@@ -69,6 +77,10 @@ namespace SeldatMRMS
             mainWindow.PreviewKeyDown += new KeyEventHandler(HandleEsc);
             mainWindow.clipBorder.SizeChanged += ClipBorder_SizeChanged;
 
+            deviceItemsList = new List<DeviceItem>();
+            orderItemsList = new List<DeviceItem.OrderItem>();
+            GroupedDeviceItems = (ListCollectionView)CollectionViewSource.GetDefaultView(deviceItemsList);
+            GroupedOrderItems = (ListCollectionView)CollectionViewSource.GetDefaultView(orderItemsList);
         }
 
         //########################################################
@@ -772,6 +784,43 @@ namespace SeldatMRMS
             {
                 list_Robot.ElementAt(i).Value.DrawCircle();
                 //Thread.Sleep(500);
+            }
+        }
+
+        public void ReloadListOrderItems(DeviceItem temp)
+        {
+            orderItemsList.Clear();
+            foreach (DeviceItem.OrderItem order in temp.oneOrderList)
+            {
+                orderItemsList.Add(order);
+            }
+            if (GroupedOrderItems.IsEditingItem)
+                GroupedOrderItems.CommitEdit();
+            if (GroupedOrderItems.IsAddingNew)
+                GroupedOrderItems.CommitNew();
+            GroupedOrderItems.Refresh();
+        }
+
+        public void ReloadListDeviceItems()
+        {
+            int index = 0;
+            Int32.TryParse(mainWindow.DeviceItemsListDg.SelectedIndex.ToString(),out index);
+            
+            deviceItemsList.Clear();
+            foreach (DeviceItem device in mainWindow.unityService.deviceRegistrationService.deviceItemList)
+            {
+                deviceItemsList.Add(device);
+            }
+            if (GroupedDeviceItems.IsEditingItem)
+                GroupedDeviceItems.CommitEdit();
+            if (GroupedDeviceItems.IsAddingNew)
+                GroupedDeviceItems.CommitNew();
+            GroupedDeviceItems.Refresh();
+
+
+            if (mainWindow.DeviceItemsListDg.HasItems)
+            {
+                mainWindow.DeviceItemsListDg.SelectedItem = mainWindow.DeviceItemsListDg.Items[(index>-1)? index : 0];
             }
         }
 

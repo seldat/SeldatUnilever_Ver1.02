@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
+using System.Windows.Threading;
 using Newtonsoft.Json.Linq;
+using SeldatUnilever_Ver1._02;
 using SelDatUnilever_Ver1._00.Communication;
 using SelDatUnilever_Ver1._00.Communication.HttpServerRounter;
 
@@ -13,13 +17,23 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 {
     public class DeviceRegistrationService : HttpServer
     {
-        private List<DeviceItem> deviceItemList { get; set; }
+
+        public MainWindow mainWindow;
+        public List<DeviceItem> deviceItemList;
+        
 
         public DeviceRegistrationService(int port) : base(port)
         {
             deviceItemList = new List<DeviceItem>();
             CreateFolder();
         }
+
+        public void RegistryMainWindow (MainWindow mainWindow)
+        {
+            this.mainWindow = new MainWindow();
+            this.mainWindow = mainWindow;
+        }
+
         public void RemoveDeviceItem(String userName)
         {
             if (deviceItemList.Count > 0)
@@ -64,11 +78,30 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 deviceItem.userName = userName;
                 deviceItem.ParseData(data);
                 deviceItemList.Add(deviceItem);
+                
             }
+            
         }
+
         public List<DeviceItem> GetDeviceItemList()
         {
             return deviceItemList;
+        }
+
+        public void AddNewDeviceItem ()
+        {
+            DeviceItem temptemp = new DeviceItem();
+            temptemp.userName = "test" + DateTime.Now.ToString();
+            temptemp.oneOrderList.Add(new DeviceItem.OrderItem()
+            {
+                OrderId = DateTime.Now.ToLongTimeString()
+            });
+            deviceItemList.Add(temptemp);
+            //if (GroupedDeviceItems.IsEditingItem)
+            //    GroupedDeviceItems.CommitEdit();
+            //if (GroupedDeviceItems.IsAddingNew)
+            //    GroupedDeviceItems.CommitNew();
+            //GroupedDeviceItems.Refresh();
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using SelDatUnilever_Ver1._00.Communication.HttpServerRounter;
+﻿using SeldatUnilever_Ver1._02.DTO;
+using SelDatUnilever_Ver1._00.Communication.HttpServerRounter;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace SelDatUnilever_Ver1._00.Communication
 {
-     public abstract class HttpServer
-        {
+     public abstract class HttpServer : NotifyUIBase
+    {
 
             protected int port;
             TcpListener listener;

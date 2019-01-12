@@ -149,8 +149,8 @@ namespace SeldatMRMS
             else{
                 RestoreOrderItem(procItem.order);
             }
-            SolvedProblem pSP = new SolvedProblem(item);
-            pSP.Show();
+            //SolvedProblem pSP = new SolvedProblem(item);
+            //pSP.Show();
         }
    
     }

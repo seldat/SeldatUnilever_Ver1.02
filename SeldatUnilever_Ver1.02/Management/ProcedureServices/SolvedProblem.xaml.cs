@@ -23,16 +23,21 @@ namespace SeldatMRMS
     public partial class SolvedProblem : Window
     {
         Object objProc;
-        public SolvedProblem(Object obj)
+        public SolvedProblem()
         {
             InitializeComponent();
+
+
+        }
+        public void Registry(Object obj)
+        {
             this.objProc = obj;
             if (obj.GetType() == typeof(ProcedureForkLiftToBuffer))
             {
                 ProcedureForkLiftToBuffer proc = obj as ProcedureForkLiftToBuffer;
                 ShowInformation(proc);
             }
-            else if(obj.GetType() == typeof(ProcedureBufferToMachine))
+            else if (obj.GetType() == typeof(ProcedureBufferToMachine))
             {
                 ProcedureBufferToMachine proc = obj as ProcedureBufferToMachine;
                 ShowInformation(proc);
@@ -57,7 +62,6 @@ namespace SeldatMRMS
                 ProcedureRobotToCharger proc = obj as ProcedureRobotToCharger;
                 ShowInformation(proc);
             }
-
         }
         public void ShowInformation(Object obj)
         {

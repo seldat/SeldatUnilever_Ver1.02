@@ -59,7 +59,11 @@ namespace SeldatMRMS.Management.RobotManagent
         public Props props;
         private Border border;
         public LoadedConfigureInformation loadConfigureInformation;
-        public RobotUnity(){ }
+        public SolvedProblem solvedProblem;
+        public RobotUnity(){
+            solvedProblem = new SolvedProblem();
+        }
+
         public void Initialize(Canvas canvas)
         {
             this.canvas = canvas;
@@ -198,6 +202,17 @@ namespace SeldatMRMS.Management.RobotManagent
             Draw();
 
         }
+        public void RegistrySolvedForm(Object obj)
+        {
+            if(obj.GetType()==typeof(ProcedureControlServices))
+            {
+                solvedProblem.Registry(obj);
+            }
+        }
+        public void DisplaySolvedForm()
+        {
+            solvedProblem.Show();
+        }
         public Point CirclePoint(double radius, double angleInDegrees, Point origin)
         {
             double x = (double)(radius * Math.Cos(angleInDegrees * Math.PI / 180)) + origin.X;
@@ -225,6 +240,7 @@ namespace SeldatMRMS.Management.RobotManagent
         private void EditMenu(object sender, RoutedEventArgs e)
         {
             //robotProperties.ShowDialog();
+            DisplaySolvedForm();
         }
 
         private void RemoveMenu(object sender, RoutedEventArgs e)

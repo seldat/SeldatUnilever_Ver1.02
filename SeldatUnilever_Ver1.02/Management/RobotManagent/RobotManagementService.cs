@@ -70,6 +70,8 @@ namespace SeldatMRMS.Management.RobotManagent
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
             r1.Registry(trafficManagementService);
 
+            // đăng ký robot list to many robot quan trong
+
             PropertiesRobotUnity prop2= new PropertiesRobotUnity();
             prop2.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop2.L1 = 40;

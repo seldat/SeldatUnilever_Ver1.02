@@ -27,7 +27,7 @@ namespace SeldatMRMS
         ForkLiftToBuffer StateForkLiftToBuffer;
         Thread ProForkLiftToBuffer;
         public RobotUnity robot;
-        DoorService door;
+        public DoorService door;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
         const UInt32 TIME_OUT_OPEN_DOOR = 600000; /* ms */

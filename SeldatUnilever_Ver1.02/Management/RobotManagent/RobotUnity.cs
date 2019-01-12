@@ -16,6 +16,9 @@ namespace SeldatMRMS.Management.RobotManagent
 {
     public class RobotUnity : RobotBaseService
     {
+
+        Ellipse headerPoint;
+        Path riskArea;
         double angle = 0.0f;
         public Point org = new Point(600, 350);
         public double rad = 0;
@@ -36,7 +39,6 @@ namespace SeldatMRMS.Management.RobotManagent
             public string name;
             public bool isSelected;
             public bool isHovering;
-            public Canvas canvas;
             public Grid mainGrid;
             public Grid statusGrid;
 
@@ -53,19 +55,17 @@ namespace SeldatMRMS.Management.RobotManagent
             public Border statusBorder;
             public List<Point> eightCorner;
         }
-
+        public Canvas canvas;
         public Props props;
         private Border border;
         public LoadedConfigureInformation loadConfigureInformation;
-        public RobotUnity()
+        public RobotUnity(){ }
+        public void Initialize(Canvas canvas)
         {
-            //th = new Thread(DrawCircle);
-            //DrawCircle();
-            //th.IsBackground = true;
-            //th.Start();
-        }
-        public void Initialize()
-        {
+            this.canvas = canvas;
+            riskArea = new Path();
+            riskArea.Stroke = new SolidColorBrush(Colors.YellowGreen);
+            riskArea.StrokeThickness = 1;
             border = new Border();
             border.ToolTip = "";
             border.ToolTipOpening += ChangeToolTipContent;
@@ -89,7 +89,6 @@ namespace SeldatMRMS.Management.RobotManagent
             //MouseRightButtonDown += MouseRightButtonDownPath;
             //===================CREATE=====================
             //Name = "Robotx" + Global_Mouse.EncodeTransmissionTimestamp();
-            props.name = properties.NameID;
             props.mainGrid = new Grid();
             props.statusGrid = new Grid();
             props.statusBorder = new Border();
@@ -188,139 +187,23 @@ namespace SeldatMRMS.Management.RobotManagent
             props.contentTransformGroup.Children.Add(props.contentRotateTransform);
             props.contentTransformGroup.Children.Add(props.contentTranslate);
             props.statusBorder.RenderTransform = props.contentTransformGroup;
-            props.canvas = canvas;
             border.Child = props.mainGrid;
-            props.canvas.Children.Add(border);
+            this.canvas.Children.Add(border);
+            headerPoint = new Ellipse();
+            headerPoint.Width = 5;
+            headerPoint.Height = 5;
+            headerPoint.Fill = new SolidColorBrush(Colors.Red);
+            canvas.Children.Add(riskArea);
+            canvas.Children.Add(headerPoint);
             Draw();
 
         }
-
-        Canvas canvas;
-        Ellipse ep;
-        Ellipse ep1;
-        Ellipse ep2;
-        Ellipse ep3;
-        Ellipse ep4;
-        Ellipse ep5;
-        Ellipse ep6;
-        TextBlock textblock;
-        double x = 0, y = 0;
-
-        public RobotUnity(Canvas canvas)
-        {
-            this.canvas = canvas;
-            /* properties.L1 = 30;
-             properties.L2 = 30;
-             properties.WS = 40;//40/2
-             textblock = new TextBlock();
-
-             ep = new Ellipse();
-             ep.Width = 5;
-             ep.Height = 5;
-             ep.Name = "hello";
-             ep.Fill = new SolidColorBrush(Colors.Red);
-
-             ep1 = new Ellipse();
-             ep1.Width = 5;
-             ep1.Height = 5;
-             ep1.Fill = new SolidColorBrush(Colors.Black);
-             ep2 = new Ellipse();
-             ep2.Width = 5;
-             ep2.Height = 5;
-             ep2.Fill = new SolidColorBrush(Colors.Blue);
-             ep3 = new Ellipse();
-             ep3.Width = 5;
-             ep3.Height = 5;
-             ep3.Fill = new SolidColorBrush(Colors.Red);
-             ep4 = new Ellipse();
-             ep4.Width = 5;
-             ep4.Height = 5;
-             ep4.Fill = new SolidColorBrush(Colors.Yellow);
-             ep5 = new Ellipse();
-             ep5.Width = 5;
-             ep5.Height = 5;
-             ep5.Fill = new SolidColorBrush(Colors.White);
-
-             ep6 = new Ellipse();
-             ep6.Width = 5;
-             ep6.Height = 5;
-             ep6.Fill = new SolidColorBrush(Colors.White);
-
-             canvas.Children.Add(ep);
-             canvas.Children.Add(ep1);
-             canvas.Children.Add(ep2);
-             canvas.Children.Add(ep3);
-             canvas.Children.Add(ep4);
-             canvas.Children.Add(ep5);
-             // canvas.Children.Add(ep6);
-             canvas.Children.Add(textblock);
-             //  dispatcherTimer.Start();*/
-
-         
-
-        }
-
-        int state = 1;
-        int count = 0;
-        Random rnd = new Random();
-        //private void dispatcherTimer_Tick(object sender, EventArgs e)
-        //{
-
-        //   // try
-        //    {
-        //        state = rnd.Next(1, 6);
-        //        count = 0;
-        //       // if (count++ > 20) count = 0;
-        //        //if(test == 0)
-        //        { switch (state)
-        //            {
-        //                case 1:
-        //                   while(count++ <5)
-        //                    this.LeftRobot();
-        //                    break;
-        //                case 2:
-        //                    while (count++ < 5)
-        //                        this.RightRobot();
-        //                    break;
-        //                case 3:
-        //                    while (count++ < 5)
-        //                        this.UpRobot();
-        //                    break;
-        //                case 4:
-        //                    while (count++ < 5)
-        //                        this.DownRobot();
-        //                    break;
-        //                case 5:
-        //                    while (count++ < 5)
-        //                        this.RotationLeft();
-        //                    break;
-        //                case 6:
-        //                    while (count++ < 5)
-        //                       this.RotationRight();
-        //                    break;
-        //            }       
-        //        }
-        //       // count = 0;
-        //    }
-        //   // catch { }
-        //}
         public Point CirclePoint(double radius, double angleInDegrees, Point origin)
         {
             double x = (double)(radius * Math.Cos(angleInDegrees * Math.PI / 180)) + origin.X;
             double y = (double)(radius * Math.Sin(angleInDegrees * Math.PI / 180)) + origin.Y;
 
             return new Point(x, y);
-        }
-
-        public void initialPos(double xx, double yy)
-        {
-            x = xx;
-            y = yy;
-            ep.RenderTransform = new TranslateTransform(xx, yy);
-            setConner(new Point(xx, yy), angle);
-            textblock.Text = this.properties.NameID;
-            textblock.FontSize = 8;
-            textblock.RenderTransform = new TranslateTransform(xx + 5, yy);
         }
         public void setColorRobotStatus(RobotStatusColorCode rsc)
         {
@@ -334,91 +217,6 @@ namespace SeldatMRMS.Management.RobotManagent
                     break;
             }
 
-        }
-        public void setConner(Point p, double angle)
-        {
-
-
-            textblock.RenderTransform = new TranslateTransform(p.X + 5, p.Y);
-            properties.pose.Position = p;
-            properties.pose.AngleW = angle;
-            ep1.RenderTransform = new TranslateTransform(TopHeader().X, TopHeader().Y);
-            ep2.RenderTransform = new TranslateTransform(BottomHeader().X, BottomHeader().Y);
-            ep3.RenderTransform = new TranslateTransform(TopTail().X, TopTail().Y);
-            ep4.RenderTransform = new TranslateTransform(BottomTail().X, BottomTail().Y);
-            ep5.RenderTransform = new TranslateTransform(MiddleHeader().X, MiddleHeader().Y);
-            ep6.RenderTransform = new TranslateTransform(MiddleTail().X, MiddleTail().Y);
-            //Canvas.SetLeft(ep1, TopHeader().X);
-            // Canvas.SetTop(ep1, TopHeader().Y);
-            //Canvas.SetLeft(ep2, BottomHeader().X);
-            // Canvas.SetTop(ep2, BottomHeader().Y);
-            // Canvas.SetLeft(ep3, TopTail().X);
-            // Canvas.SetTop(ep3, TopTail().Y);
-            // Canvas.SetLeft(ep4, BottomTail().X);
-            // Canvas.SetTop(ep4, BottomTail().Y);
-
-
-
-        }
-        public void UpRobot()
-        {
-
-            if (y > 0)
-            {
-                y = y - ep.Width;
-            }
-            ep.RenderTransform = new TranslateTransform(x, y);
-            setConner(new Point(x, y), angle);
-            SupervisorTraffic();
-        }
-        public void DownRobot()
-        {
-            if (y < canvas.Height)
-                y = y + ep.Width;
-            ep.RenderTransform = new TranslateTransform(x, y);
-            setConner(new Point(x, y), angle);
-            SupervisorTraffic();
-        }
-        public void LeftRobot()
-        {
-
-            if (x > 0)
-            {
-                x = x - ep.Width;
-            }
-            ep.RenderTransform = new TranslateTransform(x, y);
-            setConner(new Point(x, y), angle);
-            SupervisorTraffic();
-        }
-        public void RightRobot()
-        {
-            if (x < canvas.Width)
-                x = x + ep.Width;
-            ep.RenderTransform = new TranslateTransform(x, y);
-            setConner(new Point(x, y), angle);
-            SupervisorTraffic();
-        }
-
-        public void RotationLeft()
-        {
-            if (angle > -Math.PI)
-            {
-                angle = angle - 5 * Math.PI / 180;
-            }
-            ep.RenderTransform = new TranslateTransform(x, y);
-            setConner(new Point(x, y), angle);
-            SupervisorTraffic();
-        }
-
-        public void RotationRight()
-        {
-            if (angle < Math.PI)
-            {
-                angle = angle + 5 * Math.PI / 180;
-            }
-            ep.RenderTransform = new TranslateTransform(x, y);
-            setConner(new Point(x, y), angle);
-            SupervisorTraffic();
         }
         private void ChangeToolTipContent(object sender, ToolTipEventArgs e)
         {
@@ -435,7 +233,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void Remove()
         {
-            props.canvas.Children.Remove(border);
+            this.canvas.Children.Remove(border);
             RemoveHandle(props.name);
         }      
         public override void Draw()
@@ -450,17 +248,43 @@ namespace SeldatMRMS.Management.RobotManagent
                 props.contentRotateTransform.Angle = -(properties.pose.AngleW);
                 props.contentTranslate = new TranslateTransform(0, 0);
                 props.contentTransformGroup.Children[1] = props.contentTranslate;
-                // SPECIAL POINTS
-                //props.eightCorner[0] = CoorPointAtBorder(new Point((0), (Height / 2)));          //mid-left
-                //props.eightCorner[1] = CoorPointAtBorder(new Point((0), (0)));                 //top-left
-                //props.eightCorner[2] = CoorPointAtBorder(new Point((Width / 2), (0)));           //top-mid
-                //props.eightCorner[3] = CoorPointAtBorder(new Point((Width), (0)));             //top-right
-                //props.eightCorner[4] = CoorPointAtBorder(new Point((Width), (Height / 2)));      //mid-right
-                //props.eightCorner[5] = CoorPointAtBorder(new Point((Width), (Height)));        //bot-right
-                //props.eightCorner[6] = CoorPointAtBorder(new Point((Width / 2), (Height)));      //bot-mid
-                //props.eightCorner[7] = CoorPointAtBorder(new Point((0), (Height)));            //bot-left
-       
+                headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X, MiddleHeader().Y);
+
+                headerPoint.RenderTransform = new TranslateTransform(Global_Object.CoorCanvas(MiddleHeader()).X, Global_Object.CoorCanvas(MiddleHeader()).Y);
+                PathGeometry pgeometry = new PathGeometry();
+                PathFigure pF = new PathFigure();
+                pF.StartPoint = TopHeaderCv();
+                LineSegment pp = new LineSegment();
+
+                pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv() });
+                pF.Segments.Add(new LineSegment() { Point = BottomTailCv() });
+                pF.Segments.Add(new LineSegment() { Point = TopTailCv() });
+                pF.Segments.Add(new LineSegment() { Point = TopHeaderCv()});
+                pgeometry.Figures.Add(pF);
+                riskArea.Data = pgeometry;
         }
 
+        public override void UpdateProperties(PropertiesRobotUnity proR)
+        {
+
+            base.UpdateProperties(proR);
+            DfL1 = proR.L1;
+            DfL2 = proR.L2;
+            DfWS = proR.WS;
+            DfDistanceInter = proR.DistInter;
+
+            DfL1Cv = proR.L1 / properties.Scale;
+            DfL2Cv = proR.L2 / properties.Scale;
+            DfWSCv = proR.WS / properties.Scale;
+            DfDistanceInter = proR.DistInter / properties.Scale;
+
+
+            L1Cv = proR.L1 / properties.Scale;
+            L2Cv = proR.L2 / properties.Scale;
+            WSCv = proR.WS / properties.Scale;
+            DistInterCv = proR.DistInter / properties.Scale;
+            Draw();
+
+        }
     }
 }

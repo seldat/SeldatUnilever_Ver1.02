@@ -20,7 +20,41 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
     {
         public ListCollectionView Grouped_PropertiesTrafficZoneList { get; private set; }
         public List<ZoneRegister> PropertiesTrafficZoneList;
+        public ListCollectionView Grouped_PropertiesRiskZoneList { get; private set; }
+        public List<RiskZoneRegister> PropertiesRiskZoneList;
+
         protected List<RobotUnity> RobotUnityListOnTraffic = new List<RobotUnity>();
+        public class RiskZoneRegister : NotifyUIBase
+        {
+            private String _NameId;
+            public String NameId { get => _NameId; set { _NameId = value; RaisePropertyChanged("NameId"); } }
+            private String _TypeZone;
+            public String TypeZone { get => _TypeZone; set { _TypeZone = value; RaisePropertyChanged("TypeZone"); } }
+            private int _Index;
+            public int Index { get => _Index; set { _Index = value; RaisePropertyChanged("Index"); } }
+            private Point _Point1;
+            public Point Point1 { get => _Point1; set { _Point1 = value; RaisePropertyChanged("Point1"); } }
+            private Point _Point2;
+            public Point Point2 { get => _Point2; set { _Point2 = value; RaisePropertyChanged("Point2"); } }
+            private Point _Point3;
+            public Point Point3 { get => _Point3; set { _Point3 = value; RaisePropertyChanged("Point3"); } }
+            private Point _Point4;
+            public Point Point4 { get => _Point4; set { _Point4 = value; RaisePropertyChanged("Point4"); } }
+            public String _Detail;
+            public String Detail { get => _Detail; set { _Detail = value; RaisePropertyChanged("Detail"); } }
+            private double _L1;
+            public double L1 { get => _L1; set { _L1= value; RaisePropertyChanged("L1"); } }
+            private double _L2;
+            public double L2 { get => _L2; set { _L2 = value; RaisePropertyChanged("L2"); } }
+            private double _WS;
+            public double WS { get => _WS; set { _WS = value; RaisePropertyChanged("WS"); } }
+            private double _distance;
+            public double distance { get => _distance; set { _distance = value; RaisePropertyChanged("Distance"); } }
+            public Point[] GetZone()
+            {
+                return new Point[4] { Point1, Point2, Point3, Point4 };
+            }
+        }
         public class ZoneRegister : NotifyUIBase
         {
             private String _NameId;
@@ -45,15 +79,22 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
         }
         public Dictionary<String, ZoneRegister> ZoneRegisterList = new Dictionary<string, ZoneRegister>();
+        public Dictionary<String, RiskZoneRegister> RiskZoneRegisterList = new Dictionary<string, RiskZoneRegister>();
+        public ConfigureRiskZone configureRiskZone;
         public ConfigureArea configureArea;
         public TrafficRounterService()
         {
             PropertiesTrafficZoneList = new List<ZoneRegister>();
             Grouped_PropertiesTrafficZoneList = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesTrafficZoneList);
-            LoadConfigure();
+            PropertiesRiskZoneList = new List<RiskZoneRegister>();
+            Grouped_PropertiesRiskZoneList = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRiskZoneList);
+            LoadConfigureZone();
+            LoadConfigureRiskZone();
             configureArea = new ConfigureArea(this);
+            configureRiskZone = new ConfigureRiskZone(this);
+            configureRiskZone.Show();
         }
-        public void Initialize()
+        public void InitializeZone()
         {
             ZoneRegister ptemp = new ZoneRegister();
             ptemp.NameId = "OPA" + ZoneRegisterList.Count;
@@ -64,28 +105,62 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             PropertiesTrafficZoneList.Add(ptemp);
             Grouped_PropertiesTrafficZoneList.Refresh();
             ZoneRegisterList.Add(ptemp.NameId, ptemp);
+
         }
-        public void AddConfig()
+        public void InitializeRiskZone()
+        {
+
+            RiskZoneRegister pRtemp = new RiskZoneRegister();
+            pRtemp.NameId = "OPA" + RiskZoneRegisterList.Count;
+            pRtemp.Point1 = new Point(0, 0);
+            pRtemp.Point2 = new Point(10, 10);
+            pRtemp.Point3 = new Point(3, 4);
+            pRtemp.Point4 = new Point(5, 5);
+            pRtemp.L1 = 40;
+            pRtemp.L2 = 40;
+            pRtemp.WS = 60;
+            pRtemp.distance = 40;
+            PropertiesRiskZoneList.Add(pRtemp);
+            Grouped_PropertiesRiskZoneList.Refresh();
+            RiskZoneRegisterList.Add(pRtemp.NameId, pRtemp);
+
+        }
+        public void AddConfigZone()
         {
             ZoneRegister ptemp = new ZoneRegister();
             ptemp.NameId = "OPA" + ZoneRegisterList.Count;
             PropertiesTrafficZoneList.Add(ptemp);
             Grouped_PropertiesTrafficZoneList.Refresh();
             ZoneRegisterList.Add(ptemp.NameId, ptemp);
-            SaveConfig(JsonConvert.SerializeObject(PropertiesTrafficZoneList, Formatting.Indented).ToString());
+            SaveConfigZone(JsonConvert.SerializeObject(PropertiesTrafficZoneList, Formatting.Indented).ToString());
         }
-        public void SaveConfig(String data)
+        public void AddConfigRiskZone()
         {
-            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigTrafficZone.json");
+            RiskZoneRegister ptemp = new RiskZoneRegister();
+            ptemp.NameId = "OPA" + ZoneRegisterList.Count;
+            PropertiesRiskZoneList.Add(ptemp);
+            Grouped_PropertiesRiskZoneList.Refresh();
+            RiskZoneRegisterList.Add(ptemp.NameId, ptemp);
+            SaveConfigRiskZone(JsonConvert.SerializeObject(PropertiesTrafficZoneList, Formatting.Indented).ToString());
+        }
+        public void SaveConfigZone(String data)
+        {
+            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigZone.json");
             System.IO.File.WriteAllText(path, data);
         }
-        public bool LoadConfigure()
+        public void SaveConfigRiskZone(String data)
         {
-            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigTrafficZone.json");
+            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigRiskZone.json");
+            System.IO.File.WriteAllText(path, data);
+        }
+        public bool LoadConfigureZone()
+        {
+            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigZone.json");
             if (!File.Exists(path))
             {
-                Initialize();
-                SaveConfig(JsonConvert.SerializeObject(PropertiesTrafficZoneList, Formatting.Indented).ToString());
+                InitializeZone();
+                SaveConfigZone(JsonConvert.SerializeObject(PropertiesRiskZoneList, Formatting.Indented).ToString());
+
                 return false;
             }
             else
@@ -95,8 +170,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                     String data = File.ReadAllText(path);
                     if (data.Length > 0)
                     {
-                        List<ZoneRegister> tempPropertiestcharge = JsonConvert.DeserializeObject<List<ZoneRegister>>(data);
-                        tempPropertiestcharge.ForEach(e => { PropertiesTrafficZoneList.Add(e); ZoneRegisterList.Add(e.NameId, e); });
+                        List<ZoneRegister> tempPropertiestZ = JsonConvert.DeserializeObject<List<ZoneRegister>>(data);
+                        tempPropertiestZ.ForEach(e => { PropertiesTrafficZoneList.Add(e); ZoneRegisterList.Add(e.NameId, e); });
                         Grouped_PropertiesTrafficZoneList.Refresh();
                         return true;
                     }
@@ -105,7 +180,35 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
             return false;
         }
-        public void LoadConfigureZone()
+        public bool LoadConfigureRiskZone()
+        {
+              String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigRiskZone.json");
+
+            if (!File.Exists(path))
+            {
+                InitializeRiskZone();
+                SaveConfigRiskZone(JsonConvert.SerializeObject(PropertiesRiskZoneList, Formatting.Indented).ToString());
+
+                return false;
+            }
+            else
+            {
+                try
+                {
+                    String data = File.ReadAllText(path);
+                    if (data.Length > 0)
+                    {
+                        List<RiskZoneRegister> tempPropertiestRZ = JsonConvert.DeserializeObject<List<RiskZoneRegister>>(data);
+                        tempPropertiestRZ.ForEach(e => { PropertiesRiskZoneList.Add(e); RiskZoneRegisterList.Add(e.NameId, e); });
+                        Grouped_PropertiesRiskZoneList.Refresh();
+                        return true;
+                    }
+                }
+                catch { }
+            }
+            return false;
+        }
+        /*public void LoadConfigureZone()
         {
             string name = "Area";
             String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Configure.xlsx");
@@ -142,6 +245,20 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 ZoneRegisterList.Add(zone.NameId, zone);
             }
             con.Close();
+        }*/
+
+        public RiskZoneRegister FindRiskZone(Point p)
+        {
+            RiskZoneRegister trz = null;
+            foreach (var rz in RiskZoneRegisterList.Values)
+            {
+                if (ExtensionService.IsInPolygon(rz.GetZone(), p))
+                {
+                    trz = rz;
+                    break;
+                }
+            }
+            return trz;
         }
         public int FindIndexZoneRegister(Point p)
         {
@@ -246,6 +363,13 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             int index=PropertiesTrafficZoneList.FindIndex(e => e.NameId.Equals(nameID));
             PropertiesTrafficZoneList.RemoveAt(index);
             Grouped_PropertiesTrafficZoneList.Refresh();
+        }
+        public void ClearRiskZoneRegister(String nameID)
+        {
+            RiskZoneRegisterList.Remove(nameID);
+            int index = PropertiesRiskZoneList.FindIndex(e => e.NameId.Equals(nameID));
+            PropertiesRiskZoneList.RemoveAt(index);
+            Grouped_PropertiesRiskZoneList.Refresh();
         }
     }
 }

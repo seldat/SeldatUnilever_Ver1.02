@@ -21,7 +21,7 @@ namespace SeldatMRMS
         public ProcedureDataItemsDB procedureDataItemsDB;
         public GateTaskDB gateTaskDB;
         public RobotTaskDB robotTaskDB;
-        public ChargerProcedureDB chargerProcedureDB;
+        public ReadyChargerProcedureDB readyChargerProcedureDB;
         public OrderItem order;
         public enum ProcedureCode
         {
@@ -206,6 +206,17 @@ namespace SeldatMRMS
         public ProcedureControlServices (RobotUnity robot) : base (robot) {
             this.robot = robot;
             this.selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
+            robotTaskDB = new RobotTaskDB(robot);
+            procedureDataItemsDB = new ProcedureDataItemsDB(procedureCode, robotTaskDB.robotTaskId);
+            readyChargerProcedureDB = new ReadyChargerProcedureDB();
+        }
+
+        public override void AssignAnOrder(OrderItem order)
+        {
+            this.order = order;
+           
+            procedureDataItemsDB.SetOrderItem(order);
+            base.AssignAnOrder(order);
         }
         public RobotUnity GetRobotUnity()
         {

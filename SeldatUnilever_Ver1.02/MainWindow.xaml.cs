@@ -2,7 +2,6 @@
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.UnityService;
 using SeldatUnilever_Ver1._02.Form;
-using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using SeldatUnilever_Ver1._02.Management.Statistics;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using System;
@@ -163,7 +162,12 @@ namespace SeldatUnilever_Ver1._02
             stationTimer.AutoReset = true;
             stationTimer.Enabled = true;
 
-            canvasControlService.ReloadAllStation();
+
+            Dispatcher.BeginInvoke(new ThreadStart(() =>
+            {
+                canvasControlService.ReloadAllStation();
+            }));
+
             /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
                {
                    for (int i = 1; i < 5; i++)

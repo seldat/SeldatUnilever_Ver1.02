@@ -1,4 +1,5 @@
-﻿using SeldatMRMS.Management.DoorServices;
+﻿using SeldatMRMS;
+using SeldatMRMS.Management.DoorServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,29 @@ namespace SeldatUnilever_Ver1._02.Management.DoorServices
         private void FixedBtn_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Global_Object.userLogin == (int)Global_Object.PRIORITYLOGIN.PRIORITYLOGIN_ADMIN0)
+            {
+                MainDataGrid.IsEnabled = true;
+            }
+            else
+            {
+                MainDataGrid.IsEnabled = false;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Hide();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }

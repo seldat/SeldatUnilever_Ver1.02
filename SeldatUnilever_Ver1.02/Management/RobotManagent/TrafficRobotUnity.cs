@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 
 namespace SeldatMRMS.Management
 {
@@ -115,9 +116,9 @@ namespace SeldatMRMS.Management
                     // if robot in list is near but add in risk list robot
 
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
-                    if(!RobotUnityRiskList.ContainsKey(r.properties.NameID))
+                    if(!RobotUnityRiskList.ContainsKey(r.properties.NameId))
                     {
-                        RobotUnityRiskList.Add(r.properties.NameID,r);
+                        RobotUnityRiskList.Add(r.properties.NameId,r);
                     }
                     // reduce speed robot control
                     iscloseDistance = true;
@@ -125,7 +126,7 @@ namespace SeldatMRMS.Management
                 else
                 {
                     // if robot in list is far but before registe in list, must remove in list
-                    RemoveRiskList(r.properties.NameID);
+                    RemoveRiskList(r.properties.NameId);
                 }
             }
             return iscloseDistance;
@@ -201,6 +202,17 @@ namespace SeldatMRMS.Management
         }
         public override void TrafficUpdate() {
             prioritLevel.IndexOnMainRoad= trafficManagementService.FindIndexZoneRegister(properties.pose.Position);
+            // cập nhật vùng riskzone // update vùng risk area cho robot
+            RiskZoneRegister rZR=trafficManagementService.FindRiskZone(properties.pose.Position);
+            if (rZR != null)
+            {
+                UpdateRiskAraParams(rZR.L1, rZR.L2, rZR.WS, rZR.distance);
+            }
+            else
+            {
+                UpdateRiskAraParams(DfL1, DfL2, DfWS,DfDistanceInter);
+            }
+            // giám sát an toàn
             SupervisorTraffic();
         }
         protected override void SupervisorTraffic() {

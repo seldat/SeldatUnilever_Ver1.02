@@ -79,7 +79,7 @@ namespace SeldatMRMS
                         procrg.Start();
                     break;
                 case ProcedureItemSelected.PROCEDURE_ROBOT_TO_CHARGE:
-                        ProcedureRobotToCharger procrc = new ProcedureRobotToCharger(robot, chargerService,robot.properties.chargeID);
+                        ProcedureRobotToCharger procrc = new ProcedureRobotToCharger(robot, chargerService,robot.properties.ChargeID);
                         ProcedureDataItems procrcDataItems = new ProcedureDataItems();
                         procrcDataItems.StartTaskTime = DateTime.Now;
                         RegisterProcedureItem itemprocrc = new RegisterProcedureItem() { item = procrc, robot = robot, procedureDataItems = procrcDataItems};
@@ -89,7 +89,7 @@ namespace SeldatMRMS
                         procrc.Start();
                     break;
                 case ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY:
-                        ProcedureRobotToReady procrr = new ProcedureRobotToReady(robot,robot.properties.chargeID,trafficService);
+                        ProcedureRobotToReady procrr = new ProcedureRobotToReady(robot,robot.properties.ChargeID,trafficService);
                         ProcedureDataItems procrrDataItems = new ProcedureDataItems();
                         procrrDataItems.StartTaskTime = DateTime.Now;
                         RegisterProcedureItem itemprocrr = new RegisterProcedureItem() { item = procrr, robot = robot, procedureDataItems = procrrDataItems };
@@ -140,6 +140,8 @@ namespace SeldatMRMS
             ProcedureControlServices procItem = item as ProcedureControlServices;
             if(procItem.procedureCode  == ProcedureCode.PROC_CODE_ROBOT_TO_READY){
 
+
+
             }
             else if(procItem.procedureCode  == ProcedureCode.PROC_CODE_ROBOT_TO_READY){
 
@@ -147,6 +149,8 @@ namespace SeldatMRMS
             else{
                 RestoreOrderItem(procItem.order);
             }
+            SolvedProblem pSP = new SolvedProblem(item);
+            pSP.Show();
         }
    
     }

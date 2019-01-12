@@ -19,7 +19,7 @@ namespace SeldatMRMS {
         DataMachineToReturn points;
         MachineToReturn StateMachineToReturn;
         Thread ProMachineToReturn;
-        RobotUnity robot;
+        public RobotUnity robot;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
         public override event Action<Object> ReleaseProcedureHandler;

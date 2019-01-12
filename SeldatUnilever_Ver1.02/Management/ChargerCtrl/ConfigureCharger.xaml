@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Management.ChargerCtrl"
         mc:Ignorable="d"
-        Title="ConfigureCharger" Height="450" Width="800">
+        Title="ConfigureCharger" Height="450" Width="800"
+        IsVisibleChanged="Window_IsVisibleChanged"
+        Closing="Window_Closing"
+        >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -28,7 +31,7 @@
                                         Binding="{Binding Path=PointFrontLineStr, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="PointOfPallet" 
                                         Binding="{Binding Path=PointOfPallet, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <DataGridTemplateColumn Header="Fixed">
+                    <DataGridTemplateColumn Header="Fixed" x:Name="btnFixed">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Name="FixedBtn" Click="FixedBtn_Click">Save</Button>
@@ -47,7 +50,7 @@
                     Height="20"
                     Margin="5 0"
                     Padding="5 0"
-                    Content="Close"/>
+                    Content="Close" Click="Button_Click"/>
 
             </StackPanel>
         </Grid>

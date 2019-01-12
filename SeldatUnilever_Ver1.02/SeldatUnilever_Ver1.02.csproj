@@ -145,7 +145,6 @@
     <Compile Include="Management\RobotManagent\ConfigureRobotUnity.xaml.cs">
       <DependentUpon>ConfigureRobotUnity.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Management\RobotManagent\old\RobotUnityService.cs" />
     <Compile Include="Management\RobotManagent\RobotBaseService.cs" />
     <Compile Include="Management\RobotManagent\RobotManagementService.cs" />
     <Compile Include="Management\RobotManagent\RobotUnity.cs" />
@@ -159,11 +158,15 @@
     <Compile Include="Management\TrafficManager\ConfigureArea.xaml.cs">
       <DependentUpon>ConfigureArea.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Management\TrafficManager\ConfigureRiskZone.xaml.cs">
+      <DependentUpon>ConfigureRiskZone.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Management\TrafficManager\TrafficManagementService.cs" />
     <Compile Include="Management\TrafficManager\TrafficRounterService.cs" />
     <Compile Include="Management\UnityService\AssigmentTaskService.cs" />
     <Compile Include="Management\UnityService\TaskRounterService.cs" />
     <Compile Include="Management\UnityService\UnityManagementService.cs" />
+    <Compile Include="ObjectDumper.cs" />
     <Compile Include="Shape\CanvasControlService.cs" />
     <Compile Include="Shape\PalletShape.cs" />
     <Compile Include="Shape\RobotShape.cs" />
@@ -234,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Management\TrafficManager\ConfigureArea.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\TrafficManager\ConfigureRiskZone.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -408,9 +415,11 @@
   <ItemGroup>
     <Folder Include="Log\" />
     <Folder Include="Management\OrderService\" />
+    <Folder Include="Management\RobotManagent\old\" />
     <Folder Include="Management\Store\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="readme.txt" />
     <Resource Include="Management\Media\3d.png" />
     <Content Include="Management\RobotManagent\SelfDriving.py" />
   </ItemGroup>

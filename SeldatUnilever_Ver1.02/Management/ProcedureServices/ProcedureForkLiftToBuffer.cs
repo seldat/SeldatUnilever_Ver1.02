@@ -114,13 +114,13 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                            rb.UpdateRiskAraParams(0,rb.properties.L2,rb.properties.WS,rb.properties.DistanceIntersection);
+                            rb.UpdateRiskAraParams(0,rb.properties.L2,rb.properties.WS,rb.properties.DistInter);
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_CAME_CHECKIN_GATE;
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
                         if (false == Traffic.HasRobotUnityinArea (ds.config.PointFrontLine.Position)) {
-                            rb.UpdateRiskAraParams(40,rb.properties.L2,rb.properties.WS,rb.properties.DistanceIntersection);
+                            rb.UpdateRiskAraParams(40,rb.properties.L2,rb.properties.WS,rb.properties.DistInter);
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             rb.SendPoseStamped (ds.config.PointFrontLine);
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_GATE;

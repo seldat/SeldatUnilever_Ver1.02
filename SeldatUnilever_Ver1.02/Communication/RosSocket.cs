@@ -67,9 +67,6 @@ namespace SeldatMRMS.Management.RobotManagent
                 webSocket.OnOpen += (sender, e) => OnOpenedEvent();
                 webSocket.Connect();
             }).Start();
-           
-        
-           
         }
         public virtual void Dispose()
         {

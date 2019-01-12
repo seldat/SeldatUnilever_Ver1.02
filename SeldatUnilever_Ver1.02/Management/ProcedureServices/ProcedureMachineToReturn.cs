@@ -144,14 +144,14 @@ namespace SeldatMRMS {
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                            rb.UpdateRiskAraParams(0,rb.properties.L2,rb.properties.WS,rb.properties.DistanceIntersection);
+                            rb.UpdateRiskAraParams(0,rb.properties.L2,rb.properties.WS,rb.properties.DistInter);
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_CAME_CHECKIN_RETURN;
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_CAME_CHECKIN_RETURN: // đã đến vị trí
                         try {
                             if (false == Traffic.HasRobotUnityinArea (BfToRe.GetFrontLineReturn ().Position)) {
-                                rb.UpdateRiskAraParams(40,rb.properties.L2,rb.properties.WS,rb.properties.DistanceIntersection);
+                                rb.UpdateRiskAraParams(40,rb.properties.L2,rb.properties.WS,rb.properties.DistInter);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (BfToRe.GetFrontLineReturn ());
                                 StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_RETURN;

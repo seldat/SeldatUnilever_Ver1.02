@@ -207,15 +207,19 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void setColorRobotStatus(RobotStatusColorCode rsc)
         {
-            switch(rsc)
+            Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
-                case RobotStatusColorCode.ROBOT_STATUS_OK:
-                    border.Background = new SolidColorBrush(Colors.Blue);
-                    break;
-                case RobotStatusColorCode.ROBOT_STATUS_ERROR:
-                    border.Background = new SolidColorBrush(Colors.Red);
-                    break;
-            }
+                switch (rsc)
+                {
+                    case RobotStatusColorCode.ROBOT_STATUS_OK:
+                        border.Background = new SolidColorBrush(Colors.Blue);
+                        break;
+                    case RobotStatusColorCode.ROBOT_STATUS_ERROR:
+                        border.Background = new SolidColorBrush(Colors.Red);
+                        break;
+                }
+            }));
+
 
         }
         private void ChangeToolTipContent(object sender, ToolTipEventArgs e)

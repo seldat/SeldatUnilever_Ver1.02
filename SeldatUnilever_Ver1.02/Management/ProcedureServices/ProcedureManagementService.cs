@@ -6,6 +6,7 @@ using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using System;
 using System.Threading.Tasks;
 using static SeldatMRMS.DBProcedureService;
+using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 using static SeldatMRMS.ProcedureControlServices;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
@@ -143,14 +144,17 @@ namespace SeldatMRMS
 
 
             }
-            else if(procItem.procedureCode  == ProcedureCode.PROC_CODE_ROBOT_TO_READY){
+            else if(procItem.procedureCode  == ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE){
 
             }
             else{
                 RestoreOrderItem(procItem.order);
             }
-            SolvedProblem pSP = new SolvedProblem(item);
-            pSP.Show();
+
+            RobotUnity robot = procItem.GetRobotUnity();
+            robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_ERROR);
+            // SolvedProblem pSP = new SolvedProblem(item);
+            // pSP.Show();
         }
    
     }

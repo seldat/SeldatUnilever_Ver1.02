@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,9 +24,10 @@ namespace SeldatMRMS
     public partial class SolvedProblem : Window
     {
         Object objProc;
-        public SolvedProblem(Object obj)
+        public SolvedProblem(Object obj, string cultureName = null)
         {
             InitializeComponent();
+            ApplyLanguage(cultureName);
             this.objProc = obj;
             if (obj.GetType() == typeof(ProcedureForkLiftToBuffer))
             {
@@ -59,6 +61,26 @@ namespace SeldatMRMS
             }
 
         }
+
+        public void ApplyLanguage(string cultureName = null)
+        {
+            if (cultureName != null)
+                Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(cultureName);
+
+            ResourceDictionary dict = new ResourceDictionary();
+            switch (Thread.CurrentThread.CurrentCulture.ToString())
+            {
+                case "vi-VN":
+                    dict.Source = new Uri("..\\Lang\\Vietnamese.xaml", UriKind.Relative);
+                    break;
+                // ...
+                default:
+                    dict.Source = new Uri("..\\Lang\\English.xaml", UriKind.Relative);
+                    break;
+            }
+            this.Resources.MergedDictionaries.Add(dict);
+        }
+
         public void ShowInformation(Object obj)
         {
             if (obj.GetType() == typeof(ProcedureForkLiftToBuffer))

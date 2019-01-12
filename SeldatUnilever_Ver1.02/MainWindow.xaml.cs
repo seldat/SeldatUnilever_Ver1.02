@@ -309,7 +309,7 @@ namespace SeldatUnilever_Ver1._02
 
         private void Btn_Statistics_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
+            Statistics statistics = new Statistics(Thread.CurrentThread.CurrentCulture.ToString());
             statistics.ShowDialog();
         }
 

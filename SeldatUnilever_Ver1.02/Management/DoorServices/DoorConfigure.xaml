@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Management.DoorServices"
         mc:Ignorable="d"
-        Title="DoorConfigure" Height="450" Width="800"
+        Title="{DynamicResource DoorConfigure_Title}" Height="450" Width="800"
         IsVisibleChanged="Window_IsVisibleChanged"
         Closing="Window_Closing"
         >
@@ -56,9 +56,10 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
                 <Button 
-                    Content="Close" 
-                    Width="75"
-                    Height="20" Click="Button_Click"/>
+                    Content="{DynamicResource DoorConfigure_Button_Close}" 
+                    Height="20"
+                    Margin="5 0"
+                    Padding="5 0" Click="Button_Click"/>
             </StackPanel>
         </Grid>
         

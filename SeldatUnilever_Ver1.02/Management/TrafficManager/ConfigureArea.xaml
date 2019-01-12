@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Management.TrafficManager"
         mc:Ignorable="d"
-        Title="ConfigureTraffic" Height="450" Width="800"
+        Title="{DynamicResource ConfigureTraffic_Title}" Height="450" Width="800"
         Loaded="Window_Loaded"
         IsVisibleChanged="Window_IsVisibleChanged"
         Closing="Window_Closing"
@@ -64,9 +64,9 @@
                     Height="20"
                     Margin="5 0"
                     Padding="5 0"
-                    Content="Close" Click="btn_close_Click" />
+                    Content="{DynamicResource ConfigureTraffic_Button_Close}" Click="btn_close_Click" />
                 <Button 
-                    Content="Add" 
+                    Content="{DynamicResource ConfigureTraffic_Button_Add}" 
                     Height="20"
                     Margin="5 0"
                     Padding="5 0"

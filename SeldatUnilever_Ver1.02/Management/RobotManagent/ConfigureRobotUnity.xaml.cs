@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SeldatMRMS;
 using SeldatMRMS.Management.RobotManagent;
 using System;
 using System.Collections.Generic;
@@ -54,18 +55,31 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         private void FixedBtn_Click(object sender, RoutedEventArgs e)
         {
             PropertiesRobotUnity properties = (sender as Button).DataContext as PropertiesRobotUnity;
-            robotManagementService.FixedPropertiesRobotUnity(properties.NameID,properties);
+            robotManagementService.FixedPropertiesRobotUnity(properties.NameId,properties);
             robotManagementService.SaveConfig(JsonConvert.SerializeObject(MainDataGrid.ItemsSource, Formatting.Indented));
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            Hide();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            this.Hide();
+            e.Cancel = true;
+            Hide();
+        }
+
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Global_Object.userLogin == (int)Global_Object.PRIORITYLOGIN.PRIORITYLOGIN_ADMIN0)
+            {
+                MainDataGrid.IsEnabled = true;
+            }
+            else
+            {
+                MainDataGrid.IsEnabled = false;
+            }
         }
     }
 }

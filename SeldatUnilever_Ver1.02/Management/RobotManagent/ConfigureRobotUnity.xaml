@@ -7,7 +7,10 @@
         mc:Ignorable="d"
         Title="{DynamicResource ConfigureRobotUnity_Title}" Height="450" Width="800"
         Closing="Window_Closing"
+        IsVisibleChanged="Window_IsVisibleChanged"
+        
         >
+   
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"></RowDefinition>
@@ -32,16 +35,24 @@
                                         Binding="{Binding Path=Url, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="L1" 
                                         Binding="{Binding Path=L1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
                     <DataGridTextColumn Width="*" Header="L2" 
                                         Binding="{Binding Path=L2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="WS" 
                                         Binding="{Binding Path=WS, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="Scale" 
+                                        Binding="{Binding Path=Scale, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="BatteryLevelRb" 
+                                        Binding="{Binding Path=BatteryLevelRb, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="BatteryLowLevel" 
+                                        Binding="{Binding Path=BatteryLowLevel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="ChargeID" 
+                                        Binding="{Binding Path=ChargeID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
                     <DataGridTextColumn Width="*" Header="Width" 
                                         Binding="{Binding Path=Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Length" 
                                         Binding="{Binding Path=Length, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <DataGridTemplateColumn Header="Fixed">
+                    <DataGridTemplateColumn Header="Fixed" x:Name="btnFixed">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Name="FixedBtn" Click="FixedBtn_Click">Save</Button>

@@ -1,9 +1,9 @@
-﻿<Window x:Class="SeldatUnilever_Ver1._02.Management.ProcedureServices.SolvedProblem"
+﻿<Window x:Class="SeldatMRMS.SolvedProblem"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Management.ProcedureServices"
+        xmlns:local="clr-namespace:SeldatMRMS"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         Title="SolvedProblem" Height="600" Width="700">
@@ -37,42 +37,58 @@
             <Grid Grid.Column="1">
                 <StackPanel VerticalAlignment="Center">
                     <Image/>
-                    <Label 
+                    <StackPanel Orientation="Horizontal">
+                        <Label 
                         Content="{DynamicResource SolvedProblem_RobotNameID}" 
                         FontWeight="DemiBold"/>
-                    <Label 
+                        <Label x:Name="txt_robotname" Content=""/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label 
                         Content="{DynamicResource SolvedProblem_ProcedureNameID}"
                         FontWeight="DemiBold"/>
+                        <Label x:Name="txt_procedurecode" Content=""/>
+                    </StackPanel>
+                    
                 </StackPanel>
             </Grid>
             <Grid Grid.Column="2">
                 <StackPanel VerticalAlignment="Center">
-                    <Label 
+                    <StackPanel Orientation="Horizontal">
+                        <Label 
                         Content="{DynamicResource SolvedProblem_ErrorCode}"
                         FontWeight="DemiBold"
                         />
-                    <Label 
+                        <Label x:Name="txt_errorcode" Content=""/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label  
                         Content="{DynamicResource SolvedProblem_Date}"
                         FontWeight="DemiBold"
                         />
+                        <Label Name="txt_datetime" Content=""/>
+                    </StackPanel>
+                    
                 </StackPanel>
             </Grid>
-            
+
         </Grid>
         <Grid Grid.Row="2">
             <GroupBox Header="{DynamicResource SolvedProblem_ProblemDescription}" FontSize="18" FontWeight="DemiBold">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="91*"></ColumnDefinition>
+                        <ColumnDefinition Width="589*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <RichTextBox Grid.Column="0" Grid.Row="0" Name="detailInfo" FontSize="12" FontWeight="Normal">
+                    <RichTextBox Grid.Column="0" Grid.Row="0" Name="detailInfo" FontSize="12" FontWeight="Normal" Grid.ColumnSpan="2">
                         <FlowDocument>
                             <Paragraph >
-                                <Run Text="điền đầy đủ thông tin"/>
+                                <Run Text="điền đầy đủ thông tin "/>
                             </Paragraph>
+
                         </FlowDocument>
                     </RichTextBox>
 
@@ -88,7 +104,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <RichTextBox Grid.Column="0" Grid.Row="0" FontSize="12" FontWeight="Normal">
+                    <RichTextBox Grid.Column="0" Grid.Row="0" FontSize="12" FontWeight="Normal" Name="problemInfo">
                         <FlowDocument>
                             <Paragraph>
                                 <Run Text="điền đầy đủ thông tin"/>
@@ -108,7 +124,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <RichTextBox Grid.Column="0" Grid.Row="0" FontSize="12" FontWeight="Normal">
+                    <RichTextBox Grid.Column="0" Grid.Row="0" FontSize="12" FontWeight="Normal" Name="solvedProblemInfo">
                         <FlowDocument>
                             <Paragraph>
                                 <Run Text="điền đầy đủ thông tin"/>
@@ -125,12 +141,12 @@
                 VerticalAlignment="Center" 
                 HorizontalAlignment="Center">
                 <Button 
-                    Name="cancelProcBtn" 
+                    Name="destroyProcBtn" 
                     Margin="5"
                     Padding="5 0"
                     Width="Auto"
                     Height="20"
-                    Click="cancelProcBtn_Click"  
+                    Click="destroyProcBtn_Click"  
                     Content="{DynamicResource SolvedProblem_Button_CancelProcess}"/>
                 <Button 
                     Name="contProcBtn"
@@ -138,6 +154,7 @@
                     Padding="5 0"
                     Width="Auto"
                     Height="20"
+                    Click="contProcBtn_Click"
                     Content="{DynamicResource SolvedProblem_Button_ContinueProcess}"/>
             </StackPanel>
         </Grid>

@@ -18,7 +18,8 @@ namespace SeldatMRMS
         public enum ProcessStatus
         {
             F=0, // failed
-            S=1 //Sucess
+            S=1, //Sucess
+            E // Error
         }
 
         public DBProcedureService(RobotUnity robot) {
@@ -28,14 +29,21 @@ namespace SeldatMRMS
         }
         public void SendHttpProcedureDataItem(ProcedureDataItemsDB procedureDataItemsDB)
         {
-            String url= Global_Object.url + "/robot/rest/reportRobot/insertUpdateListRobotProcess";
+            String url= Global_Object.url + "reportRobot/insertUpdateListRobotProcess";
             List<ProcedureDataItemsDB> listproc = new List<ProcedureDataItemsDB>();
             listproc.Add(procedureDataItemsDB);         
             new BridgeClientRequest().PostCallAPI(url, JsonConvert.SerializeObject(listproc).ToString());
         }
+        public void SendHttpReadyChargerProcedureDB(ReadyChargerProcedureDB readyChargerProcedureDB)
+        {
+            String url = Global_Object.url + "reportRobot/insertUpdateListRobotCharge";
+            List<ReadyChargerProcedureDB> listproc = new List<ReadyChargerProcedureDB>();
+            listproc.Add(readyChargerProcedureDB);
+            new BridgeClientRequest().PostCallAPI(url, JsonConvert.SerializeObject(listproc).ToString());
+        }
         public void SendHttpRobotTaskItem(RobotTaskDB robotTaskDB)
         {
-            String url = Global_Object.url+ "/robot/rest/reportRobot/insertUpdateListRobotTask";
+            String url = Global_Object.url+ "reportRobot/insertListRobotTask";
             List<RobotTaskDB> listrot = new List<RobotTaskDB>();
             listrot.Add(robotTaskDB);
             new BridgeClientRequest().PostCallAPI(url, JsonConvert.SerializeObject(listrot));
@@ -44,15 +52,13 @@ namespace SeldatMRMS
         {
             ProcedureCode prcode;
             OrderItem order;
-            RobotUnity robot;
-            public ProcedureDataItemsDB(ProcedureCode prcode,RobotUnity robot) {
+            public ProcedureDataItemsDB(ProcedureCode prcode,String robotTaskId) {
                 this.prcode = prcode;
                 this.order = order;
-                this.robot = robot;
-                rpBeginDatetime = DateTime.Now.ToString("yyyyMMddHHmmss");
+                rpBeginDatetime = DateTime.Now.ToString("yyyy/MM/dd hh:mm:tt");
                 creUsrId = Global_Object.userLogin;
                 updUsrId = Global_Object.userLogin;
-                robotTaskId = robot.properties.NameID;
+                this.robotTaskId = robotTaskId;
             }
             public String robotProcessId { get; set; }
             public string robotTaskId { get; set; }
@@ -84,7 +90,7 @@ namespace SeldatMRMS
                 bufferId = order.bufferId;
                 operationType = (int)prcode ;
                 orderContent = JsonConvert.SerializeObject(order);
-                rpEndDatetime = DateTime.Now.ToString("yyyyMMddHHmmss");
+                rpEndDatetime = DateTime.Now.ToString("yyyy/MM/dd hh:mm:tt");
                 robotProcessStastus = status;
             }
         }
@@ -100,7 +106,8 @@ namespace SeldatMRMS
         {
               RobotUnity robot;
               public RobotTaskDB(RobotUnity robot) {
-                robotTaskId = robot.properties.NameID;
+                robotTaskId = robot.properties.NameId+"-"+DateTime.Now.ToString("yyyyMMddHHmmtt");
+                robotId = robot.properties.NameId;
                 creUsrId = Global_Object.userLogin;
                 updUsrId = Global_Object.userLogin;
               }
@@ -122,13 +129,12 @@ namespace SeldatMRMS
             public String ErrorStatusID { get; set; } // if have
         }
 
-        public class ChargerProcedureDB
+        public class ReadyChargerProcedureDB
         {
             ChargerCtrl chargerCtrl;
-            public ChargerProcedureDB(ChargerCtrl chargerCtrl)
+            public ReadyChargerProcedureDB()
             {
-                this.chargerCtrl=chargerCtrl;
-                rcBeginDatetime = DateTime.Now.ToString("yy//MM/dd hh:mm tt");
+                rcBeginDatetime = DateTime.Now.ToString("yyyy//MM/dd hh:mm:tt");
             }
             public int robotChargeId;
             public string robotTaskId;
@@ -137,8 +143,19 @@ namespace SeldatMRMS
             public String rcBeginDatetime;// ": "2018-12-29 13:23:05" //Không có hoặc chuôi rỗng lây ngày hệ thống
             public String rcEndDatetime;//":  "2018-12-29 13:23:05" //Không có hoặc chuôi rỗng lây ngày hệ thống 
             public double currentBattery;
-            public int robotChargeStatus;
-            public void GetParams(int status)
+            public String robotChargeStatus;
+            public void Registry(ChargerCtrl chargerCtrl, String robotTaskId)
+            {
+                this.chargerCtrl = chargerCtrl;
+                this.robotTaskId = robotTaskId;
+                rcEndDatetime = DateTime.Now.ToString("yy//MM/dd hh:mm tt");
+            }
+            public void Registry(String robotTaskId)
+            {
+                this.robotTaskId = robotTaskId;
+                rcEndDatetime = DateTime.Now.ToString("yy//MM/dd hh:mm tt");
+            }
+            public void GetParams(String status)
             {
                 rcEndDatetime = DateTime.Now.ToString("yy//MM/dd hh:mm tt");
                 robotChargeStatus=status;

@@ -20,7 +20,7 @@ namespace SeldatMRMS {
         // DataBufferToMachine points;
         BufferToMachine StateBufferToMachine;
         Thread ProBuferToMachine;
-        RobotUnity robot;
+        public RobotUnity robot;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
 

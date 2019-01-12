@@ -36,9 +36,37 @@ namespace SeldatMRMS.Management.RobotManagent
     public class RobotUnityService : RobotUnityControl
     {
 
+        public double DistInterCv;
+        public double L1Cv;
+        public double L2Cv;
+        public double WSCv;
+
+        public double DfL1 = 40;
+        public double DfL2 = 40;
+        public double DfWS = 60;
+        public double DfDistanceInter = 40;
+
+        public double DfL1Cv = 40;
+        public double DfL2Cv = 40;
+        public double DfWSCv = 60;
+        public double DfDistInterCv = 40;
 
         public RobotUnityService()
         {
+        }
+
+        public void UpdateRiskAraParams(double L1, double L2, double WS, double distanceInter)
+        {
+            properties.L1 = L1;
+            properties.L2 = L2;
+            properties.WS = WS;
+            properties.DistInter = distanceInter;
+
+            L1Cv = L1 / properties.Scale;
+            L2Cv = L2 / properties.Scale;
+            WSCv = WS / properties.Scale;
+            DistInterCv = distanceInter / properties.Scale;
+
         }
         public virtual Point TopHeader()
         {
@@ -46,10 +74,22 @@ namespace SeldatMRMS.Management.RobotManagent
             double y = properties.pose.Position.Y + Math.Sqrt(Math.Abs(properties.L1) * Math.Abs(properties.L1) + Math.Abs(properties.WS / 2) * Math.Abs(properties.WS / 2)) * Math.Sin(properties.pose.AngleW + Math.Atan2(-properties.WS / 2, properties.L1));
             return new Point(x, y);
         }
+        public virtual Point TopHeaderCv()
+        {
+            double x = Global_Object.CoorCanvas(properties.pose.Position).X + Math.Sqrt((Math.Abs(L1Cv) * Math.Abs(L1Cv)) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Cos(properties.pose.AngleW + Math.Atan2(-WSCv / 2, L1Cv));
+            double y = Global_Object.CoorCanvas(properties.pose.Position).Y + Math.Sqrt(Math.Abs(L1Cv) * Math.Abs(L1Cv) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Sin(properties.pose.AngleW + Math.Atan2(-WSCv / 2, L1Cv));
+            return new Point(x, y);
+        }
         public virtual Point BottomHeader()
         {
             double x = properties.pose.Position.X + Math.Sqrt(Math.Abs(properties.L1) * Math.Abs(properties.L1) + Math.Abs(properties.WS / 2) * Math.Abs(properties.WS / 2)) * Math.Cos(properties.pose.AngleW + Math.Atan2(properties.WS / 2, properties.L1));
             double y = properties.pose.Position.Y + Math.Sqrt(Math.Abs(properties.L1) * Math.Abs(properties.L1) + Math.Abs(properties.WS / 2) * Math.Abs(properties.WS / 2)) * Math.Sin(properties.pose.AngleW + Math.Atan2(properties.WS / 2, properties.L1));
+            return new Point(x, y);
+        }
+        public virtual Point BottomHeaderCv()
+        {
+            double x = Global_Object.CoorCanvas(properties.pose.Position).X + Math.Sqrt(Math.Abs(L1Cv) * Math.Abs(L1Cv) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Cos(properties.pose.AngleW + Math.Atan2(WSCv / 2, L1Cv));
+            double y = Global_Object.CoorCanvas(properties.pose.Position).Y + Math.Sqrt(Math.Abs(L1Cv) * Math.Abs(L1Cv) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Sin(properties.pose.AngleW + Math.Atan2(WSCv / 2, L1Cv));
             return new Point(x, y);
         }
         public virtual Point MiddleHeader()
@@ -62,7 +102,12 @@ namespace SeldatMRMS.Management.RobotManagent
             double y = properties.pose.Position.Y + Math.Sqrt(Math.Abs(properties.L2) * Math.Abs(properties.L2) + Math.Abs(properties.WS / 2) * Math.Abs(properties.WS / 2)) * Math.Sin(properties.pose.AngleW + Math.Atan2(-properties.WS / 2, -properties.L2));
             return new Point(x, y);
         }
-
+        public virtual Point TopTailCv()
+        {
+            double x = Global_Object.CoorCanvas(properties.pose.Position).X + Math.Sqrt(Math.Abs(L2Cv) * Math.Abs(L2Cv) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Cos(properties.pose.AngleW + Math.Atan2(-WSCv / 2, -L2Cv));
+            double y = Global_Object.CoorCanvas(properties.pose.Position).Y + Math.Sqrt(Math.Abs(L2Cv) * Math.Abs(L2Cv) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Sin(properties.pose.AngleW + Math.Atan2(-WSCv / 2, -L2Cv));
+            return new Point(x, y);
+        }
 
         public virtual Point MiddleTail()
         {
@@ -72,6 +117,12 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             double x = properties.pose.Position.X + Math.Sqrt(Math.Abs(properties.L2) * Math.Abs(properties.L2) + Math.Abs(properties.WS / 2) * Math.Abs(properties.WS / 2)) * Math.Cos(properties.pose.AngleW + Math.Atan2(properties.WS / 2, -properties.L2));
             double y = properties.pose.Position.Y + Math.Sqrt(Math.Abs(properties.L2) * Math.Abs(properties.L2) + Math.Abs(properties.WS / 2) * Math.Abs(properties.WS / 2)) * Math.Sin(properties.pose.AngleW + Math.Atan2(properties.WS / 2, -properties.L2));
+            return new Point(x, y);
+        }
+        public virtual Point BottomTailCv()
+        {
+            double x = Global_Object.CoorCanvas(properties.pose.Position).X + Math.Sqrt(Math.Abs(L2Cv) * Math.Abs(L2Cv) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Cos(properties.pose.AngleW + Math.Atan2(WSCv / 2, -L2Cv));
+            double y = Global_Object.CoorCanvas(properties.pose.Position).Y + Math.Sqrt(Math.Abs(L2Cv) * Math.Abs(L2Cv) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Sin(properties.pose.AngleW + Math.Atan2(WSCv / 2, -L2Cv));
             return new Point(x, y);
         }
 
@@ -134,7 +185,7 @@ namespace SeldatMRMS.Management.RobotManagent
             // Console.WriteLine("Vi tien gan " + p.ToString());
             // Console.WriteLine("kHOAN CACH " + ExtensionService.CalDistance(properties.pose.Position, p));
 
-            return ExtensionService.CalDistance(properties.pose.Position, p) < properties.DistanceIntersection ? true : false;
+            return ExtensionService.CalDistance(properties.pose.Position, p) < properties.DistInter ? true : false;
 
         }
         public bool FindHeaderIntersectsFullRiskArea(Point p)

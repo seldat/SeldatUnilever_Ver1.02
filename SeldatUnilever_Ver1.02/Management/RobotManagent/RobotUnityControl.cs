@@ -60,13 +60,13 @@ namespace SeldatMRMS.Management.RobotManagent
         public class PropertiesRobotUnity : NotifyUIBase
         {
             [CategoryAttribute("ID Settings"), DescriptionAttribute("Name of the customer")]
-            private String _NameID;
-            public String NameID { get => _NameID; set { _NameID = value; RaisePropertyChanged("NameID"); } }
+            private String _NameId;
+            public String NameId { get => _NameId; set { _NameId = value; RaisePropertyChanged("NameID"); } }
             private String _Label;
             public String Label { get => _Label; set { _Label = value; RaisePropertyChanged("Label"); } }
             private String _Url { get; set; }
             public String Url { get => _Url; set { _Url = value; RaisePropertyChanged("Url"); } }
-            public Pose pose;
+            public Pose pose= new Pose();
             public String URL;
             public bool IsConnected { get; set; }
             private double _L1 { get; set; }
@@ -83,12 +83,18 @@ namespace SeldatMRMS.Management.RobotManagent
             private float _BatteryLowLevel;
             public float BatteryLowLevel { get => _BatteryLowLevel; set { _BatteryLowLevel = value; RaisePropertyChanged("BatteryLowLevel"); } }
             public bool RequestChargeBattery;
-            public ChargerCtrl.ChargerId chargeID;
+            private ChargerCtrl.ChargerId _ChargeID;
+            public ChargerCtrl.ChargerId ChargeID { get => _ChargeID; set { _ChargeID = value; RaisePropertyChanged("ChargeID"); } }
             private double _DistanceIntersection;
-            public double DistanceIntersection { get => _DistanceIntersection; set { _DistanceIntersection = value; RaisePropertyChanged("Distance Intersection"); } }
+            public double DistInter { get => _DistanceIntersection; set { _DistanceIntersection = value; RaisePropertyChanged("Distance Intersection"); } }
             public double L1 { get => _L1; set { _L1 = value; RaisePropertyChanged("L1"); } }
             public double L2 { get => _L2; set { _L2 = value; RaisePropertyChanged("L2"); } }
             public double WS { get => _WS; set { _WS = value; RaisePropertyChanged("WS"); } }
+
+
+            private double _Scale { get; set; }
+            public double Scale { get => _Scale; set { _Scale = value; RaisePropertyChanged("Scale"); } }
+
             public double Width { get => _Width; set { _Width = value; RaisePropertyChanged("Width"); } }
             public double Length { get => _Length; set { _Length = value; RaisePropertyChanged("Length"); } }
             public double Height { get => _Height; set { _Height = value; RaisePropertyChanged("Height"); } }
@@ -176,22 +182,7 @@ namespace SeldatMRMS.Management.RobotManagent
         protected virtual void SupervisorTraffic() { }
         public RobotUnityControl()
         {
-            properties.pose = new Pose();
-            
-            properties.pose = new Pose();
-            properties.NameID = Guid.NewGuid().ToString();
-            properties.L1 = 40;
-            properties.L2 = 40;
-            properties.WS = 60;
-            properties.Label = "Robot";
-            properties.Url = "ws://192.168.1.200:9090";
-            properties.DistanceIntersection = 40;
-            properties.BatteryLevelRb = 40;
-            properties.BatteryLowLevel = 25;
-            properties.RequestChargeBattery = false;
-            properties.Width = 1.8;
-            properties.Height = 2.5;
-            properties.Length = 2.2;
+
         }
         public void createRosTerms () {
             int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler);
@@ -237,6 +228,7 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.pose.AngleW = posTheta;
             PoseHandler (properties.pose, this);
             Draw ();
+            
         }
         private void FinishedStatesHandler (Communication.Message message) {
             StandardInt32 standard = (StandardInt32) message;
@@ -332,30 +324,11 @@ namespace SeldatMRMS.Management.RobotManagent
             msg.data = message;
             this.Publish (paramsRosSocket.publication_batteryvol, msg);
         }
-        public void UpdateProperties(PropertiesRobotUnity proR)
+        public virtual void UpdateProperties(PropertiesRobotUnity proR)
         {
-            properties.NameID = proR.NameID;
-            properties.L1 = proR.L1;
-            properties.L2 = proR.L2;
-            properties.WS = proR.WS;
-            properties.Label =proR.Label;
-            properties.BatteryLowLevel = proR.BatteryLowLevel;
-            properties.BatteryLevelRb = proR.BatteryLevelRb;
-            properties.Url =proR.Url;
-            properties.chargeID = proR.chargeID;
-            properties.DistanceIntersection = proR.DistanceIntersection;
-            properties.BatteryLowLevel = proR.BatteryLowLevel;
-            properties.Width = proR.Width;
-            properties.Height = proR.Height;
-            properties.Length = proR.Length;
+            properties = proR;
         }
-        public void UpdateRiskAraParams(double L1,double L2,double WS, double distanceIntersection)
-        {
-            properties.L1 = L1;
-            properties.L2 = L2;
-            properties.WS = WS;
-            properties.DistanceIntersection = distanceIntersection;
-        }
+
         public void SendPoseStamped (Pose pose) {
             GeometryPoseStamped data = new GeometryPoseStamped ();
             data.header.frame_id = "map";

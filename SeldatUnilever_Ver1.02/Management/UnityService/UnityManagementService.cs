@@ -17,6 +17,8 @@ namespace SeldatMRMS.Management.UnityService
 {
     public class UnityManagementService : NotifyUIBase
     {
+       //SolvedProblem sf; 
+
         public RobotManagementService robotManagementService { get; set; }
         public DoorManagementService doorManagementService { get; set; }
         public ProcedureManagementService procedureManagementService { get; set; }
@@ -64,13 +66,13 @@ namespace SeldatMRMS.Management.UnityService
             assigmentTaskService.Start();
             
            
-                /*RobotUnity robot = robotManagementService.RobotUnityRegistedList.ElementAt(0).Value;
+               /* RobotUnity robot = robotManagementService.RobotUnityRegistedList.ElementAt(0).Value;
 
                 ProcedureForkLiftToBuffer pp = new ProcedureForkLiftToBuffer(robot, doorManagementService, trafficService);
-            DeviceItem.OrderItem order = new DeviceItem.OrderItem();
-            MessageBox.Show(order.bufferId+"");
-            pp.AssignAnOrder(order);
-                SeldatUnilever_Ver1._02.Management.ProcedureServices.SolvedProblem sf = new SeldatUnilever_Ver1._02.Management.ProcedureServices.SolvedProblem(pp);
+                DeviceItem.OrderItem order = new DeviceItem.OrderItem();
+                MessageBox.Show(order.bufferId+"");
+                pp.AssignAnOrder(order);
+                sf = new SolvedProblem(pp);
                 sf.Show();*/
            
         }

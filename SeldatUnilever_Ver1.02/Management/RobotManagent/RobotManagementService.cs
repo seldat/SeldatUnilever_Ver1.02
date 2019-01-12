@@ -9,6 +9,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,7 +40,7 @@ namespace SeldatMRMS.Management.RobotManagent
            //LoadRobotUnityConfigure();
             PropertiesRobotUnity_List = new List<PropertiesRobotUnity>();
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
-            configureForm = new ConfigureRobotUnity(this);
+            configureForm = new ConfigureRobotUnity(this, Thread.CurrentThread.CurrentCulture.ToString());
             LoadConfigure();
             //   LoadConfigure();
         }

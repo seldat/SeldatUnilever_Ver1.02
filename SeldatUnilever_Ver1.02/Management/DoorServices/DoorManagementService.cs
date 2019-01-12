@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -40,7 +41,7 @@ namespace SeldatMRMS.Management.DoorServices
             DoorMezzamineUpFront = new DoorService(DoorInfoConfigList[1]);
             DoorMezzamineReturnBack = new DoorService(DoorInfoConfigList[2]);
             DoorMezzamineReturnFront = new DoorService(DoorInfoConfigList[3]);
-            DoorConfigure doorConfigure = new DoorConfigure(this);
+            doorConfigure = new DoorConfigure(this, Thread.CurrentThread.CurrentCulture.ToString());
         }
     
         public void AddDoor()

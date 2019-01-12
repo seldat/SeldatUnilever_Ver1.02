@@ -38,21 +38,21 @@
                 <StackPanel VerticalAlignment="Center">
                     <Image/>
                     <Label 
-                        Content="Robot NameID:" 
+                        Content="{DynamicResource SolvedProblem_RobotNameID}" 
                         FontWeight="DemiBold"/>
                     <Label 
-                        Content="Procedure NameID:"
+                        Content="{DynamicResource SolvedProblem_ProcedureNameID}"
                         FontWeight="DemiBold"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Column="2">
                 <StackPanel VerticalAlignment="Center">
                     <Label 
-                        Content="Error Code:"
+                        Content="{DynamicResource SolvedProblem_ErrorCode}"
                         FontWeight="DemiBold"
                         />
                     <Label 
-                        Content="Date:"
+                        Content="{DynamicResource SolvedProblem_Date}"
                         FontWeight="DemiBold"
                         />
                 </StackPanel>
@@ -60,7 +60,7 @@
             
         </Grid>
         <Grid Grid.Row="2">
-            <GroupBox Header="Nội Dung Sự Cố" FontSize="18" FontWeight="DemiBold">
+            <GroupBox Header="{DynamicResource SolvedProblem_ProblemDescription}" FontSize="18" FontWeight="DemiBold">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -80,7 +80,7 @@
             </GroupBox>
         </Grid>
         <Grid Grid.Row="3">
-            <GroupBox Header="Nội Dung Giải Quyết Sự Cố" FontSize="18" FontWeight="DemiBold">
+            <GroupBox Header="{DynamicResource SolvedProblem_ProblemSolvingDetail}" FontSize="18" FontWeight="DemiBold">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -100,7 +100,7 @@
             </GroupBox>
         </Grid>
         <Grid Grid.Row="4">
-            <GroupBox Header="Nội Dung Sự Cố" FontSize="18" FontWeight="DemiBold">
+            <GroupBox Header="{DynamicResource SolvedProblem_ProblemSolvingSolution}" FontSize="18" FontWeight="DemiBold">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -131,14 +131,14 @@
                     Width="Auto"
                     Height="20"
                     Click="cancelProcBtn_Click"  
-                    Content="Hủy Quy Trình"/>
+                    Content="{DynamicResource SolvedProblem_Button_CancelProcess}"/>
                 <Button 
                     Name="contProcBtn"
                     Margin="5"
                     Padding="5 0"
                     Width="Auto"
                     Height="20"
-                    Content="Tiếp Tục Quy Trình"/>
+                    Content="{DynamicResource SolvedProblem_Button_ContinueProcess}"/>
             </StackPanel>
         </Grid>
     </Grid>

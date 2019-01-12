@@ -163,7 +163,10 @@ namespace SeldatUnilever_Ver1._02
             stationTimer.AutoReset = true;
             stationTimer.Enabled = true;
 
-            canvasControlService.ReloadAllStation();
+            Dispatcher.BeginInvoke(new ThreadStart(() =>
+            {
+                canvasControlService.ReloadAllStation();
+            }));
             /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
                {
                    for (int i = 1; i < 5; i++)
@@ -305,7 +308,7 @@ namespace SeldatUnilever_Ver1._02
 
         private void Btn_Statistics_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
+            Statistics statistics = new Statistics(Thread.CurrentThread.CurrentCulture.ToString());
             statistics.ShowDialog();
         }
 

@@ -45,13 +45,13 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
         }
         public Dictionary<String, ZoneRegister> ZoneRegisterList = new Dictionary<string, ZoneRegister>();
+        public ConfigureArea configureArea;
         public TrafficRounterService()
         {
             PropertiesTrafficZoneList = new List<ZoneRegister>();
             Grouped_PropertiesTrafficZoneList = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesTrafficZoneList);
             LoadConfigure();
-            ConfigureTraffic configureTraffic = new ConfigureTraffic(this);
-            //configureTraffic.Show();
+            configureArea = new ConfigureArea(this);
         }
         public void Initialize()
         {

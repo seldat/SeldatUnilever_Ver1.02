@@ -30,7 +30,7 @@
             <Grid Grid.Column="0">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid>
-                        <iconPacks:PackIconMaterial Kind="AlertCircle" Width="*" Height="50"></iconPacks:PackIconMaterial>
+                        <iconPacks:PackIconMaterial Kind="AlertCircle"  Height="50"></iconPacks:PackIconMaterial>
                     </Grid>
                 </StackPanel>
             </Grid>

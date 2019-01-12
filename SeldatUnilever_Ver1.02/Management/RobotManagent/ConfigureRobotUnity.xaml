@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Management.RobotManagent"
         mc:Ignorable="d"
-        Title="ConfigureRobotUnity" Height="450" Width="800">
+        Title="ConfigureRobotUnity" Height="450" Width="800"
+        Closing="Window_Closing"
+        >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>

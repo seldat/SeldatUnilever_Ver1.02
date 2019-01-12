@@ -41,5 +41,10 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         {
             Close();
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.Hide();
+        }
     }
 }

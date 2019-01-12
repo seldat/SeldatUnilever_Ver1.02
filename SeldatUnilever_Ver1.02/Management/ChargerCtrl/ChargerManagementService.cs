@@ -25,6 +25,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
         public ListCollectionView Grouped_PropertiesCharge { get; private set; }
         public List<ChargerInfoConfig> PropertiesCharge_List;
         private List<ChargerInfoConfig> CfChargerStationList;
+        public ConfigureCharger configureForm;
         public ChargerManagementService()
         {
             //LoadChargerConfigure();
@@ -33,18 +34,18 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             Grouped_PropertiesCharge = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesCharge_List);
             ChargerStationList = new Dictionary<ChargerId, ChargerCtrl>();
             LoadConfigure();
-            ConfigureCharger configureForm = new ConfigureCharger(this);
-            //configureForm.Show();
+
+            configureForm = new ConfigureCharger(this);
         }
         public void Initialize()
         {
             ChargerInfoConfig pchr1 = new ChargerInfoConfig();
             pchr1.Id = ChargerId.CHARGER_ID_1;
             pchr1.Ip = "192.168.1.2";
-            pchr1.Port = 10001;
+            pchr1.Port = 8081;
             pchr1.PointFrontLineStr = "1,2,3";
             pchr1.ParsePointFrontLineValue(pchr1.PointFrontLineStr);
-            pchr1.PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}";
+            pchr1.PointOfPallet = "{\"pallet\":2,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}";
             PropertiesCharge_List.Add(pchr1);
             ChargerCtrl chargerStation1 = new ChargerCtrl(pchr1);
             ChargerStationList.Add(chargerStation1.cf.Id, chargerStation1);
@@ -52,10 +53,10 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             ChargerInfoConfig pchr2 = new ChargerInfoConfig();
             pchr2.Id = ChargerId.CHARGER_ID_2;
             pchr2.Ip = "192.168.1.2";
-            pchr2.Port = 10001;
+            pchr2.Port = 8081;
             pchr2.PointFrontLineStr = "1,2,3";
             pchr2.ParsePointFrontLineValue(pchr2.PointFrontLineStr);
-            pchr2.PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}";
+            pchr2.PointOfPallet = "{\"pallet\":2,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}";
             PropertiesCharge_List.Add(pchr2);
             ChargerCtrl chargerStation2 = new ChargerCtrl(pchr2);
             ChargerStationList.Add(chargerStation2.cf.Id, chargerStation2);
@@ -63,10 +64,10 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             ChargerInfoConfig pchr3 = new ChargerInfoConfig();
             pchr3.Id = ChargerId.CHARGER_ID_3;
             pchr3.Ip = "192.168.1.2";
-            pchr3.Port = 10001;
+            pchr3.Port = 8081;
             pchr3.PointFrontLineStr = "1,2,3";
             pchr3.ParsePointFrontLineValue(pchr3.PointFrontLineStr);
-            pchr3.PointOfPallet = "{ \"pallet\":\"null\",\"bay\":1,\"hasSubLine\":\"no\",\"direction\":\"null\",\"row\":0}";
+            pchr3.PointOfPallet = "{\"pallet\":2,\"bay\":1,\"hasSubLine\":\"no\",\"direction\":0,\"row\":0}";
             PropertiesCharge_List.Add(pchr3);
             ChargerCtrl chargerStation3 = new ChargerCtrl(pchr3);
             ChargerStationList.Add(chargerStation3.cf.Id, chargerStation3);

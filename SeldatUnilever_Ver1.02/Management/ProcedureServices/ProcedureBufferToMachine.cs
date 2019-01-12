@@ -41,9 +41,11 @@ namespace SeldatMRMS {
             ProBuferToMachine = new Thread (this.Procedure);
             ProBuferToMachine.Start (this);
             ProRun = true;
+            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
         }
         public void Destroy () {
             // StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;
+            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
         }
         public void Procedure (object ojb) {
@@ -92,12 +94,14 @@ namespace SeldatMRMS {
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY;
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try {
                             if (false == Traffic.HasRobotUnityinArea (BfToMa.GetFrontLineBuffer ().Position)) {
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (BfToMa.GetFrontLineBuffer ());
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
                             }
@@ -110,6 +114,7 @@ namespace SeldatMRMS {
                         try {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 rb.SendCmdAreaPallet (BfToMa.GetInfoOfPalletBuffer (PistonPalletCtrl.PISTON_PALLET_UP));
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
                             }
@@ -162,6 +167,7 @@ namespace SeldatMRMS {
                         try {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE) {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (BfToMa.GetFrontLineMachine ());
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET;
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
@@ -178,6 +184,7 @@ namespace SeldatMRMS {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.SendCmdAreaPallet (BfToMa.GetInfoOfPalletMachine (PistonPalletCtrl.PISTON_PALLET_DOWN));
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET;
                             }
                         } catch (System.Exception) {
@@ -210,6 +217,7 @@ namespace SeldatMRMS {
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;

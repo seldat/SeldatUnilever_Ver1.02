@@ -20,10 +20,10 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
     /// <summary>
     /// Interaction logic for ConfigureTraffic.xaml
     /// </summary>
-    public partial class ConfigureTraffic : Window
+    public partial class ConfigureArea : Window
     {
         TrafficRounterService trafficRounterService;
-        public ConfigureTraffic(TrafficRounterService trafficRounterService)
+        public ConfigureArea(TrafficRounterService trafficRounterService)
         {
             InitializeComponent();
             this.trafficRounterService = trafficRounterService;
@@ -44,9 +44,15 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
 
         private void RemoveBtn_Click(object sender, RoutedEventArgs e)
         {
+
             ZoneRegister zr = (sender as Button).DataContext as ZoneRegister;
             trafficRounterService.ClearZoneRegister(zr.NameId);
             trafficRounterService.SaveConfig(JsonConvert.SerializeObject(MainDataGrid.ItemsSource, Formatting.Indented));
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

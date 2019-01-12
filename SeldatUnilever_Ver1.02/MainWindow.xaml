@@ -108,8 +108,8 @@
                                 </Button>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_3Dmap}"
                                     Name="btn_3Dmap"
-                                    ToolBar.OverflowMode="AsNeeded">
-                                    <iconPacks:PackIconMaterial 
+                                    ToolBar.OverflowMode="AsNeeded" Click="btn_3Dmap_Click">
+                                    <iconPacks:PackIconMaterial
                                     Kind="MapMarkerRadius"/>
                                 </Button>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_Statistics}"

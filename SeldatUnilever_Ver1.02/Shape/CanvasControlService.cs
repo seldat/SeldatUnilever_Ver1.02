@@ -582,7 +582,7 @@ namespace SeldatMRMS
                           }
                       }
                     }
-               RedrawAllStation();
+              /// RedrawAllStation();
 
 
 

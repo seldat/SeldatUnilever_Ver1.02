@@ -37,11 +37,6 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             Hide();
         }
 
-        private void btn_close_Click(object sender, RoutedEventArgs e)
-        {
-            Hide();
-        }
-
         private void btn_addItem_Click(object sender, RoutedEventArgs e)
         {
             trafficRounterService.AddConfigRiskZone();

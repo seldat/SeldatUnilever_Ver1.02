@@ -30,7 +30,7 @@
             <Grid Grid.Column="0">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid>
-                        <iconPacks:PackIconMaterial Kind="AlertCircle"  Height="50"></iconPacks:PackIconMaterial>
+                        <iconPacks:PackIconMaterial Kind="AlertCircle" Width="50" Height="50"></iconPacks:PackIconMaterial>
                     </Grid>
                 </StackPanel>
             </Grid>
@@ -68,22 +68,18 @@
                         />
                         <Label Name="txt_datetime" Content=""/>
                     </StackPanel>
-                    
+
                 </StackPanel>
             </Grid>
-
         </Grid>
         <Grid Grid.Row="2">
             <GroupBox Header="{DynamicResource SolvedProblem_ProblemDescription}" FontSize="18" FontWeight="DemiBold">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="91*"></ColumnDefinition>
-                        <ColumnDefinition Width="589*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <RichTextBox Grid.Column="0" Grid.Row="0" Name="detailInfo" FontSize="12" FontWeight="Normal" Grid.ColumnSpan="2">
+                    <RichTextBox 
+                        IsReadOnly="True"
+                        Name="detailInfo" 
+                        FontSize="12" 
+                        FontWeight="Normal">
                         <FlowDocument>
                             <Paragraph >
                                 <Run Text="điền đầy đủ thông tin "/>
@@ -104,7 +100,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <RichTextBox Grid.Column="0" Grid.Row="0" FontSize="12" FontWeight="Normal" Name="problemInfo">
+                    <RichTextBox FontSize="12" FontWeight="Normal" Name="problemInfo">
                         <FlowDocument>
                             <Paragraph>
                                 <Run Text="điền đầy đủ thông tin"/>
@@ -118,13 +114,7 @@
         <Grid Grid.Row="4">
             <GroupBox Header="{DynamicResource SolvedProblem_ProblemSolvingSolution}" FontSize="18" FontWeight="DemiBold">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <RichTextBox Grid.Column="0" Grid.Row="0" FontSize="12" FontWeight="Normal" Name="solvedProblemInfo">
+                    <RichTextBox FontSize="12" FontWeight="Normal" Name="solvedProblemInfo">
                         <FlowDocument>
                             <Paragraph>
                                 <Run Text="điền đầy đủ thông tin"/>

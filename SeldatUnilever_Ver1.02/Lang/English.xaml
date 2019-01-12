@@ -191,12 +191,12 @@
     
     <!--ConfigureCharger-->
     <sys:String x:Key="ConfigureCharger_Title">Charger Configuration</sys:String>
-    <sys:String x:Key="ConfigureCharger_Button_Close">Close</sys:String>
+    <sys:String x:Key="ConfigureCharger_Button_Save">Save</sys:String>
 
 
     <!--DoorConfigure-->
     <sys:String x:Key="DoorConfigure_Title">Door Configuration</sys:String>
-    <sys:String x:Key="DoorConfigure_Button_Close">Close</sys:String>
+    <sys:String x:Key="DoorConfigure_Button_Save">Save</sys:String>
 
     <!--SolvedProblem-->
     <sys:String x:Key="SolvedProblem_Title">Problem Detail</sys:String>
@@ -212,12 +212,12 @@
 
     <!--ConfigureRobotUnity-->
     <sys:String x:Key="ConfigureRobotUnity_Title">Robot Unity Configuration</sys:String>
-    <sys:String x:Key="ConfigureRobotUnity_Button_Close">Thoát</sys:String>
+    <sys:String x:Key="ConfigureRobotUnity_Button_Save">Save</sys:String>
 
     <!--ConfigureTraffic-->
     <sys:String x:Key="ConfigureTraffic_Title">Traffic Configuration</sys:String>
     <sys:String x:Key="ConfigureTraffic_Button_Add">Add</sys:String>
-    <sys:String x:Key="ConfigureTraffic_Button_Close">Close</sys:String>
+    <sys:String x:Key="ConfigureTraffic_Button_Save">Save</sys:String>
 
     <!--Statistics-->
     <sys:String x:Key="Statistics_Title">Statistics</sys:String>
@@ -241,5 +241,10 @@
 
 
     <sys:String x:Key="Statistics_GroupBox_Detail">Detail</sys:String>
+
+    <!--ConfigureRiskZone-->
+    <sys:String x:Key="ConfigureRiskZone_Title">RiskZone Configuration</sys:String>
+    <sys:String x:Key="ConfigureRiskZone_Button_Add">Add</sys:String>
+    <sys:String x:Key="ConfigureRiskZone_Button_Remove">Remove</sys:String>
 
 </ResourceDictionary>

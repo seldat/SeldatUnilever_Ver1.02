@@ -41,7 +41,7 @@ namespace SeldatMRMS.Management.RobotManagent
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
             ConfigureForm = new ConfigureRobotUnity(this);
             LoadConfigure();
-            ConfigureForm.Show();
+            //ConfigureForm.Show();
             //   LoadConfigure();
         }
         public void Initialize()

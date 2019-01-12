@@ -4,6 +4,7 @@ using SeldatMRMS.Management.UnityService;
 using SeldatUnilever_Ver1._02.Form;
 using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using SeldatUnilever_Ver1._02.Management.Statistics;
+using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,58 @@ using System.Windows.Shapes;
 
 namespace SeldatUnilever_Ver1._02
 {
+    public class Student
+    {
+        public String Name { get; set; }
+        public String Lastname { get; set; }
+    }
+
+    public class School
+    {
+        public String Name { get; set; }
+        public List<Student> Students { get; set; }
+    }
+
+    public static class SchoolData
+    {
+        /// <summary>
+        /// Returns a list of schools containing a list of students
+        /// </summary>
+        public static IList<School> GetSchoolData()
+        {
+            IList<School> schools = new List<School>(){
+            new School() {
+                Name = "school1",
+                Students = new List<Student>() {
+                    new Student(){Name="name0",Lastname="lastname0"},
+                    new Student(){Name="name1",Lastname="lastname1"},
+                    new Student(){Name="name2",Lastname="lastname2"},
+                    new Student(){Name="name3",Lastname="lastname3"},
+            }},
+            new School() {
+                Name = "school2" ,
+                Students = new List<Student>() {
+                    new Student(){Name="name10",Lastname="lastname10"},
+                    new Student(){Name="name11",Lastname="lastname11"},
+                    new Student(){Name="name12",Lastname="lastname12"},
+                    new Student(){Name="name13",Lastname="lastname13"},
+            }}
+        };
+
+            return schools;
+        }
+    }
+
+    public class ViewModel : DependencyObject
+    {
+        public IList<School> Schools { get; set; }
+
+        public ViewModel()
+        {
+            Schools = SchoolData.GetSchoolData();
+        }
+    }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -32,9 +85,12 @@ namespace SeldatUnilever_Ver1._02
         public System.Timers.Timer stationTimer;
         public System.Timers.Timer robotTimer;
 
+
+
+
         public bool drag = true;
-        private UnityManagementService unityService;
-        private CanvasControlService canvasControlService;
+        public UnityManagementService unityService;
+        public CanvasControlService canvasControlService;
         CtrlRobot ctrR;
         public MainWindow()
         {
@@ -49,11 +105,18 @@ namespace SeldatUnilever_Ver1._02
             map.Height = img.ImageSource.Height;
             map.Background = img;
             canvasControlService = new CanvasControlService(this);
+            DataContext = canvasControlService;
+            //DataContext = this;
+            //DataContext = new ViewModel();
 
         }
 
         private void OnTimedRedrawStationEvent(object sender, ElapsedEventArgs e)
         {
+            Dispatcher.BeginInvoke(new ThreadStart(() =>
+            {
+                canvasControlService.ReloadListDeviceItems();
+            }));
             Parallel.Invoke(() =>
             {
                 //Console.WriteLine("Begin first task...");
@@ -94,7 +157,6 @@ namespace SeldatUnilever_Ver1._02
             }
 
 
-
             stationTimer = new System.Timers.Timer();
             stationTimer.Interval = 5000;
             stationTimer.Elapsed += OnTimedRedrawStationEvent;
@@ -102,7 +164,6 @@ namespace SeldatUnilever_Ver1._02
             stationTimer.Enabled = true;
 
             canvasControlService.ReloadAllStation();
-
             /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
                {
                    for (int i = 1; i < 5; i++)
@@ -246,6 +307,22 @@ namespace SeldatUnilever_Ver1._02
         {
             Statistics statistics = new Statistics();
             statistics.ShowDialog();
+        }
+
+        private void DeviceItemsListDg_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            if (DeviceItemsListDg.SelectedItem != null)
+            {
+                DeviceItem temp = DeviceItemsListDg.SelectedItem as DeviceItem;
+                canvasControlService.ReloadListOrderItems(temp);
+            }
+        }
+
+        private void Btn_Test_Click(object sender, RoutedEventArgs e)
+        {
+            //unityService.deviceRegistrationService.AddNewDeviceItem();
+            
+            canvasControlService.ReloadListDeviceItems();
         }
     }
 }

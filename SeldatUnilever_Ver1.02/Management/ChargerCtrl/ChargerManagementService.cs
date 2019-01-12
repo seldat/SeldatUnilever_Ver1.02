@@ -34,7 +34,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             ChargerStationList = new Dictionary<ChargerId, ChargerCtrl>();
             LoadConfigure();
             ConfigureCharger configureForm = new ConfigureCharger(this);
-            configureForm.Show();
+            //configureForm.Show();
         }
         public void Initialize()
         {

@@ -2,6 +2,7 @@
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using SeldatUnilever_Ver1._02;
+using SeldatUnilever_Ver1._02.DTO;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using SelDatUnilever_Ver1._00.Management.UnityService;
@@ -14,17 +15,23 @@ using System.Windows;
 
 namespace SeldatMRMS.Management.UnityService
 {
-    public class UnityManagementService
+    public class UnityManagementService : NotifyUIBase
     {
         public RobotManagementService robotManagementService { get; set; }
         public DoorManagementService doorManagementService { get; set; }
-        ProcedureManagementService procedureManagementService { get; set; }
+        public ProcedureManagementService procedureManagementService { get; set; }
         public TrafficManagementService trafficService { get; set; }
-        AssigmentTaskService assigmentTaskService { get; set; }
-        DeviceRegistrationService deviceRegistrationService { get; set; }
+        public AssigmentTaskService assigmentTaskService { get; set; }
+        public DeviceRegistrationService deviceRegistrationService { get; set; }
         public ChargerManagementService chargerService;
+
+        
+
         private MainWindow mainWindow;
-        public UnityManagementService(MainWindow mainWindow ) { this.mainWindow = mainWindow; }
+        public UnityManagementService(MainWindow mainWindow )
+        {
+            this.mainWindow = mainWindow;
+        }
         public void Initialize()
         {
             robotManagementService = new RobotManagementService(this.mainWindow.map);
@@ -45,8 +52,15 @@ namespace SeldatMRMS.Management.UnityService
             procedureManagementService.RegistryService(chargerService);
             procedureManagementService.RegistryService(deviceRegistrationService);
 
+
+
             robotManagementService.Registry(trafficService);
+
+
             deviceRegistrationService.listen();
+            deviceRegistrationService.RegistryMainWindow(this.mainWindow);
+
+
             assigmentTaskService.Start();
             
            

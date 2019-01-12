@@ -51,7 +51,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             Grouped_PropertiesTrafficZoneList = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesTrafficZoneList);
             LoadConfigure();
             ConfigureTraffic configureTraffic = new ConfigureTraffic(this);
-            configureTraffic.Show();
+            //configureTraffic.Show();
         }
         public void Initialize()
         {

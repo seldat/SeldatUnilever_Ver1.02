@@ -127,7 +127,7 @@
                                     Kind="Thermostat"/>
                                 </Button>
                                 <Separator />
-                                <ListBox SelectedIndex="0">
+                                <!--<ListBox SelectedIndex="0">
                                     <StackPanel Orientation="Horizontal" 
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Stretch">
@@ -140,7 +140,14 @@
                                         Kind="Play"/>
                                         </ListBoxItem>
                                     </StackPanel>
-                                </ListBox>
+                                </ListBox>-->
+                                <Button 
+                                    Name="btn_TEST2"
+                                    Click="ListBoxItem_Selected"
+                                    ToolBar.OverflowMode="AsNeeded">
+                                    <iconPacks:PackIconMaterial 
+                                    Kind="Xbox"/>
+                                </Button>
                             </ToolBar>
                         </ToolBarTray>
                     </StackPanel>

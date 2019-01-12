@@ -42,6 +42,8 @@ namespace SeldatMRMS.Management.RobotManagent
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
             configureForm = new ConfigureRobotUnity(this, Thread.CurrentThread.CurrentCulture.ToString());
             LoadConfigure();
+            RobotUnity rb1 = RobotUnityRegistedList["RSD0"];
+            rb1.Start("ws://192.168.80.131:9090");
             //   LoadConfigure();
         }
         public void Initialize()
@@ -54,7 +56,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.Label = "Robot1";
             prop1.BatteryLowLevel = 23;
             prop1.BatteryLevelRb = 40;
-            prop1.Url = "ws://192.168.1.200:9090";
+            prop1.Url = "ws://192.168.80.131:9090";
             prop1.DistInter = 40;
             prop1.BatteryLowLevel = 25;
             prop1.RequestChargeBattery = false;
@@ -70,7 +72,9 @@ namespace SeldatMRMS.Management.RobotManagent
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
             r1.Registry(trafficManagementService);
-
+            AddRobotUnityReadyList(r1);
+            r1.RegisteRobotInAvailable(RobotUnityRegistedList);
+#if false
             PropertiesRobotUnity prop2= new PropertiesRobotUnity();
             prop2.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop2.L1 = 40;
@@ -123,6 +127,9 @@ namespace SeldatMRMS.Management.RobotManagent
             r3.Registry(trafficManagementService);
             Grouped_PropertiesRobotUnity.Refresh();
 
+            
+#endif
+
         }
         public void Registry(TrafficManagementService trafficManagementService)
         {
@@ -171,7 +178,8 @@ namespace SeldatMRMS.Management.RobotManagent
                             robot.UpdateProperties(e);
                             robot.Registry(trafficManagementService);
                             RobotUnityRegistedList.Add(e.NameId,robot);
-                            
+                            AddRobotUnityReadyList(robot);
+                            robot.RegisteRobotInAvailable(RobotUnityRegistedList);
                         }
                         Grouped_PropertiesRobotUnity.Refresh();
                         return true;

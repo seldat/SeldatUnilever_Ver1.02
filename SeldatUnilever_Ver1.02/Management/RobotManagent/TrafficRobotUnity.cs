@@ -76,13 +76,15 @@ namespace SeldatMRMS.Management
         private TrafficManagementService trafficManagementService;
         public TrafficRobotUnity() : base() {
             TurnOnSupervisorTraffic(false);
+            prioritLevel = new PriorityLevel();
         }
         public PriorityLevel prioritLevel;
-        public void RegisteRobotInAvailable(List<RobotUnity> RobotUnitylist)
+        public void RegisteRobotInAvailable(Dictionary<String,RobotUnity> RobotUnitydic)
         {
-            this.RobotUnitylist = RobotUnitylist;
+            foreach(var r in RobotUnitydic.Values)
+                this.RobotUnitylist.Add(r);
             TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
-            prioritLevel = new PriorityLevel();
+            
         }
         public void Registry(TrafficManagementService trafficManagementService)
         {

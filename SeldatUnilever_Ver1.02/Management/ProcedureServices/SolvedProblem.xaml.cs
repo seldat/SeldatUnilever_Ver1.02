@@ -22,7 +22,7 @@ namespace SeldatMRMS
     /// </summary>
     public partial class SolvedProblem : Window
     {
-        Object objProc;
+        public Object objProc;
         public SolvedProblem()
         {
             InitializeComponent();
@@ -256,6 +256,8 @@ namespace SeldatMRMS
             ProcedureForkLiftToBuffer proFB = objProc as ProcedureForkLiftToBuffer;
             UpdateInformation(proFB);
             proFB.selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
+            objProc = null;
+            Hide();
         }
 
         private void contProcBtn_Click(object sender, RoutedEventArgs e)
@@ -263,6 +265,8 @@ namespace SeldatMRMS
             ProcedureForkLiftToBuffer proFB = objProc as ProcedureForkLiftToBuffer;
             UpdateInformation(proFB);
             proFB.selectHandleError = SelectHandleError.CASE_ERROR_CONTINUOUS;
+            objProc = null;
+            Hide();
         }
     }
 }

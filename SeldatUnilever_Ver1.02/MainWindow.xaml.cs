@@ -165,7 +165,7 @@ namespace SeldatUnilever_Ver1._02
             stationTimer.Enabled = true;
 
 
-            
+            canvasControlService.ReloadAllStation();
 
             new Thread(()=> 
             {
@@ -344,6 +344,30 @@ namespace SeldatUnilever_Ver1._02
         private void btn_3Dmap_Click(object sender, RoutedEventArgs e)
         {
             robotView.Show();
+        }
+
+        private void btn_Stop_Click(object sender, RoutedEventArgs e)
+        {
+            unityService.robotManagementService.Stop();
+            btn_Play.IsEnabled = true;
+            btn_Stop.IsEnabled = false;
+            btn_Play_icon.Foreground = new SolidColorBrush(Colors.Green);
+            btn_Stop_icon.Foreground = new SolidColorBrush(Colors.Red);
+
+        }
+
+        private void btn_Play_Click(object sender, RoutedEventArgs e)
+        {
+            unityService.robotManagementService.Run();
+            btn_Play.IsEnabled = false;
+            btn_Stop.IsEnabled = true;
+            btn_Play_icon.Foreground = new SolidColorBrush(Colors.Red);
+            btn_Stop_icon.Foreground = new SolidColorBrush(Colors.Green);
+        }
+
+        private void btn_RiskArea_Click(object sender, RoutedEventArgs e)
+        {
+            unityService.OpenConfigureForm("RACF");
         }
     }
 }

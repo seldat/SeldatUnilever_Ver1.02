@@ -57,7 +57,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             }
             else
             {
-                MainDataGrid.IsEnabled = false;
+                MainDataGrid.IsEnabled = true;
             }
         }
     }

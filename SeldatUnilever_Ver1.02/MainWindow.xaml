@@ -90,6 +90,13 @@
                                     <iconPacks:PackIconMaterial 
                                     Kind="ImageArea"/>
                                 </Button>
+                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_Configure}"
+                                    Name="btn_RiskArea"
+                                    Click="btn_RiskArea_Click"
+                                    ToolBar.OverflowMode="AsNeeded">
+                                    <iconPacks:PackIconMaterial 
+                                    Kind="ImageAreaClose"/>
+                                </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_Configure}"
                                     Name="btn_Charge"
@@ -127,7 +134,7 @@
                                     Kind="Thermostat"/>
                                 </Button>
                                 <Separator />
-                                <ListBox SelectedIndex="0">
+                                <!--<ListBox SelectedIndex="0">
                                     <StackPanel Orientation="Horizontal" 
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Stretch">
@@ -137,10 +144,29 @@
                                         </ListBoxItem>
                                         <ListBoxItem Selected="ListBoxItem_Selected">
                                             <iconPacks:PackIconMaterial Name="ctrl"
-                                        Kind="Play"/>
+                                        Kind="Stop"/>
                                         </ListBoxItem>
                                     </StackPanel>
-                                </ListBox>
+                                </ListBox>-->
+                                <Separator/>
+                                <Button 
+                                    Name="btn_Stop"
+                                    Click="btn_Stop_Click"
+                                    IsEnabled="False"
+                                    ToolBar.OverflowMode="AsNeeded">
+                                    <iconPacks:PackIconMaterial Name="btn_Stop_icon"
+                                                                Foreground="Red"
+                                    Kind="Stop"/>
+                                </Button>
+                                <Button 
+                                    Name="btn_Play"
+                                    Click="btn_Play_Click"
+                                    IsEnabled="True"
+                                    ToolBar.OverflowMode="AsNeeded">
+                                    <iconPacks:PackIconMaterial Name="btn_Play_icon"
+                                                                Foreground="Green"
+                                    Kind="Play"/>
+                                </Button>
                             </ToolBar>
                         </ToolBarTray>
                     </StackPanel>

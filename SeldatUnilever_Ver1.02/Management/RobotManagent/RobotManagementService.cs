@@ -41,6 +41,7 @@ namespace SeldatMRMS.Management.RobotManagent
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
             configureForm = new ConfigureRobotUnity(this);
             LoadConfigure();
+            // All robot Stop
             //   LoadConfigure();
         }
         public void Initialize()
@@ -69,6 +70,7 @@ namespace SeldatMRMS.Management.RobotManagent
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
             r1.Registry(trafficManagementService);
+            r1.Start(prop1.Url);
 
             // đăng ký robot list to many robot quan trong
 
@@ -172,6 +174,7 @@ namespace SeldatMRMS.Management.RobotManagent
                             robot.UpdateProperties(e);
                             robot.Registry(trafficManagementService);
                             RobotUnityRegistedList.Add(e.NameId,robot);
+                            robot.Start(robot.properties.Url);
                             
                         }
                         Grouped_PropertiesRobotUnity.Refresh();
@@ -319,16 +322,23 @@ namespace SeldatMRMS.Management.RobotManagent
             RobotUnity Rd=RobotUnityRegistedList[nameID];
             RemoveRobotUnityRegistedList(nameID);
             RemoveRobotUnityWaitTaskList(nameID);
-            RemoveRobotUnityWaitTaskList(nameID);
+            RemoveRobotUnityReadyList(nameID);
+            Rd.RemoveDraw();
             Rd.Dispose();
             Rd = null;
             RobotUnity rn = new RobotUnity();
+            // cài đặt canvas
+            rn.Initialize(this.canvas);
+            // update properties
             rn.UpdateProperties(properties);
+            // connect ros
             rn.Start(properties.Url);
+            // đăng ký giao thông
             rn.Registry(trafficManagementService);
             RobotUnityRegistedList.Add(nameID, rn);
             RobotUnityReadyList.Add(nameID, rn);
-           
+            // dăng ký robot list
+            rn.RegisteRobotInAvailable(RobotUnityRegistedList);
         }
     }
 }

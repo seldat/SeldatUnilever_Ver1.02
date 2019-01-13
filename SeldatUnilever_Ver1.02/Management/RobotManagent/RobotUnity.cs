@@ -77,15 +77,23 @@ namespace SeldatMRMS.Management.RobotManagent
             props.isHovering = false;
             border.ContextMenu = new ContextMenu();
             //===================================
-            MenuItem editItem = new MenuItem();
-            editItem.Header = "Edit";
-            editItem.Click += EditMenu;
+            MenuItem problemSolutionItem = new MenuItem();
+            problemSolutionItem.Header = "Problem Solution";
+            problemSolutionItem.Click += PoblemSolutionItem;
             //===================================
-            MenuItem removeItem = new MenuItem();
-            removeItem.Header = "Remove";
-            removeItem.Click += RemoveMenu;
-            border.ContextMenu.Items.Add(editItem);
-            border.ContextMenu.Items.Add(removeItem);
+            MenuItem startItem = new MenuItem();
+            startItem.Header = "Start";
+            startItem.Click += StartMenu;
+            //===================================
+            MenuItem pauseItem = new MenuItem();
+            pauseItem.Header = "Pause";
+            pauseItem.Click += PauseMenu;
+
+
+
+            border.ContextMenu.Items.Add(problemSolutionItem);
+            border.ContextMenu.Items.Add(startItem);
+            border.ContextMenu.Items.Add(pauseItem);
             //====================EVENT=====================
             //MouseLeave += MouseLeavePath;
             //MouseMove += MouseHoverPath;
@@ -211,7 +219,10 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void DisplaySolvedForm()
         {
-            solvedProblem.Show();
+            if (solvedProblem.objProc != null)
+                solvedProblem.Show();
+            else
+                MessageBox.Show("Không có nội dung lỗi!!");
         }
         public Point CirclePoint(double radius, double angleInDegrees, Point origin)
         {
@@ -237,20 +248,26 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             border.ToolTip = "1234567890";
         }
-        private void EditMenu(object sender, RoutedEventArgs e)
+        private void PoblemSolutionItem(object sender, RoutedEventArgs e)
         {
             //robotProperties.ShowDialog();
             DisplaySolvedForm();
         }
 
-        private void RemoveMenu(object sender, RoutedEventArgs e)
+        private void PauseMenu(object sender, RoutedEventArgs e)
         {
-            Remove();
+            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
         }
-        public void Remove()
+        private void StartMenu(object sender, RoutedEventArgs e)
+        {
+            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+        }
+        public void RemoveDraw()
         {
             this.canvas.Children.Remove(border);
-            RemoveHandle(props.name);
+            this.canvas.Children.Remove(headerPoint);
+            this.canvas.Children.Remove(riskArea);
+            //RemoveHandle(props.name);
         }      
         public override void Draw()
         {

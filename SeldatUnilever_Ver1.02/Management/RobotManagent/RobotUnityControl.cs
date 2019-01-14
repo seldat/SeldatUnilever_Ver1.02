@@ -367,6 +367,7 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.IsConnected = true;
             Console.WriteLine ("connected");
             createRosTerms ();
+            
             //   ConnectionStatusHandler(this, ConnectionStatus.CON_OK);
         }
 

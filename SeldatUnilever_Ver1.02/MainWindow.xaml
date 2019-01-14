@@ -90,6 +90,13 @@
                                     <iconPacks:PackIconMaterial 
                                     Kind="ImageArea"/>
                                 </Button>
+                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_Configure}"
+                                    Name="btn_RiskArea"
+                                    Click="btn_RiskArea_Click"
+                                    ToolBar.OverflowMode="AsNeeded">
+                                    <iconPacks:PackIconMaterial 
+                                    Kind="ImageAreaClose"/>
+                                </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_Configure}"
                                     Name="btn_Charge"
@@ -108,8 +115,8 @@
                                 </Button>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_3Dmap}"
                                     Name="btn_3Dmap"
-                                    ToolBar.OverflowMode="AsNeeded">
-                                    <iconPacks:PackIconMaterial 
+                                    ToolBar.OverflowMode="AsNeeded" Click="btn_3Dmap_Click">
+                                    <iconPacks:PackIconMaterial
                                     Kind="MapMarkerRadius"/>
                                 </Button>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_Statistics}"
@@ -137,16 +144,28 @@
                                         </ListBoxItem>
                                         <ListBoxItem Selected="ListBoxItem_Selected">
                                             <iconPacks:PackIconMaterial Name="ctrl"
-                                        Kind="Play"/>
+                                        Kind="Stop"/>
                                         </ListBoxItem>
                                     </StackPanel>
                                 </ListBox>-->
+                                <Separator/>
                                 <Button 
-                                    Name="btn_TEST2"
-                                    Click="ListBoxItem_Selected"
+                                    Name="btn_Stop"
+                                    Click="btn_Stop_Click"
+                                    IsEnabled="False"
                                     ToolBar.OverflowMode="AsNeeded">
-                                    <iconPacks:PackIconMaterial 
-                                    Kind="Xbox"/>
+                                    <iconPacks:PackIconMaterial Name="btn_Stop_icon"
+                                                                Foreground="Red"
+                                    Kind="Stop"/>
+                                </Button>
+                                <Button 
+                                    Name="btn_Play"
+                                    Click="btn_Play_Click"
+                                    IsEnabled="True"
+                                    ToolBar.OverflowMode="AsNeeded">
+                                    <iconPacks:PackIconMaterial Name="btn_Play_icon"
+                                                                Foreground="Green"
+                                    Kind="Play"/>
                                 </Button>
                             </ToolBar>
                         </ToolBarTray>

@@ -23,6 +23,15 @@ namespace SeldatMRMS
     /// </summary>
     public partial class SolvedProblem : Window
     {
+        public Object objProc;
+        public SolvedProblem()
+        {
+            InitializeComponent();
+
+
+        }
+        public void Registry(Object obj)
+        {
         Object objProc;
         public SolvedProblem(Object obj, string cultureName = null)
         {
@@ -34,7 +43,7 @@ namespace SeldatMRMS
                 ProcedureForkLiftToBuffer proc = obj as ProcedureForkLiftToBuffer;
                 ShowInformation(proc);
             }
-            else if(obj.GetType() == typeof(ProcedureBufferToMachine))
+            else if (obj.GetType() == typeof(ProcedureBufferToMachine))
             {
                 ProcedureBufferToMachine proc = obj as ProcedureBufferToMachine;
                 ShowInformation(proc);
@@ -59,7 +68,6 @@ namespace SeldatMRMS
                 ProcedureRobotToCharger proc = obj as ProcedureRobotToCharger;
                 ShowInformation(proc);
             }
-
         }
 
         public void ApplyLanguage(string cultureName = null)
@@ -274,6 +282,8 @@ namespace SeldatMRMS
             ProcedureForkLiftToBuffer proFB = objProc as ProcedureForkLiftToBuffer;
             UpdateInformation(proFB);
             proFB.selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
+            objProc = null;
+            Hide();
         }
 
         private void contProcBtn_Click(object sender, RoutedEventArgs e)
@@ -281,6 +291,8 @@ namespace SeldatMRMS
             ProcedureForkLiftToBuffer proFB = objProc as ProcedureForkLiftToBuffer;
             UpdateInformation(proFB);
             proFB.selectHandleError = SelectHandleError.CASE_ERROR_CONTINUOUS;
+            objProc = null;
+            Hide();
         }
     }
 }

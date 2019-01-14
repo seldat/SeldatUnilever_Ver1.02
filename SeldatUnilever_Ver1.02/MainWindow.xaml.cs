@@ -1,6 +1,7 @@
 ﻿using SeldatMRMS;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.UnityService;
+using SeldatMRMS.RobotView;
 using SeldatUnilever_Ver1._02.Form;
 using SeldatUnilever_Ver1._02.Management.Statistics;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
@@ -91,6 +92,7 @@ namespace SeldatUnilever_Ver1._02
         public UnityManagementService unityService;
         public CanvasControlService canvasControlService;
         CtrlRobot ctrR;
+        RobotView3D robotView = new RobotView3D();
         public MainWindow()
         {
             InitializeComponent();
@@ -116,11 +118,11 @@ namespace SeldatUnilever_Ver1._02
             {
                 canvasControlService.ReloadListDeviceItems();
             }));
-            Parallel.Invoke(() =>
+          /*  Parallel.Invoke(() =>
             {
                 //Console.WriteLine("Begin first task...");
                 canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
-            });
+            });*/
         }
         
 
@@ -164,10 +166,20 @@ namespace SeldatUnilever_Ver1._02
             stationTimer.Enabled = true;
 
 
-            Dispatcher.BeginInvoke(new ThreadStart(() =>
+            canvasControlService.ReloadAllStation();
+
+            new Thread(()=> 
             {
-                canvasControlService.ReloadAllStation();
-            }));
+                 
+                        //canvasControlService.ReloadAllStation();
+           
+                while (true)
+                {
+                    //Console.WriteLine("Begin first task...");
+                    canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
+                };
+
+            }).Start();
 
             /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
                {
@@ -184,11 +196,11 @@ namespace SeldatUnilever_Ver1._02
                        Thread.Sleep(100);
                    }
                }));*/
-            /* robotTimer = new System.Timers.Timer();
+            robotTimer = new System.Timers.Timer();
              robotTimer.Interval = 50;
              robotTimer.Elapsed += OnTimedRedrawRobotEvent;
              robotTimer.AutoReset = true;
-             robotTimer.Enabled = true;*/
+             robotTimer.Enabled = true;
         }
 
 
@@ -328,6 +340,35 @@ namespace SeldatUnilever_Ver1._02
             //unityService.deviceRegistrationService.AddNewDeviceItem();
             
             canvasControlService.ReloadListDeviceItems();
+        }
+
+        private void btn_3Dmap_Click(object sender, RoutedEventArgs e)
+        {
+            robotView.Show();
+        }
+
+        private void btn_Stop_Click(object sender, RoutedEventArgs e)
+        {
+            unityService.robotManagementService.Stop();
+            btn_Play.IsEnabled = true;
+            btn_Stop.IsEnabled = false;
+            btn_Play_icon.Foreground = new SolidColorBrush(Colors.Green);
+            btn_Stop_icon.Foreground = new SolidColorBrush(Colors.Red);
+
+        }
+
+        private void btn_Play_Click(object sender, RoutedEventArgs e)
+        {
+            unityService.robotManagementService.Run();
+            btn_Play.IsEnabled = false;
+            btn_Stop.IsEnabled = true;
+            btn_Play_icon.Foreground = new SolidColorBrush(Colors.Red);
+            btn_Stop_icon.Foreground = new SolidColorBrush(Colors.Green);
+        }
+
+        private void btn_RiskArea_Click(object sender, RoutedEventArgs e)
+        {
+            unityService.OpenConfigureForm("RACF");
         }
     }
 }

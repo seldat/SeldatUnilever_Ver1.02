@@ -93,7 +93,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             LoadConfigureRiskZone();
             configureArea = new ConfigureArea(this, Thread.CurrentThread.CurrentCulture.ToString());
             configureRiskZone = new ConfigureRiskZone(this);
-            configureRiskZone.Show();
+            //configureRiskZone.Show();
         }
         public void InitializeZone()
         {

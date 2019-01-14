@@ -41,7 +41,7 @@ namespace SeldatMRMS.Management.DoorServices
             DoorMezzamineUpFront = new DoorService(DoorInfoConfigList[1]);
             DoorMezzamineReturnBack = new DoorService(DoorInfoConfigList[2]);
             DoorMezzamineReturnFront = new DoorService(DoorInfoConfigList[3]);
-            doorConfigure = new DoorConfigure(this, Thread.CurrentThread.CurrentCulture.ToString());
+            doorConfigure = new DoorConfigure(this);
         }
     
         public void AddDoor()

@@ -326,10 +326,12 @@ namespace SeldatMRMS
 
                                     }
                                 }
+                                break;
                             }
                             else
                             {
                                 props.bufferDb = tempBuffer;
+                                break;
                             }
 
                         }

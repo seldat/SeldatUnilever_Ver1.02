@@ -87,6 +87,9 @@ namespace SeldatMRMS.Management.UnityService
                 case "ACF":
                     trafficService.configureArea.Show();
                     break;
+                case "RACF":
+                    trafficService.configureRiskZone.Show();
+                    break;
                 case "CCF":
                     chargerService.configureForm.Show();
                     break;

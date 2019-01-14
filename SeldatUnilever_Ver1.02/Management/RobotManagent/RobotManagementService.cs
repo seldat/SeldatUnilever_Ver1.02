@@ -42,9 +42,8 @@ namespace SeldatMRMS.Management.RobotManagent
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
             configureForm = new ConfigureRobotUnity(this, Thread.CurrentThread.CurrentCulture.ToString());
             LoadConfigure();
-            RobotUnity rb1 = RobotUnityRegistedList["RSD0"];
-            rb1.Start("ws://192.168.80.131:9090");
-            //   LoadConfigure();
+           // RobotUnity rb1 = RobotUnityRegistedList["RSD0"];
+           // rb1.Start("ws://192.168.80.131:9090");
         }
         public void Initialize()
         {
@@ -72,9 +71,12 @@ namespace SeldatMRMS.Management.RobotManagent
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
             r1.Registry(trafficManagementService);
+            r1.Start(prop1.Url);
+
+            // đăng ký robot list to many robot quan trong
             AddRobotUnityReadyList(r1);
             r1.RegisteRobotInAvailable(RobotUnityRegistedList);
-#if false
+          
             PropertiesRobotUnity prop2= new PropertiesRobotUnity();
             prop2.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop2.L1 = 40;
@@ -99,6 +101,7 @@ namespace SeldatMRMS.Management.RobotManagent
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r2.properties.NameId, r2);
             r2.Registry(trafficManagementService);
+            r2.RegisteRobotInAvailable(RobotUnityRegistedList);
 
             PropertiesRobotUnity prop3 = new PropertiesRobotUnity();
             prop3.NameId = "RSD" + RobotUnityRegistedList.Count;
@@ -125,10 +128,9 @@ namespace SeldatMRMS.Management.RobotManagent
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r3.properties.NameId, r3);
             r3.Registry(trafficManagementService);
+            r3.RegisteRobotInAvailable(RobotUnityRegistedList);
             Grouped_PropertiesRobotUnity.Refresh();
 
-            
-#endif
 
         }
         public void Registry(TrafficManagementService trafficManagementService)
@@ -178,6 +180,7 @@ namespace SeldatMRMS.Management.RobotManagent
                             robot.UpdateProperties(e);
                             robot.Registry(trafficManagementService);
                             RobotUnityRegistedList.Add(e.NameId,robot);
+                            robot.Start(robot.properties.Url);
                             AddRobotUnityReadyList(robot);
                             robot.RegisteRobotInAvailable(RobotUnityRegistedList);
                         }
@@ -326,16 +329,23 @@ namespace SeldatMRMS.Management.RobotManagent
             RobotUnity Rd=RobotUnityRegistedList[nameID];
             RemoveRobotUnityRegistedList(nameID);
             RemoveRobotUnityWaitTaskList(nameID);
-            RemoveRobotUnityWaitTaskList(nameID);
+            RemoveRobotUnityReadyList(nameID);
+            Rd.RemoveDraw();
             Rd.Dispose();
             Rd = null;
             RobotUnity rn = new RobotUnity();
+            // cài đặt canvas
+            rn.Initialize(this.canvas);
+            // update properties
             rn.UpdateProperties(properties);
+            // connect ros
             rn.Start(properties.Url);
+            // đăng ký giao thông
             rn.Registry(trafficManagementService);
             RobotUnityRegistedList.Add(nameID, rn);
             RobotUnityReadyList.Add(nameID, rn);
-           
+            // dăng ký robot list
+            rn.RegisteRobotInAvailable(RobotUnityRegistedList);
         }
     }
 }

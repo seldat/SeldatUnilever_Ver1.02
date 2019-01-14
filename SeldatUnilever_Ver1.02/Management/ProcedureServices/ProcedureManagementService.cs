@@ -136,6 +136,12 @@ namespace SeldatMRMS {
             } else {
                 RestoreOrderItem (procItem.order);
             }
+            }
+            else{
+                RestoreOrderItem(procItem.order);
+            }
+            //SolvedProblem pSP = new SolvedProblem(item);
+            //pSP.Show();
 
             RobotUnity robot = procItem.GetRobotUnity ();
 
@@ -147,6 +153,7 @@ namespace SeldatMRMS {
             //                        }));
             // SolvedProblem pSP = new SolvedProblem(item);
             // pSP.Show();
+
         }
 
     }

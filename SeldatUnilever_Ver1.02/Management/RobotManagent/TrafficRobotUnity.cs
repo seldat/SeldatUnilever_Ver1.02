@@ -79,12 +79,11 @@ namespace SeldatMRMS.Management
             prioritLevel = new PriorityLevel();
         }
         public PriorityLevel prioritLevel;
-        public void RegisteRobotInAvailable(Dictionary<String,RobotUnity> RobotUnitydic)
+        public void RegisteRobotInAvailable(Dictionary<String,RobotUnity> RobotUnitylistdc)
         {
-            foreach(var r in RobotUnitydic.Values)
-                this.RobotUnitylist.Add(r);
+            foreach(var r in RobotUnitylistdc.Values)
+              this.RobotUnitylist.Add(r);
             TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
-            
         }
         public void Registry(TrafficManagementService trafficManagementService)
         {

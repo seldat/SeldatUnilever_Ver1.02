@@ -54,8 +54,13 @@ namespace SeldatMRMS.Management.RobotManagent {
         public Props props;
         public Border border;
         public LoadedConfigureInformation loadConfigureInformation;
-        public RobotUnity () { }
-        public void Initialize (Canvas canvas) {
+        public SolvedProblem solvedProblem;
+        public RobotUnity(){
+            solvedProblem = new SolvedProblem();
+        }
+
+        public void Initialize(Canvas canvas)
+        {
             this.canvas = canvas;
             riskArea = new Path ();
             riskArea.Stroke = new SolidColorBrush (Colors.YellowGreen);
@@ -66,17 +71,26 @@ namespace SeldatMRMS.Management.RobotManagent {
             props.isSelected = false;
             props.isHovering = false;
             border.ContextMenu = new ContextMenu ();
+            
+            MenuItem problemSolutionItem = new MenuItem();
+            problemSolutionItem.Header = "Problem Solution";
+            problemSolutionItem.Click += PoblemSolutionItem;
             //===================================
-            MenuItem editItem = new MenuItem ();
-            editItem.Header = "Edit";
-            editItem.Click += EditMenu;
+            MenuItem startItem = new MenuItem();
+            startItem.Header = "Start";
+            startItem.Click += StartMenu;
             //===================================
-            MenuItem removeItem = new MenuItem ();
-            removeItem.Header = "Remove";
-            removeItem.Click += RemoveMenu;
-            border.ContextMenu.Items.Add (editItem);
-            border.ContextMenu.Items.Add (removeItem);
-            //====================EVENT=====================
+            MenuItem pauseItem = new MenuItem();
+            pauseItem.Header = "Pause";
+            pauseItem.Click += PauseMenu;
+
+
+
+            border.ContextMenu.Items.Add(problemSolutionItem);
+            border.ContextMenu.Items.Add(startItem);
+            border.ContextMenu.Items.Add(pauseItem);
+
+           //====================EVENT=====================
             //MouseLeave += MouseLeavePath;
             //MouseMove += MouseHoverPath;
             //MouseLeftButtonDown += MouseLeftButtonDownPath;
@@ -188,10 +202,24 @@ namespace SeldatMRMS.Management.RobotManagent {
             Draw ();
 
         }
-        public Point CirclePoint (double radius, double angleInDegrees, Point origin) {
-            double x = (double) (radius * Math.Cos (angleInDegrees * Math.PI / 180)) + origin.X;
-            double y = (double) (radius * Math.Sin (angleInDegrees * Math.PI / 180)) + origin.Y;
-
+        public void RegistrySolvedForm(Object obj)
+        {
+            if(obj.GetType()==typeof(ProcedureControlServices))
+            {
+                solvedProblem.Registry(obj);
+            }
+        }
+        public void DisplaySolvedForm()
+        {
+            if (solvedProblem.objProc != null)
+                solvedProblem.Show();
+            else
+                MessageBox.Show("Không có nội dung lỗi!!");
+        }
+        public Point CirclePoint(double radius, double angleInDegrees, Point origin)
+        {
+            double x = (double)(radius * Math.Cos(angleInDegrees * Math.PI / 180)) + origin.X;
+            double y = (double)(radius * Math.Sin(angleInDegrees * Math.PI / 180)) + origin.Y;
             return new Point (x, y);
         }
         //public void setColorRobotStatus(RobotStatusColorCode rsc)
@@ -242,17 +270,26 @@ namespace SeldatMRMS.Management.RobotManagent {
         private void ChangeToolTipContent (object sender, ToolTipEventArgs e) {
             border.ToolTip = "1234567890";
         }
-        private void EditMenu (object sender, RoutedEventArgs e) {
-            //robotProperties.ShowDialog();
-        }
 
-        private void RemoveMenu (object sender, RoutedEventArgs e) {
-            Remove ();
+        private void PoblemSolutionItem(object sender, RoutedEventArgs e)
+        {
+            DisplaySolvedForm();
         }
-        public void Remove () {
-            this.canvas.Children.Remove (border);
-            RemoveHandle (props.name);
+        private void PauseMenu(object sender, RoutedEventArgs e)
+        {
+            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
         }
+        private void StartMenu(object sender, RoutedEventArgs e)
+        {
+            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+        }
+        public void RemoveDraw()
+        {
+            this.canvas.Children.Remove(border);
+            this.canvas.Children.Remove(headerPoint);
+            this.canvas.Children.Remove(riskArea);
+            //RemoveHandle(props.name);
+        }      
         public override void Draw () {
 
             //Render Robot
@@ -265,7 +302,6 @@ namespace SeldatMRMS.Management.RobotManagent {
             props.contentTranslate = new TranslateTransform (0, 0);
             props.contentTransformGroup.Children[1] = props.contentTranslate;
             headerPoint.RenderTransform = new TranslateTransform (MiddleHeader ().X, MiddleHeader ().Y);
-
             headerPoint.RenderTransform = new TranslateTransform (Global_Object.CoorCanvas (MiddleHeader ()).X, Global_Object.CoorCanvas (MiddleHeader ()).Y);
             PathGeometry pgeometry = new PathGeometry ();
             PathFigure pF = new PathFigure ();

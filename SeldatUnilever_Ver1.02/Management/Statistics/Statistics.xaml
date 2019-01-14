@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Management.Statistics"
         mc:Ignorable="d"
-        Title="Statistics" Height="450" Width="800">
+        Title="{DynamicResource Statistics_Title}" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"></RowDefinition>
@@ -20,7 +20,7 @@
             <TabControl
                 Name="StatisticsTabControl">
                 <!--<TabItem Header="{DynamicResource Statistics_TabItem_RobotProcess}" FontSize="12">-->
-                <TabItem Header="Robot Process" FontSize="12">
+                <TabItem Header="{DynamicResource Statistics_RobotProcess}" FontSize="12">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="140"></RowDefinition>
@@ -42,7 +42,7 @@
                                         <StackPanel Margin="0 0 30 0"
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center">
-                                            <Label Content="Robot"></Label>
+                                            <Label Content="{DynamicResource Statistics_RobotProcess}"></Label>
                                             <ComboBox 
                                                 Name="cmbRobot" 
                                                 Width="100"
@@ -55,7 +55,7 @@
                                         <StackPanel Margin="0 0 30 0"
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center">
-                                            <Label Content="Devices"></Label>
+                                            <Label Content="{DynamicResource Statistics_Combobox_Devices}"></Label>
                                             <ComboBox 
                                                 Name="cmbDevice"
                                                 Width="100"
@@ -69,7 +69,7 @@
                                         <StackPanel Margin="0 0 30 0"
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center">
-                                            <Label Content="Products"></Label>
+                                            <Label Content="{DynamicResource Statistics_Combobox_Products}"></Label>
                                             <ComboBox 
                                                 Name="cmbProduct"
                                                 Width="100"
@@ -87,7 +87,7 @@
                                         <StackPanel Margin="0 0 30 0"
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center">
-                                            <Label Content="Operation Type"></Label>
+                                            <Label Content="{DynamicResource Statistics_Combobox_OperationType}"></Label>
                                             <ComboBox 
                                                 Name="cmbOperationType"
                                                 Width="100"
@@ -100,7 +100,7 @@
                                         <StackPanel Margin="0 0 30 0"
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center">
-                                            <Label Content="Buffer"></Label>
+                                            <Label Content="{DynamicResource Statistics_Combobox_Buffer}"></Label>
                                             <ComboBox 
                                                 Name="cmbBuffer"
                                                 Width="100"
@@ -113,7 +113,7 @@
                                         <StackPanel Margin="0 0 30 0"
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center">
-                                            <Label Content="Product Detail"></Label>
+                                            <Label Content="{DynamicResource Statistics_Combobox_ProductDetail}"></Label>
                                             <ComboBox 
                                                 Name="cmbProductDetail"
                                                 Width="100"
@@ -130,7 +130,7 @@
                                         <StackPanel Margin="0 0 30 0"
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center">
-                                            <Label Content="Shift"></Label>
+                                            <Label Content="{DynamicResource Statistics_Combobox_Shift}"></Label>
                                             <ComboBox 
                                                 Name="cmbShift"
                                                 Width="100"
@@ -155,19 +155,31 @@
                                     VerticalAlignment="Center">
                                     <Button 
                                         Name="Search"
+                                        Height="24"
+                                        MinWidth="80"
                                         Margin="0 10 0 0"
-                                        Width="80"
+                                        Padding="5 0"
                                         Click="Search_Click"
-                                        >Search</Button>
+                                        Content="{DynamicResource Statistics_Button_Search}"
+                                        ></Button>
                                     <Button 
+                                        Name="Export"
+                                        Height="24"
+                                        MinWidth="80"
                                         Margin="0 10 0 0"
-                                        Width="80" 
-                                        Click="Button_Click"
-                                        >Test</Button>
+                                        Padding="5 0"
+                                        Click="Export_Click"
+                                        Content="{DynamicResource Statistics_Button_Export}"
+                                        ></Button>
                                     <Button 
+                                        Name="Close"
+                                        Height="24"
+                                        MinWidth="80"
                                         Margin="0 10 0 0"
-                                        Width="80"
-                                        >Export</Button>
+                                        Padding="5 0"
+                                        Click="Close_Click"
+                                        Content="{DynamicResource Statistics_Button_Close}"
+                                        ></Button>
                                 </StackPanel>
 
                             </Grid>
@@ -304,7 +316,7 @@
                                                 <DataTemplate>
                                                     <StackPanel>
                                                         <TextBlock
-                                                               Text="Devices"/>
+                                                               Text="{DynamicResource Statistics_Combobox_Devices}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.HeaderTemplate>
@@ -349,7 +361,7 @@
                                                 <DataTemplate>
                                                     <StackPanel>
                                                         <TextBlock
-                                                               Text="Products"/>
+                                                               Text="{DynamicResource Statistics_Combobox_Products}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.HeaderTemplate>
@@ -394,7 +406,7 @@
                                                 <DataTemplate>
                                                     <StackPanel>
                                                         <TextBlock
-                                                               Text="ProductDetails"/>
+                                                               Text="{DynamicResource Statistics_Combobox_ProductDetail}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.HeaderTemplate>
@@ -439,7 +451,7 @@
                                                 <DataTemplate>
                                                     <StackPanel>
                                                         <TextBlock
-                                                               Text="Buffers"/>
+                                                               Text="{DynamicResource Statistics_Combobox_Buffer}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.HeaderTemplate>
@@ -464,7 +476,7 @@
                                                 <DataTemplate>
                                                     <StackPanel>
                                                         <TextBlock
-                                                               Text="Status"/>
+                                                               Text="{DynamicResource Statistics_DataGrid_Column_Status}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.HeaderTemplate>
@@ -507,7 +519,7 @@
                                                 <DataTemplate>
                                                     <StackPanel>
                                                         <TextBlock
-                                                               Text="Operation Type"/>
+                                                               Text="{DynamicResource Statistics_Combobox_OperationType}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.HeaderTemplate>
@@ -552,7 +564,7 @@
                                                 <DataTemplate>
                                                     <StackPanel>
                                                         <TextBlock
-                                                               Text="Shift"/>
+                                                               Text="{DynamicResource Statistics_Combobox_Shift}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.HeaderTemplate>
@@ -727,9 +739,9 @@
                                 </DataGrid>
                             </Grid>
                             <Grid Grid.Column="1">
-                                <GroupBox Header="Detail">
+                                <GroupBox Header="{DynamicResource Statistics_GroupBox_Detail}">
                                     <Grid>
-                                        <TextBox TextWrapping="Wrap">
+                                        <TextBox TextWrapping="Wrap" IsReadOnly="True">
                                             Copy and connect the repository locally so that you can push updates you make and pull changes others make. Enter git clone and the repository URL at your command line:
                                         </TextBox>
                                     </Grid>
@@ -739,10 +751,9 @@
                     </Grid>
                 </TabItem>
                 <!--<TabItem Header="{DynamicResource Statistics_TabItem_RobotCharge}" FontSize="12">-->
-                <TabItem Header="Robot Charge" FontSize="12">
+                <TabItem Header="{DynamicResource Statistics_RobotCharge}" FontSize="12">
 
                 </TabItem>
-                <TabItem></TabItem>
             </TabControl>
         </Grid>
     </Grid>

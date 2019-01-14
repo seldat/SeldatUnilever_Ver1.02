@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,12 +22,32 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
     public partial class Statistics : Window
     {
         StatisticsModel statisticsModel;
-        public Statistics()
+        public Statistics(string cultureName = null)
         {
             InitializeComponent();
+            ApplyLanguage(cultureName);
             Loaded += Statistics_Loaded;
             statisticsModel = new StatisticsModel(this);
             DataContext = statisticsModel;
+        }
+
+        public void ApplyLanguage(string cultureName = null)
+        {
+            if (cultureName != null)
+                Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(cultureName);
+
+            ResourceDictionary dict = new ResourceDictionary();
+            switch (Thread.CurrentThread.CurrentCulture.ToString())
+            {
+                case "vi-VN":
+                    dict.Source = new Uri("..\\Lang\\Vietnamese.xaml", UriKind.Relative);
+                    break;
+                // ...
+                default:
+                    dict.Source = new Uri("..\\Lang\\English.xaml", UriKind.Relative);
+                    break;
+            }
+            this.Resources.MergedDictionaries.Add(dict);
         }
 
         private void Statistics_Loaded(object sender, RoutedEventArgs e)
@@ -98,6 +119,16 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
         private void Search_Click(object sender, RoutedEventArgs e)
         {
             statisticsModel.ReloadDataGridTask();
+        }
+
+        private void Export_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

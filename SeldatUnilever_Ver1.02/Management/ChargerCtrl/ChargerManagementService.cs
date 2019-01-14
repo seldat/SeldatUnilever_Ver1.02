@@ -8,6 +8,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -35,8 +36,9 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             ChargerStationList = new Dictionary<ChargerId, ChargerCtrl>();
             LoadConfigure();
 
-            configureForm = new ConfigureCharger(this);
+            configureForm = new ConfigureCharger(this, Thread.CurrentThread.CurrentCulture.ToString());
         }
+
         public void Initialize()
         {
             ChargerInfoConfig pchr1 = new ChargerInfoConfig();

@@ -36,6 +36,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>mainicon_YRB_icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
@@ -718,6 +721,7 @@
     <Resource Include="readme.txt" />
     <Resource Include="Management\Media\3d.png" />
     <Resource Include="License-LGPL.txt" />
+    <Resource Include="mainicon_YRB_icon.ico" />
     <Content Include="Management\RobotManagent\SelfDriving.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

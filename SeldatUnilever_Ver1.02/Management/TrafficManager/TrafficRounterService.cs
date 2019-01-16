@@ -9,6 +9,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -90,7 +91,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             Grouped_PropertiesRiskZoneList = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRiskZoneList);
             LoadConfigureZone();
             LoadConfigureRiskZone();
-            configureArea = new ConfigureArea(this);
+            configureArea = new ConfigureArea(this, Thread.CurrentThread.CurrentCulture.ToString());
             configureRiskZone = new ConfigureRiskZone(this);
             //configureRiskZone.Show();
         }

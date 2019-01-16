@@ -188,4 +188,63 @@
     <sys:String x:Key="UserManagement_AccountList_Column_Device">Device</sys:String>
 
     <sys:String x:Key="UserManagement_Button_Exit">Close</sys:String>
+    
+    <!--ConfigureCharger-->
+    <sys:String x:Key="ConfigureCharger_Title">Charger Configuration</sys:String>
+    <sys:String x:Key="ConfigureCharger_Button_Save">Save</sys:String>
+
+
+    <!--DoorConfigure-->
+    <sys:String x:Key="DoorConfigure_Title">Door Configuration</sys:String>
+    <sys:String x:Key="DoorConfigure_Button_Save">Save</sys:String>
+
+    <!--SolvedProblem-->
+    <sys:String x:Key="SolvedProblem_Title">Problem Detail</sys:String>
+    <sys:String x:Key="SolvedProblem_RobotNameID">Robot Name:</sys:String>
+    <sys:String x:Key="SolvedProblem_ProcedureNameID">Procedure Name:</sys:String>
+    <sys:String x:Key="SolvedProblem_ErrorCode">Error Code:</sys:String>
+    <sys:String x:Key="SolvedProblem_Date">Date:</sys:String>
+    <sys:String x:Key="SolvedProblem_ProblemDescription">Problem Description:</sys:String>
+    <sys:String x:Key="SolvedProblem_ProblemSolvingDetail">Problem Solving Detail:</sys:String>
+    <sys:String x:Key="SolvedProblem_ProblemSolvingSolution">Problem Solving Solution:</sys:String>
+    <sys:String x:Key="SolvedProblem_Button_CancelProcess">Cancel Procedure</sys:String>
+    <sys:String x:Key="SolvedProblem_Button_ContinueProcess">Continue Procedure</sys:String>
+
+    <!--ConfigureRobotUnity-->
+    <sys:String x:Key="ConfigureRobotUnity_Title">Robot Unity Configuration</sys:String>
+    <sys:String x:Key="ConfigureRobotUnity_Button_Save">Save</sys:String>
+
+    <!--ConfigureTraffic-->
+    <sys:String x:Key="ConfigureTraffic_Title">Traffic Configuration</sys:String>
+    <sys:String x:Key="ConfigureTraffic_Button_Add">Add</sys:String>
+    <sys:String x:Key="ConfigureTraffic_Button_Save">Save</sys:String>
+
+    <!--Statistics-->
+    <sys:String x:Key="Statistics_Title">Statistics</sys:String>
+    <sys:String x:Key="Statistics_RobotProcess">Robot Process</sys:String>
+    <sys:String x:Key="Statistics_RobotCharge">Robot Charge</sys:String>
+    <sys:String x:Key="Statistics_Combobox_Robot">Robot</sys:String>
+    <sys:String x:Key="Statistics_Combobox_Devices">Devices</sys:String>
+    <sys:String x:Key="Statistics_Combobox_Products">Products</sys:String>
+    <sys:String x:Key="Statistics_Combobox_OperationType">Operation Type</sys:String>
+    <sys:String x:Key="Statistics_Combobox_Buffer">Buffer</sys:String>
+    <sys:String x:Key="Statistics_Combobox_ProductDetail">Product Detail</sys:String>
+    <sys:String x:Key="Statistics_Combobox_Shift">Shift</sys:String>
+    <sys:String x:Key="Statistics_Button_Search">Search</sys:String>
+    <sys:String x:Key="Statistics_Button_Export">Export</sys:String>
+    <sys:String x:Key="Statistics_Button_Close">Close</sys:String>
+
+
+    <sys:String x:Key="Statistics_DataGrid_Column_Status">Status</sys:String>
+    <sys:String x:Key="Statistics_DataGrid_Column_locationBuffer">Buffer location</sys:String>
+    <sys:String x:Key="Statistics_DataGrid_Column_locationPallet">Pallet location</sys:String>
+
+
+    <sys:String x:Key="Statistics_GroupBox_Detail">Detail</sys:String>
+
+    <!--ConfigureRiskZone-->
+    <sys:String x:Key="ConfigureRiskZone_Title">RiskZone Configuration</sys:String>
+    <sys:String x:Key="ConfigureRiskZone_Button_Add">Add</sys:String>
+    <sys:String x:Key="ConfigureRiskZone_Button_Remove">Remove</sys:String>
+
 </ResourceDictionary>

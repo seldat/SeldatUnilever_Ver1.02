@@ -82,7 +82,7 @@ namespace SeldatMRMS.Management
         public void RegisteRobotInAvailable(Dictionary<String,RobotUnity> RobotUnitylistdc)
         {
             foreach(var r in RobotUnitylistdc.Values)
-            this.RobotUnitylist.Add(r);
+              this.RobotUnitylist.Add(r);
             TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
         }
         public void Registry(TrafficManagementService trafficManagementService)

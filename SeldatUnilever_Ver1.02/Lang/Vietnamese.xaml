@@ -191,4 +191,68 @@
     <sys:String x:Key="UserManagement_AccountList_Column_Device">Thiết bị</sys:String>
 
     <sys:String x:Key="UserManagement_Button_Exit">Thoát</sys:String>
+
+    <!--ConfigureCharger-->
+    <sys:String x:Key="ConfigureCharger_Title">Cài đặt trạm sạc</sys:String>
+    <sys:String x:Key="ConfigureCharger_Button_Save">Lưu</sys:String>
+
+
+    <!--DoorConfigure-->
+    <sys:String x:Key="DoorConfigure_Title">Cài đặt cửa tự động</sys:String>
+    <sys:String x:Key="DoorConfigure_Button_Save">Lưu</sys:String>
+
+
+    <!--SolvedProblem-->
+    <sys:String x:Key="SolvedProblem_Title">Thông tin lỗi</sys:String>
+    <sys:String x:Key="SolvedProblem_RobotNameID">Tên Robot: </sys:String>
+    <sys:String x:Key="SolvedProblem_ProcedureNameID">Tên quy trình: </sys:String>
+    <sys:String x:Key="SolvedProblem_ErrorCode">Mã lỗi: </sys:String>
+    <sys:String x:Key="SolvedProblem_Date">Ngày: </sys:String>
+    <sys:String x:Key="SolvedProblem_ProblemDescription">Thông tin chi tiết hệ thống: </sys:String>
+    <sys:String x:Key="SolvedProblem_ProblemSolvingDetail">Nội Dung Sự Cố: </sys:String>
+    <sys:String x:Key="SolvedProblem_ProblemSolvingSolution">Phương Pháp Giải Quyết Sự Cố: </sys:String>
+    <sys:String x:Key="SolvedProblem_Button_CancelProcess">Hủy quy trình</sys:String>
+    <sys:String x:Key="SolvedProblem_Button_ContinueProcess">Tiếp tục quy trình</sys:String>
+
+
+    <!--ConfigureRobotUnity-->
+    <sys:String x:Key="ConfigureRobotUnity_Title">Thiết lập Robot</sys:String>
+    <sys:String x:Key="ConfigureRobotUnity_Button_Save">Lưu</sys:String>
+
+    <!--ConfigureTraffic-->
+    <sys:String x:Key="ConfigureTraffic_Title">Thiết lập giao thông</sys:String>
+    <sys:String x:Key="ConfigureTraffic_Button_Add">Thêm</sys:String>
+    <sys:String x:Key="ConfigureTraffic_Button_Save">Lưu</sys:String>
+
+    <!--Statistics-->
+    <sys:String x:Key="Statistics_Title">Thống kê</sys:String>
+    <sys:String x:Key="Statistics_RobotProcess">Quy trình Robot</sys:String>
+    <sys:String x:Key="Statistics_RobotCharge">Quy trình sạc</sys:String>
+    <sys:String x:Key="Statistics_Combobox_Robot">Robot</sys:String>
+    <sys:String x:Key="Statistics_Combobox_Devices">Thiết bị</sys:String>
+    <sys:String x:Key="Statistics_Combobox_Products">Sản phẩm</sys:String>
+    <sys:String x:Key="Statistics_Combobox_OperationType">Quy trình</sys:String>
+    <sys:String x:Key="Statistics_Combobox_Buffer">Vùng chèn</sys:String>
+    <sys:String x:Key="Statistics_Combobox_ProductDetail">Mã hàng</sys:String>
+    <sys:String x:Key="Statistics_Combobox_Shift">Ca</sys:String>
+    <sys:String x:Key="Statistics_Button_Search">Tìm kiếm</sys:String>
+    <sys:String x:Key="Statistics_Button_Export">Xuất dữ liệu</sys:String>
+    <sys:String x:Key="Statistics_Button_Close">Thoát</sys:String>
+    
+    
+    
+    <sys:String x:Key="Statistics_DataGrid_Column_Status">Trạng thái</sys:String>
+    <sys:String x:Key="Statistics_DataGrid_Column_locationBuffer">Vị trí vùng chèn</sys:String>
+    <sys:String x:Key="Statistics_DataGrid_Column_locationPallet">Vị trí Pallet</sys:String>
+
+
+
+    <sys:String x:Key="Statistics_GroupBox_Detail">Chi tiết</sys:String>
+
+    <!--ConfigureRiskZone-->
+    <sys:String x:Key="ConfigureRiskZone_Title">Cài đặt Vùng nguy hiểm</sys:String>
+    <sys:String x:Key="ConfigureRiskZone_Button_Add">Thêm</sys:String>
+    <sys:String x:Key="ConfigureRiskZone_Button_Remove">Xóa</sys:String>
+
+
 </ResourceDictionary>

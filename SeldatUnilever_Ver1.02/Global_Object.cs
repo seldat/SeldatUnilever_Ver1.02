@@ -17,6 +17,7 @@ namespace SeldatMRMS
     public static class Global_Object
     {
 
+
         public enum PRIORITYLOGIN
         {
             PRIORITYLOGIN_ADMIN0=0,

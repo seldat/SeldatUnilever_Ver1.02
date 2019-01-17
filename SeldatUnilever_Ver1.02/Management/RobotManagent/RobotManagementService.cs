@@ -42,8 +42,8 @@ namespace SeldatMRMS.Management.RobotManagent
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
             configureForm = new ConfigureRobotUnity(this, Thread.CurrentThread.CurrentCulture.ToString());
             LoadConfigure();
-           // RobotUnity rb1 = RobotUnityRegistedList["RSD0"];
-           // rb1.Start("ws://192.168.80.131:9090");
+            RobotUnity rb1 = RobotUnityRegistedList["RSD0"];
+          // rb1.Start("ws://192.168.80.131:9090");
         }
         public void Initialize()
         {

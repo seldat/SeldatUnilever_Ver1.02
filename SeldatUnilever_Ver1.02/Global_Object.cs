@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeldatUnilever_Ver1._02;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -52,6 +53,45 @@ namespace SeldatMRMS
         public static string messageTitileInformation = "Information";
         public static string messageTitileError = "Error";
         public static string messageTitileWarning = "Warning";
+
+
+        //#######################################
+        public static MusicPlayerOld musicPlayerOld = new MusicPlayerOld("ALARM.mp3");
+        public static void PlayWarning(bool isLoop)
+        {
+            if (musicPlayerOld == null)
+            {
+                musicPlayerOld = new MusicPlayerOld("ALARM.mp3");
+                musicPlayerOld.Play(true);
+            }
+            else
+            {
+                if (musicPlayerOld.IsBeingPlayed)
+                {
+                    return;
+                }
+                //if (Global_Object.musicPlayerOld.IsBeingPlayed)
+                //{
+                //    Global_Object.musicPlayerOld.StopPlaying();
+                //}
+                else
+                {
+                    musicPlayerOld.Play(true);
+                }
+            }
+        }
+        public static void StopWarning()
+        {
+            if (musicPlayerOld != null)
+            {
+                if (musicPlayerOld.IsBeingPlayed)
+                {
+                    musicPlayerOld.StopPlaying();
+                }
+            }
+        }
+
+        //#######################################
 
         //#######################################
 

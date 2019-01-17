@@ -296,6 +296,7 @@
     <Compile Include="Management\UnityService\AssigmentTaskService.cs" />
     <Compile Include="Management\UnityService\TaskRounterService.cs" />
     <Compile Include="Management\UnityService\UnityManagementService.cs" />
+    <Compile Include="MusicPlayerOld.cs" />
     <Compile Include="ObjectDumper.cs" />
     <Compile Include="PixelRuler.cs" />
     <Compile Include="RobotView\ConnectBridge.cs" />

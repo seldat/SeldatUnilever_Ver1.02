@@ -255,6 +255,7 @@
     <Compile Include="Management\DoorServices\DoorManagementService.cs" />
     <Compile Include="Management\DoorServices\DoorService.cs" />
     <Compile Include="Management\ExtensionService.cs" />
+    <Compile Include="Management\McuCom\McuCtrl.cs" />
     <Compile Include="Management\NotifyUIBase.cs" />
     <Compile Include="Management\ProcedureServices\CollectionDataService.cs" />
     <Compile Include="Management\ProcedureServices\ControlService.cs" />

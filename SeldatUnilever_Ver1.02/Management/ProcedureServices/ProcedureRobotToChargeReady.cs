@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SeldatUnilever_Ver1._02.Management.McuCom;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
@@ -58,7 +59,7 @@ namespace SeldatMRMS {
             //}
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE;
         }
-    
+
         public void Start (RobotGoToCharge state = RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER) {
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_CHARGE;
@@ -141,9 +142,8 @@ namespace SeldatMRMS {
                             if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_TURNOFF_PC) {
                                 sw.Stop ();
                                 errorCode = ErrorCode.CAN_NOT_TURN_OFF_PC;
-                                if (SelectHandleError.CASE_ERROR_CONTINUOUS == CheckUserHandleError (this)) {
-                                    StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
-                                }
+                                CheckUserHandleError (this);
+                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
                             }
                         }
                         break;
@@ -173,7 +173,15 @@ namespace SeldatMRMS {
                         break; //dợi charge battery và thông tin giao tiếp server và trạm sạc
 
                     case RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY:
-                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING;
+                        Thread.Sleep (10000);
+                        McuCtrl mcuCtrl = new McuCtrl (rb);
+
+                        if (true == mcuCtrl.TurnOnPcRobot ()) {
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
+                        } else {
+                            errorCode = ErrorCode.CAN_NOT_TURN_ON_PC;
+                            CheckUserHandleError (this);
+                        }
                         break; //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc
                     case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING:
                         if (true == CheckReconnectServer (TIME_OUT_ROBOT_RECONNECT_SERVER)) {

@@ -43,7 +43,8 @@ namespace SeldatMRMS {
             LASER_CONTROL_ERROR,
             CAN_NOT_GET_DATA,
             ROBOT_CANNOT_CONNECT_SERVER_AFTER_CHARGE,
-            CAN_NOT_TURN_OFF_PC
+            CAN_NOT_TURN_OFF_PC,
+            CAN_NOT_TURN_ON_PC
         }
 
         public ErrorCode errorCode;
@@ -219,9 +220,10 @@ namespace SeldatMRMS {
 
         public SelectHandleError selectHandleError;
 
-        protected SelectHandleError CheckUserHandleError (object obj) {
+        protected void CheckUserHandleError (object obj) {
+            bool keepRun = true;
             ErrorProcedureHandler (obj);
-            while (selectHandleError == SelectHandleError.CASE_ERROR_WAITTING) {
+            while (keepRun) {
                 switch (selectHandleError) {
                     case SelectHandleError.CASE_ERROR_WAITTING:
                         robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
@@ -235,7 +237,9 @@ namespace SeldatMRMS {
                             new Action (delegate () {
                                 robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_RUNNING);
                             }));
+                        selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
                         ProRun = true;
+                        keepRun = false;
                         break;
                     case SelectHandleError.CASE_ERROR_EXIT:
                         robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
@@ -244,12 +248,13 @@ namespace SeldatMRMS {
                             }));
                         robot.PreProcedureAs = robot.ProcedureAs;
                         ProRun = false;
+                        keepRun = false;
                         break;
                     default:
                         break;
                 }
             }
-            return selectHandleError;
+            selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
         }
     }
 }

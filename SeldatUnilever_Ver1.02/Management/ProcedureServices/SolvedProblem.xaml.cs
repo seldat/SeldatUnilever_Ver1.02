@@ -23,21 +23,22 @@ namespace SeldatMRMS
     /// </summary>
     public partial class SolvedProblem : Window
     {
-        public Object objProc;
-        public SolvedProblem()
+        public Object obj;
+        public SolvedProblem(string cultureName = null)
         {
             InitializeComponent();
-
+            ApplyLanguage(cultureName);
 
         }
         public void Registry(Object obj)
         {
-        Object objProc;
+            this.obj=obj;
+        }
         public SolvedProblem(Object obj, string cultureName = null)
         {
             InitializeComponent();
             ApplyLanguage(cultureName);
-            this.objProc = obj;
+           /* this.obj = obj;
             if (obj.GetType() == typeof(ProcedureForkLiftToBuffer))
             {
                 ProcedureForkLiftToBuffer proc = obj as ProcedureForkLiftToBuffer;
@@ -67,7 +68,7 @@ namespace SeldatMRMS
             {
                 ProcedureRobotToCharger proc = obj as ProcedureRobotToCharger;
                 ShowInformation(proc);
-            }
+            }*/
         }
 
         public void ApplyLanguage(string cultureName = null)
@@ -89,7 +90,7 @@ namespace SeldatMRMS
             this.Resources.MergedDictionaries.Add(dict);
         }
 
-        public void ShowInformation(Object obj)
+        public void ShowInformation()
         {
             if (obj.GetType() == typeof(ProcedureForkLiftToBuffer))
             {
@@ -183,7 +184,7 @@ namespace SeldatMRMS
             }
 
         }
-        public void UpdateInformation(Object obj)
+        public void UpdateInformation(SelectHandleError shError)
         {
             if (obj.GetType() == typeof(ProcedureForkLiftToBuffer))
             {
@@ -197,7 +198,9 @@ namespace SeldatMRMS
                 MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
-              
+                proc.selectHandleError = shError;
+
+
             }
             else if (obj.GetType() == typeof(ProcedureBufferToMachine))
             {
@@ -211,7 +214,9 @@ namespace SeldatMRMS
                 MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
-             
+                proc.selectHandleError = shError;
+
+
             }
             else if (obj.GetType() == typeof(ProcedureMachineToReturn))
             {
@@ -225,7 +230,9 @@ namespace SeldatMRMS
                 MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
-                
+                proc.selectHandleError = shError;
+
+
             }
             else if (obj.GetType() == typeof(ProcedureBufferToReturn))
             {
@@ -239,7 +246,9 @@ namespace SeldatMRMS
                 MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
-                
+                proc.selectHandleError = shError;
+
+
             }
             else if (obj.GetType() == typeof(ProcedureRobotToReady))
             {
@@ -254,6 +263,8 @@ namespace SeldatMRMS
                 MessageBox.Show(JsonConvert.SerializeObject(proc.readyChargerProcedureDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpReadyChargerProcedureDB(proc.readyChargerProcedureDB);
+                proc.selectHandleError = shError;
+
             }
             else if (obj.GetType() == typeof(ProcedureRobotToCharger))
             {
@@ -268,6 +279,8 @@ namespace SeldatMRMS
                 MessageBox.Show(JsonConvert.SerializeObject(proc.readyChargerProcedureDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpReadyChargerProcedureDB(proc.readyChargerProcedureDB);
+                proc.selectHandleError = shError;
+
 
             }
         }
@@ -279,20 +292,21 @@ namespace SeldatMRMS
 
         private void destroyProcBtn_Click(object sender, RoutedEventArgs e)
         {
-            ProcedureForkLiftToBuffer proFB = objProc as ProcedureForkLiftToBuffer;
-            UpdateInformation(proFB);
-            proFB.selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
-            objProc = null;
+         
+            UpdateInformation(SelectHandleError.CASE_ERROR_EXIT);
             Hide();
         }
 
         private void contProcBtn_Click(object sender, RoutedEventArgs e)
         {
-            ProcedureForkLiftToBuffer proFB = objProc as ProcedureForkLiftToBuffer;
-            UpdateInformation(proFB);
-            proFB.selectHandleError = SelectHandleError.CASE_ERROR_CONTINUOUS;
-            objProc = null;
+      
+            UpdateInformation(SelectHandleError.CASE_ERROR_CONTINUOUS);
             Hide();
+        }
+
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ShowInformation();
         }
     }
 }

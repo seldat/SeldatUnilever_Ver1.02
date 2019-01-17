@@ -29,7 +29,7 @@ namespace SeldatMRMS
         public static bool IsEngLish = false;
 
 
-        public static string url = @"http://192.168.0.6:8081/robot/rest/";
+        public static string url = @"http://localhost:8085/robot/rest/";
 
 
         public static int userLogin = -2;
@@ -57,7 +57,7 @@ namespace SeldatMRMS
 
         //#######################################
         public static MusicPlayerOld musicPlayerOld = new MusicPlayerOld("ALARM.mp3");
-        public static void PlayWarning(bool isLoop)
+        public static void PlayWarning()
         {
             if (musicPlayerOld == null)
             {

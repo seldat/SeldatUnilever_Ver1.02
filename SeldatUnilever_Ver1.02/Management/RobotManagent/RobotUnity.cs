@@ -226,14 +226,15 @@ namespace SeldatMRMS.Management.RobotManagent {
         }
         public void RegistrySolvedForm(Object obj)
         {
-            if(obj.GetType()==typeof(ProcedureControlServices))
+          //  if(obj.GetType()==typeof(ProcedureControlServices))
             {
                 solvedProblem.Registry(obj);
+                //solvedProblem.Show();
             }
         }
         public void DisplaySolvedForm()
         {
-            if (solvedProblem.objProc != null)
+            if (solvedProblem.obj != null)
                 solvedProblem.Show();
             else
                 MessageBox.Show("Không có nội dung lỗi!!");

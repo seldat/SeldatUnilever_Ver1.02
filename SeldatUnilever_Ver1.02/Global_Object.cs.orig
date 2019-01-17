@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeldatUnilever_Ver1._02;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -17,15 +18,22 @@ namespace SeldatMRMS
     public static class Global_Object
     {
 
+
+        public enum PRIORITYLOGIN
+        {
+            PRIORITYLOGIN_ADMIN0=0,
+            PRIORITYLOGIN_ADMIN1 = 1,
+            PRIORITYLOGIN_GUEST = 2,
+        }
         //#######################################
         public static bool IsEngLish = false;
 
 
 <<<<<<< HEAD
-        public static string url = @"http://192.168.1.24:8081/robot/rest/";
+        public static string url = @"http://192.168.0.6:8081/robot/rest/";
 =======
         public static string url = @"http://localhost:8085/robot/rest/";
->>>>>>> chau_test1
+>>>>>>> chau_66
 
 
         public static int userLogin = -2;
@@ -49,6 +57,45 @@ namespace SeldatMRMS
         public static string messageTitileInformation = "Information";
         public static string messageTitileError = "Error";
         public static string messageTitileWarning = "Warning";
+
+
+        //#######################################
+        public static MusicPlayerOld musicPlayerOld = new MusicPlayerOld("ALARM.mp3");
+        public static void PlayWarning(bool isLoop)
+        {
+            if (musicPlayerOld == null)
+            {
+                musicPlayerOld = new MusicPlayerOld("ALARM.mp3");
+                musicPlayerOld.Play(true);
+            }
+            else
+            {
+                if (musicPlayerOld.IsBeingPlayed)
+                {
+                    return;
+                }
+                //if (Global_Object.musicPlayerOld.IsBeingPlayed)
+                //{
+                //    Global_Object.musicPlayerOld.StopPlaying();
+                //}
+                else
+                {
+                    musicPlayerOld.Play(true);
+                }
+            }
+        }
+        public static void StopWarning()
+        {
+            if (musicPlayerOld != null)
+            {
+                if (musicPlayerOld.IsBeingPlayed)
+                {
+                    musicPlayerOld.StopPlaying();
+                }
+            }
+        }
+
+        //#######################################
 
         //#######################################
 

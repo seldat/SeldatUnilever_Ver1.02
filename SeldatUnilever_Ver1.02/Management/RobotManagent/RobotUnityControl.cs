@@ -2,16 +2,8 @@
 using SelDatUnilever_Ver1._00.Management;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media.Media3D;
-using SeldatMRMS.Communication;
-using SelDatUnilever_Ver1._00.Management;
-using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using WebSocketSharp;
 
 namespace SeldatMRMS.Management.RobotManagent
@@ -101,6 +93,10 @@ namespace SeldatMRMS.Management.RobotManagent
             public String problemContent;
             public String solvedProblemContent;
             public String detailInfo;
+            private String _ipMcuCtrl;
+            public String ipMcuCtrl{ get => _ipMcuCtrl; set { _ipMcuCtrl = value; RaisePropertyChanged("IpMCU"); } }
+            private int _portMcuCtrl;
+            public int portMcuCtrl{ get => _portMcuCtrl; set {_portMcuCtrl = value; RaisePropertyChanged("PortMCU"); } }
         }
 
         public enum RequestCommandLineDetect {

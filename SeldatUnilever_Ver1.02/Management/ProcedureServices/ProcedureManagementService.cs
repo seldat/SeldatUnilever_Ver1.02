@@ -141,7 +141,7 @@ namespace SeldatMRMS {
             //pSP.Show();
 
             RobotUnity robot = procItem.GetRobotUnity ();
-
+            robot.RegistrySolvedForm(item);
             //robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_ERROR);
             // robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
             //                        new Action(delegate ()

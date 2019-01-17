@@ -338,8 +338,14 @@ namespace SeldatUnilever_Ver1._02
         private void Btn_Test_Click(object sender, RoutedEventArgs e)
         {
             //unityService.deviceRegistrationService.AddNewDeviceItem();
-            
-            canvasControlService.ReloadListDeviceItems();
+
+            // canvasControlService.ReloadListDeviceItems();
+
+            try
+            {
+                ctrR.Show();
+            }
+            catch { }
         }
 
         private void btn_3Dmap_Click(object sender, RoutedEventArgs e)

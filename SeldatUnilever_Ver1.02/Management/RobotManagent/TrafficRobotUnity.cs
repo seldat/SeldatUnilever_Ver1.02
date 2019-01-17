@@ -76,6 +76,7 @@ namespace SeldatMRMS.Management
         private TrafficManagementService trafficManagementService;
         public TrafficRobotUnity() : base() {
             TurnOnSupervisorTraffic(false);
+            RobotUnitylist = new List<RobotUnity>();
             prioritLevel = new PriorityLevel();
         }
         public PriorityLevel prioritLevel;

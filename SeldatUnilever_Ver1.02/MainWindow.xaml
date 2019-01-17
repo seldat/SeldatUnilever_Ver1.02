@@ -75,7 +75,7 @@
                                     Kind="SetCenter"/>
                                 </Button>
                                 <Separator/>
-                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_Configure}"
+                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_robotConfigure}"
                                     Name="btn_Robot"
                                     Click="Btn_Robot_Click"
                                     ToolBar.OverflowMode="AsNeeded">
@@ -83,14 +83,14 @@
                                     Kind="Robot"/>
                                 </Button>
                                 <Separator/>
-                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_Configure}"
+                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_areaConfigure}"
                                     Name="btn_Area"
                                     Click="Btn_Area_Click"
                                     ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial 
                                     Kind="ImageArea"/>
                                 </Button>
-                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_Configure}"
+                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_trafficareaConfigure}"
                                     Name="btn_RiskArea"
                                     Click="btn_RiskArea_Click"
                                     ToolBar.OverflowMode="AsNeeded">
@@ -98,7 +98,7 @@
                                     Kind="ImageAreaClose"/>
                                 </Button>
                                 <Separator/>
-                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_Configure}"
+                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_chargerConfigure}"
                                     Name="btn_Charge"
                                     Click="Btn_Charge_Click"
                                     ToolBar.OverflowMode="AsNeeded">
@@ -106,7 +106,7 @@
                                     Kind="BatteryCharging"/>
                                 </Button>
                                 <Separator/>
-                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_Configure}"
+                                <Button ToolTip="{DynamicResource MainWindow_Toolbar_doorConfigure}"
                                     Name="btn_Door"
                                     Click="Btn_Door_Click"
                                     ToolBar.OverflowMode="AsNeeded">

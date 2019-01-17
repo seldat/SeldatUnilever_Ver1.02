@@ -18,7 +18,13 @@
 
     <!--Toolbar-->
     <sys:String x:Key="MainWindow_Toolbar_MapReCenter">Recenter map</sys:String>
-    <sys:String x:Key="MainWindow_Toolbar_Configure">Configuration</sys:String>
+
+    <sys:String x:Key="MainWindow_Toolbar_robotConfigure">Robot Configure</sys:String>
+    <sys:String x:Key="MainWindow_Toolbar_areaConfigure">Area Configure</sys:String>
+    <sys:String x:Key="MainWindow_Toolbar_trafficareaConfigure">Traffic Area Configure</sys:String>
+    <sys:String x:Key="MainWindow_Toolbar_doorConfigure">Door Configuration</sys:String>
+    <sys:String x:Key="MainWindow_Toolbar_chargerConfigure">Charger Configuration</sys:String>
+
     <sys:String x:Key="MainWindow_Toolbar_Statistics">Statistics</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_3Dmap">3D Map</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_MapOnOff">Hide/Show map</sys:String>
@@ -188,7 +194,7 @@
     <sys:String x:Key="UserManagement_AccountList_Column_Device">Device</sys:String>
 
     <sys:String x:Key="UserManagement_Button_Exit">Close</sys:String>
-    
+
     <!--ConfigureCharger-->
     <sys:String x:Key="ConfigureCharger_Title">Charger Configuration</sys:String>
     <sys:String x:Key="ConfigureCharger_Button_Save">Save</sys:String>

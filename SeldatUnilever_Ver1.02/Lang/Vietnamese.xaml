@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:local="clr-namespace:SeldatUnilever_Ver1._02.Lang">
-    
-    
-    
+
+
+
     <sys:String x:Key="Language">Ngôn ngữ</sys:String>
     <sys:String x:Key="English">English</sys:String>
     <sys:String x:Key="Vietnamese">Tiếng Việt</sys:String>
@@ -21,6 +21,13 @@
 
     <!--Toolbar-->
     <sys:String x:Key="MainWindow_Toolbar_MapReCenter">Đặt lại bản đồ</sys:String>
+
+    <sys:String x:Key="MainWindow_Toolbar_robotConfigure">Cấu Hình Robot</sys:String>
+    <sys:String x:Key="MainWindow_Toolbar_areaConfigure">Cấu Hình Vùng Hoạt Động</sys:String>
+    <sys:String x:Key="MainWindow_Toolbar_riskareaConfigure">Cấu Hình Vùng Giao Thông</sys:String>
+    <sys:String x:Key="MainWindow_Toolbar_doorConfigure">Cấu Hình Cửa</sys:String>
+    <sys:String x:Key="MainWindow_Toolbar_chargerConfigure">Cấu Hình Trạm Sạc</sys:String>
+
     <sys:String x:Key="MainWindow_Toolbar_Configure">Tùy chỉnh</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_Statistics">Thống kê</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_3Dmap">Bản đồ 3D</sys:String>
@@ -204,13 +211,13 @@
 
     <!--SolvedProblem-->
     <sys:String x:Key="SolvedProblem_Title">Thông tin lỗi</sys:String>
-    <sys:String x:Key="SolvedProblem_RobotNameID">Tên Robot: </sys:String>
-    <sys:String x:Key="SolvedProblem_ProcedureNameID">Tên quy trình: </sys:String>
-    <sys:String x:Key="SolvedProblem_ErrorCode">Mã lỗi: </sys:String>
-    <sys:String x:Key="SolvedProblem_Date">Ngày: </sys:String>
-    <sys:String x:Key="SolvedProblem_ProblemDescription">Thông tin chi tiết hệ thống: </sys:String>
-    <sys:String x:Key="SolvedProblem_ProblemSolvingDetail">Nội Dung Sự Cố: </sys:String>
-    <sys:String x:Key="SolvedProblem_ProblemSolvingSolution">Phương Pháp Giải Quyết Sự Cố: </sys:String>
+    <sys:String x:Key="SolvedProblem_RobotNameID">Tên Robot:</sys:String>
+    <sys:String x:Key="SolvedProblem_ProcedureNameID">Tên quy trình:</sys:String>
+    <sys:String x:Key="SolvedProblem_ErrorCode">Mã lỗi:</sys:String>
+    <sys:String x:Key="SolvedProblem_Date">Ngày:</sys:String>
+    <sys:String x:Key="SolvedProblem_ProblemDescription">Thông tin chi tiết hệ thống:</sys:String>
+    <sys:String x:Key="SolvedProblem_ProblemSolvingDetail">Nội Dung Sự Cố:</sys:String>
+    <sys:String x:Key="SolvedProblem_ProblemSolvingSolution">Phương Pháp Giải Quyết Sự Cố:</sys:String>
     <sys:String x:Key="SolvedProblem_Button_CancelProcess">Hủy quy trình</sys:String>
     <sys:String x:Key="SolvedProblem_Button_ContinueProcess">Tiếp tục quy trình</sys:String>
 
@@ -238,9 +245,9 @@
     <sys:String x:Key="Statistics_Button_Search">Tìm kiếm</sys:String>
     <sys:String x:Key="Statistics_Button_Export">Xuất dữ liệu</sys:String>
     <sys:String x:Key="Statistics_Button_Close">Thoát</sys:String>
-    
-    
-    
+
+
+
     <sys:String x:Key="Statistics_DataGrid_Column_Status">Trạng thái</sys:String>
     <sys:String x:Key="Statistics_DataGrid_Column_locationBuffer">Vị trí vùng chèn</sys:String>
     <sys:String x:Key="Statistics_DataGrid_Column_locationPallet">Vị trí Pallet</sys:String>

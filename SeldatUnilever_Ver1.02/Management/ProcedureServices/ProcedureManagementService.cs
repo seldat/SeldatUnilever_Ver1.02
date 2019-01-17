@@ -134,6 +134,7 @@ namespace SeldatMRMS {
             } else if (procItem.procedureCode == ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE) {
 
             } else {
+                // lưu lại giá trị order
                 RestoreOrderItem (procItem.order);
             }
            
@@ -141,6 +142,7 @@ namespace SeldatMRMS {
             //pSP.Show();
 
             RobotUnity robot = procItem.GetRobotUnity ();
+            robot.RegistrySolvedForm(this);
 
             //robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_ERROR);
             // robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,

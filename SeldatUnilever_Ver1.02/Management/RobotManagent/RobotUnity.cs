@@ -84,25 +84,40 @@ namespace SeldatMRMS.Management.RobotManagent {
             pauseItem.Header = "Pause";
             pauseItem.Click += PauseMenu;
 
+            MenuItem mainMenuWorkList = new MenuItem();
+            mainMenuWorkList.Header = "Registry WorkList";
 
+            MenuItem itemw0 = new MenuItem();
+            itemw0.Header = "Ready Area";
+            mainMenuWorkList.Items.Add(itemw0);
 
-            MenuItem mainMenu = new MenuItem();
-            mainMenu.Background = Brushes.LightGreen;
-            mainMenu.Header = "Registry Procedure";
-            mainMenu.Height = 300;
-            mainMenu.Width = 200;
+            MenuItem itemw1 = new MenuItem();
+            itemw1.Header = "Wait Task";
+            mainMenuWorkList.Items.Add(itemw1);
+
+            MenuItem mainMenuProc = new MenuItem();
+            mainMenuProc.Header = "Registry Procedure";
+
+            MenuItem item0 = new MenuItem();
+            item0.Header = "All";
+            mainMenuProc.Items.Add(item0);
+            item0.IsCheckable = true;
             MenuItem item1 = new MenuItem();
-            item1.Width = 50;
-            item1.Header = "First";
-            mainMenu.Items.Add(item1);
+            item1.Header = "ForkLift To Buffer";
+            mainMenuProc.Items.Add(item1);
+            item0.IsCheckable = false;
             MenuItem item2 = new MenuItem();
-            item2.Width = 50;
-            item2.Header = "Two";
-            item1.Items.Add(item2);
+            item2.Header = "Buffer To Machine";
+            mainMenuProc.Items.Add(item2);
             MenuItem item3 = new MenuItem();
-            item3.Width = 50;
-            item3.Header = "Third";
-            item1.Items.Add(item3);
+            item3.Header = "Buffer To Return";
+            mainMenuProc.Items.Add(item3);
+            MenuItem item4 = new MenuItem();
+            item4.Header = "Return To Gate";
+            mainMenuProc.Items.Add(item4);
+
+
+
 
 
 
@@ -110,7 +125,8 @@ namespace SeldatMRMS.Management.RobotManagent {
             border.ContextMenu.Items.Add(problemSolutionItem);
             border.ContextMenu.Items.Add(startItem);
             border.ContextMenu.Items.Add(pauseItem);
-            border.ContextMenu.Items.Add(mainMenu);
+            border.ContextMenu.Items.Add(mainMenuWorkList);
+            border.ContextMenu.Items.Add(mainMenuProc);
 
            //====================EVENT=====================
            //MouseLeave += MouseLeavePath;

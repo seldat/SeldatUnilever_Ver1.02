@@ -86,17 +86,39 @@ namespace SeldatMRMS.Management.RobotManagent {
 
 
 
+            MenuItem mainMenu = new MenuItem();
+            mainMenu.Background = Brushes.LightGreen;
+            mainMenu.Header = "Registry Procedure";
+            mainMenu.Height = 300;
+            mainMenu.Width = 200;
+            MenuItem item1 = new MenuItem();
+            item1.Width = 50;
+            item1.Header = "First";
+            mainMenu.Items.Add(item1);
+            MenuItem item2 = new MenuItem();
+            item2.Width = 50;
+            item2.Header = "Two";
+            item1.Items.Add(item2);
+            MenuItem item3 = new MenuItem();
+            item3.Width = 50;
+            item3.Header = "Third";
+            item1.Items.Add(item3);
+
+
+
+
             border.ContextMenu.Items.Add(problemSolutionItem);
             border.ContextMenu.Items.Add(startItem);
             border.ContextMenu.Items.Add(pauseItem);
+            border.ContextMenu.Items.Add(mainMenu);
 
            //====================EVENT=====================
-            //MouseLeave += MouseLeavePath;
-            //MouseMove += MouseHoverPath;
-            //MouseLeftButtonDown += MouseLeftButtonDownPath;
-            //MouseRightButtonDown += MouseRightButtonDownPath;
-            //===================CREATE=====================
-            //Name = "Robotx" + Global_Mouse.EncodeTransmissionTimestamp();
+           //MouseLeave += MouseLeavePath;
+           //MouseMove += MouseHoverPath;
+           //MouseLeftButtonDown += MouseLeftButtonDownPath;
+           //MouseRightButtonDown += MouseRightButtonDownPath;
+           //===================CREATE=====================
+           //Name = "Robotx" + Global_Mouse.EncodeTransmissionTimestamp();
             props.mainGrid = new Grid ();
             props.statusGrid = new Grid ();
             props.statusBorder = new Border ();

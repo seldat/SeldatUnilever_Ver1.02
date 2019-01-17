@@ -32,7 +32,8 @@ namespace SeldatMRMS
         }
         public void Registry(Object obj)
         {
-        Object objProc;
+            Object objProc;
+        }
         public SolvedProblem(Object obj, string cultureName = null)
         {
             InitializeComponent();

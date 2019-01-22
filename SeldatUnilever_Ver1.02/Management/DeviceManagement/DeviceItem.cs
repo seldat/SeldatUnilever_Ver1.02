@@ -55,7 +55,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public int planId { get; set; }
             public int deviceId;
             public int productId { get; set; }
-            public int productDetailID { get; set; }
+            public int productDetailId { get; set; }
             public TyeRequest typeReq; // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
             public String activeDate;
             public int timeWorkId;
@@ -130,7 +130,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 OrderItem order = new OrderItem();
                 order.typeReq = (TyeRequest)typeReq;
                 order.userName = (String)results["userName"];
-                order.productDetailID = (int)results["productDetailId"];
+                order.productDetailId = (int)results["productDetailId"];
                 order.productId = (int)results["productId"];
                 order.planId = (int)results["planId"];
                 order.deviceId =(int)results["deviceId"];
@@ -156,7 +156,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     OrderItem order = new OrderItem();
                     order.typeReq = (TyeRequest)typeReq;
                     order.userName = (String)results["userName"];
-                    order.productDetailID = (int)results["productDetailId"];
+                    order.productDetailId = (int)results["productDetailId"];
                     order.productId = (int)results["productId"];
                     order.planId=(int)results["planId"];
                     order.deviceId = (int)results["deviceId"];
@@ -219,7 +219,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 order.typeReq = (TyeRequest)typeReq;
                 order.userName = (String)results["userName"];
                 order.deviceId = (int)results["deviceId"];
-                order.productDetailID = (int)results["productDetailId"];
+                order.productDetailId = (int)results["productDetailId"];
                 order.productId = (int)results["productId"];
                 order.timeWorkId = (int)results["timeWorkId"];
                 order.activeDate = (string)results["activeDate"];

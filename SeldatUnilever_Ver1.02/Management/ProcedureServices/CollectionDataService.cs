@@ -36,7 +36,6 @@ namespace SelDatUnilever_Ver1
         // public int timeWorkID;
         public List<Pose> checkInBuffer = new List<Pose>();
         protected BridgeClientRequest clientRequest;
-        public const String UrlServer = "http://localhost:8085";
         protected int palletId { get; set; }
         protected int planId { get; set; }
         public CollectionDataService()
@@ -50,15 +49,27 @@ namespace SelDatUnilever_Ver1
             this.order = order;
             clientRequest = new BridgeClientRequest();
             clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
-            
+
         }
         public virtual void AssignAnOrder(OrderItem order)
         {
             this.order = order;
         }
+        public String createPlanBuffer()
+        {
+            dynamic product = new JObject();
+            product.timeWorkId= 1;
+            product.activeDate =order.activeDate;
+            product.productId =order.productId;
+            product.productDetailId=order.productDetailId;
+            product.updUsrId = Global_Object.userLogin;
+            product.palletAmount=1;
+            String response = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/createPlanPallet");
+            return response;
+        }
         public String RequestDataProcedure(String dataReq, String url)
         {
-            //String url = UrlServer+"/robot/rest/plan/getListPlanPallet";
+            //String url = Global_Object.url+"plan/getListPlanPallet";
             // String url = "http://localhost:8080";
             var data = clientRequest.PostCallAPI(url, dataReq);
             if (data.Result != null)
@@ -71,7 +82,7 @@ namespace SelDatUnilever_Ver1
         public Pose GetCheckInBuffer()
         {
             Pose poseTemp = null;
-            String collectionData = RequestDataProcedure(order.dataRequest, UrlServer + "/robot/rest/plan/getListPlanPallet");
+            String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
             if (collectionData.Length > 0)
             {
                 JArray results = JArray.Parse(collectionData);
@@ -98,7 +109,7 @@ namespace SelDatUnilever_Ver1
         public Pose GetFrontLineBuffer()
         {
             Pose poseTemp = null;
-            String collectionData = RequestDataProcedure(order.dataRequest, UrlServer + "/robot/rest/plan/getListPlanPallet");
+            String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
             if (collectionData.Length > 0)
             {
                 JArray results = JArray.Parse(collectionData);
@@ -132,7 +143,7 @@ namespace SelDatUnilever_Ver1
             dynamic product = new JObject();
             product.palletStatus = order.palletStatus;
             Pose poseTemp = null;
-            String collectionData = RequestDataProcedure(product.ToString(), UrlServer + "/robot/rest/buffer/getListBufferReturn");
+            String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "buffer/getListBufferReturn");
             if (collectionData.Length > 0)
             {
                 JArray results = JArray.Parse(collectionData);
@@ -143,7 +154,7 @@ namespace SelDatUnilever_Ver1
                 double y = (double)stuff["y"];
                 double angle = (double)stuff["angle"];
                 poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
-                
+
             }
             return poseTemp;
         }
@@ -154,7 +165,7 @@ namespace SelDatUnilever_Ver1
             Pose poseTemp = null;
             dynamic product = new JObject();
             product.palletStatus = order.palletStatus;
-            String collectionData = RequestDataProcedure(product.ToString(), UrlServer + "/robot/rest/buffer/getListBufferReturn");
+            String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "buffer/getListBufferReturn");
             if (collectionData.Length > 0)
             {
                 JArray results = JArray.Parse(collectionData);
@@ -175,7 +186,7 @@ namespace SelDatUnilever_Ver1
         public String GetInfoOfPalletBuffer(TrafficRobotUnity.PistonPalletCtrl pisCtrl)
         {
             JInfoPallet infoPallet = new JInfoPallet();
-            String collectionData = RequestDataProcedure(order.dataRequest, UrlServer + "/robot/rest/plan/getListPlanPallet");
+            String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
             if (collectionData.Length > 0)
             {
                 JArray results = JArray.Parse(collectionData);
@@ -193,7 +204,7 @@ namespace SelDatUnilever_Ver1
                         int row = (int)stuff["pallet"]["row"];
                         int bay = (int)stuff["pallet"]["bay"];
                         int direct = (int)stuff["pallet"]["direct"];
-                   
+
                         infoPallet.pallet = pisCtrl; /* dropdown */
                         infoPallet.bay = bay;
                         infoPallet.hasSubLine = "yes"; /* no */
@@ -224,7 +235,7 @@ namespace SelDatUnilever_Ver1
             JInfoPallet infoPallet = new JInfoPallet();
             dynamic product = new JObject();
             product.palletStatus = order.palletStatus;
-            String collectionData = RequestDataProcedure(product.ToString(), UrlServer + "/robot/rest/buffer/getListBufferReturn");
+            String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "buffer/getListBufferReturn");
             if (collectionData.Length > 0)
             {
                 JArray results = JArray.Parse(collectionData);
@@ -248,7 +259,7 @@ namespace SelDatUnilever_Ver1
 
         public void UpdatePalletState(PalletStatus palletStatus)
         {
-            String url = UrlServer + "/robot/rest/pallet/updatePalletStatus";
+            String url = Global_Object.url + "pallet/updatePalletStatus";
             dynamic product = new JObject();
             product.palletId = palletId;
             product.planId = planId;
@@ -260,7 +271,7 @@ namespace SelDatUnilever_Ver1
                 ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);
             }
         }
- 
+
         protected virtual void ReceiveResponseHandler(String msg) { }
         protected virtual void ErrorHandler(ProcedureMessages.ProcMessage procMessage) { }
     }

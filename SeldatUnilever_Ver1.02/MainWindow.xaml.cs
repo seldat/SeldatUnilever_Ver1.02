@@ -350,6 +350,7 @@ namespace SeldatUnilever_Ver1._02
 
         private void btn_3Dmap_Click(object sender, RoutedEventArgs e)
         {
+            robotView.loadAWareHouseMap();
             robotView.Show();
         }
 

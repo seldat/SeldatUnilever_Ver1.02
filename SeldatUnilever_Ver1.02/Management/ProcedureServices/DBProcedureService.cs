@@ -84,7 +84,7 @@ namespace SeldatMRMS
             {
                 planId = order.planId;
                 deviceId = order.deviceId;
-                productDetailId = order.productDetailID;
+                productDetailId = order.productDetailId;
                 productId = order.productId;
                 palletId = order.palletId;
                 bufferId = order.bufferId;

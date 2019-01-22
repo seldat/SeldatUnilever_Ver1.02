@@ -167,7 +167,7 @@ namespace SeldatMRMS.RobotView
               
               //  brush.RelativeTransform = pr;
                 double largesize = bi.PixelWidth <= bi.PixelHeight ? bi.PixelWidth : bi.PixelHeight;
-                brush.Viewport = new Rect(-GlobalVariables.ConvertMetertoUnitLength(54.8), GlobalVariables.ConvertMetertoUnitLength(15) - largesize, bi.PixelWidth, bi.PixelHeight);
+                brush.Viewport = new Rect(-GlobalVariables.ConvertMetertoUnitLength(74.0), GlobalVariables.ConvertMetertoUnitLength(40.6) - largesize, bi.PixelWidth, bi.PixelHeight);
                 DiffuseMaterial mat = new DiffuseMaterial(brush);
                 GeometryModel3D gModel3D = new GeometryModel3D { Geometry = mesh, Material = mat };
                 pModelMap.Content = gModel3D;

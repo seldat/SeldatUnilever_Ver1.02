@@ -94,9 +94,9 @@ namespace SelDatUnilever_Ver1
                         var bufferResults = result["buffers"][0];
                         String checkinResults = (String)bufferResults["bufferCheckIn"];
                         JObject stuff = JObject.Parse(checkinResults);
-                        double x = (double)stuff["x"];
-                        double y = (double)stuff["y"];
-                        double angle = (double)stuff["angle"];
+                        double x = (double)stuff["checkin"]["x"];
+                        double y = (double)stuff["checkin"]["y"];
+                        double angle = (double)stuff["checkin"]["angle"];
                         poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
                         planId = order.planId;
                         break;
@@ -106,7 +106,7 @@ namespace SelDatUnilever_Ver1
             }
             return poseTemp;
         }
-        public Pose GetFrontLineBuffer()
+        public Pose GetFrontLineBuffer() // đổi 
         {
             Pose poseTemp = null;
             String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
@@ -119,8 +119,8 @@ namespace SelDatUnilever_Ver1
                     if (temp_planId == order.planId)
                     {
                         var bufferResults = result["buffers"][0];
-                        var palletInfo = bufferResults["pallets"][0];
-                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                        String checkinResults = (String)bufferResults["bufferCheckIn"];
+                        JObject stuff = JObject.Parse(checkinResults);
                         double x = (double)stuff["line"]["x"];
                         double y = (double)stuff["line"]["y"];
                         double angle = (double)stuff["line"]["angle"];

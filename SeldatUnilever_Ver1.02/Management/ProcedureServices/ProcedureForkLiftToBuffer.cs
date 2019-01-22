@@ -211,6 +211,7 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try {
                             if (false == Traffic.HasRobotUnityinArea (FlToBuf.GetFrontLineBuffer ().Position)) {
+                                createPlanBuffer();
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (FlToBuf.GetFrontLineBuffer ());
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;

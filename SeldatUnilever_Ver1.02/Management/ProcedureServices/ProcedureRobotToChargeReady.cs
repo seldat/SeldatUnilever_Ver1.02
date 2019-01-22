@@ -79,6 +79,7 @@ namespace SeldatMRMS {
             ProcedureRobotToCharger RbToChar = (ProcedureRobotToCharger) ojb;
             RobotUnity rb = RbToChar.robot;
             ErrorCodeCharger result;
+            McuCtrl mcuCtrl = new McuCtrl (rb);
             while (ProRun) {
                 switch (StateRobotToCharge) {
                     case RobotGoToCharge.ROBCHAR_IDLE:
@@ -151,6 +152,26 @@ namespace SeldatMRMS {
 #if false  //for test
                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
 #else
+#if true
+                        try {
+                            result = mcuCtrl.GetBatteryLevel (ref batLevel);
+                            if (ErrorCodeCharger.TRUE == result) {
+                                if (batLevel.data[0] == 100) {
+                                    StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+                                }
+                            } else {
+                                if (result == ErrorCodeCharger.ERROR_CONNECT) {
+                                    errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
+                                }
+                                CheckUserHandleError (this);
+                            }
+                            rb.properties.BatteryLevelRb = (float) batLevel.data[0];
+                        } catch (System.Exception) {
+                            Console.WriteLine ("ROBCHAR_WAITTING_CHARGEBATTERY : CONNECT_BOARD_CTRL_ROBOT_ERROR");
+                            errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
+                            CheckUserHandleError (this);
+                        }
+#else
                         try {
                             result = chargerCtrl.GetBatteryAndStatus (ref batLevel, ref statusCharger);
                             if (ErrorCodeCharger.TRUE == result) {
@@ -170,16 +191,34 @@ namespace SeldatMRMS {
                             CheckUserHandleError (this);
                         }
 #endif
+#endif
                         break; //dợi charge battery và thông tin giao tiếp server và trạm sạc
 
                     case RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY:
-                        Thread.Sleep (10000);
-                        McuCtrl mcuCtrl = new McuCtrl (rb);
+                        try {
+                            if (true == chargerCtrl.StopCharge ()) {
+                                Console.WriteLine ("Stop charger success");
+                            } else {
+                                errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
+                                CheckUserHandleError (this);
+                            }
+                        } catch (System.Exception) {
+                            Console.WriteLine ("ROBCHAR_FINISHED_CHARGEBATTERY : CONNECT_CHARGER_ERROR");
+                            errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
+                            CheckUserHandleError (this);
+                        }
 
-                        if (true == mcuCtrl.TurnOnPcRobot ()) {
-                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
-                        } else {
-                            errorCode = ErrorCode.CAN_NOT_TURN_ON_PC;
+                        Thread.Sleep (10000);
+
+                        try {
+                            if (true == mcuCtrl.TurnOnPcRobot ()) {
+                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
+                            } else {
+                                errorCode = ErrorCode.CAN_NOT_TURN_ON_PC;
+                                CheckUserHandleError (this);
+                            }
+                        } catch (System.Exception) {
+                            errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
                             CheckUserHandleError (this);
                         }
                         break; //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc

@@ -107,6 +107,14 @@ namespace SeldatUnilever_Ver1._02
             map.Background = img;
             canvasControlService = new CanvasControlService(this);
             DataContext = canvasControlService;
+
+
+
+            stationTimer = new System.Timers.Timer();
+            stationTimer.Interval = 5000;
+            stationTimer.Elapsed += OnTimedRedrawStationEvent;
+            stationTimer.AutoReset = true;
+            stationTimer.Enabled = true;
             //DataContext = this;
             //DataContext = new ViewModel();
 
@@ -128,8 +136,11 @@ namespace SeldatUnilever_Ver1._02
 
         private void OnTimedRedrawRobotEvent(object sender, ElapsedEventArgs e)
         {
-           //Task.Run(()=> canvasControlService.RedrawAllStation());
-            canvasControlService.RedrawAllRobot();
+            //Task.Run(()=> canvasControlService.RedrawAllStation());
+            Dispatcher.BeginInvoke(new ThreadStart(() =>
+            {
+                canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
+            }));
         }
 
         private void CenterWindowOnScreen()
@@ -145,41 +156,34 @@ namespace SeldatUnilever_Ver1._02
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             CenterWindowOnScreen();
-            //TEST frm1 = new TEST();
-            //frm1.ShowDialog();
             myManagementWindow.Visibility = Visibility.Hidden;
-            //LoginForm frm = new LoginForm(Thread.CurrentThread.CurrentCulture.ToString());
-            //frm.ShowDialog();
-            //if (Global_Object.userLogin <= 2)
+            LoginForm frm = new LoginForm(Thread.CurrentThread.CurrentCulture.ToString());
+            frm.ShowDialog();
+            if (Global_Object.userAuthor <= 2)
             {
                 myManagementWindow.Visibility = Visibility.Visible;
+                Dispatcher.BeginInvoke(new ThreadStart(() =>
+                {
+                    canvasControlService.ReloadAllStation();
+                }));
                 unityService = new UnityManagementService(this);
                 unityService.Initialize();
-               ctrR= new CtrlRobot(unityService.robotManagementService);
+                ctrR = new CtrlRobot(unityService.robotManagementService);
             }
 
 
-            stationTimer = new System.Timers.Timer();
-            stationTimer.Interval = 5000;
-            stationTimer.Elapsed += OnTimedRedrawStationEvent;
-            stationTimer.AutoReset = true;
-            stationTimer.Enabled = true;
-
-
-            canvasControlService.ReloadAllStation();
-
-            new Thread(()=> 
-            {
+            //new Thread(()=> 
+            //{
                  
-                        //canvasControlService.ReloadAllStation();
+            //            //canvasControlService.ReloadAllStation();
            
-                while (true)
-                {
-                    //Console.WriteLine("Begin first task...");
-                    canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
-                };
+            //    while (true)
+            //    {
+            //        //Console.WriteLine("Begin first task...");
+            //        canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
+            //    };
 
-            }).Start();
+            //}).Start();
 
             /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
                {

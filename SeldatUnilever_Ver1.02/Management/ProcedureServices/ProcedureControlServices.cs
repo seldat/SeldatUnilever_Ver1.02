@@ -44,7 +44,8 @@ namespace SeldatMRMS {
             CAN_NOT_GET_DATA,
             ROBOT_CANNOT_CONNECT_SERVER_AFTER_CHARGE,
             CAN_NOT_TURN_OFF_PC,
-            CAN_NOT_TURN_ON_PC
+            CAN_NOT_TURN_ON_PC,
+            CONNECT_BOARD_CTRL_ROBOT_ERROR,
         }
 
         public ErrorCode errorCode;

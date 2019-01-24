@@ -102,27 +102,27 @@ namespace SeldatMRMS
             Grid.SetColumn(props._stationInfoBorder, 0);
             //Name = props.bufferDb.bufferName.Trim().Replace(" ", ""); //Object name
 
-            ContextMenu = new ContextMenu();
+            //ContextMenu = new ContextMenu();
 
-            MenuItem propertiesItem = new MenuItem();
-            propertiesItem.SetResourceReference(MenuItem.HeaderProperty, "Station_Menu_Item_Properties");
-            propertiesItem.Click += PropertiesMenu;
+            //MenuItem propertiesItem = new MenuItem();
+            //propertiesItem.SetResourceReference(MenuItem.HeaderProperty, "Station_Menu_Item_Properties");
+            //propertiesItem.Click += PropertiesMenu;
 
-            MenuItem editItem = new MenuItem();
-            editItem.SetResourceReference(MenuItem.HeaderProperty, "Station_Menu_Item_Edit");
-            editItem.Click += EditMenu;
+            //MenuItem editItem = new MenuItem();
+            //editItem.SetResourceReference(MenuItem.HeaderProperty, "Station_Menu_Item_Edit");
+            //editItem.Click += EditMenu;
 
-            MenuItem removeItem = new MenuItem();
-            removeItem.SetResourceReference(MenuItem.HeaderProperty, "Station_Menu_Item_Remove");
-            removeItem.Click += RemoveMenu;
+            //MenuItem removeItem = new MenuItem();
+            //removeItem.SetResourceReference(MenuItem.HeaderProperty, "Station_Menu_Item_Remove");
+            //removeItem.Click += RemoveMenu;
 
-            MenuItem rotateItem = new MenuItem();
-            rotateItem.SetResourceReference(MenuItem.HeaderProperty, "Station_Menu_Item_Rotate");
-            rotateItem.Click += RotateMenu;
+            //MenuItem rotateItem = new MenuItem();
+            //rotateItem.SetResourceReference(MenuItem.HeaderProperty, "Station_Menu_Item_Rotate");
+            //rotateItem.Click += RotateMenu;
 
-            ContextMenu.Items.Add(propertiesItem);
-            ContextMenu.Items.Add(editItem);
-            ContextMenu.Items.Add(rotateItem);
+            //ContextMenu.Items.Add(propertiesItem);
+            //ContextMenu.Items.Add(editItem);
+            //ContextMenu.Items.Add(rotateItem);
             //ContextMenu.Items.Add(removeItem);
             //====================EVENT=====================
             //MouseLeave += MouseLeaveStation;

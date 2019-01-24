@@ -101,7 +101,7 @@ namespace SeldatUnilever_Ver1._02
 
             canvasMatrixTransform = new MatrixTransform(1, 0, 0, -1, 0, 0);
 
-            ImageBrush img = LoadImage("Map");
+            ImageBrush img = LoadImage("test3");
             map.Width = img.ImageSource.Width;
             map.Height = img.ImageSource.Height;
             map.Background = img;
@@ -125,22 +125,13 @@ namespace SeldatUnilever_Ver1._02
             Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
                 canvasControlService.ReloadListDeviceItems();
-            }));
-          /*  Parallel.Invoke(() =>
-            {
-                //Console.WriteLine("Begin first task...");
                 canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
-            });*/
+            }));
         }
         
 
         private void OnTimedRedrawRobotEvent(object sender, ElapsedEventArgs e)
         {
-            //Task.Run(()=> canvasControlService.RedrawAllStation());
-            Dispatcher.BeginInvoke(new ThreadStart(() =>
-            {
-                canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
-            }));
         }
 
         private void CenterWindowOnScreen()
@@ -201,7 +192,7 @@ namespace SeldatUnilever_Ver1._02
                    }
                }));*/
             robotTimer = new System.Timers.Timer();
-             robotTimer.Interval = 50;
+             robotTimer.Interval = 10000;
              robotTimer.Elapsed += OnTimedRedrawRobotEvent;
              robotTimer.AutoReset = true;
              robotTimer.Enabled = true;

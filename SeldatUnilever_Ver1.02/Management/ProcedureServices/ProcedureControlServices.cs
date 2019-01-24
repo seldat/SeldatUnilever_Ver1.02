@@ -180,8 +180,8 @@ namespace SeldatMRMS {
             ROBCHAR_WAITTING_CHARGEBATTERY, //dợi charge battery và thông tin giao tiếp server và trạm sạc
             ROBCHAR_FINISHED_CHARGEBATTERY, //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc
             ROBCHAR_ROBOT_WAITTING_RECONNECTING, //Robot mở nguồng và đợi connect lại
-            ROBCHAR_ROBOT_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại
-            ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại
+            // ROBCHAR_ROBOT_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại
+            // ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại
             // ROBCHAR_ROBOT_STATUS_GOOD_OPERATION, //điều kiện hoạt động tốt 
             // ROBCHAR_ROBOT_STATUS_BAD_OPERATION, //điều kiện hoạt động không tốt thông tin về procedure management chuyển sang quy trình xử lý sự cố
             ROBCHAR_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
@@ -227,7 +227,7 @@ namespace SeldatMRMS {
             while (keepRun) {
                 switch (selectHandleError) {
                     case SelectHandleError.CASE_ERROR_WAITTING:
-                        Global_Object.PlayWarning();
+                        Global_Object.PlayWarning ();
                         robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
                             new Action (delegate () {
                                 robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_ERROR);
@@ -235,7 +235,7 @@ namespace SeldatMRMS {
                         Thread.Sleep (1000);
                         break;
                     case SelectHandleError.CASE_ERROR_CONTINUOUS:
-                        Global_Object.StopWarning();
+                        Global_Object.StopWarning ();
                         robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
                             new Action (delegate () {
                                 robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_RUNNING);
@@ -245,7 +245,7 @@ namespace SeldatMRMS {
                         keepRun = false;
                         break;
                     case SelectHandleError.CASE_ERROR_EXIT:
-                        Global_Object.StopWarning();
+                        Global_Object.StopWarning ();
                         robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
                             new Action (delegate () {
                                 robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX);
@@ -259,6 +259,27 @@ namespace SeldatMRMS {
                 }
             }
             selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
+        }
+        protected void Debug (string log) {
+            switch (this.procedureCode) {
+                case ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE:
+                    Console.WriteLine("PROC_CODE_BUFFER_TO_MACHINE:{}",log);
+                    break;
+                case ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER:
+                    break;
+                case ProcedureCode.PROC_CODE_BUFFER_TO_RETURN:
+                    break;
+                case ProcedureCode.PROC_CODE_MACHINE_TO_RETURN:
+                    break;
+                case ProcedureCode.PROC_CODE_RETURN_TO_GATE:
+                    break;
+                case ProcedureCode.PROC_CODE_ROBOT_TO_READY:
+                    break;
+                case ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

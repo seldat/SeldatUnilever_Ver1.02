@@ -256,7 +256,16 @@
   <data name="test3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\test3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Map1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Resources\Map\Map.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="path2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\path2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="phat_draw" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\phat_draw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="phat_measure" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\phat_measure.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="phat_zoom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\phat_zoom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

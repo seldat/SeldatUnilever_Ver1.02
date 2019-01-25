@@ -1,6 +1,7 @@
 ﻿using HelixToolkit.Wpf;
 using Newtonsoft.Json.Linq;
 using SeldatMRMS.Management;
+using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.RobotView.Path;
 using System;
 using System.Collections.Generic;
@@ -96,7 +97,8 @@ namespace SeldatMRMS.RobotView
         private Vector3DCollection xyz = new Vector3DCollection();
         public List<SetCurveParams> setCurveParamsList = new List<SetCurveParams>();
 		public List<SetLineParams> setLineParamsList = new List<SetLineParams>();
-		public SetCurveParams pcurinfo;
+        public List<RobotUnity> RobotUnityRegistedList = new List<RobotUnity>();
+        public SetCurveParams pcurinfo;
 		public SetLineParams plineinfo;
 		public ImportPaths importPaths;
 		MapSettingF psettingform;
@@ -110,6 +112,18 @@ namespace SeldatMRMS.RobotView
 			Console.WriteLine(MainView3D.Camera.Position.X + " " + MainView3D.Camera.Position.Y + " " + MainView3D.Camera.Position.Z);
 			//this.Topmost = true;
 		}
+        public void RegisterRobotUnityList(List<RobotUnity> RobotUnityRegistedList)
+        {
+            Dispatcher.Invoke((Action)(() =>
+            {
+                ModelVisual3D layer = new ModelVisual3D();
+                Robot3D robot3DModel = new Robot3D("robotname", layer);
+                RobotLayer.Children.Add(robot3DModel.contentlayer);
+            }));
+            /* this.RobotUnityRegistedList = RobotUnityRegistedList;
+             RobotUnityRegistedList.ForEach(e=>RobotLayer.Children.Add(e.robot3DModel.contentlayer));*/
+
+        }
 	/*	public Robot3D setRobotAgenttoLayer(RobotAgent robotAgent,String robotname)
 		{
 			Robot3D robot3DModel=null;

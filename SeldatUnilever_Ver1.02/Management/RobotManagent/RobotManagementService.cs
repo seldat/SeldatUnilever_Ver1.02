@@ -42,7 +42,7 @@ namespace SeldatMRMS.Management.RobotManagent
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
             configureForm = new ConfigureRobotUnity(this, Thread.CurrentThread.CurrentCulture.ToString());
             LoadConfigure();
-            RobotUnity rb1 = RobotUnityRegistedList["RSD0"];
+           // RobotUnity rb1 = RobotUnityRegistedList["RSD0"];
           // rb1.Start("ws://192.168.80.131:9090");
         }
         public void Initialize()
@@ -65,8 +65,8 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.ChargeID= ChargerId.CHARGER_ID_1;
             prop1.Scale = 10;
             RobotUnity r1 = new RobotUnity();
-            r1.Initialize(this.canvas);
             r1.UpdateProperties(prop1);
+            r1.Initialize(this.canvas);
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
@@ -95,8 +95,8 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.ChargeID = ChargerId.CHARGER_ID_2;
             prop2.Scale = 10;
             RobotUnity r2 = new RobotUnity();
-            r2.Initialize(this.canvas);
             r2.UpdateProperties(prop2);
+            r2.Initialize(this.canvas);
             r2.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r2.properties.NameId, r2);
@@ -122,8 +122,8 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.Scale = 10;
 
             RobotUnity r3 = new RobotUnity();
-            r3.Initialize(this.canvas);
             r3.UpdateProperties(prop3);
+            r3.Initialize(this.canvas);
             r3.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r3.properties.NameId, r3);
@@ -166,8 +166,7 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             else
             {
-                try
-                {
+                
                     String data = File.ReadAllText(path);
                     if (data.Length > 0)
                     {
@@ -177,6 +176,7 @@ namespace SeldatMRMS.Management.RobotManagent
                             PropertiesRobotUnity_List.Add(e);
                             RobotUnity robot = new RobotUnity();
                             robot.Initialize(this.canvas);
+
                             robot.UpdateProperties(e);
                             robot.Registry(trafficManagementService);
                             RobotUnityRegistedList.Add(e.NameId,robot);
@@ -187,8 +187,7 @@ namespace SeldatMRMS.Management.RobotManagent
                         Grouped_PropertiesRobotUnity.Refresh();
                         return true;
                     }                   
-                }
-                catch { }
+              
             }
             return false;
         }

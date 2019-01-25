@@ -678,6 +678,7 @@ namespace SeldatMRMS
 
         public List<dtBuffer> GetDataAllStation()
         {
+           
             List<dtBuffer> listBuffer = new List<dtBuffer>();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "buffer/getListBuffer");

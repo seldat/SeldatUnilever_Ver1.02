@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeldatMRMS.RobotView;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -8,6 +9,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
@@ -55,13 +57,17 @@ namespace SeldatMRMS.Management.RobotManagent {
         public Border border;
         public LoadedConfigureInformation loadConfigureInformation;
         public SolvedProblem solvedProblem;
+        public Robot3D robot3DModel = null;
         public RobotUnity(){
             solvedProblem = new SolvedProblem();
+
         }
 
         public void Initialize(Canvas canvas)
         {
             this.canvas = canvas;
+            ModelVisual3D layer = new ModelVisual3D();
+            robot3DModel = new Robot3D(properties.NameId, layer);
             riskArea = new Path ();
             riskArea.Stroke = new SolidColorBrush (Colors.YellowGreen);
             riskArea.StrokeThickness = 1;
@@ -371,7 +377,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             L1Cv = proR.L1 / properties.Scale;
             L2Cv = proR.L2 / properties.Scale;
             WSCv = proR.WS / properties.Scale;
-            DistInterCv = proR.DistInter / properties.Scale;
+            DistInterCv = proR.DistInter / properties.Scale;         
             Draw ();
 
         }

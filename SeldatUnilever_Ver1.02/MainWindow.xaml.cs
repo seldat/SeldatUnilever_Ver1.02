@@ -92,7 +92,7 @@ namespace SeldatUnilever_Ver1._02
         public UnityManagementService unityService;
         public CanvasControlService canvasControlService;
         CtrlRobot ctrR;
-        RobotView3D robotView = new RobotView3D();
+  
         public MainWindow()
         {
             InitializeComponent();
@@ -168,7 +168,7 @@ namespace SeldatUnilever_Ver1._02
 
             canvasControlService.ReloadAllStation();
 
-            new Thread(()=> 
+          /*  new Thread(()=> 
             {
                  
                         //canvasControlService.ReloadAllStation();
@@ -179,7 +179,7 @@ namespace SeldatUnilever_Ver1._02
                     canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
                 };
 
-            }).Start();
+            }).Start();*/
 
             /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
                {
@@ -347,9 +347,11 @@ namespace SeldatUnilever_Ver1._02
             }
             catch { }
         }
-
+        RobotView3D robotView;
         private void btn_3Dmap_Click(object sender, RoutedEventArgs e)
         {
+            robotView = new RobotView3D();
+            robotView.RegisterRobotUnityList(new List<RobotUnity>(unityService.robotManagementService.RobotUnityRegistedList.Values));
             robotView.loadAWareHouseMap();
             robotView.Show();
         }

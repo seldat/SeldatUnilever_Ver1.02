@@ -85,7 +85,9 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
 
         private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if(Global_Object.userLogin==(int)Global_Object.PRIORITYLOGIN.PRIORITYLOGIN_ADMIN0)
+            MainDataGrid.IsEnabled = true;
+            btn_addItem.IsEnabled = true;
+          /*  if (Global_Object.userLogin==(int)Global_Object.PRIORITYLOGIN.PRIORITYLOGIN_ADMIN0)
             {
                 MainDataGrid.IsEnabled = true;
                 btn_addItem.IsEnabled = true;
@@ -94,7 +96,7 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             {
                 MainDataGrid.IsEnabled = false;
                 btn_addItem.IsEnabled = false;
-            }
+            }*/
         }
 
         private void btn_addItem_Click(object sender, RoutedEventArgs e)

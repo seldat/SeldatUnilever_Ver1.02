@@ -114,43 +114,42 @@ namespace SeldatMRMS.RobotView
 		}
         public void RegisterRobotUnityList(List<RobotUnity> RobotUnityRegistedList)
         {
-            Dispatcher.Invoke((Action)(() =>
-            {
-                ModelVisual3D layer = new ModelVisual3D();
-                Robot3D robot3DModel = new Robot3D("robotname", layer);
-                RobotLayer.Children.Add(robot3DModel.contentlayer);
-            }));
-            /* this.RobotUnityRegistedList = RobotUnityRegistedList;
-             RobotUnityRegistedList.ForEach(e=>RobotLayer.Children.Add(e.robot3DModel.contentlayer));*/
+              this.RobotUnityRegistedList = RobotUnityRegistedList;
 
+            MessageBox.Show(this.RobotUnityRegistedList[2].properties.NameId);
+            RobotUnityRegistedList.ForEach(e => e.robot3DModel.ScaledRobot(GlobalVariables.ROBOT_SCALED/10, GlobalVariables.ROBOT_SCALED/10, GlobalVariables.ROBOT_SCALED/10));
+
+
+            RobotUnityRegistedList.ForEach(e=>RobotLayer.Children.Add(e.robot3DModel.contentlayer));
+            
         }
-	/*	public Robot3D setRobotAgenttoLayer(RobotAgent robotAgent,String robotname)
-		{
-			Robot3D robot3DModel=null;
-			Dispatcher.Invoke((Action)(() =>
-			{
-					ModelVisual3D layer = new ModelVisual3D();
-					robot3DModel = new Robot3D(robotname, layer);
-					RobotLayer.Children.Add(robot3DModel.contentlayer);
-					robotAgent.robotInfo.robot3DModel = robot3DModel;
-			}));
-			return robot3DModel;
-		}
-		public void updatePos(RobotAgent robotAgent, Point3D loc, double angle)
-		{
-            try
+        /*	public Robot3D setRobotAgenttoLayer(RobotAgent robotAgent,String robotname)
             {
-               // MessageBox.Show("okfine");
-                Task.Run(() =>
-                     Dispatcher.Invoke((Action)(() =>
-                     {
-                         robotAgent.robotInfo.robot3DModel.updatePos(loc, angle);
-                     }))
-                 );
+                Robot3D robot3DModel=null;
+                Dispatcher.Invoke((Action)(() =>
+                {
+                        ModelVisual3D layer = new ModelVisual3D();
+                        robot3DModel = new Robot3D(robotname, layer);
+                        RobotLayer.Children.Add(robot3DModel.contentlayer);
+                        robotAgent.robotInfo.robot3DModel = robot3DModel;
+                }));
+                return robot3DModel;
             }
-            catch { }
-		}*/
-		private void btn_setting_Click(object sender, RoutedEventArgs e)
+            public void updatePos(RobotAgent robotAgent, Point3D loc, double angle)
+            {
+                try
+                {
+                   // MessageBox.Show("okfine");
+                    Task.Run(() =>
+                         Dispatcher.Invoke((Action)(() =>
+                         {
+                             robotAgent.robotInfo.robot3DModel.updatePos(loc, angle);
+                         }))
+                     );
+                }
+                catch { }
+            }*/
+        private void btn_setting_Click(object sender, RoutedEventArgs e)
 		{
 			selectedctrlmode = SELECTEDCONTROL.SELECTED_CONTROL_SETTING;
 			selectModes(null);

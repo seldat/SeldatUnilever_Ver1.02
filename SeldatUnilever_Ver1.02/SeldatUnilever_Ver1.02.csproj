@@ -693,6 +693,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\test3.png" />
+    <None Include="Resources\path2.png" />
+    <None Include="Resources\phat_draw.png" />
+    <None Include="Resources\phat_measure.png" />
+    <None Include="Resources\phat_zoom.png" />
     <Content Include="sharpdx_direct3d11_1_effects_arm.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

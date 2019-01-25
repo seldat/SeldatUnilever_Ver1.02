@@ -142,9 +142,9 @@ namespace SeldatMRMS.RobotView
 		public static String getPathRobot3DModel()
 		{
             //8400001A_small5M2.stl
-            String robot3DPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Resources\\8400001A_small5M2.stl";
-           // String robot3DPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+ "\\Resources\\ROBOT P4 updated 14-Mar.stl";
-			//MessageBox.Show(robot3DPath);
+            String robot3DPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Resources\\RobotU.stl";
+            // String robot3DPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+ "\\Resources\\ROBOT P4 updated 14-Mar.stl";
+            Console.WriteLine(robot3DPath);
 			return robot3DPath;
 		}
 		//public const string MODELROBOT3D_V1 = "C:\\Users\\luat.tran\\source\\repos\\SeldatMRMS\\SeldatMRMS\\RobotView\\Media\\FULLFRAME.stl";

@@ -63,8 +63,8 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.ChargeID= ChargerId.CHARGER_ID_1;
             prop1.Scale = 10;
             RobotUnity r1 = new RobotUnity();
-            r1.UpdateProperties(prop1);
             r1.Initialize(this.canvas);
+            r1.UpdateProperties(prop1);
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add (r1.properties);
             RobotUnityRegistedList.Add (r1.properties.NameId, r1);
@@ -92,8 +92,8 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.ChargeID = ChargerId.CHARGER_ID_2;
             prop2.Scale = 10;
             RobotUnity r2 = new RobotUnity();
-            r2.UpdateProperties(prop2);
             r2.Initialize(this.canvas);
+            r2.UpdateProperties(prop2);
             r2.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r2.properties.NameId, r2);
@@ -121,8 +121,8 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.Scale = 10;
 
             RobotUnity r3 = new RobotUnity();
-            r3.UpdateProperties(prop3);
             r3.Initialize(this.canvas);
+            r3.UpdateProperties(prop3);
             r3.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r3.properties.NameId, r3);

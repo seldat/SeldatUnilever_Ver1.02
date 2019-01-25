@@ -60,7 +60,7 @@ namespace SeldatMRMS {
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE;
         }
 
-        public void Start (RobotGoToCharge state = RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER) {
+        public void Start (RobotGoToCharge state = RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE) {
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_CHARGE;
             StateRobotToCharge = state;
@@ -80,34 +80,36 @@ namespace SeldatMRMS {
             RobotUnity rb = RbToChar.robot;
             ErrorCodeCharger result;
             McuCtrl mcuCtrl = new McuCtrl (rb);
+            Debug(this,"Start");
             while (ProRun) {
                 switch (StateRobotToCharge) {
                     case RobotGoToCharge.ROBCHAR_IDLE:
+                        Debug(this,"ROBCHAR_IDLE"); 
                         break;
                         // case RobotGoToCharge.ROBCHAR_CHARGER_CHECKSTATUS:
                         //     if(true == chargerCtrl.WaitState(ChargerState.ST_READY,TIME_OUT_WAIT_STATE)){
                         //         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
                         //     }
                         //     break; //kiểm tra kết nối và trạng thái sạc
-                    case RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER:
-                        rb.SendCmdLineDetectionCtrl (RequestCommandLineDetect.REQUEST_LINEDETECT_GETIN_CHARGER);
-                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE;
-                        break;
+                    // case RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER:
+                    //     rb.SendCmdLineDetectionCtrl (RequestCommandLineDetect.REQUEST_LINEDETECT_GETIN_CHARGER);
+                    //     StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE;
+                    //     break;
                     case RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE:
                         try {
-                            if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETIN_CHARGER) {
+                            // if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETIN_CHARGER) {
                                 if (true == chargerCtrl.StartCharge ()) {
                                     StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
+                                    Debug(this,"ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER"); 
                                 } else {
                                     errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
                                     CheckUserHandleError (this);
                                 }
-                            } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
-                                errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
-                                CheckUserHandleError (this);
-                            }
+                            // } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
+                            //     errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
+                            //     CheckUserHandleError (this);
+                            // }
                         } catch (System.Exception) {
-                            Console.WriteLine ("ROBCHAR_ROBOT_START_CHARGE : CONNECT_CHARGER_ERROR");
                             errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
                             CheckUserHandleError (this);
                         }
@@ -117,6 +119,7 @@ namespace SeldatMRMS {
                             result = chargerCtrl.WaitState (ChargerState.ST_CHARGING, TIME_OUT_WAIT_STATE);
                             if (ErrorCodeCharger.TRUE == result) {
                                 StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
+                                Debug(this,"ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT"); 
                             } else {
                                 if (result == ErrorCodeCharger.ERROR_CONNECT) {
                                     errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
@@ -126,7 +129,6 @@ namespace SeldatMRMS {
                                 CheckUserHandleError (this);
                             }
                         } catch (System.Exception) {
-                            Console.WriteLine ("ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER : CONNECT_CHARGER_ERROR");
                             errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
                             CheckUserHandleError (this);
                         }
@@ -134,11 +136,13 @@ namespace SeldatMRMS {
                     case RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT:
                         rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_TURNOFF_PC);
                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC;
+                        Debug(this,"ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC"); 
                         sw.Start ();
                         break; //cho phép cắt nguồn robot
                     case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC:
                         if (true != rb.properties.IsConnected) {
                             StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_CHARGEBATTERY;
+                            Debug(this,"ROBCHAR_WAITTING_CHARGEBATTERY"); 
                         } else {
                             if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_TURNOFF_PC) {
                                 sw.Stop ();
@@ -158,6 +162,7 @@ namespace SeldatMRMS {
                             if (ErrorCodeCharger.TRUE == result) {
                                 if (batLevel.data[0] == 100) {
                                     StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+                                    Debug(this,"ROBCHAR_FINISHED_CHARGEBATTERY"); 
                                 }
                             } else {
                                 if (result == ErrorCodeCharger.ERROR_CONNECT) {
@@ -167,7 +172,6 @@ namespace SeldatMRMS {
                             }
                             rb.properties.BatteryLevelRb = (float) batLevel.data[0];
                         } catch (System.Exception) {
-                            Console.WriteLine ("ROBCHAR_WAITTING_CHARGEBATTERY : CONNECT_BOARD_CTRL_ROBOT_ERROR");
                             errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
                             CheckUserHandleError (this);
                         }
@@ -177,6 +181,7 @@ namespace SeldatMRMS {
                             if (ErrorCodeCharger.TRUE == result) {
                                 if ((batLevel.data[0] == 100) || (statusCharger.data[0] == (byte) ChargerState.ST_CHARGE_FULL)) {
                                     StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+                                    Debug(this,"ROBCHAR_FINISHED_CHARGEBATTERY"); 
                                 }
                             } else {
                                 if (result == ErrorCodeCharger.ERROR_CONNECT) {
@@ -186,7 +191,6 @@ namespace SeldatMRMS {
                             }
                             rb.properties.BatteryLevelRb = (float) batLevel.data[0];
                         } catch (System.Exception) {
-                            Console.WriteLine ("ROBCHAR_WAITTING_CHARGEBATTERY : CONNECT_CHARGER_ERROR");
                             errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
                             CheckUserHandleError (this);
                         }
@@ -203,7 +207,6 @@ namespace SeldatMRMS {
                                 CheckUserHandleError (this);
                             }
                         } catch (System.Exception) {
-                            Console.WriteLine ("ROBCHAR_FINISHED_CHARGEBATTERY : CONNECT_CHARGER_ERROR");
                             errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
                             CheckUserHandleError (this);
                         }
@@ -213,6 +216,7 @@ namespace SeldatMRMS {
                         try {
                             if (true == mcuCtrl.TurnOnPcRobot ()) {
                                 StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
+                                Debug(this,"ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER"); 
                             } else {
                                 errorCode = ErrorCode.CAN_NOT_TURN_ON_PC;
                                 CheckUserHandleError (this);
@@ -224,24 +228,25 @@ namespace SeldatMRMS {
                         break; //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc
                     case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING:
                         if (true == CheckReconnectServer (TIME_OUT_ROBOT_RECONNECT_SERVER)) {
-                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER;
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
+                            Debug(this,"ROBCHAR_ROBOT_RELEASED"); 
                         } else {
                             errorCode = ErrorCode.ROBOT_CANNOT_CONNECT_SERVER_AFTER_CHARGE;
                             CheckUserHandleError (this);
                         }
                         break; //Robot mở nguồng và đợi connect lại
-                    case RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER:
-                        rb.SendCmdLineDetectionCtrl (RequestCommandLineDetect.REQUEST_LINEDETECT_GETOUT_CHARGER);
-                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER;
-                        break;
-                    case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER:
-                        if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETOUT_CHARGER) {
-                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
-                        } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
-                            errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
-                            CheckUserHandleError (this);
-                        }
-                        break;
+                    // case RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER:
+                    //     rb.SendCmdLineDetectionCtrl (RequestCommandLineDetect.REQUEST_LINEDETECT_GETOUT_CHARGER);
+                    //     StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER;
+                    //     break;
+                    // case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER:
+                    //     if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETOUT_CHARGER) {
+                    //         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
+                    //     } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
+                    //         errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
+                    //         CheckUserHandleError (this);
+                    //     }
+                    //     break;
                     case RobotGoToCharge.ROBCHAR_ROBOT_RELEASED:
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_CHARGE;
                         // if (errorCode == ErrorCode.RUN_OK) {
@@ -250,6 +255,7 @@ namespace SeldatMRMS {
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
+                        Debug(this,"RELEASED"); 
                         break; // trả robot về robotmanagement để nhận quy trình mới
                     default:
                         break;
@@ -347,10 +353,12 @@ namespace SeldatMRMS {
             while (ProRun) {
                 switch (StateRobotGoToReady) {
                     case RobotGoToReady.ROBREA_IDLE:
+                        Debug(this,"ROBREA_IDLE"); 
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION: // ROBOT cho tiến vào vị trí đầu line charge su dung laser
                         rb.SendPoseStamped (p.PointFrontLine);
                         StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;
+                        Debug(this,"ROBREA_ROBOT_WAITTING_GOTO_READYSTATION"); 
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
@@ -358,6 +366,7 @@ namespace SeldatMRMS {
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_READYAREA);
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION;
+                            Debug(this,"ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION"); 
                         } else if (Traffic.RobotIsInArea ("", robot.properties.pose.Position)) {
                             robot.TurnOnSupervisorTraffic (false);
                         }
@@ -373,6 +382,7 @@ namespace SeldatMRMS {
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOTO_POSITION) {
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
+                            Debug(this,"ROBREA_ROBOT_RELEASED"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError (this);
@@ -386,6 +396,7 @@ namespace SeldatMRMS {
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
+                        Debug(this,"RELEASED"); 
                         break;
                 }
                 Thread.Sleep (5);

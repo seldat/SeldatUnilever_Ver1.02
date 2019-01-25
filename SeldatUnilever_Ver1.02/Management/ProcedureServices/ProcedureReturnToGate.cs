@@ -63,6 +63,7 @@ namespace SeldatMRMS {
             // DataReturnToGate p = ReToGate.points;
             DoorService ds = ReToGate.door.DoorMezzamineReturnBack;
             TrafficManagementService Traffic = ReToGate.Traffic;
+            Debug(this,"Start");
             while (ProRun) {
                 switch (StateReturnToGate) {
                     case ReturnToGate.RETGATE_IDLE:
@@ -78,6 +79,7 @@ namespace SeldatMRMS {
                                         resCmd = ResponseCommand.RESPONSE_NONE;
                                         rb.SendPoseStamped (ReToGate.GetCheckInBuffer ());
                                         StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY;
+                                        Debug(this,"RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY"); 
                                         break;
                                     } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                         errorCode = ErrorCode.DETECT_LINE_ERROR;
@@ -95,6 +97,7 @@ namespace SeldatMRMS {
                             } else {
                                 rb.SendPoseStamped (ReToGate.GetCheckInBuffer ());
                                 StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY;
+                                Debug(this,"RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY"); 
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -106,6 +109,7 @@ namespace SeldatMRMS {
                             if (false == Traffic.HasRobotUnityinArea (ReToGate.GetFrontLineReturn ().Position)) {
                                 rb.SendPoseStamped (ReToGate.GetFrontLineReturn ());
                                 StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_CAME_FRONTLINE_RETURN;
+                                Debug(this,"RETGATE_ROBOT_WAITTING_CAME_FRONTLINE_RETURN"); 
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -120,6 +124,7 @@ namespace SeldatMRMS {
                                 // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN;
+                                Debug(this,"RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN"); 
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                 errorCode = ErrorCode.DETECT_LINE_ERROR;
                                 CheckUserHandleError(this);
@@ -142,6 +147,7 @@ namespace SeldatMRMS {
                             ReToGate.UpdatePalletState (PalletStatus.F);
                             rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_RETURN;
+                            Debug(this,"RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_RETURN"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -153,6 +159,7 @@ namespace SeldatMRMS {
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             rb.SendPoseStamped (ds.config.PointCheckInGate);
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
+                            Debug(this,"RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -167,6 +174,7 @@ namespace SeldatMRMS {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_CAME_CHECKIN_GATE;
+                            Debug(this,"RETGATE_ROBOT_CAME_CHECKIN_GATE"); 
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
@@ -174,6 +182,7 @@ namespace SeldatMRMS {
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             rb.SendPoseStamped (ds.config.PointFrontLine);
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_GATE;
+                            Debug(this,"RETGATE_ROBOT_WAITTING_GOTO_GATE"); 
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_GATE:
@@ -181,11 +190,13 @@ namespace SeldatMRMS {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_CAME_GATE_POSITION;
+                            Debug(this,"RETGATE_ROBOT_CAME_GATE_POSITION"); 
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
                         if (true == ds.Open (DoorService.DoorId.DOOR_MEZZAMINE_RETURN_BACK)) {
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_OPEN_DOOR;
+                            Debug(this,"RETGATE_ROBOT_WAITTING_OPEN_DOOR"); 
                         } else {
                             errorCode = ErrorCode.CONNECT_DOOR_ERROR;
                             CheckUserHandleError(this);
@@ -195,6 +206,7 @@ namespace SeldatMRMS {
                         if (true == ds.WaitOpen (DoorService.DoorId.DOOR_MEZZAMINE_RETURN_BACK, TIME_OUT_OPEN_DOOR)) {
                             rb.SendCmdAreaPallet (ds.config.infoPallet);
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN;
+                            Debug(this,"RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN"); 
                         } else {
                             errorCode = ErrorCode.OPEN_DOOR_ERROR;
                             CheckUserHandleError(this);
@@ -217,6 +229,7 @@ namespace SeldatMRMS {
                             // ReToGate.UpdatePalletState(PalletStatus.W);
                             rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
+                            Debug(this,"RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -227,6 +240,7 @@ namespace SeldatMRMS {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             if (ds.Close (DoorService.DoorId.DOOR_MEZZAMINE_RETURN_BACK)) {
                                 StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_CLOSE_GATE;
+                                Debug(this,"RETGATE_ROBOT_WAITTING_CLOSE_GATE"); 
                             } else {
                                 errorCode = ErrorCode.CONNECT_DOOR_ERROR;
                                 CheckUserHandleError(this);
@@ -240,6 +254,7 @@ namespace SeldatMRMS {
                         if (true == ds.WaitClose (DoorService.DoorId.DOOR_MEZZAMINE_RETURN_BACK, TIME_OUT_CLOSE_DOOR)) {
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                            Debug(this,"RETGATE_ROBOT_WAITTING_CLOSE_GATE"); 
                         } else {
                             errorCode = ErrorCode.CLOSE_DOOR_ERROR;
                             CheckUserHandleError(this);
@@ -254,6 +269,7 @@ namespace SeldatMRMS {
                             // ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
+                        Debug(this,"RELEASED"); 
                         break;
                     default:
                         break;

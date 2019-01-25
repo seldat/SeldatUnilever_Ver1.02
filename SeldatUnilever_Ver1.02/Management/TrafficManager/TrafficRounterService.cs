@@ -138,7 +138,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
         public void AddConfigRiskZone()
         {
             RiskZoneRegister ptemp = new RiskZoneRegister();
-            ptemp.NameId = "OPA" + ZoneRegisterList.Count;
+            ptemp.NameId = "OPA" + RiskZoneRegisterList.Count;
             PropertiesRiskZoneList.Add(ptemp);
             Grouped_PropertiesRiskZoneList.Refresh();
             RiskZoneRegisterList.Add(ptemp.NameId, ptemp);

@@ -92,7 +92,7 @@ namespace SeldatUnilever_Ver1._02
         public UnityManagementService unityService;
         public CanvasControlService canvasControlService;
         CtrlRobot ctrR;
-        RobotView3D robotView = new RobotView3D();
+       
         public MainWindow()
         {
             InitializeComponent();
@@ -342,10 +342,13 @@ namespace SeldatUnilever_Ver1._02
             }
             catch { }
         }
-
+  
         private void btn_3Dmap_Click(object sender, RoutedEventArgs e)
         {
+            RobotView3D robotView = new RobotView3D();
             robotView.loadAWareHouseMap();
+            robotView.RegisterRobotUnityList(new List<RobotUnity>(unityService.robotManagementService.RobotUnityRegistedList.Values));
+         
             robotView.Show();
         }
 

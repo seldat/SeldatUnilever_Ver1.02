@@ -51,8 +51,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
             }
             else
             {
-                MainDataGrid.IsEnabled = false;
-                btn_addItem.IsEnabled = false;
+                MainDataGrid.IsEnabled = true;
+                btn_addItem.IsEnabled = true;
             }
         }
 

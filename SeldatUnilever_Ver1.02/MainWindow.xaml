@@ -202,9 +202,9 @@
                             <Grid>
                                 <Border Name="clipBorder" ClipToBounds="True" 
                                             RenderTransformOrigin="0.5,0.5" Background="#ffffff">
-                                    <xctk:Zoombox MinScale="0.5" 
+                                    <!--<xctk:Zoombox MinScale="0.5" 
                                                   MaxScale="100"
-                                                  >
+                                                  >-->
                                         <Grid Background="Transparent">
                                             <Canvas Name="map" RenderTransformOrigin="0.5,0.5" 
                                             Width="400" Height="200">
@@ -221,7 +221,7 @@
                                                 </Canvas.RenderTransform>
                                             </Canvas>
                                         </Grid>
-                                    </xctk:Zoombox>
+                                    <!--</xctk:Zoombox>-->
                                 </Border>
                             </Grid>
                         </Border>

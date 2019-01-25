@@ -53,25 +53,13 @@ namespace SeldatMRMS.Management.UnityService
             procedureManagementService.RegistryService(doorManagementService);
             procedureManagementService.RegistryService(chargerService);
             procedureManagementService.RegistryService(deviceRegistrationService);
-
+            
             robotManagementService.Registry(trafficService);
 
             deviceRegistrationService.listen();
             deviceRegistrationService.RegistryMainWindow(this.mainWindow);
 
-
             assigmentTaskService.Start();
-            
-           
-               /* RobotUnity robot = robotManagementService.RobotUnityRegistedList.ElementAt(0).Value;
-
-                ProcedureForkLiftToBuffer pp = new ProcedureForkLiftToBuffer(robot, doorManagementService, trafficService);
-                DeviceItem.OrderItem order = new DeviceItem.OrderItem();
-                MessageBox.Show(order.bufferId+"");
-                pp.AssignAnOrder(order);
-                sf = new SolvedProblem(pp);
-                sf.Show();*/
-           
         }
         public void Dispose()
         {

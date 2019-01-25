@@ -94,9 +94,9 @@ namespace SelDatUnilever_Ver1
                         var bufferResults = result["buffers"][0];
                         String checkinResults = (String)bufferResults["bufferCheckIn"];
                         JObject stuff = JObject.Parse(checkinResults);
-                        double x = (double)stuff["checkin"]["x"];
-                        double y = (double)stuff["checkin"]["y"];
-                        double angle = (double)stuff["checkin"]["angle"];
+                        double x = (double)stuff["x"];
+                        double y = (double)stuff["y"];
+                        double angle = (double)stuff["angle"];
                         poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
                         planId = order.planId;
                         break;
@@ -121,9 +121,9 @@ namespace SelDatUnilever_Ver1
                         var bufferResults = result["buffers"][0];
                         String checkinResults = (String)bufferResults["bufferCheckIn"];
                         JObject stuff = JObject.Parse(checkinResults);
-                        double x = (double)stuff["line"]["x"];
-                        double y = (double)stuff["line"]["y"];
-                        double angle = (double)stuff["line"]["angle"];
+                        double x = (double)stuff["x"];
+                        double y = (double)stuff["y"];
+                        double angle = (double)stuff["angle"];
                         poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
                         break;
 

@@ -265,7 +265,7 @@ namespace SeldatMRMS {
         protected void Debug (object ojb, string log) {
             ProcedureControlServices pCs = (ProcedureControlServices) ojb;
             RobotUnity rb = pCs.GetRobotUnity ();
-            string rBid = rb.properties.NameId + " => (^-^) ";
+            string rBid = rb.properties.NameId + " => (^_^) ";
 
             switch (pCs.procedureCode) {
                 case ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE:

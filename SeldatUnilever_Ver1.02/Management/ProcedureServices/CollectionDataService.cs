@@ -203,11 +203,12 @@ namespace SelDatUnilever_Ver1
                         JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
                         int row = (int)stuff["pallet"]["row"];
                         int bay = (int)stuff["pallet"]["bay"];
-                        int direct = (int)stuff["pallet"]["direct"];
+                        int direct = (int)stuff["pallet"]["direction"];
+                        string subLine = (string)stuff["pallet"]["hasSubLine"];
 
                         infoPallet.pallet = pisCtrl; /* dropdown */
                         infoPallet.bay = bay;
-                        infoPallet.hasSubLine = "yes"; /* no */
+                        infoPallet.hasSubLine = subLine; /* yes/no */
                         infoPallet.direction = (TrafficRobotUnity.BrDirection)direct; /* right */
                         infoPallet.row = row;
                         break;

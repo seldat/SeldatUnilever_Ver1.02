@@ -1,11 +1,4 @@
-﻿using SeldatMRMS;
-using SeldatMRMS.Management.RobotManagent;
-using SeldatMRMS.Management.UnityService;
-using SeldatMRMS.RobotView;
-using SeldatUnilever_Ver1._02.Form;
-using SeldatUnilever_Ver1._02.Management.Statistics;
-using SelDatUnilever_Ver1._00.Management.DeviceManagement;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,118 +15,111 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SeldatMRMS;
+using SeldatMRMS.Management.RobotManagent;
+using SeldatMRMS.Management.UnityService;
+using SeldatMRMS.RobotView;
+using SeldatUnilever_Ver1._02.Form;
+using SeldatUnilever_Ver1._02.Management.Statistics;
+using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 
-namespace SeldatUnilever_Ver1._02
-{
-    public class Student
-    {
+namespace SeldatUnilever_Ver1._02 {
+    public class Student {
         public String Name { get; set; }
         public String Lastname { get; set; }
     }
 
-    public class School
-    {
+    public class School {
         public String Name { get; set; }
         public List<Student> Students { get; set; }
     }
 
-    public static class SchoolData
-    {
+    public static class SchoolData {
         /// <summary>
         /// Returns a list of schools containing a list of students
         /// </summary>
-        public static IList<School> GetSchoolData()
-        {
-            IList<School> schools = new List<School>(){
-            new School() {
+        public static IList<School> GetSchoolData () {
+            IList<School> schools = new List<School> () {
+                new School () {
                 Name = "school1",
-                Students = new List<Student>() {
-                    new Student(){Name="name0",Lastname="lastname0"},
-                    new Student(){Name="name1",Lastname="lastname1"},
-                    new Student(){Name="name2",Lastname="lastname2"},
-                    new Student(){Name="name3",Lastname="lastname3"},
-            }},
-            new School() {
-                Name = "school2" ,
-                Students = new List<Student>() {
-                    new Student(){Name="name10",Lastname="lastname10"},
-                    new Student(){Name="name11",Lastname="lastname11"},
-                    new Student(){Name="name12",Lastname="lastname12"},
-                    new Student(){Name="name13",Lastname="lastname13"},
-            }}
-        };
+                Students = new List<Student> () {
+                new Student () { Name = "name0", Lastname = "lastname0" },
+                new Student () { Name = "name1", Lastname = "lastname1" },
+                new Student () { Name = "name2", Lastname = "lastname2" },
+                new Student () { Name = "name3", Lastname = "lastname3" },
+                }
+                },
+                new School () {
+                Name = "school2",
+                Students = new List<Student> () {
+                new Student () { Name = "name10", Lastname = "lastname10" },
+                new Student () { Name = "name11", Lastname = "lastname11" },
+                new Student () { Name = "name12", Lastname = "lastname12" },
+                new Student () { Name = "name13", Lastname = "lastname13" },
+                }
+                }
+            };
 
             return schools;
         }
     }
 
-    public class ViewModel : DependencyObject
-    {
+    public class ViewModel : DependencyObject {
         public IList<School> Schools { get; set; }
 
-        public ViewModel()
-        {
-            Schools = SchoolData.GetSchoolData();
+        public ViewModel () {
+            Schools = SchoolData.GetSchoolData ();
         }
     }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
+    public partial class MainWindow : Window {
         public System.Timers.Timer stationTimer;
         public System.Timers.Timer robotTimer;
-
-
-
 
         public bool drag = true;
         public UnityManagementService unityService;
         public CanvasControlService canvasControlService;
         CtrlRobot ctrR;
-        RobotView3D robotView = new RobotView3D();
-        public MainWindow()
-        {
-            InitializeComponent();
-            ApplyLanguage();
+        RobotView3D robotView = new RobotView3D ();
+
+        public MainWindow () {
+            InitializeComponent ();
+            ApplyLanguage ();
             Loaded += MainWindow_Loaded;
 
-            canvasMatrixTransform = new MatrixTransform(1, 0, 0, -1, 0, 0);
+            canvasMatrixTransform = new MatrixTransform (1, 0, 0, -1, 0, 0);
 
-            ImageBrush img = LoadImage("Map");
+            ImageBrush img = LoadImage ("Map");
             map.Width = img.ImageSource.Width;
             map.Height = img.ImageSource.Height;
             map.Background = img;
-            canvasControlService = new CanvasControlService(this);
+            canvasControlService = new CanvasControlService (this);
             DataContext = canvasControlService;
             //DataContext = this;
             //DataContext = new ViewModel();
 
         }
 
-        private void OnTimedRedrawStationEvent(object sender, ElapsedEventArgs e)
-        {
-            Dispatcher.BeginInvoke(new ThreadStart(() =>
-            {
-                canvasControlService.ReloadListDeviceItems();
+        private void OnTimedRedrawStationEvent (object sender, ElapsedEventArgs e) {
+            Dispatcher.BeginInvoke (new ThreadStart (() => {
+                canvasControlService.ReloadListDeviceItems ();
             }));
-          /*  Parallel.Invoke(() =>
-            {
-                //Console.WriteLine("Begin first task...");
-                canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
-            });*/
-        }
-        
-
-        private void OnTimedRedrawRobotEvent(object sender, ElapsedEventArgs e)
-        {
-           //Task.Run(()=> canvasControlService.RedrawAllStation());
-            canvasControlService.RedrawAllRobot();
+            /*  Parallel.Invoke(() =>
+              {
+                  //Console.WriteLine("Begin first task...");
+                  canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
+              });*/
         }
 
-        private void CenterWindowOnScreen()
-        {
+        private void OnTimedRedrawRobotEvent (object sender, ElapsedEventArgs e) {
+            //Task.Run(()=> canvasControlService.RedrawAllStation());
+            canvasControlService.RedrawAllRobot ();
+        }
+
+        private void CenterWindowOnScreen () {
             double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
             double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
             double windowWidth = this.Width;
@@ -142,9 +128,8 @@ namespace SeldatUnilever_Ver1._02
             this.Top = (screenHeight / 2) - (windowHeight / 2);
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            CenterWindowOnScreen();
+        private void MainWindow_Loaded (object sender, RoutedEventArgs e) {
+            CenterWindowOnScreen ();
             //TEST frm1 = new TEST();
             //frm1.ShowDialog();
             myManagementWindow.Visibility = Visibility.Hidden;
@@ -153,33 +138,29 @@ namespace SeldatUnilever_Ver1._02
             //if (Global_Object.userLogin <= 2)
             {
                 myManagementWindow.Visibility = Visibility.Visible;
-                unityService = new UnityManagementService(this);
-                unityService.Initialize();
-               ctrR= new CtrlRobot(unityService.robotManagementService);
+                unityService = new UnityManagementService (this);
+                unityService.Initialize ();
+                ctrR = new CtrlRobot (unityService.robotManagementService);
             }
 
-
-            stationTimer = new System.Timers.Timer();
+            stationTimer = new System.Timers.Timer ();
             stationTimer.Interval = 5000;
             stationTimer.Elapsed += OnTimedRedrawStationEvent;
             stationTimer.AutoReset = true;
             stationTimer.Enabled = true;
 
+            canvasControlService.ReloadAllStation ();
 
-            canvasControlService.ReloadAllStation();
+            new Thread (() => {
 
-            new Thread(()=> 
-            {
-                 
-                        //canvasControlService.ReloadAllStation();
-           
-                while (true)
-                {
+                //canvasControlService.ReloadAllStation();
+
+                while (true) {
                     //Console.WriteLine("Begin first task...");
-                    canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
+                    canvasControlService.RedrawAllStation (canvasControlService.GetDataAllStation ());
                 };
 
-            }).Start();
+            }).Start ();
 
             /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
                {
@@ -196,186 +177,155 @@ namespace SeldatUnilever_Ver1._02
                        Thread.Sleep(100);
                    }
                }));*/
-            robotTimer = new System.Timers.Timer();
-             robotTimer.Interval = 50;
-             robotTimer.Elapsed += OnTimedRedrawRobotEvent;
-             robotTimer.AutoReset = true;
-             robotTimer.Enabled = true;
+            robotTimer = new System.Timers.Timer ();
+            robotTimer.Interval = 50;
+            robotTimer.Elapsed += OnTimedRedrawRobotEvent;
+            robotTimer.AutoReset = true;
+            robotTimer.Enabled = true;
         }
 
-
-        private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
-        {
-            ChangePassForm changePassForm = new ChangePassForm(Thread.CurrentThread.CurrentCulture.ToString());
-            changePassForm.ShowDialog();
+        private void btn_ChangePassword_Click (object sender, RoutedEventArgs e) {
+            ChangePassForm changePassForm = new ChangePassForm (Thread.CurrentThread.CurrentCulture.ToString ());
+            changePassForm.ShowDialog ();
         }
 
-        private void Logout_Click(object sender, RoutedEventArgs e)
-        {
+        private void Logout_Click (object sender, RoutedEventArgs e) {
             myManagementWindow.Visibility = Visibility.Hidden;
 
             Global_Object.userAuthor = -2;
             Global_Object.userLogin = -2;
             Global_Object.userName = "";
 
-            LoginForm frm = new LoginForm(Thread.CurrentThread.CurrentCulture.ToString());
-            frm.ShowDialog();
-            if (Global_Object.userLogin <= 2)
-            {
+            LoginForm frm = new LoginForm (Thread.CurrentThread.CurrentCulture.ToString ());
+            frm.ShowDialog ();
+            if (Global_Object.userLogin <= 2) {
                 myManagementWindow.Visibility = Visibility.Visible;
             }
         }
 
-        public ImageBrush LoadImage(string name)
-        {
-            System.Drawing.Bitmap bmp = (System.Drawing.Bitmap)Properties.Resources.ResourceManager.GetObject(name);
-            ImageBrush img = new ImageBrush();
-            img.ImageSource = ImageSourceForBitmap(bmp);
+        public ImageBrush LoadImage (string name) {
+            System.Drawing.Bitmap bmp = (System.Drawing.Bitmap) Properties.Resources.ResourceManager.GetObject (name);
+            ImageBrush img = new ImageBrush ();
+            img.ImageSource = ImageSourceForBitmap (bmp);
             return img;
         }
 
-        public ImageSource ImageSourceForBitmap(System.Drawing.Bitmap bmp)
-        {
-            var handle = bmp.GetHbitmap();
-            try
-            {
-                return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally { }
+        public ImageSource ImageSourceForBitmap (System.Drawing.Bitmap bmp) {
+            var handle = bmp.GetHbitmap ();
+            try {
+                return Imaging.CreateBitmapSourceFromHBitmap (handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions ());
+            } finally { }
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
+        private void MenuItem_Click (object sender, RoutedEventArgs e) {
             MenuItem menuItem = sender as MenuItem;
 
-            ApplyLanguage(menuItem.Tag.ToString());
+            ApplyLanguage (menuItem.Tag.ToString ());
 
         }
 
-        private void ApplyLanguage(string cultureName = null)
-        {
+        private void ApplyLanguage (string cultureName = null) {
             if (cultureName != null)
-                Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(cultureName);
+                Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo (cultureName);
 
-            ResourceDictionary dict = new ResourceDictionary();
-            switch (Thread.CurrentThread.CurrentCulture.ToString())
-            {
+            ResourceDictionary dict = new ResourceDictionary ();
+            switch (Thread.CurrentThread.CurrentCulture.ToString ()) {
                 case "vi-VN":
-                    dict.Source = new Uri("..\\Lang\\Vietnamese.xaml", UriKind.Relative);
+                    dict.Source = new Uri ("..\\Lang\\Vietnamese.xaml", UriKind.Relative);
                     break;
-                // ...
+                    // ...
                 default:
-                    dict.Source = new Uri("..\\Lang\\English.xaml", UriKind.Relative);
+                    dict.Source = new Uri ("..\\Lang\\English.xaml", UriKind.Relative);
                     break;
             }
-            this.Resources.MergedDictionaries.Add(dict);
+            this.Resources.MergedDictionaries.Add (dict);
 
             // check/uncheck the language menu items based on the current culture
-            foreach (var item in languageMenuItem.Items)
-            {
+            foreach (var item in languageMenuItem.Items) {
                 MenuItem menuItem = item as MenuItem;
-                if (menuItem.Tag.ToString() == Thread.CurrentThread.CurrentCulture.Name)
+                if (menuItem.Tag.ToString () == Thread.CurrentThread.CurrentCulture.Name)
                     menuItem.IsChecked = true;
                 else
                     menuItem.IsChecked = false;
             }
         }
 
-        private void Btn_MapReCenter_Click(object sender, RoutedEventArgs e)
-        {
+        private void Btn_MapReCenter_Click (object sender, RoutedEventArgs e) {
 
         }
 
-        private void Ctrl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-           
+        private void Ctrl_MouseDoubleClick (object sender, MouseButtonEventArgs e) {
+
         }
 
-        private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ctrR.Show();
-            }
-            catch { }
+        private void ListBoxItem_Selected (object sender, RoutedEventArgs e) {
+            try {
+                ctrR.Show ();
+            } catch { }
         }
 
-        private void Btn_Robot_Click(object sender, RoutedEventArgs e)
-        {
-            unityService.OpenConfigureForm("RCF");
+        private void Btn_Robot_Click (object sender, RoutedEventArgs e) {
+            unityService.OpenConfigureForm ("RCF");
         }
 
-        private void Btn_Area_Click(object sender, RoutedEventArgs e)
-        {
-            unityService.OpenConfigureForm("ACF");
+        private void Btn_Area_Click (object sender, RoutedEventArgs e) {
+            unityService.OpenConfigureForm ("ACF");
         }
 
-        private void Btn_Charge_Click(object sender, RoutedEventArgs e)
-        {
-            unityService.OpenConfigureForm("CCF");
+        private void Btn_Charge_Click (object sender, RoutedEventArgs e) {
+            unityService.OpenConfigureForm ("CCF");
         }
 
-        private void Btn_Door_Click(object sender, RoutedEventArgs e)
-        {
-            unityService.OpenConfigureForm("DCF");
+        private void Btn_Door_Click (object sender, RoutedEventArgs e) {
+            unityService.OpenConfigureForm ("DCF");
         }
 
-        private void Btn_Statistics_Click(object sender, RoutedEventArgs e)
-        {
-            Statistics statistics = new Statistics(Thread.CurrentThread.CurrentCulture.ToString());
-            statistics.ShowDialog();
+        private void Btn_Statistics_Click (object sender, RoutedEventArgs e) {
+            Statistics statistics = new Statistics (Thread.CurrentThread.CurrentCulture.ToString ());
+            statistics.ShowDialog ();
         }
 
-        private void DeviceItemsListDg_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-        {
-            if (DeviceItemsListDg.SelectedItem != null)
-            {
+        private void DeviceItemsListDg_SelectedCellsChanged (object sender, SelectedCellsChangedEventArgs e) {
+            if (DeviceItemsListDg.SelectedItem != null) {
                 DeviceItem temp = DeviceItemsListDg.SelectedItem as DeviceItem;
-                canvasControlService.ReloadListOrderItems(temp);
+                canvasControlService.ReloadListOrderItems (temp);
             }
         }
 
-        private void Btn_Test_Click(object sender, RoutedEventArgs e)
-        {
+        private void Btn_Test_Click (object sender, RoutedEventArgs e) {
             //unityService.deviceRegistrationService.AddNewDeviceItem();
 
             // canvasControlService.ReloadListDeviceItems();
 
-            try
-            {
-                ctrR.Show();
-            }
-            catch { }
+            try {
+                ctrR.Show ();
+            } catch { }
         }
 
-        private void btn_3Dmap_Click(object sender, RoutedEventArgs e)
-        {
-            robotView.loadAWareHouseMap();
-            robotView.Show();
+        private void btn_3Dmap_Click (object sender, RoutedEventArgs e) {
+            robotView.loadAWareHouseMap ();
+            robotView.Show ();
         }
 
-        private void btn_Stop_Click(object sender, RoutedEventArgs e)
-        {
-            unityService.robotManagementService.Stop();
+        private void btn_Stop_Click (object sender, RoutedEventArgs e) {
+            unityService.robotManagementService.Stop ();
             btn_Play.IsEnabled = true;
             btn_Stop.IsEnabled = false;
-            btn_Play_icon.Foreground = new SolidColorBrush(Colors.Green);
-            btn_Stop_icon.Foreground = new SolidColorBrush(Colors.Red);
+            btn_Play_icon.Foreground = new SolidColorBrush (Colors.Green);
+            btn_Stop_icon.Foreground = new SolidColorBrush (Colors.Red);
 
         }
 
-        private void btn_Play_Click(object sender, RoutedEventArgs e)
-        {
-            unityService.robotManagementService.Run();
+        private void btn_Play_Click (object sender, RoutedEventArgs e) {
+            unityService.robotManagementService.Run ();
             btn_Play.IsEnabled = false;
             btn_Stop.IsEnabled = true;
-            btn_Play_icon.Foreground = new SolidColorBrush(Colors.Red);
-            btn_Stop_icon.Foreground = new SolidColorBrush(Colors.Green);
+            btn_Play_icon.Foreground = new SolidColorBrush (Colors.Red);
+            btn_Stop_icon.Foreground = new SolidColorBrush (Colors.Green);
         }
 
-        private void btn_RiskArea_Click(object sender, RoutedEventArgs e)
-        {
-            unityService.OpenConfigureForm("RACF");
+        private void btn_RiskArea_Click (object sender, RoutedEventArgs e) {
+            unityService.OpenConfigureForm ("RACF");
         }
     }
 }

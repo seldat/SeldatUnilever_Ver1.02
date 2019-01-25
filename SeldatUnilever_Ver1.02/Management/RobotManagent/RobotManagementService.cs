@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using SeldatMRMS.Management.TrafficManager;
-using SeldatUnilever_Ver1._02.Management.RobotManagent;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -14,70 +11,66 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Newtonsoft.Json;
+using SeldatMRMS.Management.TrafficManager;
+using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 
-namespace SeldatMRMS.Management.RobotManagent
-{
-    public class RobotManagementService
-    {
+namespace SeldatMRMS.Management.RobotManagent {
+    public class RobotManagementService {
         public const Int32 AmountofRobotUnity = 3;
-        public class ResultRobotReady
-        {
+        public class ResultRobotReady {
             public RobotUnity robot;
             public bool onReristryCharge = false;
 
         }
         public ListCollectionView Grouped_PropertiesRobotUnity { get; private set; }
         public List<PropertiesRobotUnity> PropertiesRobotUnity_List;
-        public Dictionary<String,RobotUnity>  RobotUnityRegistedList = new Dictionary<string, RobotUnity>();
-        public Dictionary<String, RobotUnity> RobotUnityWaitTaskList = new Dictionary<string, RobotUnity>();
-        public Dictionary<String, RobotUnity> RobotUnityReadyList = new Dictionary<string, RobotUnity>();
+        public Dictionary<String, RobotUnity> RobotUnityRegistedList = new Dictionary<string, RobotUnity> ();
+        public Dictionary<String, RobotUnity> RobotUnityWaitTaskList = new Dictionary<string, RobotUnity> ();
+        public Dictionary<String, RobotUnity> RobotUnityReadyList = new Dictionary<string, RobotUnity> ();
         public ConfigureRobotUnity configureForm;
         private TrafficManagementService trafficManagementService;
         private Canvas canvas;
-        public RobotManagementService(Canvas canvas) {
+        public RobotManagementService (Canvas canvas) {
             this.canvas = canvas;
-            PropertiesRobotUnity_List = new List<PropertiesRobotUnity>();
-            Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
-            configureForm = new ConfigureRobotUnity(this, Thread.CurrentThread.CurrentCulture.ToString());
-            LoadConfigure();
-            RobotUnity rb1 = RobotUnityRegistedList["RSD0"];
-          // rb1.Start("ws://192.168.80.131:9090");
+            PropertiesRobotUnity_List = new List<PropertiesRobotUnity> ();
+            Grouped_PropertiesRobotUnity = (ListCollectionView) CollectionViewSource.GetDefaultView (PropertiesRobotUnity_List);
+            configureForm = new ConfigureRobotUnity (this, Thread.CurrentThread.CurrentCulture.ToString ());
+            LoadConfigure ();
         }
-        public void Initialize()
-        {
-            PropertiesRobotUnity prop1 = new PropertiesRobotUnity();
-            prop1.NameId = "RSD"+ RobotUnityRegistedList.Count;
+        public void Initialize () {
+            PropertiesRobotUnity prop1 = new PropertiesRobotUnity ();
+            prop1.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop1.L1 = 40;
             prop1.L2 = 40;
             prop1.WS = 60;
             prop1.Label = "Robot1";
             prop1.BatteryLowLevel = 23;
             prop1.BatteryLevelRb = 40;
-            prop1.Url = "ws://192.168.80.131:9090";
+            prop1.Url = "ws://192.168.80.132:9090";
             prop1.DistInter = 40;
             prop1.BatteryLowLevel = 25;
             prop1.RequestChargeBattery = false;
             prop1.Width = 1.8;
             prop1.Height = 2.5;
             prop1.Length = 2.2;
-            prop1.ChargeID= ChargerId.CHARGER_ID_1;
+            prop1.ChargeID = ChargerId.CHARGER_ID_1;
             prop1.Scale = 10;
-            RobotUnity r1 = new RobotUnity();
-            r1.Initialize(this.canvas);
-            r1.UpdateProperties(prop1);
+            RobotUnity r1 = new RobotUnity ();
+            r1.Initialize (this.canvas);
+            r1.UpdateProperties (prop1);
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
-            PropertiesRobotUnity_List.Add(r1.properties);
-            RobotUnityRegistedList.Add(r1.properties.NameId, r1);
-            r1.Registry(trafficManagementService);
-            r1.Start(prop1.Url);
-
+            PropertiesRobotUnity_List.Add (r1.properties);
+            RobotUnityRegistedList.Add (r1.properties.NameId, r1);
+            r1.Registry (trafficManagementService);
+            r1.Start (prop1.Url);
             // đăng ký robot list to many robot quan trong
-            AddRobotUnityReadyList(r1);
-            r1.RegisteRobotInAvailable(RobotUnityRegistedList);
-          
-            PropertiesRobotUnity prop2= new PropertiesRobotUnity();
+            AddRobotUnityReadyList (r1);
+            r1.RegisteRobotInAvailable (RobotUnityRegistedList);
+#if false
+            PropertiesRobotUnity prop2 = new PropertiesRobotUnity ();
             prop2.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop2.L1 = 40;
             prop2.L2 = 40;
@@ -94,16 +87,18 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.Length = 2.2;
             prop2.ChargeID = ChargerId.CHARGER_ID_2;
             prop2.Scale = 10;
-            RobotUnity r2 = new RobotUnity();
-            r2.Initialize(this.canvas);
-            r2.UpdateProperties(prop2);
+            RobotUnity r2 = new RobotUnity ();
+            r2.Initialize (this.canvas);
+            r2.UpdateProperties (prop2);
             r2.ConnectionStatusHandler += ConnectionStatusHandler;
-            PropertiesRobotUnity_List.Add(r2.properties);
-            RobotUnityRegistedList.Add(r2.properties.NameId, r2);
-            r2.Registry(trafficManagementService);
-            r2.RegisteRobotInAvailable(RobotUnityRegistedList);
+            PropertiesRobotUnity_List.Add (r2.properties);
+            RobotUnityRegistedList.Add (r2.properties.NameId, r2);
+            r2.Registry (trafficManagementService);
+            r2.Start (prop2.Url);
+            AddRobotUnityReadyList (r2);
+            r2.RegisteRobotInAvailable (RobotUnityRegistedList);
 
-            PropertiesRobotUnity prop3 = new PropertiesRobotUnity();
+            PropertiesRobotUnity prop3 = new PropertiesRobotUnity ();
             prop3.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop3.L1 = 40;
             prop3.L2 = 40;
@@ -120,103 +115,88 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.Length = 2.2;
             prop3.ChargeID = ChargerId.CHARGER_ID_3;
             prop3.Scale = 10;
-
-            RobotUnity r3 = new RobotUnity();
-            r3.Initialize(this.canvas);
-            r3.UpdateProperties(prop3);
+            RobotUnity r3 = new RobotUnity ();
+            r3.Initialize (this.canvas);
+            r3.UpdateProperties (prop3);
             r3.ConnectionStatusHandler += ConnectionStatusHandler;
-            PropertiesRobotUnity_List.Add(r2.properties);
-            RobotUnityRegistedList.Add(r3.properties.NameId, r3);
-            r3.Registry(trafficManagementService);
-            r3.RegisteRobotInAvailable(RobotUnityRegistedList);
-            Grouped_PropertiesRobotUnity.Refresh();
-
-
+            PropertiesRobotUnity_List.Add (r2.properties);
+            RobotUnityRegistedList.Add (r3.properties.NameId, r3);
+            r3.Registry (trafficManagementService);
+            r3.Start (prop3.Url);
+            AddRobotUnityReadyList (r3);
+            r3.RegisteRobotInAvailable (RobotUnityRegistedList);
+            Grouped_PropertiesRobotUnity.Refresh ();
+#endif
         }
-        public void Registry(TrafficManagementService trafficManagementService)
-        {
+        public void Registry (TrafficManagementService trafficManagementService) {
             this.trafficManagementService = trafficManagementService;
         }
-        public void ConnectionStatusHandler(Object obj, RosSocket.ConnectionStatus status)
-        {
+        public void ConnectionStatusHandler (Object obj, RosSocket.ConnectionStatus status) {
             RobotUnity robot = obj as RobotUnity;
-            if (status==RosSocket.ConnectionStatus.CON_OK)
-            {
-              //  RobotUnityReadyList.Add(robot.properties.NameID,robot);
+            if (status == RosSocket.ConnectionStatus.CON_OK) {
+                //  RobotUnityReadyList.Add(robot.properties.NameID,robot);
             }
         }
-        public void AddRobotUnity()
-        {
-                PropertiesRobotUnity_List.Add(new RobotUnity().properties);
-                Grouped_PropertiesRobotUnity.Refresh();
+        public void AddRobotUnity () {
+            PropertiesRobotUnity_List.Add (new RobotUnity ().properties);
+            Grouped_PropertiesRobotUnity.Refresh ();
         }
-        public void SaveConfig(String data)
-        {
-                String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigRobot.json");
-                System.IO.File.WriteAllText(path, data);   
+        public void SaveConfig (String data) {
+            String path = Path.Combine (System.IO.Directory.GetCurrentDirectory (), "ConfigRobot.json");
+            System.IO.File.WriteAllText (path, data);
         }
-        public bool LoadConfigure()
-        {
-            String path= Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ConfigRobot.json");
-            if(!File.Exists(path))
-            {
-                Initialize();
-                SaveConfig(JsonConvert.SerializeObject(PropertiesRobotUnity_List, Formatting.Indented).ToString());
+        public bool LoadConfigure () {
+            String path = Path.Combine (System.IO.Directory.GetCurrentDirectory (), "ConfigRobot.json");
+            if (!File.Exists (path)) {
+                Initialize ();
+                SaveConfig (JsonConvert.SerializeObject (PropertiesRobotUnity_List, Formatting.Indented).ToString ());
                 return false;
-            }
-            else
-            {
-                try
-                {
-                    String data = File.ReadAllText(path);
-                    if (data.Length > 0)
-                    {
-                        List<PropertiesRobotUnity> tempPropertiestRobotList = JsonConvert.DeserializeObject<List<PropertiesRobotUnity>>(data);
-                        foreach(var e in tempPropertiestRobotList)
-                        {
-                            PropertiesRobotUnity_List.Add(e);
-                            RobotUnity robot = new RobotUnity();
-                            robot.Initialize(this.canvas);
-                            robot.UpdateProperties(e);
-                            robot.Registry(trafficManagementService);
-                            RobotUnityRegistedList.Add(e.NameId,robot);
-                            robot.Start(robot.properties.Url);
-                            AddRobotUnityReadyList(robot);
-                            robot.RegisteRobotInAvailable(RobotUnityRegistedList);
+            } else {
+                try {
+                    String data = File.ReadAllText (path);
+                    if (data.Length > 0) {
+                        List<PropertiesRobotUnity> tempPropertiestRobotList = JsonConvert.DeserializeObject<List<PropertiesRobotUnity>> (data);
+                        foreach (var e in tempPropertiestRobotList) {
+                            PropertiesRobotUnity_List.Add (e);
+                            RobotUnity robot = new RobotUnity ();
+                            robot.Initialize (this.canvas);
+                            robot.UpdateProperties (e);
+                            robot.Registry (trafficManagementService);
+                            RobotUnityRegistedList.Add (e.NameId, robot);
+                            robot.Start (robot.properties.Url);
+                            AddRobotUnityReadyList (robot);
+                            robot.RegisteRobotInAvailable (RobotUnityRegistedList);
                         }
-                        Grouped_PropertiesRobotUnity.Refresh();
+                        Grouped_PropertiesRobotUnity.Refresh ();
                         return true;
-                    }                   
-                }
-                catch { }
+                    }
+                } catch { }
             }
             return false;
         }
-        public void LoadRobotUnityConfigure()
-        {
+        public void LoadRobotUnityConfigure () {
             string name = "Robot";
-            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Configure.xlsx");
+            String path = Path.Combine (System.IO.Directory.GetCurrentDirectory (), "Configure.xlsx");
             string constr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +
-                            path +
-                            ";Extended Properties='Excel 12.0 XML;HDR=YES;';";
-            OleDbConnection con = new OleDbConnection(constr);
-            OleDbCommand oconn = new OleDbCommand("Select * From [" + name + "$]", con);
-            con.Open();
+                path +
+                ";Extended Properties='Excel 12.0 XML;HDR=YES;';";
+            OleDbConnection con = new OleDbConnection (constr);
+            OleDbCommand oconn = new OleDbCommand ("Select * From [" + name + "$]", con);
+            con.Open ();
 
-            OleDbDataAdapter sda = new OleDbDataAdapter(oconn);
-            DataTable data = new DataTable();
-            sda.Fill(data);
-           // foreach (DataRow row in data.Rows)
+            OleDbDataAdapter sda = new OleDbDataAdapter (oconn);
+            DataTable data = new DataTable ();
+            sda.Fill (data);
+            // foreach (DataRow row in data.Rows)
             {
-                RobotUnity robot1 = new RobotUnity();
+                RobotUnity robot1 = new RobotUnity ();
                 //robot.Initialize(row);
-                robot1.properties.NameId = "1";
+                robot1.properties.NameId = "Robot1";
                 robot1.properties.ChargeID = ChargerId.CHARGER_ID_1;
-                robot1.Start("ws://192.168.80.131:9090");
-                RobotUnityRegistedList.Add(robot1.properties.NameId, robot1);
+                robot1.Start ("ws://192.168.80.132:9090");
+                RobotUnityRegistedList.Add (robot1.properties.NameId, robot1);
                 robot1.ConnectionStatusHandler += ConnectionStatusHandler;
-                AddRobotUnityReadyList(robot1);
-
+                AddRobotUnityReadyList (robot1);
 
                 //RobotUnity robot2 = new RobotUnity();
                 //robot2.ConnectionStatusHandler += ConnectionStatusHandler;
@@ -234,118 +214,98 @@ namespace SeldatMRMS.Management.RobotManagent
                 //AddRobotUnityReadyList(robot3);
                 //robot3.ConnectionStatusHandler += ConnectionStatusHandler;
             }
-            con.Close();
+            con.Close ();
         }
-        public void AddRobotUnityWaitTaskList(RobotUnity robot)
-        {
-           RobotUnityWaitTaskList.Add(robot.properties.NameId,robot);
+        public void AddRobotUnityWaitTaskList (RobotUnity robot) {
+            RobotUnityWaitTaskList.Add (robot.properties.NameId, robot);
         }
-        public void RemoveRobotUnityWaitTaskList(String NameID)
-        {
-            RobotUnityWaitTaskList.Remove(NameID);
+        public void RemoveRobotUnityWaitTaskList (String NameID) {
+            RobotUnityWaitTaskList.Remove (NameID);
         }
-        public void DestroyAllRobotUnity()
-        {
-            foreach (var item in RobotUnityRegistedList.Values)
-            {
-                item.Dispose();
+        public void DestroyAllRobotUnity () {
+            foreach (var item in RobotUnityRegistedList.Values) {
+                item.Dispose ();
             }
-            RobotUnityRegistedList.Clear();
+            RobotUnityRegistedList.Clear ();
         }
-        public void DestroyRobotUnity(String NameID)
-        {
-            if(RobotUnityRegistedList.ContainsKey(NameID))
-            {
+        public void DestroyRobotUnity (String NameID) {
+            if (RobotUnityRegistedList.ContainsKey (NameID)) {
                 RobotUnity robot = RobotUnityRegistedList[NameID];
-                robot.Dispose();
-                RobotUnityRegistedList.Remove(NameID);
+                robot.Dispose ();
+                RobotUnityRegistedList.Remove (NameID);
             }
-   
+
         }
-        public ResultRobotReady GetRobotUnityWaitTaskItem0()
-        {
+        public ResultRobotReady GetRobotUnityWaitTaskItem0 () {
             ResultRobotReady result = null;
-            if (RobotUnityWaitTaskList.Count > 0)
-            {
-                RobotUnity robot = RobotUnityWaitTaskList.ElementAt(0).Value;
-                if (robot.getBattery())
-                {
-                    RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+            if (RobotUnityWaitTaskList.Count > 0) {
+                RobotUnity robot = RobotUnityWaitTaskList.ElementAt (0).Value;
+                if (robot.getBattery ()) {
+                    RemoveRobotUnityWaitTaskList (robot.properties.NameId);
                 }
-                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                result = new ResultRobotReady () { robot = robot, onReristryCharge = robot.getBattery () };
             }
             return result;
         }
-        public void AddRobotUnityReadyList(RobotUnity robot)
-        {
-            RobotUnityReadyList.Add(robot.properties.NameId,robot);
+        public void AddRobotUnityReadyList (RobotUnity robot) {
+            RobotUnityReadyList.Add (robot.properties.NameId, robot);
         }
-        
-        public ResultRobotReady GetRobotUnityReadyItem0()
-        {
+
+        public ResultRobotReady GetRobotUnityReadyItem0 () {
             ResultRobotReady result = null;
-            if (RobotUnityReadyList.Count > 0)
-            {
-                RobotUnity robot = RobotUnityReadyList.ElementAt(0).Value;
-                if(robot.getBattery())
-                {
-                    RemoveRobotUnityReadyList(robot.properties.NameId);
+            if (RobotUnityReadyList.Count > 0) {
+                RobotUnity robot = RobotUnityReadyList.ElementAt (0).Value;
+                if (robot.getBattery ()) {
+                    RemoveRobotUnityReadyList (robot.properties.NameId);
                 }
-                result = new ResultRobotReady() {robot=robot, onReristryCharge=robot.getBattery()};
+                result = new ResultRobotReady () { robot = robot, onReristryCharge = robot.getBattery () };
             }
             return result;
         }
-        public void RemoveRobotUnityReadyList(String nameID)
-        {
-            RobotUnityReadyList.Remove(nameID);
+        public void RemoveRobotUnityReadyList (String nameID) {
+            RobotUnityReadyList.Remove (nameID);
         }
-        public void StopAt(String nameID)
-        {
-            if (RobotUnityRegistedList.ContainsKey(nameID))
-                RobotUnityRegistedList[nameID].SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+        public void StopAt (String nameID) {
+            if (RobotUnityRegistedList.ContainsKey (nameID))
+                RobotUnityRegistedList[nameID].SetSpeed (RobotSpeedLevel.ROBOT_SPEED_STOP);
         }
-        public void RunAt(String nameID)
-        {
-            if (RobotUnityRegistedList.ContainsKey(nameID))
-                RobotUnityRegistedList[nameID].SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+        public void RunAt (String nameID) {
+            if (RobotUnityRegistedList.ContainsKey (nameID))
+                RobotUnityRegistedList[nameID].SetSpeed (RobotSpeedLevel.ROBOT_SPEED_NORMAL);
         }
-        public void Stop()
-        {
+        public void Stop () {
             foreach (RobotUnity r in RobotUnityReadyList.Values)
-                r.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                r.SetSpeed (RobotSpeedLevel.ROBOT_SPEED_STOP);
         }
-        public void Run()
-        {
+        public void Run () {
             foreach (RobotUnity r in RobotUnityReadyList.Values)
-                r.SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                r.SetSpeed (RobotSpeedLevel.ROBOT_SPEED_NORMAL);
         }
-        public void RemoveRobotUnityRegistedList(String nameID)
-        {
-            if (RobotUnityRegistedList.ContainsKey(nameID))
-                RobotUnityRegistedList.Remove(nameID);
+        public void RemoveRobotUnityRegistedList (String nameID) {
+            if (RobotUnityRegistedList.ContainsKey (nameID))
+                RobotUnityRegistedList.Remove (nameID);
         }
-        public void FixedPropertiesRobotUnity(String nameID,PropertiesRobotUnity properties)
-        {
-            RobotUnity Rd=RobotUnityRegistedList[nameID];
-            RemoveRobotUnityRegistedList(nameID);
-            RemoveRobotUnityWaitTaskList(nameID);
-            RemoveRobotUnityReadyList(nameID);
-            Rd.RemoveDraw();
-            Rd.Dispose();
+        public void FixedPropertiesRobotUnity (String nameID, PropertiesRobotUnity properties) {
+            RobotUnity Rd = RobotUnityRegistedList[nameID];
+            RemoveRobotUnityRegistedList (nameID);
+            RemoveRobotUnityWaitTaskList (nameID);
+            RemoveRobotUnityReadyList (nameID);
+            Rd.RemoveDraw ();
+            Rd.Dispose ();
             Rd = null;
-            RobotUnity rn = new RobotUnity();
+            RobotUnity rn = new RobotUnity ();
             // cài đặt canvas
-            rn.Initialize(this.canvas);
+            rn.Initialize (this.canvas);
             // update properties
-            rn.UpdateProperties(properties);
+            rn.UpdateProperties (properties);
             // connect ros
-            rn.Start(properties.Url);
+            rn.Start (properties.Url);
             // đăng ký giao thông
-            rn.Registry(trafficManagementService);
-            RobotUnityRegistedList.Add(nameID, rn);
-            RobotUnityReadyList.Add(nameID, rn);
+            rn.Registry (trafficManagementService);
+            RobotUnityRegistedList.Add (nameID, rn);
+            RobotUnityReadyList.Add (nameID, rn);
             // dăng ký robot list
-            rn.RegisteRobotInAvailable(RobotUnityRegistedList);
+            rn.RegisteRobotInAvailable (RobotUnityRegistedList);
         }
     }
 }

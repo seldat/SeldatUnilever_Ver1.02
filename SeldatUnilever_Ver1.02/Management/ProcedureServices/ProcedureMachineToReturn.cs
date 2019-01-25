@@ -51,6 +51,7 @@ namespace SeldatMRMS {
             RobotUnity rb = BfToRe.robot;
             DataMachineToReturn p = BfToRe.points;
             TrafficManagementService Traffic = BfToRe.Traffic;
+            Debug(this,"Start");
             while (ProRun) {
                 switch (StateMachineToReturn) {
                     case MachineToReturn.MACRET_IDLE:
@@ -66,6 +67,7 @@ namespace SeldatMRMS {
                                         resCmd = ResponseCommand.RESPONSE_NONE;
                                         rb.SendPoseStamped (BfToRe.GetFrontLineMachine ());
                                         StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
+                                        Debug(this,"MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE"); 
                                         break;
                                     } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                         errorCode = ErrorCode.DETECT_LINE_ERROR;
@@ -83,6 +85,7 @@ namespace SeldatMRMS {
                             } else {
                                 rb.SendPoseStamped (BfToRe.GetFrontLineMachine ());
                                 StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
+                                Debug(this,"MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE"); 
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -97,6 +100,7 @@ namespace SeldatMRMS {
                                 // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE;
+                                Debug(this,"MACRET_ROBOT_WAITTING_PICKUP_PALLET_MACHINE"); 
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                 errorCode = ErrorCode.DETECT_LINE_ERROR;
                                 CheckUserHandleError(this);
@@ -119,6 +123,7 @@ namespace SeldatMRMS {
                             BfToRe.UpdatePalletState (PalletStatus.F);
                             rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE;
+                            Debug(this,"MACRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -131,6 +136,7 @@ namespace SeldatMRMS {
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (BfToRe.GetCheckInReturn ());
                                 StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN;
+                                Debug(this,"MACRET_ROBOT_GOTO_CHECKIN_RETURN"); 
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                 errorCode = ErrorCode.DETECT_LINE_ERROR;
                                 CheckUserHandleError(this);
@@ -146,6 +152,7 @@ namespace SeldatMRMS {
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             rb.UpdateRiskAraParams(0,rb.properties.L2,rb.properties.WS,rb.properties.DistInter);
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_CAME_CHECKIN_RETURN;
+                            Debug(this,"MACRET_ROBOT_CAME_CHECKIN_RETURN"); 
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_CAME_CHECKIN_RETURN: // đã đến vị trí
@@ -155,6 +162,7 @@ namespace SeldatMRMS {
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (BfToRe.GetFrontLineReturn ());
                                 StateMachineToReturn = MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_RETURN;
+                                Debug(this,"MACRET_ROBOT_GOTO_FRONTLINE_RETURN"); 
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -168,6 +176,7 @@ namespace SeldatMRMS {
                                 rb.SendCmdAreaPallet (BfToRe.GetInfoOfPalletReturn (PistonPalletCtrl.PISTON_PALLET_DOWN));
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_DROPDOWN_PALLET;
+                                Debug(this,"MACRET_ROBOT_WAITTING_DROPDOWN_PALLET"); 
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                 errorCode = ErrorCode.DETECT_LINE_ERROR;
                                 CheckUserHandleError(this);
@@ -208,6 +217,7 @@ namespace SeldatMRMS {
                             BfToRe.UpdatePalletState (PalletStatus.W);
                             rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_GOTO_FRONTLINE;
+                            Debug(this,"MACRET_ROBOT_WAITTING_GOTO_FRONTLINE"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -218,6 +228,7 @@ namespace SeldatMRMS {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
+                            Debug(this,"MACRET_ROBOT_RELEASED"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -231,6 +242,7 @@ namespace SeldatMRMS {
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
+                        Debug(this,"RELEASED"); 
                         break;
                     default:
                         break;

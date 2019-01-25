@@ -283,6 +283,26 @@ namespace SeldatUnilever_Ver1._02.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap path2 {
+            get {
+                object obj = ResourceManager.GetObject("path2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap phat_draw {
+            get {
+                object obj = ResourceManager.GetObject("phat_draw", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap phat_joinpath {
             get {
                 object obj = ResourceManager.GetObject("phat_joinpath", resourceCulture);
@@ -333,6 +353,16 @@ namespace SeldatUnilever_Ver1._02.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap phat_measure {
+            get {
+                object obj = ResourceManager.GetObject("phat_measure", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap phat_straightpath {
             get {
                 object obj = ResourceManager.GetObject("phat_straightpath", resourceCulture);
@@ -356,6 +386,16 @@ namespace SeldatUnilever_Ver1._02.Properties {
         internal static System.Drawing.Bitmap phat_straightpath_on {
             get {
                 object obj = ResourceManager.GetObject("phat_straightpath_on", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap phat_zoom {
+            get {
+                object obj = ResourceManager.GetObject("phat_zoom", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

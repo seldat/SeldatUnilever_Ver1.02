@@ -124,7 +124,7 @@ namespace SeldatUnilever_Ver1._02
         {
             Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
-                canvasControlService.ReloadListDeviceItems();
+                //canvasControlService.ReloadListDeviceItems();
                 canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
             }));
         }

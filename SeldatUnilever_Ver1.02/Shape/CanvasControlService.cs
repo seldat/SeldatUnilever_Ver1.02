@@ -68,9 +68,9 @@ namespace SeldatMRMS
             list_Robot = new SortedDictionary<string, RobotShape>();
             //==========EVENT==========
             map.MouseDown += Map_MouseDown;
-            map.MouseWheel += Map_Zoom;
+            //map.MouseWheel += Map_Zoom;
             map.MouseMove += Map_MouseMove;
-            map.SizeChanged += Map_SizeChanged;
+            //map.SizeChanged += Map_SizeChanged;
             map.MouseLeftButtonDown += Map_MouseLeftButtonDown;
             map.MouseRightButtonDown += Map_MouseRightButtonDown;
             map.MouseLeftButtonUp += Map_MouseLeftButtonUp;
@@ -154,6 +154,8 @@ namespace SeldatMRMS
         private void Map_MouseDown(object sender, MouseButtonEventArgs e)
         {
             string elementName = (e.OriginalSource as FrameworkElement).Name;
+            Point mousePos = e.GetPosition(map);
+            Console.WriteLine(mousePos.X + "  " + mousePos.Y);
         }
         private void Map_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -223,7 +225,7 @@ namespace SeldatMRMS
             ////
             // POINT OF VIEW
             //
-            if ((mainWindow.drag))
+            if ((!mainWindow.drag))
             {
                 if (!map.IsMouseCaptured) return;
                 Vector moveVector = startPoint - e.GetPosition(mainWindow.clipBorder);
@@ -528,60 +530,62 @@ namespace SeldatMRMS
 
         public void ReloadAllStation()
         {
-                    for (int i = 0; i < list_Station.Count; i++)
+            for (int i = 0; i < list_Station.Count; i++)
+            {
+                //Console.WriteLine(i);
+                StationShape temp = list_Station.ElementAt(i).Value;
+                Console.WriteLine("Remove: " + list_Station.ElementAt(i).Key);
+                temp.Remove();
+            }
+            list_Station.Clear();
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "buffer/getListBuffer");
+            request.Method = "GET";
+            request.ContentType = @"application/json";
+            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+            using (Stream responseStream = response.GetResponseStream())
+            {
+                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                string result = reader.ReadToEnd();
+
+                DataTable buffers = JsonConvert.DeserializeObject<DataTable>(result);
+                foreach (DataRow dr in buffers.Rows)
+                {
+                    dtBuffer tempBuffer = new dtBuffer
                     {
-                        Console.WriteLine(i);
-                        StationShape temp = list_Station.ElementAt(i).Value;
-                        Console.WriteLine("Remove: " + list_Station.ElementAt(i).Key);
-                        temp.Remove();
-                    }
-                    list_Station.Clear();
+                        creUsrId = int.Parse(dr["creUsrId"].ToString()),
+                        creDt = dr["creDt"].ToString(),
+                        updUsrId = int.Parse(dr["updUsrId"].ToString()),
+                        updDt = dr["updDt"].ToString(),
 
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "buffer/getListBuffer");
-                    request.Method = "GET";
-                    request.ContentType = @"application/json";
-                    HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-                    using (Stream responseStream = response.GetResponseStream())
+                        bufferId = int.Parse(dr["bufferId"].ToString()),
+                        bufferName = dr["bufferName"].ToString(),
+                        bufferNameOld = dr["bufferNameOld"].ToString(),
+                        bufferCheckIn = dr["bufferCheckIn"].ToString(),
+                        bufferData = dr["bufferData"].ToString(),
+                        maxBay = int.Parse(dr["maxBay"].ToString()),
+                        maxBayOld = int.Parse(dr["maxBayOld"].ToString()),
+                        maxRow = int.Parse(dr["maxRow"].ToString()),
+                        maxRowOld = int.Parse(dr["maxRowOld"].ToString()),
+                        bufferReturn = bool.Parse(dr["bufferReturn"].ToString()),
+                        bufferReturnOld = bool.Parse(dr["bufferReturnOld"].ToString()),
+                        //pallets
+                    };
+                    if (list_Station.ContainsKey(tempBuffer.bufferName.ToString().Trim()))
                     {
-                        StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                        string result = reader.ReadToEnd();
-
-                        DataTable buffers = JsonConvert.DeserializeObject<DataTable>(result);
-
-                      foreach (DataRow dr in buffers.Rows)
-                      {
-                          dtBuffer tempBuffer = new dtBuffer
-                          {
-                              creUsrId = int.Parse(dr["creUsrId"].ToString()),
-                              creDt = dr["creDt"].ToString(),
-                              updUsrId = int.Parse(dr["updUsrId"].ToString()),
-                              updDt = dr["updDt"].ToString(),
-
-                              bufferId = int.Parse(dr["bufferId"].ToString()),
-                              bufferName = dr["bufferName"].ToString(),
-                              bufferNameOld = dr["bufferNameOld"].ToString(),
-                              bufferCheckIn = dr["bufferCheckIn"].ToString(),
-                              bufferData = dr["bufferData"].ToString(),
-                              maxBay = int.Parse(dr["maxBay"].ToString()),
-                              maxBayOld = int.Parse(dr["maxBayOld"].ToString()),
-                              maxRow = int.Parse(dr["maxRow"].ToString()),
-                              maxRowOld = int.Parse(dr["maxRowOld"].ToString()),
-                              bufferReturn = bool.Parse(dr["bufferReturn"].ToString()),
-                              bufferReturnOld = bool.Parse(dr["bufferReturnOld"].ToString()),
-                              //pallets
-                          };
-                          if (!list_Station.ContainsKey(tempBuffer.bufferId.ToString()))
-                          {
-
-                              StationShape tempStation = new StationShape(map, tempBuffer);
-                              tempStation.ReDraw();
-                              //tempStation.RemoveHandle += StationRemove;
-                              list_Station.Add(tempStation.props.bufferDb.bufferName.ToString().Trim(), tempStation);
-                              //list_Station.Add(tempStation.props.bufferDb.bufferName.ToString().Trim(), tempStation);
-
-                          }
-                      }
+                        list_Station[tempBuffer.bufferName.ToString().Trim()].props.bufferDb = tempBuffer;
+                        Console.WriteLine("Upadte bufferDb station ReloadAllStation:" + tempBuffer.bufferName);
                     }
+                    else
+                    {
+                        StationShape tempStation = new StationShape(map, tempBuffer);
+                        //tempStation.ReDraw();
+                        //tempStation.RemoveHandle += StationRemove;
+                        list_Station.Add(tempStation.props.bufferDb.bufferName.ToString().Trim(), tempStation);
+                        Console.WriteLine("Add them station ReloadAllStation:" + tempBuffer.bufferName);
+                    }
+                }
+            }
 
         }
 
@@ -645,22 +649,22 @@ namespace SeldatMRMS
             }
         }
 
-        public void RedrawAllStation()
-        {
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    Task.Delay(5000).Wait();
-                    for (int i = 0; i < list_Station.Count; i++)
-                    {
-                        list_Station.ElementAt(i).Value.ReDraw();
-                    }
+        //public void RedrawAllStation()
+        //{
+        //    Task.Run(() =>
+        //    {
+        //        while (true)
+        //        {
+        //            Task.Delay(5000).Wait();
+        //            for (int i = 0; i < list_Station.Count; i++)
+        //            {
+        //                list_Station.ElementAt(i).Value.ReDraw();
+        //            }
                    
-                }
-            }
-            );
-        }
+        //        }
+        //    }
+        //    );
+        //}
 
         public void RedrawAllStation(List<dtBuffer> listBuffer)
         {

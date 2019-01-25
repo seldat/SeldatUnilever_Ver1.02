@@ -171,7 +171,7 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
         }
 
 
-        public void ReloadListRobot()
+        public void ReloadListRobot(int tabIndex)
         {
             Robots.Add(new dtRobot() { id = "", robotName = "No data" });
             Robots.Add(new dtRobot() { id = "1", robotName = "Robot1" });
@@ -183,7 +183,24 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
             AllRobots.Add(new dtRobot() { id = "2", robotName = "Robot2" });
             AllRobots.Add(new dtRobot() { id = "3", robotName = "Robot3" });
 
+            switch (tabIndex)
+            {
+                case 0:
+                    {
 
+                        break;
+                    }
+                case 1:
+                    {
+
+                        break;
+                    }
+                default:
+                    {
+
+                        break;
+                    }
+            }
         }
 
         public void ReloadListOperationType()
@@ -661,6 +678,7 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
                         rpBeginDatetime = dr["rpBeginDatetime"].ToString(),
                         rpEndDatetime = dr["rpEndDatetime"].ToString(),
                         robotProcessStastus = dr["robotProcessStastus"].ToString(),
+                        orderContent = dr["orderContent"].ToString(),
                         robotId = dr["robotId"].ToString(),
                         timeWorkId = int.Parse(dr["timeWorkId"].ToString()),
                         activeDate = dr["activeDate"].ToString()
@@ -815,5 +833,6 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
             }
             return false;
         }
+
     }
 }

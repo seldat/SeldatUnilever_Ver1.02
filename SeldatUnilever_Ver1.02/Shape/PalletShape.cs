@@ -18,22 +18,29 @@ namespace SeldatMRMS
 {
     public class PalletShape : Border
     {
-        private double palletMargin = 0.05; //metters
+        private double palletMargin = 0.1; //metters
 
         private dtPallet pPallet;
         public dtPallet pallet { get => pPallet; set => pPallet = value; }
 
         public string name = "";
-        public Label lbPallet;
-        public Label lbPallet2;
+        public TextBlock lbPallet;
+        public TextBlock lbPallet2;
 
         public PalletShape(string name)
         {
             pallet = new dtPallet();
             this.name = name;
+            Name = name;
             // Specific Size of Pallet
-            Margin = new Thickness(palletMargin / Global_Object.resolution);
-            //Padding = new Thickness(palletPadding / Global_Object.resolution);
+            Margin = new Thickness
+                (
+                (palletMargin / Global_Object.resolution) + 0,
+                (palletMargin / Global_Object.resolution) + 0,
+                (palletMargin / Global_Object.resolution) + 0,
+                (palletMargin / Global_Object.resolution) + 0
+                );
+            //Padding = new Thickness(5,0,5,0);
             // Style Pallet Border
             BorderBrush = new SolidColorBrush(Colors.Black);
             BorderThickness = new Thickness(0.3);
@@ -46,17 +53,17 @@ namespace SeldatMRMS
             //=============================
             StatusChanged(new dtPallet());
 
-            lbPallet = new Label();
+            lbPallet = new TextBlock();
+            lbPallet.TextWrapping = TextWrapping.Wrap;
             lbPallet.Width = this.Width;
             lbPallet.FontSize = 2;
-            lbPallet.Margin = new Thickness(-5);
-            lbPallet.Content = this.name.Split('x')[1] + "-" + this.name.Split('x')[2];
+            lbPallet.Text = this.name.Split('x')[1] + "-" + this.name.Split('x')[2];
 
-            lbPallet2 = new Label();
+            lbPallet2 = new TextBlock();
+            lbPallet2.TextWrapping = TextWrapping.Wrap;
             lbPallet2.Width = this.Width;
-            lbPallet2.FontSize = 2;
-            lbPallet2.Margin = new Thickness(-5);
-            lbPallet2.Content = pallet.productDetailName;
+            lbPallet2.FontSize = 1.5;
+            lbPallet2.Text = pallet.productDetailName;
 
             System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle();
             rectangle.Width = 2;
@@ -106,11 +113,11 @@ namespace SeldatMRMS
                                        {
                                            if ((pallet.productDetailName.ToString().Trim() != "") && (pallet.palletStatus != "F"))
                                            {
-                                               lbPallet2.Content = pallet.productDetailName;
+                                               lbPallet2.Text = pallet.productDetailName;
                                            }
                                            else
                                            {
-                                               lbPallet2.Content = "";
+                                               lbPallet2.Text = "";
                                            }
 
                                        }
@@ -130,11 +137,11 @@ namespace SeldatMRMS
                                        {
                                            if ((pallet.productDetailName.ToString().Trim() != "") && (pallet.palletStatus != "F"))
                                            {
-                                               lbPallet2.Content = pallet.productDetailName;
+                                               lbPallet2.Text = pallet.productDetailName;
                                            }
                                            else
                                            {
-                                               lbPallet2.Content = "";
+                                               lbPallet2.Text = "";
                                            }
 
                                        }
@@ -153,11 +160,11 @@ namespace SeldatMRMS
                                        {
                                            if ((pallet.productDetailName.ToString().Trim() != "") && (pallet.palletStatus != "F"))
                                            {
-                                               lbPallet2.Content = pallet.productDetailName;
+                                               lbPallet2.Text = pallet.productDetailName;
                                            }
                                            else
                                            {
-                                               lbPallet2.Content = "";
+                                               lbPallet2.Text = "";
                                            }
 
                                        }
@@ -176,11 +183,11 @@ namespace SeldatMRMS
                                        {
                                            if ((pallet.productDetailName.ToString().Trim() != "") && (pallet.palletStatus != "F"))
                                            {
-                                               lbPallet2.Content = pallet.productDetailName;
+                                               lbPallet2.Text = pallet.productDetailName;
                                            }
                                            else
                                            {
-                                               lbPallet2.Content = "";
+                                               lbPallet2.Text = "";
                                            }
 
                                        }

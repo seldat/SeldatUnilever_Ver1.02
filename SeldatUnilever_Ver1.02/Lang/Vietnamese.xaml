@@ -19,15 +19,19 @@
     <sys:String x:Key="MainWindow_Menu_Account_ChangePass">_Thay đổi mật khẩu</sys:String>
     <sys:String x:Key="MainWindow_Menu_Account_Logout">_Đăng xuất</sys:String>
 
+    <!--MenuItem-->
+    <sys:String x:Key="Station_Menu_Item_Properties">Thông tin</sys:String>
+    <sys:String x:Key="Station_Menu_Item_Edit">Tùy chỉnh</sys:String>
+    <sys:String x:Key="Station_Menu_Item_Rotate">Xoay</sys:String>
+    <sys:String x:Key="Station_Menu_Item_Remove">Xóa</sys:String>
+
     <!--Toolbar-->
     <sys:String x:Key="MainWindow_Toolbar_MapReCenter">Đặt lại bản đồ</sys:String>
-
     <sys:String x:Key="MainWindow_Toolbar_robotConfigure">Cấu Hình Robot</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_areaConfigure">Cấu Hình Vùng Hoạt Động</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_riskareaConfigure">Cấu Hình Vùng Giao Thông</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_doorConfigure">Cấu Hình Cửa</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_chargerConfigure">Cấu Hình Trạm Sạc</sys:String>
-
     <sys:String x:Key="MainWindow_Toolbar_Configure">Tùy chỉnh</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_Statistics">Thống kê</sys:String>
     <sys:String x:Key="MainWindow_Toolbar_3Dmap">Bản đồ 3D</sys:String>

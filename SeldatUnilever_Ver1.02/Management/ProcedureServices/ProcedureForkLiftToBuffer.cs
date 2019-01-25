@@ -210,7 +210,7 @@ namespace SeldatMRMS
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try {
-                            if (false == Traffic.HasRobotUnityinArea (FlToBuf.GetFrontLineBuffer ().Position)) {
+                            if (false == Traffic.HasRobotUnityinArea (FlToBuf.GetAnyPointInBuffer().Position)) {
                                 createPlanBuffer();
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (FlToBuf.GetFrontLineBuffer ());

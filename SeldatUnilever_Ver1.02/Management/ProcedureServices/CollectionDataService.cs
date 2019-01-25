@@ -106,7 +106,7 @@ namespace SelDatUnilever_Ver1
             }
             return poseTemp;
         }
-        public Pose GetFrontLineBuffer() // đổi 
+        public Pose GetAnyPointInBuffer() // đổi 
         {
             Pose poseTemp = null;
             String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
@@ -121,6 +121,33 @@ namespace SelDatUnilever_Ver1
                         var bufferResults = result["buffers"][0];
                         String checkinResults = (String)bufferResults["bufferCheckIn"];
                         JObject stuff = JObject.Parse(checkinResults);
+                        double x = (double)stuff["headpoint"]["x"];
+                        double y = (double)stuff["headpoint"]["y"];
+                        double angle = (double)stuff["headpoint"]["angle"];
+                        poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
+                        break;
+
+                    }
+                }
+            }
+            return poseTemp;
+        }
+
+        public Pose GetFrontLineBuffer()
+        {
+            Pose poseTemp = null;
+            String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+            if (collectionData.Length > 0)
+            {
+                JArray results = JArray.Parse(collectionData);
+                foreach (var result in results)
+                {
+                    int temp_planId = (int)result["planId"];
+                    if (temp_planId == order.planId)
+                    {
+                        var bufferResults = result["buffers"][0];
+                        var palletInfo = bufferResults["pallets"][0];
+                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
                         double x = (double)stuff["line"]["x"];
                         double y = (double)stuff["line"]["y"];
                         double angle = (double)stuff["line"]["angle"];

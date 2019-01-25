@@ -68,9 +68,9 @@ namespace SeldatMRMS
             list_Robot = new SortedDictionary<string, RobotShape>();
             //==========EVENT==========
             map.MouseDown += Map_MouseDown;
-            //map.MouseWheel += Map_Zoom;
+            map.MouseWheel += Map_Zoom;
             map.MouseMove += Map_MouseMove;
-            //map.SizeChanged += Map_SizeChanged;
+            map.SizeChanged += Map_SizeChanged;
             map.MouseLeftButtonDown += Map_MouseLeftButtonDown;
             map.MouseRightButtonDown += Map_MouseRightButtonDown;
             map.MouseLeftButtonUp += Map_MouseLeftButtonUp;
@@ -225,7 +225,7 @@ namespace SeldatMRMS
             ////
             // POINT OF VIEW
             //
-            if ((!mainWindow.drag))
+            if ((mainWindow.drag))
             {
                 if (!map.IsMouseCaptured) return;
                 Vector moveVector = startPoint - e.GetPosition(mainWindow.clipBorder);

@@ -66,8 +66,8 @@ namespace SeldatMRMS.Management.RobotManagent {
         public void Initialize(Canvas canvas)
         {
             this.canvas = canvas;
-            ModelVisual3D layer = new ModelVisual3D();
-            robot3DModel = new Robot3D(properties.NameId, layer);
+            //ModelVisual3D layer = new ModelVisual3D();
+           // robot3DModel = new Robot3D(properties.NameId, layer);
             riskArea = new Path ();
             riskArea.Stroke = new SolidColorBrush (Colors.YellowGreen);
             riskArea.StrokeThickness = 1;

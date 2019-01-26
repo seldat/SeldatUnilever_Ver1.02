@@ -67,21 +67,24 @@ namespace SeldatMRMS.Management.RobotManagent
                 webSocket.OnOpen += (sender, e) => OnOpenedEvent();
                 webSocket.Connect();
             }).Start();
+            Console.Write("");
         }
         public virtual void Dispose()
         {
             if (webSocket != null)
             {
                 IsDisposed = true;
-                Close();
+
                 webSocket.OnMessage -= (sender, e) => recievedOperation((WebSocket)sender, e);
                 webSocket.OnClose -= (sender, e) => OnClosedEvent((WebSocket)sender, e);
                 webSocket.OnOpen -= (sender, e) => OnOpenedEvent();
+              //  Close();
                 webSocket = null;
             }
         }
         public void Close()
         {
+            
             while (publishers.Count > 0)
             {
                 Unadvertize(publishers.First().Key);

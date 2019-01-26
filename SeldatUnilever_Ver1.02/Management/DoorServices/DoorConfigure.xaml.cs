@@ -57,7 +57,7 @@ namespace SeldatUnilever_Ver1._02.Management.DoorServices
 
         private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (Global_Object.userLogin == (int)Global_Object.PRIORITYLOGIN.PRIORITYLOGIN_ADMIN0)
+            if (Global_Object.userLogin <=2)
             {
                 MainDataGrid.IsEnabled = true;
             }

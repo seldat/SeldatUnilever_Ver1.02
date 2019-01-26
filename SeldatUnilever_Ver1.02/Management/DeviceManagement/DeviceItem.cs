@@ -141,6 +141,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 product.timeWorkId = order.timeWorkId;
                 product.activeDate = order.activeDate;
                 product.productId = order.productId;
+                product.productDetailId = order.productDetailId;
 
                 // chu y sua 
                 product.palletStatus= PalletStatus.P.ToString();
@@ -176,6 +177,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     product.timeWorkId = order.timeWorkId;
                     product.activeDate = order.activeDate;
                     product.productId = order.productId;
+                    product.productDetailId = order.productDetailId;
                     // chu y sua 
                     product.palletStatus = PalletStatus.P.ToString(); // W
                     order.dataRequest = product.ToString();
@@ -207,6 +209,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     product.timeWorkId = order.timeWorkId;
                     product.activeDate = order.activeDate;
                     product.productId = order.productId;
+
                     // chu y sua 
                     product.palletStatus = PalletStatus.F.ToString();
                     order.dataRequest = product.ToString();
@@ -228,6 +231,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 product.timeWorkId = order.timeWorkId;
                 product.activeDate = order.activeDate;
                 product.productId = order.productId;
+                product.productDetailId = order.productDetailId;
                 // chu y sua 
                 product.palletStatus = PalletStatus.W.ToString();
                 order.dataRequest = product.ToString();

@@ -224,7 +224,9 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.pose.AngleW = posTheta;
             PoseHandler (properties.pose, this);
             Draw ();
-            
+            TrafficUpdate();
+
+
         }
         private void FinishedStatesHandler (Communication.Message message) {
             StandardInt32 standard = (StandardInt32) message;

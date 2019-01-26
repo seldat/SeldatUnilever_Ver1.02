@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,13 +25,31 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
     public partial class ConfigureRiskZone : Window
     {
         TrafficRounterService trafficRounterService;
-        public ConfigureRiskZone(TrafficRounterService trafficRounterService)
+        public ConfigureRiskZone(TrafficRounterService trafficRounterService, string cultureName = null)
         {
             InitializeComponent();
+            ApplyLanguage(cultureName);
             this.trafficRounterService = trafficRounterService;
             DataContext = trafficRounterService;
         }
+        public void ApplyLanguage(string cultureName = null)
+        {
+            if (cultureName != null)
+                Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(cultureName);
 
+            ResourceDictionary dict = new ResourceDictionary();
+            switch (Thread.CurrentThread.CurrentCulture.ToString())
+            {
+                case "vi-VN":
+                    dict.Source = new Uri("..\\Lang\\Vietnamese.xaml", UriKind.Relative);
+                    break;
+                // ...
+                default:
+                    dict.Source = new Uri("..\\Lang\\English.xaml", UriKind.Relative);
+                    break;
+            }
+            this.Resources.MergedDictionaries.Add(dict);
+        }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
@@ -65,6 +84,8 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
 
         private void FixedBtn_Click(object sender, RoutedEventArgs e)
         {
+            RiskZoneRegister rzr = (sender as Button).DataContext as RiskZoneRegister;
+            trafficRounterService.SaveConfigRiskZone(JsonConvert.SerializeObject(MainDataGrid.ItemsSource, Formatting.Indented));
 
         }
     }

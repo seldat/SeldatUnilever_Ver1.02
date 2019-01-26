@@ -262,8 +262,6 @@
 
     <!--ConfigureRiskZone-->
     <sys:String x:Key="ConfigureRiskZone_Title">Cài đặt Vùng nguy hiểm</sys:String>
-    <sys:String x:Key="ConfigureRiskZone_Button_Add">Thêm</sys:String>
+    <sys:String x:Key="ConfigureRiskZone_Button_Fix">Thêm</sys:String>
     <sys:String x:Key="ConfigureRiskZone_Button_Remove">Xóa</sys:String>
-
-
 </ResourceDictionary>

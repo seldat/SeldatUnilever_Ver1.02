@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Forms;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 
@@ -326,26 +327,37 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void FixedPropertiesRobotUnity(String nameID,PropertiesRobotUnity properties)
         {
-            RobotUnity Rd=RobotUnityRegistedList[nameID];
-            RemoveRobotUnityRegistedList(nameID);
-            RemoveRobotUnityWaitTaskList(nameID);
-            RemoveRobotUnityReadyList(nameID);
-            Rd.RemoveDraw();
-            Rd.Dispose();
-            Rd = null;
-            RobotUnity rn = new RobotUnity();
-            // cài đặt canvas
-            rn.Initialize(this.canvas);
-            // update properties
-            rn.UpdateProperties(properties);
-            // connect ros
-            rn.Start(properties.Url);
-            // đăng ký giao thông
-            rn.Registry(trafficManagementService);
-            RobotUnityRegistedList.Add(nameID, rn);
-            RobotUnityReadyList.Add(nameID, rn);
-            // dăng ký robot list
-            rn.RegisteRobotInAvailable(RobotUnityRegistedList);
+            DialogResult result = System.Windows.Forms.MessageBox.Show("Bạn chắc chắn Robot đang nằm ở vùng Charge/Ready?", "Confirmation", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                RobotUnity Rd = RobotUnityRegistedList[nameID];
+                Rd.RemoveDraw();
+                Rd.Dispose();
+                RemoveRobotUnityRegistedList(nameID);
+                RemoveRobotUnityWaitTaskList(nameID);
+                RemoveRobotUnityReadyList(nameID);
+                Rd = null;
+                RobotUnity rn = new RobotUnity();
+                // cài đặt canvas
+                rn.Initialize(this.canvas);
+                rn.UpdateProperties(properties);
+
+                // update properties
+
+                // connect ros
+                rn.Start(properties.Url);
+                // đăng ký giao thông
+                rn.Registry(trafficManagementService);
+                RobotUnityRegistedList.Add(nameID, rn);
+                RobotUnityReadyList.Add(nameID, rn);
+                // dăng ký robot list
+                rn.RegisteRobotInAvailable(RobotUnityRegistedList);
+            }
+            else if (result == DialogResult.No)
+            {
+                //...
+            }
+
         }
     }
 }

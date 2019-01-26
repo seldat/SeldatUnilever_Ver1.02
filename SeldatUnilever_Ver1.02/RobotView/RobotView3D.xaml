@@ -255,7 +255,7 @@
                 <TextBlock Foreground="#1aa3ff" FontWeight="Black" Text="BATTERY" FontSize="14" />
                 <TextBlock Foreground="#1aa3ff" FontWeight="Black" Text="(X:Y)" FontSize="14" />
             </StackPanel>
-            <StackPanel Grid.Column="1" HorizontalAlignment="Left" Height="120" Margin="0,10,0,0" VerticalAlignment="Top" Width="100">
+            <StackPanel Grid.Column="1" HorizontalAlignment="Left" Height="120" Margin="0,10,0,0" VerticalAlignment="Top" Width="200">
                 <TextBlock TextAlignment="Right" Foreground="#ff6600" x:Name="txt_moveMouseXY" Text="0.0/0.0" FontSize="14" FontWeight="Black"/>
                 <TextBlock TextAlignment="Right" Foreground="#ff6600" x:Name="txt_moveMouse_pointY" Text="0.0/0.0" FontSize="14" FontWeight="Black" />
                 <TextBlock TextAlignment="Right" Foreground="#ff6600" x:Name="txt_moveMouse_scaleLength" Text="10" FontSize="14" FontWeight="Black" />

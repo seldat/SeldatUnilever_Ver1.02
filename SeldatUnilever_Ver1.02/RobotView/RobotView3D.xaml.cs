@@ -114,13 +114,13 @@ namespace SeldatMRMS.RobotView
 		}
         public void RegisterRobotUnityList(List<RobotUnity> RobotUnityRegistedList)
         {
-              this.RobotUnityRegistedList = RobotUnityRegistedList;
-
-            MessageBox.Show(this.RobotUnityRegistedList[2].properties.NameId);
-            RobotUnityRegistedList.ForEach(e => e.robot3DModel.ScaledRobot(GlobalVariables.ROBOT_SCALED/10, GlobalVariables.ROBOT_SCALED/10, GlobalVariables.ROBOT_SCALED/10));
-
-
-            RobotUnityRegistedList.ForEach(e=>RobotLayer.Children.Add(e.robot3DModel.contentlayer));
+            try
+            {
+                this.RobotUnityRegistedList = RobotUnityRegistedList;
+                RobotUnityRegistedList.ForEach(e => e.robot3DModel.ScaledRobot(GlobalVariables.ROBOT_SCALED / 10, GlobalVariables.ROBOT_SCALED / 10, GlobalVariables.ROBOT_SCALED / 10));
+                RobotUnityRegistedList.ForEach(e => RobotLayer.Children.Add(e.robot3DModel.contentlayer));
+            }
+            catch { }
             
         }
         /*	public Robot3D setRobotAgenttoLayer(RobotAgent robotAgent,String robotname)
@@ -822,8 +822,9 @@ namespace SeldatMRMS.RobotView
 			RayMeshGeometry3DHitTestResult mesh_rsult = result as RayMeshGeometry3DHitTestResult;
 			try
 			{
-				txt_movePointer.Text = "" + GlobalVariables.ConvertUnitLengthtoMeter(mesh_rsult.PointHit.X).ToString("0.00") + " / " + GlobalVariables.ConvertUnitLengthtoMeter(mesh_rsult.PointHit.Y).ToString("0.00");
-			}
+				txt_movePointer.Text = "" + GlobalVariables.ConvertUnitLengthtoMeter(mesh_rsult.PointHit.X).ToString("0.00") + " / " + GlobalVariables.ConvertUnitLengthtoMeter(mesh_rsult.PointHit.Y).ToString("0.00")+
+                                        "  "+ mesh_rsult.PointHit.X.ToString("0.00") + " / " + mesh_rsult.PointHit.Y.ToString("0.00");
+            }
 			catch { }
 			if (mesh_rsult != null)
 			{

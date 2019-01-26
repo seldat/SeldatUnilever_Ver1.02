@@ -250,7 +250,7 @@
 
     <!--ConfigureRiskZone-->
     <sys:String x:Key="ConfigureRiskZone_Title">RiskZone Configuration</sys:String>
-    <sys:String x:Key="ConfigureRiskZone_Button_Add">Add</sys:String>
+    <sys:String x:Key="ConfigureRiskZone_Button_Fix">Fix</sys:String>
     <sys:String x:Key="ConfigureRiskZone_Button_Remove">Remove</sys:String>
 
 </ResourceDictionary>

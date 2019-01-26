@@ -92,7 +92,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             LoadConfigureZone();
             LoadConfigureRiskZone();
             configureArea = new ConfigureArea(this, Thread.CurrentThread.CurrentCulture.ToString());
-            configureRiskZone = new ConfigureRiskZone(this);
+            configureRiskZone = new ConfigureRiskZone(this, Thread.CurrentThread.CurrentCulture.ToString());
             //configureRiskZone.Show();
         }
         public void InitializeZone()
@@ -142,7 +142,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             PropertiesRiskZoneList.Add(ptemp);
             Grouped_PropertiesRiskZoneList.Refresh();
             RiskZoneRegisterList.Add(ptemp.NameId, ptemp);
-            SaveConfigRiskZone(JsonConvert.SerializeObject(PropertiesTrafficZoneList, Formatting.Indented).ToString());
+            SaveConfigRiskZone(JsonConvert.SerializeObject(PropertiesRiskZoneList, Formatting.Indented).ToString());
         }
         public void SaveConfigZone(String data)
         {

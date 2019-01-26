@@ -34,8 +34,8 @@ namespace SeldatMRMS.Management.RobotManagent
             public Pose () { }
             public void Destroy () // hủy vị trí robot để robot khác có thể làm việc trong quá trình detect
             {
-                this.Position = new Point (-1000, -1000);
-                this.AngleW = 0;
+                //this.Position = new Point (-1000, -1000);
+                //this.AngleW = 0;
             }
             public Point Position { get; set; }
             public double AngleW { get; set; } // radian
@@ -224,7 +224,9 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.pose.AngleW = posTheta;
             PoseHandler (properties.pose, this);
             Draw ();
-            
+            TrafficUpdate();
+
+
         }
         private void FinishedStatesHandler (Communication.Message message) {
             StandardInt32 standard = (StandardInt32) message;

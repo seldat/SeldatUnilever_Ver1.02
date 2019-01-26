@@ -238,8 +238,8 @@ namespace SeldatMRMS.Management.RobotManagent {
             border.Child = props.mainGrid;
             this.canvas.Children.Add (border);
             headerPoint = new Ellipse ();
-            headerPoint.Width = 5;
-            headerPoint.Height = 5;
+            headerPoint.Width = 1;
+            headerPoint.Height = 1;
             headerPoint.Fill = new SolidColorBrush (Colors.Red);
             canvas.Children.Add (riskArea);
             canvas.Children.Add (headerPoint);
@@ -369,15 +369,15 @@ namespace SeldatMRMS.Management.RobotManagent {
             DfWS = proR.WS;
             DfDistanceInter = proR.DistInter;
 
-            DfL1Cv = proR.L1 / properties.Scale;
-            DfL2Cv = proR.L2 / properties.Scale;
-            DfWSCv = proR.WS / properties.Scale;
-            DfDistanceInter = proR.DistInter / properties.Scale;
+            DfL1Cv = proR.L1* properties.Scale;
+            DfL2Cv = proR.L2* properties.Scale;
+            DfWSCv = proR.WS* properties.Scale;
+            DfDistInterCv = proR.DistInter* properties.Scale;
 
-            L1Cv = proR.L1 / properties.Scale;
-            L2Cv = proR.L2 / properties.Scale;
-            WSCv = proR.WS / properties.Scale;
-            DistInterCv = proR.DistInter / properties.Scale;         
+            L1Cv = proR.L1* properties.Scale;
+            L2Cv = proR.L2* properties.Scale;
+            WSCv = proR.WS* properties.Scale;
+            DistInterCv = proR.DistInter*properties.Scale;         
             Draw ();
 
         }

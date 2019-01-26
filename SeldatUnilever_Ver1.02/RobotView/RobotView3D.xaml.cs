@@ -822,8 +822,9 @@ namespace SeldatMRMS.RobotView
 			RayMeshGeometry3DHitTestResult mesh_rsult = result as RayMeshGeometry3DHitTestResult;
 			try
 			{
-				txt_movePointer.Text = "" + GlobalVariables.ConvertUnitLengthtoMeter(mesh_rsult.PointHit.X).ToString("0.00") + " / " + GlobalVariables.ConvertUnitLengthtoMeter(mesh_rsult.PointHit.Y).ToString("0.00");
-			}
+				txt_movePointer.Text = "" + GlobalVariables.ConvertUnitLengthtoMeter(mesh_rsult.PointHit.X).ToString("0.00") + " / " + GlobalVariables.ConvertUnitLengthtoMeter(mesh_rsult.PointHit.Y).ToString("0.00")+
+                                        "  "+ mesh_rsult.PointHit.X.ToString("0.00") + " / " + mesh_rsult.PointHit.Y.ToString("0.00");
+            }
 			catch { }
 			if (mesh_rsult != null)
 			{

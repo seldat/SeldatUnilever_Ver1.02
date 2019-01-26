@@ -62,10 +62,10 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.WS = WS;
             properties.DistInter = distanceInter;
 
-            L1Cv = L1 / properties.Scale;
-            L2Cv = L2 / properties.Scale;
-            WSCv = WS / properties.Scale;
-            DistInterCv = distanceInter / properties.Scale;
+            L1Cv = L1* properties.Scale;
+            L2Cv = L2*properties.Scale;
+            WSCv = WS*properties.Scale;
+            DistInterCv = distanceInter*properties.Scale;
 
         }
         public virtual Point TopHeader()

@@ -553,6 +553,16 @@ namespace SeldatUnilever_Ver1._02.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap test34 {
+            get {
+                object obj = ResourceManager.GetObject("test34", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap unilever_logo {
             get {
                 object obj = ResourceManager.GetObject("unilever_logo", resourceCulture);

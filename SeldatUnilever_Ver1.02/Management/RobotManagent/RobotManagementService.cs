@@ -43,8 +43,6 @@ namespace SeldatMRMS.Management.RobotManagent
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
             configureForm = new ConfigureRobotUnity(this, Thread.CurrentThread.CurrentCulture.ToString());
             LoadConfigure();
-           // RobotUnity rb1 = RobotUnityRegistedList["RSD0"];
-          // rb1.Start("ws://192.168.80.131:9090");
         }
         public void Initialize()
         {
@@ -56,7 +54,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.Label = "Robot1";
             prop1.BatteryLowLevel = 23;
             prop1.BatteryLevelRb = 40;
-            prop1.Url = "ws://192.168.80.131:9090";
+            prop1.Url = "ws://192.168.80.132:9090";
             prop1.DistInter = 40;
             prop1.BatteryLowLevel = 25;
             prop1.RequestChargeBattery = false;
@@ -69,16 +67,15 @@ namespace SeldatMRMS.Management.RobotManagent
             r1.Initialize(this.canvas);
             r1.UpdateProperties(prop1);
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
-            PropertiesRobotUnity_List.Add(r1.properties);
-            RobotUnityRegistedList.Add(r1.properties.NameId, r1);
-            r1.Registry(trafficManagementService);
-            r1.Start(prop1.Url);
-
+            PropertiesRobotUnity_List.Add (r1.properties);
+            RobotUnityRegistedList.Add (r1.properties.NameId, r1);
+            r1.Registry (trafficManagementService);
+            r1.Start (prop1.Url);
             // đăng ký robot list to many robot quan trong
-            AddRobotUnityReadyList(r1);
-            r1.RegisteRobotInAvailable(RobotUnityRegistedList);
-          
-            PropertiesRobotUnity prop2= new PropertiesRobotUnity();
+            AddRobotUnityReadyList (r1);
+            r1.RegisteRobotInAvailable (RobotUnityRegistedList);
+#if false
+            PropertiesRobotUnity prop2 = new PropertiesRobotUnity ();
             prop2.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop2.L1 = 40;
             prop2.L2 = 40;
@@ -102,7 +99,9 @@ namespace SeldatMRMS.Management.RobotManagent
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r2.properties.NameId, r2);
             r2.Registry(trafficManagementService);
-            r2.RegisteRobotInAvailable(RobotUnityRegistedList);
+            r2.Start (prop2.Url);
+            AddRobotUnityReadyList (r2);
+            r2.RegisteRobotInAvailable (RobotUnityRegistedList);
 
             PropertiesRobotUnity prop3 = new PropertiesRobotUnity();
             prop3.NameId = "RSD" + RobotUnityRegistedList.Count;
@@ -129,10 +128,11 @@ namespace SeldatMRMS.Management.RobotManagent
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r3.properties.NameId, r3);
             r3.Registry(trafficManagementService);
-            r3.RegisteRobotInAvailable(RobotUnityRegistedList);
-            Grouped_PropertiesRobotUnity.Refresh();
-
-
+            r3.Start (prop3.Url);
+            AddRobotUnityReadyList (r3);
+            r3.RegisteRobotInAvailable (RobotUnityRegistedList);
+            Grouped_PropertiesRobotUnity.Refresh ();
+#endif
         }
         public void Registry(TrafficManagementService trafficManagementService)
         {
@@ -167,7 +167,8 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             else
             {
-                
+                try
+                {
                     String data = File.ReadAllText(path);
                     if (data.Length > 0)
                     {
@@ -177,7 +178,6 @@ namespace SeldatMRMS.Management.RobotManagent
                             PropertiesRobotUnity_List.Add(e);
                             RobotUnity robot = new RobotUnity();
                             robot.Initialize(this.canvas);
-
                             robot.UpdateProperties(e);
                             robot.Registry(trafficManagementService);
                             RobotUnityRegistedList.Add(e.NameId,robot);
@@ -188,7 +188,8 @@ namespace SeldatMRMS.Management.RobotManagent
                         Grouped_PropertiesRobotUnity.Refresh();
                         return true;
                     }                   
-              
+                }
+                catch { }
             }
             return false;
         }

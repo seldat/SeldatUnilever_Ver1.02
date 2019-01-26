@@ -67,9 +67,11 @@ namespace SeldatMRMS
             DoorService ds = FlToBuf.door;
             TrafficManagementService Traffic = FlToBuf.Traffic;
             Console.WriteLine("ProcedureForkLiftToBuffer run...");
+            Debug(this,"Start");
             while (ProRun) {
                 switch (StateForkLiftToBuffer) {
                     case ForkLiftToBuffer.FORBUF_IDLE:
+                        Debug(this,"FORBUF_IDLE");
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_GOTO_CHECKIN_GATE: //gui toa do di den khu vuc checkin cong
                         if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY) {
@@ -82,9 +84,11 @@ namespace SeldatMRMS
                                     if (Traffic.RobotIsInArea ("OPA4", rb.properties.pose.Position)) {
                                         rb.SendPoseStamped (ds.config.PointFrontLine);
                                         StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_CAME_CHECKIN_GATE;
+                                        Debug(this,"FORBUF_ROBOT_CAME_CHECKIN_GATE");
                                     } else {
                                         rb.SendPoseStamped (ds.config.PointCheckInGate);
                                         StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
+                                        Debug(this,"FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE"); 
                                     }
                                     break;
                                 } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
@@ -104,9 +108,11 @@ namespace SeldatMRMS
                             if (Traffic.RobotIsInArea ("OPA4", rb.properties.pose.Position)) {
                                 rb.SendPoseStamped (ds.config.PointFrontLine);
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_CAME_CHECKIN_GATE;
+                                Debug(this,"FORBUF_ROBOT_CAME_CHECKIN_GATE"); 
                             } else {
                                 rb.SendPoseStamped (ds.config.PointCheckInGate);
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
+                                Debug(this,"FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE"); 
                             }
                         }
                         break;
@@ -116,6 +122,7 @@ namespace SeldatMRMS
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             rb.UpdateRiskAraParams(0,rb.properties.L2,rb.properties.WS,rb.properties.DistInter);
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_CAME_CHECKIN_GATE;
+                            Debug(this,"FORBUF_ROBOT_CAME_CHECKIN_GATE"); 
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
@@ -124,6 +131,7 @@ namespace SeldatMRMS
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             rb.SendPoseStamped (ds.config.PointFrontLine);
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_GATE;
+                            Debug(this,"FORBUF_ROBOT_WAITTING_GOTO_GATE"); 
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_GATE:
@@ -131,11 +139,13 @@ namespace SeldatMRMS
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_CAME_GATE_POSITION;
+                            Debug(this,"FORBUF_ROBOT_CAME_GATE_POSITION"); 
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
                         if (ds.Open (DoorService.DoorId.DOOR_MEZZAMINE_UP_BACK)) {
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_OPEN_DOOR;
+                            Debug(this,"FORBUF_ROBOT_WAITTING_OPEN_DOOR"); 
                         } else {
                             errorCode = ErrorCode.CONNECT_DOOR_ERROR;
                             CheckUserHandleError(this);
@@ -144,6 +154,7 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
                         if (true == ds.WaitOpen (DoorService.DoorId.DOOR_MEZZAMINE_UP_BACK, TIME_OUT_OPEN_DOOR)) {
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_OPEN_DOOR_SUCCESS;
+                            Debug(this,"FORBUF_ROBOT_OPEN_DOOR_SUCCESS"); 
                         } else {
                             errorCode = ErrorCode.OPEN_DOOR_ERROR;
                             CheckUserHandleError(this);
@@ -153,6 +164,7 @@ namespace SeldatMRMS
                         // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
                         rb.SendCmdAreaPallet (ds.config.infoPallet);
                         StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_PICKUP_PALLET_IN;
+                        Debug(this,"FORBUF_ROBOT_WAITTING_PICKUP_PALLET_IN"); 
                         break;
                         // case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_PALLET_IN:
                         //     if (true == rb.CheckPointDetectLine(ds.config.P, rb))
@@ -167,6 +179,7 @@ namespace SeldatMRMS
                             // FlToBuf.UpdatePalletState(PalletStatus.F);
                             rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
+                            Debug(this,"FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -177,6 +190,7 @@ namespace SeldatMRMS
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             if (ds.Close (DoorService.DoorId.DOOR_MEZZAMINE_UP_BACK)) {
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CLOSE_GATE;
+                                Debug(this,"FORBUF_ROBOT_WAITTING_CLOSE_GATE"); 
                             } else {
                                 errorCode = ErrorCode.CONNECT_DOOR_ERROR;
                                 CheckUserHandleError(this);
@@ -192,6 +206,7 @@ namespace SeldatMRMS
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (FlToBuf.GetCheckInBuffer ());
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
+                                Debug(this,"FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER"); 
                             } else {
                                 errorCode = ErrorCode.CLOSE_DOOR_ERROR;
                                 CheckUserHandleError(this);
@@ -206,6 +221,7 @@ namespace SeldatMRMS
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY;
+                            Debug(this,"FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY"); 
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
@@ -215,6 +231,7 @@ namespace SeldatMRMS
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (FlToBuf.GetFrontLineBuffer ());
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
+                                Debug(this,"FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER"); 
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -229,6 +246,7 @@ namespace SeldatMRMS
                                 // rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_FORWARD_DIRECTION);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;
+                                Debug(this,"FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER"); 
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -270,6 +288,7 @@ namespace SeldatMRMS
                             FlToBuf.UpdatePalletState (PalletStatus.W);
                             rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
+                            Debug(this,"FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -280,6 +299,7 @@ namespace SeldatMRMS
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+                            Debug(this,"FORBUF_ROBOT_RELEASED"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -293,6 +313,7 @@ namespace SeldatMRMS
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
+                        Debug(this,"RELEASED"); 
                         break;
                     default:
                         break;

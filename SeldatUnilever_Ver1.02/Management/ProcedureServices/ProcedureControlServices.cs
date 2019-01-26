@@ -180,8 +180,8 @@ namespace SeldatMRMS {
             ROBCHAR_WAITTING_CHARGEBATTERY, //dợi charge battery và thông tin giao tiếp server và trạm sạc
             ROBCHAR_FINISHED_CHARGEBATTERY, //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc
             ROBCHAR_ROBOT_WAITTING_RECONNECTING, //Robot mở nguồng và đợi connect lại
-            ROBCHAR_ROBOT_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại
-            ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại
+            // ROBCHAR_ROBOT_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại
+            // ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER, //Robot mở nguồng và đợi connect lại
             // ROBCHAR_ROBOT_STATUS_GOOD_OPERATION, //điều kiện hoạt động tốt 
             // ROBCHAR_ROBOT_STATUS_BAD_OPERATION, //điều kiện hoạt động không tốt thông tin về procedure management chuyển sang quy trình xử lý sự cố
             ROBCHAR_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
@@ -223,11 +223,13 @@ namespace SeldatMRMS {
 
         protected void CheckUserHandleError (object obj) {
             bool keepRun = true;
+            ProcedureControlServices p = (ProcedureControlServices)obj;
+            Debug (obj,"ErrorCode -> " + getStringError(p.errorCode));
             ErrorProcedureHandler (obj);
             while (keepRun) {
                 switch (selectHandleError) {
                     case SelectHandleError.CASE_ERROR_WAITTING:
-                        Global_Object.PlayWarning();
+                        // Global_Object.PlayWarning ();
                         robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
                             new Action (delegate () {
                                 robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_ERROR);
@@ -235,7 +237,7 @@ namespace SeldatMRMS {
                         Thread.Sleep (1000);
                         break;
                     case SelectHandleError.CASE_ERROR_CONTINUOUS:
-                        Global_Object.StopWarning();
+                        // Global_Object.StopWarning ();
                         robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
                             new Action (delegate () {
                                 robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_RUNNING);
@@ -245,7 +247,7 @@ namespace SeldatMRMS {
                         keepRun = false;
                         break;
                     case SelectHandleError.CASE_ERROR_EXIT:
-                        Global_Object.StopWarning();
+                        // Global_Object.StopWarning ();
                         robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
                             new Action (delegate () {
                                 robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX);
@@ -259,6 +261,71 @@ namespace SeldatMRMS {
                 }
             }
             selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
+        }
+        protected void Debug (object ojb, string log) {
+            ProcedureControlServices pCs = (ProcedureControlServices) ojb;
+            RobotUnity rb = pCs.GetRobotUnity ();
+            string rBid = rb.properties.NameId + " => (^_^) ";
+
+            switch (pCs.procedureCode) {
+                case ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE:
+                    Console.WriteLine (rBid + "BUFFER_TO_MACHINE:" + log);
+                    break;
+                case ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER:
+                    Console.WriteLine (rBid + "FORKLIFT_TO_BUFFER:" + log);
+                    break;
+                case ProcedureCode.PROC_CODE_BUFFER_TO_RETURN:
+                    Console.WriteLine (rBid + "BUFFER_TO_RETURN:" + log);
+                    break;
+                case ProcedureCode.PROC_CODE_MACHINE_TO_RETURN:
+                    Console.WriteLine (rBid + "MACHINE_TO_RETURN:" + log);
+                    break;
+                case ProcedureCode.PROC_CODE_RETURN_TO_GATE:
+                    Console.WriteLine (rBid + "RETURN_TO_GATE:" + log);
+                    break;
+                case ProcedureCode.PROC_CODE_ROBOT_TO_READY:
+                    Console.WriteLine (rBid + "ROBOT_TO_READY:" + log);
+                    break;
+                case ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE:
+                    Console.WriteLine (rBid + "ROBOT_TO_CHARGE:" + log);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        protected string getStringError(ErrorCode erCode) {
+            switch (erCode) {
+                case ErrorCode.DETECT_LINE_ERROR:
+                    return "DETECT_LINE_ERROR";
+                case ErrorCode.DETECT_LINE_CHARGER_ERROR:
+                    return "DETECT_LINE_CHARGER_ERROR";
+                case ErrorCode.CONNECT_DOOR_ERROR:
+                    return "CONNECT_DOOR_ERROR";
+                case ErrorCode.OPEN_DOOR_ERROR:
+                    return "OPEN_DOOR_ERROR";
+                case ErrorCode.CLOSE_DOOR_ERROR:
+                    return "CLOSE_DOOR_ERROR";
+                case ErrorCode.CONNECT_CHARGER_ERROR:
+                    return "CONNECT_CHARGER_ERROR";
+                case ErrorCode.CONTACT_CHARGER_ERROR:
+                    return "CONTACT_CHARGER_ERROR";
+                case ErrorCode.LASER_CONTROL_ERROR:
+                    return "LASER_CONTROL_ERROR";
+                case ErrorCode.CAN_NOT_GET_DATA:
+                    return "CAN_NOT_GET_DATA";
+                case ErrorCode.ROBOT_CANNOT_CONNECT_SERVER_AFTER_CHARGE:
+                    return "ROBOT_CANNOT_CONNECT_SERVER_AFTER_CHARGE";
+                case ErrorCode.CAN_NOT_TURN_OFF_PC:
+                    return "CAN_NOT_TURN_OFF_PC";
+                case ErrorCode.CAN_NOT_TURN_ON_PC:
+                    return "CAN_NOT_TURN_ON_PC";
+                case ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR:
+                    return "CONNECT_BOARD_CTRL_ROBOT_ERROR";
+                default:
+                    break;
+            }
+            return "";
         }
     }
 }

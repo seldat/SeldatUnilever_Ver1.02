@@ -53,11 +53,14 @@ namespace SeldatMRMS {
             RobotUnity rb = BfToMa.robot;
             // DataBufferToMachine p = BfToMa.points;
             TrafficManagementService Traffic = BfToMa.Traffic;
+            Debug(this,"Start");
             while (ProRun) {
                 switch (StateBufferToMachine) {
                     case BufferToMachine.BUFMAC_IDLE:
+                        Debug(this,"BUFMAC_IDLE");
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER: // bắt đầu rời khỏi vùng GATE đi đến check in/ đảm bảo check out vùng cổng để robot kế tiếp vào làm việc
+                        Debug(this,"BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER");
                         try {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY) {
                                 rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
@@ -68,6 +71,7 @@ namespace SeldatMRMS {
                                         resCmd = ResponseCommand.RESPONSE_NONE;
                                         rb.SendPoseStamped (BfToMa.GetCheckInBuffer ());
                                         StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
+                                        Debug(this,"BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
                                         break;
                                     } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                         errorCode = ErrorCode.DETECT_LINE_ERROR;
@@ -85,6 +89,7 @@ namespace SeldatMRMS {
                             } else {
                                 rb.SendPoseStamped (BfToMa.GetCheckInBuffer ());
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
+                                Debug(this,"BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -96,6 +101,7 @@ namespace SeldatMRMS {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY;
+                            Debug(this,"BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
@@ -104,6 +110,7 @@ namespace SeldatMRMS {
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (BfToMa.GetFrontLineBuffer ());
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
+                                Debug(this,"BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -117,6 +124,7 @@ namespace SeldatMRMS {
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 rb.SendCmdAreaPallet (BfToMa.GetInfoOfPalletBuffer (PistonPalletCtrl.PISTON_PALLET_UP));
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
+                                Debug(this,"BUFMAC_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -158,6 +166,7 @@ namespace SeldatMRMS {
                             BfToMa.UpdatePalletState (PalletStatus.F);
                             rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
+                            Debug(this,"BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -170,6 +179,7 @@ namespace SeldatMRMS {
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (BfToMa.GetFrontLineMachine ());
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET;
+                                Debug(this,"BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET");
                             } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                                 errorCode = ErrorCode.DETECT_LINE_ERROR;
                                 CheckUserHandleError(this);
@@ -186,6 +196,7 @@ namespace SeldatMRMS {
                                 rb.SendCmdAreaPallet (BfToMa.GetInfoOfPalletMachine (PistonPalletCtrl.PISTON_PALLET_DOWN));
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET;
+                                Debug(this,"BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET");
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
@@ -209,6 +220,7 @@ namespace SeldatMRMS {
                             BfToMa.UpdatePalletState (PalletStatus.W);
                             rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE;
+                            Debug(this,"BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE");
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -219,6 +231,7 @@ namespace SeldatMRMS {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;
+                            Debug(this,"BUFMAC_ROBOT_RELEASED");
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
                             errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
@@ -232,6 +245,7 @@ namespace SeldatMRMS {
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
+                        Debug(this,"RELEASED");
                         break;
                     default:
                         break;

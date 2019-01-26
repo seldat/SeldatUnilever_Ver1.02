@@ -159,7 +159,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.userName = (String)results["userName"];
                     order.productDetailId = (int)results["productDetailId"];
                     order.productId = (int)results["productId"];
-                    order.planId=(int)results["planId"];
+                    order.planId = (int)results["planId"];
                     order.deviceId = (int)results["deviceId"];
                     order.timeWorkId = (int)results["timeWorkId"];
                     order.activeDate = (string)results["activeDate"];
@@ -171,7 +171,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     double angle = (double)stuffPallet["line"]["angle"];
                     int row = (int)stuffPallet["pallet"]["row"];
                     int bay = (int)stuffPallet["pallet"]["bay"];
-                    int direct = (int)stuffPallet["pallet"]["direct"];
+                    int direct = (int)stuffPallet["pallet"]["direction"];
                     order.palletAtMachine = new DataPallet() {linePos=new Pose(xx,yy,angle), row=row, bay=bay,direct=direct};
                     dynamic product = new JObject();
                     product.timeWorkId = order.timeWorkId;
@@ -179,7 +179,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     product.productId = order.productId;
                     product.productDetailId = order.productDetailId;
                     // chu y sua 
-                    product.palletStatus = PalletStatus.P.ToString(); // W
+                    product.palletStatus = PalletStatus.W.ToString(); // W
                     order.dataRequest = product.ToString();
                     oneOrderList.Add(order);
                 }

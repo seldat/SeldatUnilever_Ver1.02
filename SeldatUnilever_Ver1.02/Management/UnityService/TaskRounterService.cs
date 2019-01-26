@@ -62,9 +62,12 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         }
         public void MoveElementToEnd()
         {
-            var element = deviceItemsList[0];
-            deviceItemsList.RemoveAt(0);
-            deviceItemsList.Add(element);
+            if (deviceItemsList.Count > 0)
+            {
+                var element = deviceItemsList[0];
+                deviceItemsList.RemoveAt(0);
+                deviceItemsList.Add(element);
+            }
         }
         public OrderItem Gettask()
         {

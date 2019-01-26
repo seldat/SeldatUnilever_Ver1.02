@@ -217,7 +217,6 @@ namespace SeldatMRMS {
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            BfToMa.UpdatePalletState (PalletStatus.W);
                             rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE;
                             Debug(this,"BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE");

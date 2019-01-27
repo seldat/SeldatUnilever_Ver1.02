@@ -230,13 +230,15 @@ namespace SelDatUnilever_Ver1
                         JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
                         int row = (int)stuff["pallet"]["row"];
                         int bay = (int)stuff["pallet"]["bay"];
-                        int direct = (int)stuff["pallet"]["direction"];
+                        int directMain = (int)stuff["pallet"]["dir_main"];
+                        int directSub = (int)stuff["pallet"]["dir_sub"];
                         string subline = (string)stuff["pallet"]["hasSubLine"];
 
                         infoPallet.pallet = pisCtrl; /* dropdown */
+                        infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
                         infoPallet.bay = bay;
                         infoPallet.hasSubLine = subline; /* yes or no */
-                        infoPallet.direction = (TrafficRobotUnity.BrDirection)direct; /* right */
+                        infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
                         infoPallet.row = row;
                         break;
                     }
@@ -252,7 +254,8 @@ namespace SelDatUnilever_Ver1
             infoPallet.pallet = pisCtrl; /* dropdown */
             infoPallet.bay = order.palletAtMachine.bay;
             infoPallet.hasSubLine = "no"; /* no */
-            infoPallet.direction = (TrafficRobotUnity.BrDirection)order.palletAtMachine.direct; /* right */
+            infoPallet.dir_main = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directMain;
+            infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directSub;
             infoPallet.row = order.palletAtMachine.row;
 
             return JsonConvert.SerializeObject(infoPallet);
@@ -273,12 +276,14 @@ namespace SelDatUnilever_Ver1
                 JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
                 int row = (int)stuff["pallet"]["row"];
                 int bay = (int)stuff["pallet"]["bay"];
-                int direct = (int)stuff["pallet"]["direction"];
+                int directMain = (int)stuff["pallet"]["dir_main"];
+                int directSub = (int)stuff["pallet"]["dir_sub"];
 
                 infoPallet.pallet = pisCtrl; /* dropdown */
                 infoPallet.bay = bay;
                 infoPallet.hasSubLine = "yes"; /* no */
-                infoPallet.direction = (TrafficRobotUnity.BrDirection)direct; /* right */
+                infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain; 
+                infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; 
                 infoPallet.row = row;
 
             }

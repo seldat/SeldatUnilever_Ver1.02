@@ -24,7 +24,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         {
             public int row;
             public int bay;
-            public int direct;
+            public int directMain;
+            public int directSub;
             public PalletCtrl palletCtrl;
             public Pose linePos;
         }
@@ -171,8 +172,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     double angle = (double)stuffPallet["line"]["angle"];
                     int row = (int)stuffPallet["pallet"]["row"];
                     int bay = (int)stuffPallet["pallet"]["bay"];
-                    int direct = (int)stuffPallet["pallet"]["direction"];
-                    order.palletAtMachine = new DataPallet() {linePos=new Pose(xx,yy,angle), row=row, bay=bay,direct=direct};
+                    int directMain = (int)stuffPallet["pallet"]["dir_main"];
+                    int directSub = (int)stuffPallet["pallet"]["dir_sub"];
+                    order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub };
                     dynamic product = new JObject();
                     product.timeWorkId = order.timeWorkId;
                     product.activeDate = order.activeDate;
@@ -203,8 +205,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     double angle = (double)stuffPallet["line"]["angle"];
                     int row = (int)stuffPallet["pallet"]["row"];
                     int bay = (int)stuffPallet["pallet"]["bay"];
-                    int direct = (int)stuffPallet["pallet"]["direct"];
-                    order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, direct = direct };
+                    int directMain = (int)stuffPallet["pallet"]["dir_main"];
+                    int directSub = (int)stuffPallet["pallet"]["dir_sub"];
+                    order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub };
                     dynamic product = new JObject();
                     product.timeWorkId = order.timeWorkId;
                     product.activeDate = order.activeDate;

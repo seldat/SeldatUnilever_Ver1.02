@@ -63,9 +63,10 @@ namespace SeldatMRMS.Management
         }
         public class JInfoPallet{
             public PistonPalletCtrl pallet;
+            public BrDirection dir_main;
             public Int32 bay;
             public String hasSubLine;
-            public BrDirection direction;
+            public BrDirection dir_sub;
             public Int32 row;
             public Int32 palletId;
         }

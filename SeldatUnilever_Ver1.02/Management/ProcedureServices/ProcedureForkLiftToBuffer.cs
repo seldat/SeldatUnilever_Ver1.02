@@ -46,8 +46,8 @@ namespace SeldatMRMS
             procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
 
         }
-        //public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_GOTO_CHECKIN_GATE) {
-        public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
+        public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_GOTO_CHECKIN_GATE) {
+        // public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
             StateForkLiftToBuffer = state;

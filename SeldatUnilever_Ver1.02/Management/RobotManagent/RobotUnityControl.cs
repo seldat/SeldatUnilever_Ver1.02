@@ -21,15 +21,17 @@ namespace SeldatMRMS.Management.RobotManagent
         private const float delBatterry = 5;
         public class Pose
         {
-            public Pose(Point p, double AngleW) // Angle gốc
+            public Pose(Point p, double Angle) // Angle gốc
             {
                 this.Position = p;
-                this.AngleW = AngleW;
+                this.AngleW = Angle * Math.PI / 180.0;
+                this.Angle = Angle;
             }
-            public Pose (double X, double Y, double AngleW) // Angle gốc
+            public Pose (double X, double Y, double Angle) // Angle gốc
             {
                 this.Position = new Point(X, Y);
-                this.AngleW = AngleW;
+                this.AngleW = Angle*Math.PI/180.0;
+                this.Angle = Angle;
             }
             public Pose () { }
             public void Destroy () // hủy vị trí robot để robot khác có thể làm việc trong quá trình detect
@@ -39,6 +41,7 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             public Point Position { get; set; }
             public double AngleW { get; set; } // radian
+            public double Angle { get; set; } // radian
         }
         public enum RobotSpeedLevel {
             ROBOT_SPEED_NORMAL = 100,

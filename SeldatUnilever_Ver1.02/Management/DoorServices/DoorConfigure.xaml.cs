@@ -1,4 +1,6 @@
-﻿using SeldatMRMS;
+﻿using DoorControllerService;
+using Newtonsoft.Json;
+using SeldatMRMS;
 using SeldatMRMS.Management.DoorServices;
 using System;
 using System.Collections.Generic;
@@ -52,7 +54,8 @@ namespace SeldatUnilever_Ver1._02.Management.DoorServices
 
         private void FixedBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            DoorService ds = (sender as Button).DataContext as DoorService;
+            this.doorManagementService.SaveConfig(JsonConvert.SerializeObject(MainDataGrid.ItemsSource, Formatting.Indented));
         }
 
         private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

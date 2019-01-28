@@ -43,7 +43,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
         {
             ChargerInfoConfig pchr1 = new ChargerInfoConfig();
             pchr1.Id = ChargerId.CHARGER_ID_1;
-            pchr1.Ip = "192.168.1.2";
+            pchr1.Ip = "192.168.1.200";
             pchr1.Port = 8081;
             pchr1.PointFrontLineStr = "1,2,3";
             pchr1.ParsePointFrontLineValue(pchr1.PointFrontLineStr);
@@ -54,7 +54,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
 
             ChargerInfoConfig pchr2 = new ChargerInfoConfig();
             pchr2.Id = ChargerId.CHARGER_ID_2;
-            pchr2.Ip = "192.168.1.2";
+            pchr2.Ip = "192.168.1.201";
             pchr2.Port = 8081;
             pchr2.PointFrontLineStr = "1,2,3";
             pchr2.ParsePointFrontLineValue(pchr2.PointFrontLineStr);
@@ -65,7 +65,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
 
             ChargerInfoConfig pchr3 = new ChargerInfoConfig();
             pchr3.Id = ChargerId.CHARGER_ID_3;
-            pchr3.Ip = "192.168.1.2";
+            pchr3.Ip = "192.168.1.202";
             pchr3.Port = 8081;
             pchr3.PointFrontLineStr = "1,2,3";
             pchr3.ParsePointFrontLineValue(pchr3.PointFrontLineStr);

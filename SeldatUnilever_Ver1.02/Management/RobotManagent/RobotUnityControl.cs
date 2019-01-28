@@ -18,7 +18,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public event Action<Pose, Object> PoseHandler;
         public event Action<Object, ConnectionStatus> ConnectionStatusHandler;
 
-        private const float delBatterry = 5;
+        private const float delBatterry = 2;
         public class Pose
         {
             public Pose(Point p, double AngleW) // Angle gốc

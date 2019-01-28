@@ -52,11 +52,12 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.L2 = 40;
             prop1.WS = 60;
             prop1.Label = "Robot1";
-            prop1.BatteryLowLevel = 23;
             prop1.BatteryLevelRb = 40;
             prop1.Url = "ws://192.168.80.132:9090";
+            prop1.ipMcuCtrl = "192.168.1.210";
+            prop1.portMcuCtrl = 8081;
             prop1.DistInter = 40;
-            prop1.BatteryLowLevel = 25;
+            prop1.BatteryLowLevel = 20;
             prop1.RequestChargeBattery = false;
             prop1.Width = 1.8;
             prop1.Height = 2.5;
@@ -81,11 +82,12 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.L2 = 40;
             prop2.WS = 60;
             prop2.Label = "Robot2";
-            prop2.BatteryLowLevel = 23;
             prop2.BatteryLevelRb = 40;
             prop2.Url = "ws://192.168.1.200:9090";
+            prop2.ipMcuCtrl = "192.168.1.211";
+            prop2.portMcuCtrl = 8081;
             prop2.DistInter = 40;
-            prop2.BatteryLowLevel = 25;
+            prop2.BatteryLowLevel = 20;
             prop2.RequestChargeBattery = false;
             prop2.Width = 1.8;
             prop2.Height = 2.5;
@@ -109,11 +111,12 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.L2 = 40;
             prop3.WS = 60;
             prop3.Label = "Robot3";
-            prop3.BatteryLowLevel = 23;
             prop3.BatteryLevelRb = 40;
             prop3.Url = "ws://192.168.1.200:9090";
+            prop3.ipMcuCtrl = "192.168.1.212";
+            prop3.portMcuCtrl = 8081;
             prop3.DistInter = 40;
-            prop3.BatteryLowLevel = 25;
+            prop3.BatteryLowLevel = 20;
             prop3.RequestChargeBattery = false;
             prop3.Width = 1.8;
             prop3.Height = 2.5;
@@ -192,50 +195,6 @@ namespace SeldatMRMS.Management.RobotManagent
                 catch { }
             }
             return false;
-        }
-        public void LoadRobotUnityConfigure()
-        {
-            string name = "Robot";
-            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Configure.xlsx");
-            string constr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +
-                            path +
-                            ";Extended Properties='Excel 12.0 XML;HDR=YES;';";
-            OleDbConnection con = new OleDbConnection(constr);
-            OleDbCommand oconn = new OleDbCommand("Select * From [" + name + "$]", con);
-            con.Open();
-
-            OleDbDataAdapter sda = new OleDbDataAdapter(oconn);
-            DataTable data = new DataTable();
-            sda.Fill(data);
-           // foreach (DataRow row in data.Rows)
-            {
-                RobotUnity robot1 = new RobotUnity();
-                //robot.Initialize(row);
-                robot1.properties.NameId = "1";
-                robot1.properties.ChargeID = ChargerId.CHARGER_ID_1;
-                robot1.Start("ws://192.168.80.131:9090");
-                RobotUnityRegistedList.Add(robot1.properties.NameId, robot1);
-                robot1.ConnectionStatusHandler += ConnectionStatusHandler;
-                AddRobotUnityReadyList(robot1);
-
-
-                //RobotUnity robot2 = new RobotUnity();
-                //robot2.ConnectionStatusHandler += ConnectionStatusHandler;
-                //robot.Initialize(row);
-                //robot2.properties.NameID = "Robot2";
-                //robot2.Start("ws://192.168.80.131:9090");
-                //RobotUnityRegistedList.Add(robot2.properties.NameID, robot2);
-                //AddRobotUnityReadyList(robot2);
-
-                //RobotUnity robot3 = new RobotUnity();
-                //robot.Initialize(row);
-                //robot3.properties.NameID = "Robot3";
-                //robot3.Start("ws://192.168.80.131:9090");
-                //RobotUnityRegistedList.Add(robot3.properties.NameID, robot3);
-                //AddRobotUnityReadyList(robot3);
-                //robot3.ConnectionStatusHandler += ConnectionStatusHandler;
-            }
-            con.Close();
         }
         public void AddRobotUnityWaitTaskList(RobotUnity robot)
         {

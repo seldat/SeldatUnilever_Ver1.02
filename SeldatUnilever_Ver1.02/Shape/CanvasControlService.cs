@@ -807,22 +807,25 @@ namespace SeldatMRMS
         {
             int index = 0;
             Int32.TryParse(mainWindow.DeviceItemsListDg.SelectedIndex.ToString(),out index);
-            
-            deviceItemsList.Clear();
-            foreach (DeviceItem device in mainWindow.unityService.deviceRegistrationService.deviceItemList)
+            if (mainWindow.unityService.deviceRegistrationService.deviceItemList.Count > 0)
             {
-                deviceItemsList.Add(device);
-            }
-            if (GroupedDeviceItems.IsEditingItem)
-                GroupedDeviceItems.CommitEdit();
-            if (GroupedDeviceItems.IsAddingNew)
-                GroupedDeviceItems.CommitNew();
-            GroupedDeviceItems.Refresh();
+                deviceItemsList.Clear();
+                foreach (DeviceItem device in mainWindow.unityService.deviceRegistrationService.deviceItemList)
+                {
+                    deviceItemsList.Add(device);
+                }
+                if (GroupedDeviceItems.IsEditingItem)
+                    GroupedDeviceItems.CommitEdit();
+                if (GroupedDeviceItems.IsAddingNew)
+                    GroupedDeviceItems.CommitNew();
+                GroupedDeviceItems.Refresh();
 
 
-            if (mainWindow.DeviceItemsListDg.HasItems)
-            {
-                mainWindow.DeviceItemsListDg.SelectedItem = mainWindow.DeviceItemsListDg.Items[(index>-1)? index : 0];
+                if (mainWindow.DeviceItemsListDg.HasItems)
+                {
+                    mainWindow.DeviceItemsListDg.SelectedItem = mainWindow.DeviceItemsListDg.Items[(index > -1) ? index : 0];
+                   
+                }
             }
         }
 

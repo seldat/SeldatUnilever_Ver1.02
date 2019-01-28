@@ -110,11 +110,7 @@ namespace SeldatUnilever_Ver1._02
 
 
 
-            stationTimer = new System.Timers.Timer();
-            stationTimer.Interval = 5000;
-            stationTimer.Elapsed += OnTimedRedrawStationEvent;
-            stationTimer.AutoReset = true;
-            stationTimer.Enabled = true;
+           
             //DataContext = this;
             //DataContext = new ViewModel();
 
@@ -124,8 +120,7 @@ namespace SeldatUnilever_Ver1._02
         {
             Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
-               // canvasControlService.ReloadListDeviceItems();
-               // canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
+               canvasControlService.ReloadListDeviceItems();
             }));
         }
         
@@ -160,6 +155,11 @@ namespace SeldatUnilever_Ver1._02
                 unityService = new UnityManagementService(this);
                 unityService.Initialize();
                 ctrR = new CtrlRobot(unityService.robotManagementService);
+                stationTimer = new System.Timers.Timer();
+                stationTimer.Interval = 5000;
+                stationTimer.Elapsed += OnTimedRedrawStationEvent;
+                stationTimer.AutoReset = true;
+                stationTimer.Enabled = true;
             }
 
 
@@ -374,6 +374,11 @@ namespace SeldatUnilever_Ver1._02
         private void btn_RiskArea_Click(object sender, RoutedEventArgs e)
         {
             unityService.OpenConfigureForm("RACF");
+        }
+
+        private void OrderItemsListDg_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

@@ -47,6 +47,10 @@
                                         Binding="{Binding Path=BatteryLowLevel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="ChargeID" 
                                         Binding="{Binding Path=ChargeID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="IpMCU" 
+                                        Binding="{Binding Path=ipMcuCtrl, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="PortMCU" 
+                                        Binding="{Binding Path=portMcuCtrl, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                     <DataGridTextColumn Width="*" Header="Width" 
                                         Binding="{Binding Path=Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>

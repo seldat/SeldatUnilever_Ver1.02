@@ -181,7 +181,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             }
             //headLed
             props.headLed.Height = 7;
-            props.headLed.Fill = new SolidColorBrush (Colors.DodgerBlue);
+            props.headLed.Fill = new SolidColorBrush (Colors.LightYellow);
             Grid.SetColumn (props.headLed, 2);
             //tailLed
             props.tailLed.Height = 7;

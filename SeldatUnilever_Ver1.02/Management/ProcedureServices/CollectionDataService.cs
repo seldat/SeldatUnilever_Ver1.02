@@ -97,7 +97,7 @@ namespace SelDatUnilever_Ver1
                         double x = (double)stuff["checkin"]["x"];
                         double y = (double)stuff["checkin"]["y"];
                         double angle = (double)stuff["checkin"]["angle"];
-                        poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
+                        poseTemp = new Pose(x, y, angle);
                         planId = order.planId;
                         break;
 
@@ -124,7 +124,7 @@ namespace SelDatUnilever_Ver1
                         double x = (double)stuff["headpoint"]["x"];
                         double y = (double)stuff["headpoint"]["y"];
                         double angle = (double)stuff["headpoint"]["angle"];
-                        poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
+                        poseTemp = new Pose(x, y, angle);
                         break;
 
                     }
@@ -151,7 +151,7 @@ namespace SelDatUnilever_Ver1
                         double x = (double)stuff["line"]["x"];
                         double y = (double)stuff["line"]["y"];
                         double angle = (double)stuff["line"]["angle"];
-                        poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
+                        poseTemp = new Pose(x, y, angle);
                         break;
 
                     }
@@ -180,7 +180,7 @@ namespace SelDatUnilever_Ver1
                 double x = (double)stuff["x"];
                 double y = (double)stuff["y"];
                 double angle = (double)stuff["angle"];
-                poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
+                poseTemp = new Pose(x, y, angle );
 
             }
             return poseTemp;
@@ -202,7 +202,7 @@ namespace SelDatUnilever_Ver1
                 double x = (double)stuff["line"]["x"];
                 double y = (double)stuff["line"]["y"];
                 double angle = (double)stuff["line"]["angle"];
-                poseTemp = new Pose(x, y, angle * Math.PI / 180.0);
+                poseTemp = new Pose(x, y, angle);
 
             }
             return poseTemp;

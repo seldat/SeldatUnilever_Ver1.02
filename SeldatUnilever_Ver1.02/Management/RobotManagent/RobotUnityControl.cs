@@ -362,6 +362,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public void SendCmdAreaPallet (String cmd) {
             StandardString msg = new StandardString ();
             msg.data = cmd;
+            Console.WriteLine(cmd);
             this.Publish (paramsRosSocket.publication_cmdAreaPallet, msg);
         }
 

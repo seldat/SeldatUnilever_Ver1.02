@@ -347,7 +347,7 @@ namespace SeldatMRMS.Management.RobotManagent {
                 props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
                 props.rbTransformGroup.Children[1] = props.rbTranslate;
                 //Render Status
-                props.contentRotateTransform.Angle = -(properties.pose.Angle);
+                props.contentRotateTransform.Angle = (properties.pose.Angle);
                 props.contentTranslate = new TranslateTransform(0, 0);
                 props.contentTransformGroup.Children[1] = props.contentTranslate;
                 headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X, MiddleHeader().Y);

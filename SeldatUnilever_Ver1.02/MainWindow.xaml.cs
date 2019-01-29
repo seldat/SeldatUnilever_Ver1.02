@@ -278,7 +278,9 @@ namespace SeldatUnilever_Ver1._02
 
         private void Btn_MapReCenter_Click(object sender, RoutedEventArgs e)
         {
-
+           MessageBox.Show(unityService.robotManagementService.RobotUnityRegistedList.Count+"");
+            
+            unityService.assigmentTaskService.AssignTaskGoToReady(unityService.robotManagementService.RobotUnityRegistedList.ElementAt(0).Value);
         }
 
         private void Ctrl_MouseDoubleClick(object sender, MouseButtonEventArgs e)

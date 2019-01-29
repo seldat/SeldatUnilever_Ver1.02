@@ -67,7 +67,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 webSocket.OnOpen += (sender, e) => OnOpenedEvent();
                 webSocket.Connect();
             }).Start();
-            Console.Write("");
+          //  Console.Write("");
         }
         public virtual void Dispose()
         {
@@ -208,8 +208,8 @@ namespace SeldatMRMS.Management.RobotManagent
             JObject operation = Deserialize(e.RawData);
 
 #if DEBUG
-            Console.WriteLine("Recieved " + operation.GetOperation());
-            Console.WriteLine(JsonConvert.SerializeObject(operation, Formatting.Indented));
+          //  Console.WriteLine("Recieved " + operation.GetOperation());
+          //  Console.WriteLine(JsonConvert.SerializeObject(operation, Formatting.Indented));
 #endif
 
             switch (operation.GetOperation())
@@ -259,7 +259,7 @@ namespace SeldatMRMS.Management.RobotManagent
         private void sendOperation(Operation operation)
         {
 #if DEBUG
-            Console.WriteLine(JsonConvert.SerializeObject(operation, Formatting.Indented));
+       //     Console.WriteLine(JsonConvert.SerializeObject(operation, Formatting.Indented));
 #endif
             webSocket.SendAsync(Serialize(operation), null);
         }

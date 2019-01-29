@@ -337,28 +337,35 @@ namespace SeldatMRMS.Management.RobotManagent {
         }      
         public override void Draw () {
 
-            //Render Robot
-            props.rbRotateTransform.Angle = properties.pose.AngleW;
-            Point cPoint = Global_Object.CoorCanvas (properties.pose.Position);
-            props.rbTranslate = new TranslateTransform (cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
-            props.rbTransformGroup.Children[1] = props.rbTranslate;
-            //Render Status
-            props.contentRotateTransform.Angle = -(properties.pose.AngleW);
-            props.contentTranslate = new TranslateTransform (0, 0);
-            props.contentTransformGroup.Children[1] = props.contentTranslate;
-            headerPoint.RenderTransform = new TranslateTransform (MiddleHeader ().X, MiddleHeader ().Y);
-            headerPoint.RenderTransform = new TranslateTransform (Global_Object.CoorCanvas (MiddleHeader ()).X, Global_Object.CoorCanvas (MiddleHeader ()).Y);
-            PathGeometry pgeometry = new PathGeometry ();
-            PathFigure pF = new PathFigure ();
-            pF.StartPoint = TopHeaderCv ();
-            LineSegment pp = new LineSegment ();
 
-            pF.Segments.Add (new LineSegment () { Point = BottomHeaderCv () });
-            pF.Segments.Add (new LineSegment () { Point = BottomTailCv () });
-            pF.Segments.Add (new LineSegment () { Point = TopTailCv () });
-            pF.Segments.Add (new LineSegment () { Point = TopHeaderCv () });
-            pgeometry.Figures.Add (pF);
-            riskArea.Data = pgeometry;
+            //Render Robot
+           this.border.Dispatcher.BeginInvoke(new System.Threading.ThreadStart(() =>
+            {
+               
+            props.rbRotateTransform.Angle = properties.pose.Angle;
+                Point cPoint = Global_Object.CoorCanvas(properties.pose.Position);
+                props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
+                props.rbTransformGroup.Children[1] = props.rbTranslate;
+                //Render Status
+                props.contentRotateTransform.Angle = -(properties.pose.Angle);
+                props.contentTranslate = new TranslateTransform(0, 0);
+                props.contentTransformGroup.Children[1] = props.contentTranslate;
+                headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X, MiddleHeader().Y);
+                headerPoint.RenderTransform = new TranslateTransform(Global_Object.CoorCanvas(MiddleHeader()).X, Global_Object.CoorCanvas(MiddleHeader()).Y);
+                PathGeometry pgeometry = new PathGeometry();
+                PathFigure pF = new PathFigure();
+                pF.StartPoint = TopHeaderCv();
+                LineSegment pp = new LineSegment();
+
+                pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv() });
+                pF.Segments.Add(new LineSegment() { Point = BottomTailCv() });
+                pF.Segments.Add(new LineSegment() { Point = TopTailCv() });
+                pF.Segments.Add(new LineSegment() { Point = TopHeaderCv() });
+                pgeometry.Figures.Add(pF);
+                riskArea.Data = pgeometry;
+
+            }));
+
         }
 
         public override void UpdateProperties (PropertiesRobotUnity proR) {

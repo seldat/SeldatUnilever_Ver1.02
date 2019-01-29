@@ -126,36 +126,7 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
             }
             return false;
         }
-        public void LoadChargerConfigure()
-        {
-            string name = "Charger";
-            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Configure.xlsx");
-            string constr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +
-                            path +
-                            ";Extended Properties='Excel 12.0 XML;HDR=YES;';";
-            OleDbConnection con = new OleDbConnection(constr);
-            OleDbCommand oconn = new OleDbCommand("Select * From [" + name + "$]", con);
-            con.Open();
-
-            OleDbDataAdapter sda = new OleDbDataAdapter(oconn);
-            DataTable data = new DataTable();
-            sda.Fill(data);
-            ChargerStationList = new Dictionary<ChargerId, ChargerCtrl>();
-            foreach (DataRow row in data.Rows)
-            {
-                ChargerInfoConfig ptemp = new ChargerInfoConfig();
-                ptemp.Id = (ChargerId)int.Parse(row.Field<String>("ID"));
-                ptemp.Ip = row.Field<String>("IP");
-                ptemp.Port = int.Parse(row.Field<String>("Port"));
-                ptemp.PointFrontLine = new Pose(double.Parse(row.Field<String>("PointFrontLine").Split(',')[0]),
-                                                double.Parse(row.Field<String>("PointFrontLine").Split(',')[1]),
-                                                double.Parse(row.Field<String>("PointFrontLine").Split(',')[2]));
-                ptemp.PointOfPallet = row.Field<String>("PointOfCharger");
-                ChargerCtrl chargerStation = new ChargerCtrl(ptemp);
-                ChargerStationList.Add(chargerStation.cf.Id,chargerStation);
-            }
-            con.Close();
-        }
+      
         public void FixedConfigure(ChargerId id, ChargerInfoConfig chcf)
         {
             if(ChargerStationList.ContainsKey(id))

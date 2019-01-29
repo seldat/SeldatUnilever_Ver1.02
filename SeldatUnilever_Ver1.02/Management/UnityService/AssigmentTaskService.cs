@@ -29,8 +29,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
             threadprocessAssignAnTaskWait=new Thread(AssignTask);
             threadprocessAssignTaskReady=new Thread(AssignTaskAtReady);
-            threadprocessAssignAnTaskWait.Start();
-            threadprocessAssignTaskReady.Start();
+            //threadprocessAssignAnTaskWait.Start();
+            //threadprocessAssignTaskReady.Start();
         }
         public void Dispose()
         {
@@ -181,6 +181,10 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     Thread.Sleep(1000);
                 }
          
+        }
+        public void AssignTaskGoToReady(RobotUnity robot)
+        {
+            procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
         }
 
     }

@@ -289,46 +289,25 @@ namespace SeldatMRMS {
             public String PointOfCharger;
         }
         DataRobotToReady points;
-        List<DataRobotToReady> DataRobotToReadyList;
+        //List<DataRobotToReady> DataRobotToReadyList;
         Thread ProRobotToReady;
+        ChargerManagementService charger;
         public RobotUnity robot;
         ResponseCommand resCmd;
         RobotGoToReady StateRobotGoToReady;
         TrafficManagementService Traffic;
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureRobotToReady (RobotUnity robot, ChargerId id, TrafficManagementService trafficService) : base (robot) {
+        public ProcedureRobotToReady (RobotUnity robot, ChargerId id, TrafficManagementService trafficService,ChargerManagementService chargerService) : base (robot) {
             StateRobotGoToReady = RobotGoToReady.ROBREA_IDLE;
             this.robot = robot;
             this.Traffic = trafficService;
-            LoadChargerConfigure ();
-            points = DataRobotToReadyList[(int) id - 1];
+            this.charger = chargerService;
+            points.PointFrontLine = this.charger.PropertiesCharge_List[(int)id - 1].PointFrontLine;
+            points.PointOfCharger = this.charger.PropertiesCharge_List[(int)id - 1].PointOfPallet;
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_READY;
         }
-        public void LoadChargerConfigure () {
-            string name = "Charger";
-            String path = Path.Combine (System.IO.Directory.GetCurrentDirectory (), "Configure.xlsx");
-            string constr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +
-                path +
-                ";Extended Properties='Excel 12.0 XML;HDR=YES;';";
-            OleDbConnection con = new OleDbConnection (constr);
-            OleDbCommand oconn = new OleDbCommand ("Select * From [" + name + "$]", con);
-            con.Open ();
 
-            OleDbDataAdapter sda = new OleDbDataAdapter (oconn);
-            DataTable data = new DataTable ();
-            sda.Fill (data);
-            DataRobotToReadyList = new List<DataRobotToReady> ();
-            foreach (DataRow row in data.Rows) {
-                DataRobotToReady ptemp = new DataRobotToReady ();
-                ptemp.PointFrontLine = new Pose (double.Parse (row.Field<String> ("PointFrontLine").Split (',') [0]),
-                    double.Parse (row.Field<String> ("PointFrontLine").Split (',') [1]),
-                    double.Parse (row.Field<String> ("PointFrontLine").Split (',') [2]));
-                ptemp.PointOfCharger = row.Field<String> ("PointOfCharger");
-                DataRobotToReadyList.Add (ptemp);
-            }
-            con.Close ();
-        }
         public void Start (RobotGoToReady state = RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION) {
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_READY;

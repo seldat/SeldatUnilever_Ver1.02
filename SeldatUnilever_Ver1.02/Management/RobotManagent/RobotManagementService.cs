@@ -180,6 +180,7 @@ namespace SeldatMRMS.Management.RobotManagent
                         {
                             PropertiesRobotUnity_List.Add(e);
                             RobotUnity robot = new RobotUnity();
+                           
                             robot.Initialize(this.canvas);
                             robot.UpdateProperties(e);
                             robot.Registry(trafficManagementService);
@@ -187,6 +188,7 @@ namespace SeldatMRMS.Management.RobotManagent
                             robot.Start(robot.properties.Url);
                             AddRobotUnityReadyList(robot);
                             robot.RegisteRobotInAvailable(RobotUnityRegistedList);
+                         
                         }
                         Grouped_PropertiesRobotUnity.Refresh();
                         return true;

@@ -192,18 +192,18 @@ namespace SeldatMRMS.Management.RobotManagent
             paramsRosSocket.publication_linedetectionctrl = this.Advertise ("/linedetectionctrl", "std_msgs/Int32");
             paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet", "std_msgs/Int32");
             paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet", "std_msgs/String");
-            float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Float32", BatteryVolHandler);
+            float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
             int subscription_AGV_LaserError = this.Subscribe ("/AGV_LaserError", "std_msgs/String", AGVLaserErrorHandler);
             int subscription_AGV_LaserWarning = this.Subscribe ("/AGV_LaserWarning", "std_msgs/String", AGVLaserWarningHandler);
             /*of chau test*/
             paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
-            paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
+            //paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
             paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
             paramsRosSocket.publication_TestLaserWarning = this.Advertise ("/AGV_LaserWarning", "std_msgs/String");
         }
 
         private void BatteryVolHandler (Communication.Message message) {
-            StandardFloat32 batVal = (StandardFloat32) message;
+            StandardInt32 batVal = (StandardInt32) message;
             properties.BatteryLevelRb = batVal.data;
             if (properties.RequestChargeBattery == false) {
                 if (properties.BatteryLevelRb < properties.BatteryLowLevel) {
@@ -225,7 +225,8 @@ namespace SeldatMRMS.Management.RobotManagent
             double posTheta = (double) 2 * Math.Atan2 (posThetaZ, posThetaW);
             properties.pose.Position = new Point (posX, posY);
             properties.pose.AngleW = posTheta;
-            PoseHandler (properties.pose, this);
+            properties.pose.Angle = posTheta * 180 / Math.PI;
+           // tam PoseHandler (properties.pose, this);
             Draw ();
             TrafficUpdate();
 
@@ -366,7 +367,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
         protected override void OnOpenedEvent () {
             properties.IsConnected = true;
-            Console.WriteLine ("connected");
+            Console.WriteLine ("connected Robot");
             createRosTerms ();
             
             //   ConnectionStatusHandler(this, ConnectionStatus.CON_OK);

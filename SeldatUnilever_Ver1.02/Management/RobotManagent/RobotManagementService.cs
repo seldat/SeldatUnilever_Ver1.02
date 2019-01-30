@@ -264,12 +264,17 @@ namespace SeldatMRMS.Management.RobotManagent
             ResultRobotReady result = null;
             if (RobotUnityWaitTaskList.Count > 0)
             {
-                RobotUnity robot = RobotUnityWaitTaskList.ElementAt(0).Value;
-                if (robot.getBattery())
+                foreach (RobotUnity robot in RobotUnityWaitTaskList.Values)
                 {
-                    RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                    if (robot.webSocket.IsAlive)
+                    {
+                        if (robot.getBattery())
+                        {
+                            RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                        }
+                        result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                    }
                 }
-                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
             }
             return result;
         }
@@ -287,14 +292,24 @@ namespace SeldatMRMS.Management.RobotManagent
             ResultRobotReady result = null;
             if (RobotUnityReadyList.Count > 0)
             {
-                RobotUnity robot = RobotUnityReadyList.ElementAt(0).Value;
-                if(robot.getBattery())
+                foreach (RobotUnity robot in RobotUnityReadyList.Values)
                 {
-                    RemoveRobotUnityReadyList(robot.properties.NameId);
+                    if (robot.webSocket.IsAlive)
+                    {
+                        if (robot.getBattery())
+                        {
+                            RemoveRobotUnityReadyList(robot.properties.NameId);
+                        }
+                        result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                        break;
+                    }
                 }
-                result = new ResultRobotReady() {robot=robot, onReristryCharge=robot.getBattery()};
             }
             return result;
+        }
+        public void MoveElementToEnd(Dictionary<String,RobotUnity> dic,int newPos, int oldPos)
+        {
+
         }
         public void RemoveRobotUnityReadyList(String nameID)
         {

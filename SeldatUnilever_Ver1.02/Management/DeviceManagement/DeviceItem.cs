@@ -55,8 +55,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public String OrderId { get; set; }
             public int planId { get; set; }
             public int deviceId;
+            public String productDetailName { get; set; }
             public int productId { get; set; }
             public int productDetailId { get; set; }
+            
             public TyeRequest typeReq; // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
             public String activeDate;
             public int timeWorkId;
@@ -159,6 +161,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.typeReq = (TyeRequest)typeReq;
                     order.userName = (String)results["userName"];
                     order.productDetailId = (int)results["productDetailId"];
+                    order.productDetailName = (String)results["productDetailName"];
                     order.productId = (int)results["productId"];
                     order.planId = (int)results["planId"];
                     order.deviceId = (int)results["deviceId"];

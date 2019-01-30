@@ -66,6 +66,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     IsDisposed = false;
                     webSocket = new WebSocket(url);
                     webSocket.OnOpen += (sender, e) => OnOpenedEvent();
+                    webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
                     webSocket.Connect();
                     if (webSocket.IsAlive)
                         break;
@@ -73,7 +74,7 @@ namespace SeldatMRMS.Management.RobotManagent
                         webSocket=null;
                 }
                 
-                webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
+               
                 webSocket.OnClose += (sender, e) => OnClosedEvent((WebSocket)sender, e);
               
             }).Start();

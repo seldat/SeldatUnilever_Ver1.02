@@ -69,7 +69,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             //ModelVisual3D layer = new ModelVisual3D();
            // robot3DModel = new Robot3D(properties.NameId, layer);
             riskArea = new Path ();
-            riskArea.Stroke = new SolidColorBrush (Colors.YellowGreen);
+            riskArea.Stroke = new SolidColorBrush (Colors.OrangeRed);
             riskArea.StrokeThickness = 1;
             border = new Border ();
             border.ToolTip = "";
@@ -241,8 +241,8 @@ namespace SeldatMRMS.Management.RobotManagent {
             border.Child = props.mainGrid;
             this.canvas.Children.Add (border);
             headerPoint = new Ellipse ();
-            headerPoint.Width = 1;
-            headerPoint.Height = 1;
+            headerPoint.Width = 5;
+            headerPoint.Height = 5;
             headerPoint.Fill = new SolidColorBrush (Colors.Red);
             canvas.Children.Add (riskArea);
             canvas.Children.Add (headerPoint);

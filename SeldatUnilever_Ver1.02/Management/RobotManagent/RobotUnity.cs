@@ -95,10 +95,13 @@ namespace SeldatMRMS.Management.RobotManagent {
 
             MenuItem itemw0 = new MenuItem();
             itemw0.Header = "Ready Area";
+            itemw0.IsCheckable = true;
+            itemw0.Checked += Itemw0_Checked;
             mainMenuWorkList.Items.Add(itemw0);
 
             MenuItem itemw1 = new MenuItem();
             itemw1.Header = "Wait Task";
+            itemw1.Checked += Itemw0_Checked;
             mainMenuWorkList.Items.Add(itemw1);
 
             MenuItem mainMenuProc = new MenuItem();
@@ -246,6 +249,12 @@ namespace SeldatMRMS.Management.RobotManagent {
             Draw ();
 
         }
+
+        private void Itemw0_Checked(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         public void RegistrySolvedForm(Object obj)
         {
           //  if(obj.GetType()==typeof(ProcedureControlServices))
@@ -342,7 +351,7 @@ namespace SeldatMRMS.Management.RobotManagent {
            this.border.Dispatcher.BeginInvoke(new System.Threading.ThreadStart(() =>
             {
                
-            props.rbRotateTransform.Angle = properties.pose.Angle;
+                props.rbRotateTransform.Angle = -properties.pose.Angle;
                 Point cPoint = Global_Object.CoorCanvas(properties.pose.Position);
                 props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
                 props.rbTransformGroup.Children[1] = props.rbTranslate;

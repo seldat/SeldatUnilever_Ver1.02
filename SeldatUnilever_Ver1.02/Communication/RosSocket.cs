@@ -27,6 +27,7 @@ using SeldatMRMS.Communication;
 using System.Windows;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace SeldatMRMS.Management.RobotManagent
 {
@@ -59,13 +60,22 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             new Thread(() =>
             {
-                this.url = url;
-                IsDisposed = false;
-                webSocket = new WebSocket(url);
+                while (true)
+                {
+                    this.url = url;
+                    IsDisposed = false;
+                    webSocket = new WebSocket(url);
+                    webSocket.OnOpen += (sender, e) => OnOpenedEvent();
+                    webSocket.Connect();
+                    if (webSocket.IsAlive)
+                        break;
+                    else
+                        webSocket=null;
+                }
+                
                 webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
                 webSocket.OnClose += (sender, e) => OnClosedEvent((WebSocket)sender, e);
-                webSocket.OnOpen += (sender, e) => OnOpenedEvent();
-                webSocket.Connect();
+              
             }).Start();
           //  Console.Write("");
         }

@@ -204,8 +204,7 @@ namespace SeldatMRMS.Management
             flagSupervisorTraffic = flagtraffic;
         }
         public override void TrafficUpdate() {
-            try
-            {
+
                 prioritLevel.IndexOnMainRoad = trafficManagementService.FindIndexZoneRegister(properties.pose.Position);
                 // cập nhật vùng riskzone // update vùng risk area cho robot
                 RiskZoneRegister rZR = trafficManagementService.FindRiskZone(properties.pose.Position);
@@ -219,8 +218,7 @@ namespace SeldatMRMS.Management
                 }
                 // giám sát an toàn
                 SupervisorTraffic();
-            }
-            catch { }
+        
         }
         protected override void SupervisorTraffic() {
             if (flagSupervisorTraffic)

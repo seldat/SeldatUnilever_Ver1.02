@@ -10,16 +10,16 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="myManagementWindow">
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="10*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="170"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0"  Grid.Column="0">
@@ -55,7 +55,7 @@
             </Grid>
             <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                 <Grid Margin="0" Background="#f5f5f5" HorizontalAlignment="Right">
-                    <Image Margin="0,0" Source="pack://siteoforigin:,,,/Resources/seldat_logo.png"/>
+                    <Image Margin="5,5" Source="pack://siteoforigin:,,,/Resources/seldat_logo.png"/>
                 </Grid>
             </Grid>
             <Grid Grid.Row="1" Grid.Column="0">
@@ -191,16 +191,17 @@
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="24"/>
+                            <ColumnDefinition Width="10"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
-                            <RowDefinition Height="24"></RowDefinition>
+                            <RowDefinition Height="15"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="Gray">
+                        <Border Grid.Row="0" Grid.Column="1" Background="Gray">
                             <Grid>
-                                <Border Name="clipBorder" ClipToBounds="True" 
+                                <Border Name="clipBorder" ClipToBounds="True" BorderThickness="2"
                                             RenderTransformOrigin="0.5,0.5" Background="#ffffff">
                                     <!--<xctk:Zoombox MinScale="0.5" 
                                                   MaxScale="100"
@@ -237,8 +238,8 @@
                         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                             <Grid Name="Cursorhehe" VerticalAlignment="Bottom">
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Name="MouseCoor" Foreground="Black" Content="X:Y" FontSize="11"></Label>
-                                    <Label Name="MouseCoor2" Foreground="Black" Content="X:Y" FontSize="11"></Label>
+                                    <Label Name="MouseCoor" Foreground="Black" Content="X:Y" FontSize="9" Margin="0,-5,0,0"></Label>
+                                    <Label Name="MouseCoor2" Foreground="Black" Content="X:Y" FontSize="9" Margin="0,-5,0,0"></Label>
 
                                 </StackPanel>
                             </Grid>

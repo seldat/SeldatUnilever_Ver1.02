@@ -35,7 +35,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public Dictionary<String, RobotUnity> RobotUnityWaitTaskList = new Dictionary<string, RobotUnity>();
         public Dictionary<String, RobotUnity> RobotUnityReadyList = new Dictionary<string, RobotUnity>();
         public ConfigureRobotUnity configureForm;
-        private TrafficManagementService trafficManagementService;
+        private TrafficManagementService trafficManagementService=new TrafficManagementService();
         private Canvas canvas;
         public RobotManagementService(Canvas canvas) {
             this.canvas = canvas;
@@ -55,7 +55,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.WS = 6;
             prop1.Label = "Robot1";
             prop1.BatteryLevelRb = 40;
-            prop1.Url = "ws://192.168.1.9:9090";
+            prop1.Url = "ws://192.168.1.8:9090";
             prop1.ipMcuCtrl = "192.168.1.210";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 4;
@@ -72,7 +72,6 @@ namespace SeldatMRMS.Management.RobotManagent
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
-            r1.Registry(trafficManagementService);
             r1.Start(prop1.Url);
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
@@ -175,6 +174,10 @@ namespace SeldatMRMS.Management.RobotManagent
         public void Registry(TrafficManagementService trafficManagementService)
         {
             this.trafficManagementService = trafficManagementService;
+            foreach(RobotUnity robot in RobotUnityRegistedList.Values)
+            {
+                robot.Registry(this.trafficManagementService);
+            }
         }
         public void ConnectionStatusHandler(Object obj, RosSocket.ConnectionStatus status)
         {
@@ -218,7 +221,7 @@ namespace SeldatMRMS.Management.RobotManagent
                            
                             robot.Initialize(this.canvas);
                             robot.UpdateProperties(e);
-                            robot.Registry(trafficManagementService);
+                            //robot.Registry(trafficManagementService);
                             RobotUnityRegistedList.Add(e.NameId,robot);
                             robot.Start(robot.properties.Url);
                             AddRobotUnityReadyList(robot);

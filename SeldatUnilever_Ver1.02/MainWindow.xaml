@@ -7,7 +7,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:SeldatUnilever_Ver1._02"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="600">
     <Grid x:Name="myManagementWindow">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
@@ -20,7 +20,7 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="170"></ColumnDefinition>
+                <ColumnDefinition Width="140"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0"  Grid.Column="0">
                 <StackPanel VerticalAlignment="Center" >
@@ -54,7 +54,7 @@
 
             </Grid>
             <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
-                <Grid Margin="0" Background="#f5f5f5" HorizontalAlignment="Right">
+                <Grid Margin="0" Background="#f5f5f5" HorizontalAlignment="Stretch">
                     <Image Margin="5,5" Source="pack://siteoforigin:,,,/Resources/seldat_logo.png"/>
                 </Grid>
             </Grid>
@@ -277,9 +277,9 @@
                                                         SelectionMode="Single"
                                                         SelectionUnit="FullRow"
                                                         SelectedCellsChanged="DeviceItemsListDg_SelectedCellsChanged"
-                                                        FontSize="12">
+                                                        FontSize="12" SelectionChanged="DeviceItemsListDg_SelectionChanged">
                                                         <DataGrid.Columns>
-                                                            <DataGridTemplateColumn Width="*">
+                                                            <!--<DataGridTemplateColumn Width="*">
                                                                 <DataGridTemplateColumn.HeaderTemplate>
                                                                     <DataTemplate>
                                                                         <StackPanel>
@@ -296,7 +296,7 @@
                                                                         </StackPanel>
                                                                     </DataTemplate>
                                                                 </DataGridTemplateColumn.CellTemplate>
-                                                            </DataGridTemplateColumn>
+                                                            </DataGridTemplateColumn>-->
                                                         </DataGrid.Columns>
                                                     </DataGrid>
                                                 </Grid>
@@ -321,7 +321,7 @@
                                                         AutoGenerateColumns="True"
                                                         FontSize="12">
                                                         <DataGrid.Columns>
-                                                            <DataGridTemplateColumn Width="*">
+                                                            <!--<DataGridTemplateColumn Width="*">
                                                                 <DataGridTemplateColumn.HeaderTemplate>
                                                                     <DataTemplate>
                                                                         <StackPanel>
@@ -338,7 +338,7 @@
                                                                         </StackPanel>
                                                                     </DataTemplate>
                                                                 </DataGridTemplateColumn.CellTemplate>
-                                                            </DataGridTemplateColumn>
+                                                            </DataGridTemplateColumn>-->
                                                         </DataGrid.Columns>
                                                     </DataGrid>
                                                 </Grid>

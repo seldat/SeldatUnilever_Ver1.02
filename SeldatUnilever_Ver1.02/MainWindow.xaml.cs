@@ -156,7 +156,7 @@ namespace SeldatUnilever_Ver1._02
                 unityService.Initialize();
                 ctrR = new CtrlRobot(unityService.robotManagementService);
                 stationTimer = new System.Timers.Timer();
-                stationTimer.Interval = 5000;
+                stationTimer.Interval = 2000;
                 stationTimer.Elapsed += OnTimedRedrawStationEvent;
                 stationTimer.AutoReset = true;
                 stationTimer.Enabled = true;
@@ -379,6 +379,11 @@ namespace SeldatUnilever_Ver1._02
         }
 
         private void OrderItemsListDg_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void DeviceItemsListDg_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }

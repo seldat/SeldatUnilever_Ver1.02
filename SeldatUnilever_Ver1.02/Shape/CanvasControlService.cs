@@ -824,7 +824,12 @@ namespace SeldatMRMS
                 if (mainWindow.DeviceItemsListDg.HasItems)
                 {
                     mainWindow.DeviceItemsListDg.SelectedItem = mainWindow.DeviceItemsListDg.Items[(index > -1) ? index : 0];
-                   
+                    if (mainWindow.DeviceItemsListDg.SelectedItem != null)
+                    {
+                        DeviceItem temp = mainWindow.DeviceItemsListDg.SelectedItem as DeviceItem;
+                        mainWindow.canvasControlService.ReloadListOrderItems(temp);
+                    }
+
                 }
             }
         }

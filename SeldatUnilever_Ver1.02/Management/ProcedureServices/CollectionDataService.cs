@@ -233,6 +233,7 @@ namespace SelDatUnilever_Ver1
                         int bay = (int)stuff["pallet"]["bay"];
                         int directMain = (int)stuff["pallet"]["dir_main"];
                         int directSub = (int)stuff["pallet"]["dir_sub"];
+                        int dir_out = (int)stuff["pallet"]["dir_out"];
                         string subline = (string)stuff["pallet"]["hasSubLine"];
 
                         infoPallet.pallet = pisCtrl; /* dropdown */
@@ -240,6 +241,7 @@ namespace SelDatUnilever_Ver1
                         infoPallet.bay = bay;
                         infoPallet.hasSubLine = subline; /* yes or no */
                         infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                        infoPallet.dir_out = (TrafficRobotUnity.BrDirection)dir_out;
                         infoPallet.row = row;
                         break;
                     }
@@ -279,12 +281,14 @@ namespace SelDatUnilever_Ver1
                 int bay = (int)stuff["pallet"]["bay"];
                 int directMain = (int)stuff["pallet"]["dir_main"];
                 int directSub = (int)stuff["pallet"]["dir_sub"];
+                int dir_out = (int)stuff["pallet"]["dir_out"];
 
                 infoPallet.pallet = pisCtrl; /* dropdown */
                 infoPallet.bay = bay;
                 infoPallet.hasSubLine = "yes"; /* no */
                 infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain; 
-                infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; 
+                infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub;
+                infoPallet.dir_out = (TrafficRobotUnity.BrDirection)dir_out;
                 infoPallet.row = row;
 
             }

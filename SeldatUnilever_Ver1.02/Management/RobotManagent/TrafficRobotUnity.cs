@@ -67,6 +67,7 @@ namespace SeldatMRMS.Management
             public Int32 bay;
             public String hasSubLine;
             public BrDirection dir_sub;
+            public BrDirection dir_out;
             public Int32 row;
             public Int32 palletId;
         }

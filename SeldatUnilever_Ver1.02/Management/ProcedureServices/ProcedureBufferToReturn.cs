@@ -61,7 +61,7 @@ namespace SeldatMRMS {
                     case BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_BUFFER: // bắt đầu rời khỏi vùng GATE đi đến check in/ đảm bảo check out vùng cổng để robot kế tiếp vào làm việc
                         try {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY) {
-                                rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+                                //rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                                 Stopwatch sw = new Stopwatch ();
                                 sw.Start ();
                                 do {
@@ -163,7 +163,7 @@ namespace SeldatMRMS {
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToRe.UpdatePalletState (PalletStatus.F);
-                            rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+                           // rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                             Debug(this,"BUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {

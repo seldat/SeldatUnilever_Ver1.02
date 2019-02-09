@@ -196,10 +196,10 @@ namespace SeldatMRMS.Management.RobotManagent
             int subscription_AGV_LaserError = this.Subscribe ("/AGV_LaserError", "std_msgs/String", AGVLaserErrorHandler);
             int subscription_AGV_LaserWarning = this.Subscribe ("/AGV_LaserWarning", "std_msgs/String", AGVLaserWarningHandler);
             /*of chau test*/
-            paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
+          //  paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
             //paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
-            paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
-            paramsRosSocket.publication_TestLaserWarning = this.Advertise ("/AGV_LaserWarning", "std_msgs/String");
+         //   paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
+          //  paramsRosSocket.publication_TestLaserWarning = this.Advertise ("/AGV_LaserWarning", "std_msgs/String");
         }
 
         private void BatteryVolHandler (Communication.Message message) {
@@ -233,8 +233,12 @@ namespace SeldatMRMS.Management.RobotManagent
 
         }
         private void FinishedStatesHandler (Communication.Message message) {
-            StandardInt32 standard = (StandardInt32) message;
-            FinishStatesCallBack (standard.data);
+            try
+            {
+                StandardInt32 standard = (StandardInt32)message;
+                FinishStatesCallBack(standard.data);
+            }
+            catch { }
 
         }
         private void AGVLaserErrorHandler (Communication.Message message) {

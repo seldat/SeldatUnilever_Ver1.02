@@ -26,6 +26,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public int bay;
             public int directMain;
             public int directSub;
+            public int directOut;
             public PalletCtrl palletCtrl;
             public Pose linePos;
         }
@@ -177,7 +178,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     int bay = (int)stuffPallet["pallet"]["bay"];
                     int directMain = (int)stuffPallet["pallet"]["dir_main"];
                     int directSub = (int)stuffPallet["pallet"]["dir_sub"];
-                    order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub };
+                    int directOut = (int)stuffPallet["pallet"]["dir_out"];
+                    order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = directOut };
                     dynamic product = new JObject();
                     product.timeWorkId = order.timeWorkId;
                     product.activeDate = order.activeDate;

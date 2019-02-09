@@ -63,7 +63,7 @@ namespace SeldatMRMS {
                         Debug(this,"BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER");
                         try {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY) {
-                                rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+                                //rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                                 Stopwatch sw = new Stopwatch ();
                                 sw.Start ();
                                 do {
@@ -164,7 +164,7 @@ namespace SeldatMRMS {
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToMa.UpdatePalletState (PalletStatus.F);
-                             rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+                    //         rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                             Debug(this,"BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
@@ -217,7 +217,7 @@ namespace SeldatMRMS {
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET:
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+                            //rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE;
                             Debug(this,"BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE");
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {

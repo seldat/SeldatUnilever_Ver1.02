@@ -121,7 +121,7 @@ namespace SeldatMRMS {
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToRe.UpdatePalletState (PalletStatus.F);
-                            rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+                          //  rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateMachineToReturn = MachineToReturn.MACRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE;
                             Debug(this,"MACRET_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {

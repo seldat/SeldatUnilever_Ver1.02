@@ -178,7 +178,7 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETUP) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             // FlToBuf.UpdatePalletState(PalletStatus.F);
-                            rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+                         //   rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
                             Debug(this,"FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {

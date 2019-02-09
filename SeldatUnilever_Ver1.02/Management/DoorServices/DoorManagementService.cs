@@ -56,7 +56,7 @@ namespace SeldatMRMS.Management.DoorServices
                 Id = DoorId.DOOR_MEZZAMINE_UP_FRONT,
                 Ip = "192.168.1.1",
                 Port = 8081,
-                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
+                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
                 PointCheckInGateStr = "0.0,0.0,0.0"
             };
@@ -70,7 +70,7 @@ namespace SeldatMRMS.Management.DoorServices
                 Id = DoorId.DOOR_MEZZAMINE_UP_BACK,
                 Ip = "192.168.1.2",
                 Port = 8081,
-                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
+                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
                 PointCheckInGateStr = "0.0,0.0,0.0"
             };
@@ -84,7 +84,7 @@ namespace SeldatMRMS.Management.DoorServices
                 Id = DoorId.DOOR_MEZZAMINE_RETURN_FRONT,
                 Ip = "192.168.1.3",
                 Port = 8081,
-                infoPallet = "{\"pallet\":1,\"dir_main\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
+                infoPallet = "{\"pallet\":1,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
                 PointCheckInGateStr = "0.0,0.0,0.0"
             };
@@ -98,7 +98,7 @@ namespace SeldatMRMS.Management.DoorServices
                 Id = DoorId.DOOR_MEZZAMINE_RETURN_BACK,
                 Ip = "192.168.1.4",
                 Port = 8081,
-                infoPallet = "{\"pallet\":1,\"dir_main\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
+                infoPallet = "{\"pallet\":1,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
                 PointCheckInGateStr = "0.0,0.0,0.0"
             };

@@ -69,7 +69,6 @@ namespace SeldatMRMS.Management
             public BrDirection dir_sub;
             public BrDirection dir_out;
             public Int32 row;
-            public BrDirection dir_out;
             // public Int32 palletId;
         }
         private List<RobotUnity> RobotUnitylist;

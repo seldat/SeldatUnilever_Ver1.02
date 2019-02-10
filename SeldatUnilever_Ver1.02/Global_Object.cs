@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -94,7 +95,33 @@ namespace SeldatMRMS
         //#######################################
 
         //#######################################
-
+        public static bool ServerAlive(string hostUri = "localhost", int portNumber = 8081)
+        {
+            //=====================================================
+            TcpClient tcpClient = new TcpClient();
+            try
+            {
+                tcpClient.Connect("localhost", 8081);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            //=====================================================
+            //try
+            //{
+            //    using (var client = new TcpClient(hostUri, portNumber))
+            //    {
+            //        return true;
+            //    }
+            //}
+            //catch (SocketException ex)
+            //{
+            //    return false;
+            //}
+            //=====================================================
+        }
         public static Point LaserOriginalCoor = new Point(740,506);
         public static Point OriginPoint = new Point(0, 0);
         public static Point CoorLaser(Point canvas)

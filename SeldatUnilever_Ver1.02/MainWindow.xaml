@@ -33,14 +33,14 @@
                                 <MenuItem Header="{DynamicResource MainWindow_Menu_Account_ChangePass}" Click="btn_ChangePassword_Click">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconMaterial
-                                        Kind="LockReset" />
+                                            Kind="LockReset" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator />
                                 <MenuItem Header="{DynamicResource MainWindow_Menu_Account_Logout}" Click="Logout_Click">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconMaterial
-                                        Kind="Logout"/>
+                                            Kind="Logout"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </MenuItem>
@@ -62,111 +62,121 @@
                 <Grid Grid.Column="0" Margin="0,0,0,-0.4">
                     <StackPanel VerticalAlignment="Center">
                         <ToolBarTray 
-                        Background="#f5f5f5" 
-                        ToolBarTray.IsLocked="True">
+                            Background="#f5f5f5" 
+                            ToolBarTray.IsLocked="True">
                             <ToolBar 
-                            Background="#f5f5f5"
-                    Style="{DynamicResource MaterialDesignToolBar}"
-                    ClipToBounds="False">
+                                Background="#f5f5f5"
+                                Style="{DynamicResource MaterialDesignToolBar}"
+                                ClipToBounds="False">
                                 <Button 
-                                Name="btn_MapReCenter"
-                                ToolTip="{DynamicResource MainWindow_Toolbar_MapReCenter}"
-                                Click="Btn_MapReCenter_Click">
+                                    Name="btn_MapReCenter"
+                                    Margin="5 0"
+                                    ToolTip="{DynamicResource MainWindow_Toolbar_MapReCenter}"
+                                    Click="Btn_MapReCenter_Click">
                                     <iconPacks:PackIconMaterial 
-                                    Kind="SetCenter"/>
+                                        Kind="SetCenter"/>
                                 </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_robotConfigure}"
-                                    Name="btn_Robot"
-                                    Click="Btn_Robot_Click"
-                                    ToolBar.OverflowMode="AsNeeded">
+                                        Name="btn_Robot"
+                                        Margin="5 0"
+                                        Click="Btn_Robot_Click"
+                                        ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial 
-                                    Kind="Robot"/>
+                                        Kind="Robot"/>
                                 </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_areaConfigure}"
-                                    Name="btn_Area"
-                                    Click="Btn_Area_Click"
-                                    ToolBar.OverflowMode="AsNeeded">
+                                        Name="btn_Area"
+                                        Margin="5 0"
+                                        Click="Btn_Area_Click"
+                                        ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial 
-                                    Kind="ImageArea"/>
+                                        Kind="ImageArea"/>
                                 </Button>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_trafficareaConfigure}"
-                                    Name="btn_RiskArea"
-                                    Click="btn_RiskArea_Click"
-                                    ToolBar.OverflowMode="AsNeeded">
+                                        Name="btn_RiskArea"
+                                        Margin="5 0"
+                                        Click="btn_RiskArea_Click"
+                                        ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial 
-                                    Kind="ImageAreaClose"/>
+                                        Kind="ImageAreaClose"/>
                                 </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_chargerConfigure}"
-                                    Name="btn_Charge"
-                                    Click="Btn_Charge_Click"
-                                    ToolBar.OverflowMode="AsNeeded">
+                                        Name="btn_Charge"
+                                        Margin="5 0"
+                                        Click="Btn_Charge_Click"
+                                        ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial 
-                                    Kind="BatteryCharging"/>
+                                        Kind="BatteryCharging"/>
                                 </Button>
                                 <Separator/>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_doorConfigure}"
-                                    Name="btn_Door"
-                                    Click="Btn_Door_Click"
-                                    ToolBar.OverflowMode="AsNeeded">
+                                        Name="btn_Door"
+                                        Margin="5 0"
+                                        Click="Btn_Door_Click"
+                                        ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial 
-                                    Kind="DoorOpen"/>
+                                        Kind="DoorOpen"/>
                                 </Button>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_3Dmap}"
-                                    Name="btn_3Dmap"
-                                    ToolBar.OverflowMode="AsNeeded" Click="btn_3Dmap_Click">
+                                        Name="btn_3Dmap"
+                                        Margin="5 0"
+                                        ToolBar.OverflowMode="AsNeeded" Click="btn_3Dmap_Click">
                                     <iconPacks:PackIconMaterial
-                                    Kind="MapMarkerRadius"/>
+                                        Kind="MapMarkerRadius"/>
                                 </Button>
                                 <Button ToolTip="{DynamicResource MainWindow_Toolbar_Statistics}"
-                                    Name="btn_Statistics"
-                                    Click="Btn_Statistics_Click"
-                                    ToolBar.OverflowMode="AsNeeded">
+                                        Name="btn_Statistics"
+                                        Margin="5 0"
+                                        Click="Btn_Statistics_Click"
+                                        ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial 
-                                    Kind="ChartBar"/>
+                                        Kind="ChartBar"/>
                                 </Button>
                                 <Button 
                                     Name="btn_TEST"
+                                    Margin="5 0"
                                     Click="Btn_Test_Click"
                                     ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial 
-                                    Kind="Thermostat"/>
+                                        Kind="Thermostat"/>
                                 </Button>
-                                <Separator />
                                 <!--<ListBox SelectedIndex="0">
-                                    <StackPanel Orientation="Horizontal" 
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch">
-                                        <ListBoxItem>
-                                            <iconPacks:PackIconMaterial
-                                        Kind="Stop"/>
-                                        </ListBoxItem>
-                                        <ListBoxItem Selected="ListBoxItem_Selected">
-                                            <iconPacks:PackIconMaterial Name="ctrl"
-                                        Kind="Stop"/>
-                                        </ListBoxItem>
-                                    </StackPanel>
-                                </ListBox>-->
+                                     <StackPanel Orientation="Horizontal" 
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch">
+                                     <ListBoxItem>
+                                     <iconPacks:PackIconMaterial
+                                     Kind="Stop"/>
+                                     </ListBoxItem>
+                                     <ListBoxItem Selected="ListBoxItem_Selected">
+                                     <iconPacks:PackIconMaterial Name="ctrl"
+                                     Kind="Stop"/>
+                                     </ListBoxItem>
+                                     </StackPanel>
+                                     </ListBox>-->
                                 <Separator/>
                                 <Button 
                                     Name="btn_Stop"
+                                    Margin="5 0"
                                     Click="btn_Stop_Click"
                                     IsEnabled="False"
                                     ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial Name="btn_Stop_icon"
                                                                 Foreground="Red"
-                                    Kind="Stop"/>
+                                                                Kind="Stop"/>
                                 </Button>
                                 <Button 
                                     Name="btn_Play"
+                                    Margin="5 0"
                                     Click="btn_Play_Click"
                                     IsEnabled="True"
                                     ToolBar.OverflowMode="AsNeeded">
                                     <iconPacks:PackIconMaterial Name="btn_Play_icon"
                                                                 Foreground="Green"
-                                    Kind="Play"/>
+                                                                Kind="Play"/>
                                 </Button>
                             </ToolBar>
                         </ToolBarTray>
@@ -202,38 +212,38 @@
                         <Border Grid.Row="0" Grid.Column="1" Background="Gray">
                             <Grid>
                                 <Border Name="clipBorder" ClipToBounds="True" BorderThickness="2"
-                                            RenderTransformOrigin="0.5,0.5" Background="#ffffff">
+                                        RenderTransformOrigin="0.5,0.5" Background="#ffffff">
                                     <!--<xctk:Zoombox MinScale="0.5" 
-                                                  MaxScale="100"
-                                                  >-->
-                                        <Grid Background="Transparent">
-                                            <Canvas Name="map" RenderTransformOrigin="0.5,0.5" 
-                                            Width="400" Height="200">
-                                                <Canvas.Children>
-                                                    <Rectangle x:Name="rect" Fill="Red" Width="1" Height="1"/>
+                                         MaxScale="100"
+                                         >-->
+                                    <Grid Background="Transparent">
+                                        <Canvas Name="map" RenderTransformOrigin="0.5,0.5" 
+                                                Width="400" Height="200">
+                                            <Canvas.Children>
+                                                <Rectangle x:Name="rect" Fill="Red" Width="1" Height="1"/>
 
-                                                </Canvas.Children>
-                                                <Canvas.RenderTransform>
-                                                    <TransformGroup>
-                                                        <MatrixTransform x:Name="canvasMatrixTransform" Matrix="1,0,0,1,0,0"/>
-                                                        <ScaleTransform x:Name="canvasScaleTransform"/>
-                                                        <TranslateTransform x:Name="canvasTranslateTransform"/>
-                                                    </TransformGroup>
-                                                </Canvas.RenderTransform>
-                                            </Canvas>
-                                        </Grid>
+                                            </Canvas.Children>
+                                            <Canvas.RenderTransform>
+                                                <TransformGroup>
+                                                    <MatrixTransform x:Name="canvasMatrixTransform" Matrix="1,0,0,1,0,0"/>
+                                                    <ScaleTransform x:Name="canvasScaleTransform"/>
+                                                    <TranslateTransform x:Name="canvasTranslateTransform"/>
+                                                </TransformGroup>
+                                            </Canvas.RenderTransform>
+                                        </Canvas>
+                                    </Grid>
                                     <!--</xctk:Zoombox>-->
                                 </Border>
                             </Grid>
                         </Border>
                         <Grid Grid.Row="0" Grid.Column="1">
                             <!--<Border BorderBrush="#f5f5f5" BorderThickness="1,0,0,0">
-                                <ToolBarTray Background="#f5f5f5" Orientation="Vertical">
-                                    <ToolBar Background="Transparent">
-                                        
-                                    </ToolBar>
-                                </ToolBarTray>
-                            </Border>-->
+                                 <ToolBarTray Background="#f5f5f5" Orientation="Vertical">
+                                 <ToolBar Background="Transparent">
+                                 
+                                 </ToolBar>
+                                 </ToolBarTray>
+                                 </Border>-->
                         </Grid>
                         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                             <Grid Name="Cursorhehe" VerticalAlignment="Bottom">
@@ -280,23 +290,23 @@
                                                         FontSize="12" SelectionChanged="DeviceItemsListDg_SelectionChanged">
                                                         <DataGrid.Columns>
                                                             <!--<DataGridTemplateColumn Width="*">
-                                                                <DataGridTemplateColumn.HeaderTemplate>
-                                                                    <DataTemplate>
-                                                                        <StackPanel>
-                                                                            <TextBlock
-                                                               Text="User Name"/>
-                                                                        </StackPanel>
-                                                                    </DataTemplate>
-                                                                </DataGridTemplateColumn.HeaderTemplate>
-                                                                <DataGridTemplateColumn.CellTemplate>
-                                                                    <DataTemplate>
-                                                                        <StackPanel>
-                                                                            <TextBlock
-                                                               Text="{Binding Path=userName}"/>
-                                                                        </StackPanel>
-                                                                    </DataTemplate>
-                                                                </DataGridTemplateColumn.CellTemplate>
-                                                            </DataGridTemplateColumn>-->
+                                                                 <DataGridTemplateColumn.HeaderTemplate>
+                                                                 <DataTemplate>
+                                                                 <StackPanel>
+                                                                 <TextBlock
+                                                                 Text="User Name"/>
+                                                                 </StackPanel>
+                                                                 </DataTemplate>
+                                                                 </DataGridTemplateColumn.HeaderTemplate>
+                                                                 <DataGridTemplateColumn.CellTemplate>
+                                                                 <DataTemplate>
+                                                                 <StackPanel>
+                                                                 <TextBlock
+                                                                 Text="{Binding Path=userName}"/>
+                                                                 </StackPanel>
+                                                                 </DataTemplate>
+                                                                 </DataGridTemplateColumn.CellTemplate>
+                                                                 </DataGridTemplateColumn>-->
                                                         </DataGrid.Columns>
                                                     </DataGrid>
                                                 </Grid>
@@ -322,23 +332,23 @@
                                                         FontSize="12">
                                                         <DataGrid.Columns>
                                                             <!--<DataGridTemplateColumn Width="*">
-                                                                <DataGridTemplateColumn.HeaderTemplate>
-                                                                    <DataTemplate>
-                                                                        <StackPanel>
-                                                                            <TextBlock
-                                                               Text="OrderId"/>
-                                                                        </StackPanel>
-                                                                    </DataTemplate>
-                                                                </DataGridTemplateColumn.HeaderTemplate>
-                                                                <DataGridTemplateColumn.CellTemplate>
-                                                                    <DataTemplate>
-                                                                        <StackPanel>
-                                                                            <TextBlock
-                                                               Text="{Binding Path=OrderId}"/>
-                                                                        </StackPanel>
-                                                                    </DataTemplate>
-                                                                </DataGridTemplateColumn.CellTemplate>
-                                                            </DataGridTemplateColumn>-->
+                                                                 <DataGridTemplateColumn.HeaderTemplate>
+                                                                 <DataTemplate>
+                                                                 <StackPanel>
+                                                                 <TextBlock
+                                                                 Text="OrderId"/>
+                                                                 </StackPanel>
+                                                                 </DataTemplate>
+                                                                 </DataGridTemplateColumn.HeaderTemplate>
+                                                                 <DataGridTemplateColumn.CellTemplate>
+                                                                 <DataTemplate>
+                                                                 <StackPanel>
+                                                                 <TextBlock
+                                                                 Text="{Binding Path=OrderId}"/>
+                                                                 </StackPanel>
+                                                                 </DataTemplate>
+                                                                 </DataGridTemplateColumn.CellTemplate>
+                                                                 </DataGridTemplateColumn>-->
                                                         </DataGrid.Columns>
                                                     </DataGrid>
                                                 </Grid>
@@ -357,18 +367,18 @@
                         <Grid Grid.Row="0" Grid.Column="1">
                             <StackPanel Orientation ="Horizontal" HorizontalAlignment="Right" Margin="7,0">
                                 <!--<Button Name="ClearButton" HorizontalAlignment="Left" Width="55" Height="18" 
-                                        Content="Xóa" FontSize="10" Background="OrangeRed"
-                                        VerticalContentAlignment = "Top" Foreground="White"
-                                        Margin="0,1,0,0" Click="clearLog_Clicked"/>-->
+                                     Content="Xóa" FontSize="10" Background="OrangeRed"
+                                     VerticalContentAlignment = "Top" Foreground="White"
+                                     Margin="0,1,0,0" Click="clearLog_Clicked"/>-->
                                 <!--<CheckBox Name="CheckScroll" Margin="7,0,0,0" HorizontalAlignment="Left" 
-                                          VerticalAlignment="Center" Content="Cuộn" 
-                                          Checked="autoScrollLog_Checked"/>-->
+                                     VerticalAlignment="Center" Content="Cuộn" 
+                                     Checked="autoScrollLog_Checked"/>-->
                             </StackPanel>
                         </Grid>
                     </Grid>
                     <GridSplitter Background="#B9B9B9" Grid.Row="0"
-                      Height="3" HorizontalAlignment="Stretch" 
-                      VerticalAlignment="Bottom"/>
+                                  Height="3" HorizontalAlignment="Stretch" 
+                                  VerticalAlignment="Bottom"/>
 
                 </Grid>
             </Border>

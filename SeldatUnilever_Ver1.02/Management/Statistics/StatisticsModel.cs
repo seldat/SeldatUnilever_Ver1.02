@@ -11,6 +11,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace SeldatUnilever_Ver1._02.Management.Statistics
 {
@@ -39,6 +40,7 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
         Statistics statistics;
 
         public ListCollectionView GroupedRobotProcess { get; private set; }
+        public ListCollectionView GroupedRobotCharge { get; private set; }
 
 
         private ObservableCollection<dtRobot> _robots;
@@ -58,6 +60,7 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
 
 
         public List<dtRobotProcess> listRobotProcess;
+        public List<dtRobotCharge> listRobotCharge;
         public List<dtOperationType> listOperationType;
 
         public ObservableCollection<dtRobot> Robots
@@ -165,7 +168,9 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
             AllTimeWorks = new ObservableCollection<dtTimeWork>();
 
             listRobotProcess = new List<dtRobotProcess>();
+            listRobotCharge = new List<dtRobotCharge>();
             GroupedRobotProcess = (ListCollectionView)CollectionViewSource.GetDefaultView(listRobotProcess);
+            GroupedRobotCharge = (ListCollectionView)CollectionViewSource.GetDefaultView(listRobotCharge);
 
             //listOperationType = new List<dtOperationType>();
         }
@@ -230,69 +235,14 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
 
         public void ReloadListDevice()
         {
-            Devices.Clear();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "device/getListDevice");
-            request.Method = "GET";
-            request.ContentType = @"application/json";
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-            using (Stream responseStream = response.GetResponseStream())
+            if (!Global_Object.ServerAlive())
             {
-                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                string result = reader.ReadToEnd();
-                DataTable devices = JsonConvert.DeserializeObject<DataTable>(result);
-                if (devices.Rows.Count > 0)
-                {
-                    dtDevice tempDevice = new dtDevice
-                    {
-                        deviceId = 0,
-                        deviceName = "No data"
-                    };
-                    if (!ContainDevice(tempDevice, Devices))
-                    {
-                        Devices.Add(tempDevice);
-                    }
-                    if (!ContainDevice(tempDevice, AllDevices))
-                    {
-                        AllDevices.Add(tempDevice);
-                    }
-                }
-                foreach (DataRow dr in devices.Rows)
-                {
-                    dtDevice tempDevice = new dtDevice
-                    {
-                        creUsrId = int.Parse(dr["creUsrId"].ToString()),
-                        creDt = dr["creDt"].ToString(),
-                        updUsrId = int.Parse(dr["updUsrId"].ToString()),
-                        updDt = dr["updDt"].ToString(),
-                        deviceId = int.Parse(dr["deviceId"].ToString()),
-                        deviceName = dr["deviceName"].ToString(),
-                        deviceNameOld = dr["deviceNameOld"].ToString(),
-                        imageDeviceUrl = dr["imageDeviceUrl"].ToString(),
-                        imageDeviceUrlOld = dr["imageDeviceUrlOld"].ToString(),
-                        maxRow = int.Parse(dr["maxRow"].ToString()),
-                        maxBay = int.Parse(dr["maxBay"].ToString()),
-                        pathFile = dr["pathFile"].ToString(),
-                    };
-                    if (!ContainDevice(tempDevice, Devices))
-                    {
-                        Devices.Add(tempDevice);
-                    }
-                    if (!ContainDevice(tempDevice, AllDevices))
-                    {
-                        AllDevices.Add(tempDevice);
-                    }
-                }
+                return;
             }
-        }
-
-        public void ReloadListProduct()
-        {
-            if (statistics.cmbDevice.SelectedValue == null ||
-                statistics.cmbDevice.SelectedValue.ToString() == "" ||
-                int.Parse(statistics.cmbDevice.SelectedValue.ToString()) <= 0)
+            try
             {
-                Products.Clear();
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "product/getListProduct");
+                Devices.Clear();
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "device/getListDevice");
                 request.Method = "GET";
                 request.ContentType = @"application/json";
                 HttpWebResponse response = request.GetResponse() as HttpWebResponse;
@@ -300,55 +250,204 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
                 {
                     StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
                     string result = reader.ReadToEnd();
-                    DataTable products = JsonConvert.DeserializeObject<DataTable>(result);
-                    if (products.Rows.Count > 0)
+                    DataTable devices = JsonConvert.DeserializeObject<DataTable>(result);
+                    if (devices.Rows.Count > 0)
                     {
-                        dtProduct tempProduct = new dtProduct
+                        dtDevice tempDevice = new dtDevice
                         {
-                            productId = 0,
-                            productName = "No data"
+                            deviceId = 0,
+                            deviceName = "No data"
                         };
-                        if (!ContainProduct(tempProduct, Products))
+                        if (!ContainDevice(tempDevice, Devices))
                         {
-                            Products.Add(tempProduct);
+                            Devices.Add(tempDevice);
                         }
-                        if (!ContainProduct(tempProduct, AllProducts))
+                        if (!ContainDevice(tempDevice, AllDevices))
                         {
-                            AllProducts.Add(tempProduct);
+                            AllDevices.Add(tempDevice);
                         }
                     }
-                    foreach (DataRow dr in products.Rows)
+                    foreach (DataRow dr in devices.Rows)
                     {
-                        dtProduct tempProduct = new dtProduct
+                        dtDevice tempDevice = new dtDevice
                         {
                             creUsrId = int.Parse(dr["creUsrId"].ToString()),
                             creDt = dr["creDt"].ToString(),
                             updUsrId = int.Parse(dr["updUsrId"].ToString()),
                             updDt = dr["updDt"].ToString(),
-                            productId = int.Parse(dr["productId"].ToString()),
-                            productName = dr["productName"].ToString(),
-                            imageProductUrl = dr["imageProductUrl"].ToString(),
-                            imageProductUrlOld = dr["imageProductUrlOld"].ToString(),
+                            deviceId = int.Parse(dr["deviceId"].ToString()),
+                            deviceName = dr["deviceName"].ToString(),
+                            deviceNameOld = dr["deviceNameOld"].ToString(),
+                            imageDeviceUrl = dr["imageDeviceUrl"].ToString(),
+                            imageDeviceUrlOld = dr["imageDeviceUrlOld"].ToString(),
+                            maxRow = int.Parse(dr["maxRow"].ToString()),
+                            maxBay = int.Parse(dr["maxBay"].ToString()),
                             pathFile = dr["pathFile"].ToString(),
                         };
-                        if (!ContainProduct(tempProduct, Products))
+                        if (!ContainDevice(tempDevice, Devices))
                         {
-                            Products.Add(tempProduct);
+                            Devices.Add(tempDevice);
                         }
-                        if (!ContainProduct(tempProduct, AllProducts))
+                        if (!ContainDevice(tempDevice, AllDevices))
                         {
-                            AllProducts.Add(tempProduct);
+                            AllDevices.Add(tempDevice);
                         }
                     }
                 }
             }
-            else
+            catch (Exception exc)
             {
-                Products.Clear();
-                dtDeviceProduct dtDeviceProduct = new dtDeviceProduct();
-                dtDeviceProduct.deviceId = int.Parse(statistics.cmbDevice.SelectedValue.ToString());
-                string jsonData = JsonConvert.SerializeObject(dtDeviceProduct);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "product/getListDeviceProductByDeviceId");
+                Console.WriteLine(exc.Message);
+            }
+
+        }
+
+        public void ReloadListProduct()
+        {
+            if (!Global_Object.ServerAlive())
+            {
+                return;
+            }
+            try
+            {
+                if (statistics.cmbDevice.SelectedValue == null ||
+                statistics.cmbDevice.SelectedValue.ToString() == "" ||
+                int.Parse(statistics.cmbDevice.SelectedValue.ToString()) <= 0)
+                {
+                    Products.Clear();
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "product/getListProduct");
+                    request.Method = "GET";
+                    request.ContentType = @"application/json";
+                    HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                        string result = reader.ReadToEnd();
+                        DataTable products = JsonConvert.DeserializeObject<DataTable>(result);
+                        if (products.Rows.Count > 0)
+                        {
+                            dtProduct tempProduct = new dtProduct
+                            {
+                                productId = 0,
+                                productName = "No data"
+                            };
+                            if (!ContainProduct(tempProduct, Products))
+                            {
+                                Products.Add(tempProduct);
+                            }
+                            if (!ContainProduct(tempProduct, AllProducts))
+                            {
+                                AllProducts.Add(tempProduct);
+                            }
+                        }
+                        foreach (DataRow dr in products.Rows)
+                        {
+                            dtProduct tempProduct = new dtProduct
+                            {
+                                creUsrId = int.Parse(dr["creUsrId"].ToString()),
+                                creDt = dr["creDt"].ToString(),
+                                updUsrId = int.Parse(dr["updUsrId"].ToString()),
+                                updDt = dr["updDt"].ToString(),
+                                productId = int.Parse(dr["productId"].ToString()),
+                                productName = dr["productName"].ToString(),
+                                imageProductUrl = dr["imageProductUrl"].ToString(),
+                                imageProductUrlOld = dr["imageProductUrlOld"].ToString(),
+                                pathFile = dr["pathFile"].ToString(),
+                            };
+                            if (!ContainProduct(tempProduct, Products))
+                            {
+                                Products.Add(tempProduct);
+                            }
+                            if (!ContainProduct(tempProduct, AllProducts))
+                            {
+                                AllProducts.Add(tempProduct);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Products.Clear();
+                    dtDeviceProduct dtDeviceProduct = new dtDeviceProduct();
+                    dtDeviceProduct.deviceId = int.Parse(statistics.cmbDevice.SelectedValue.ToString());
+                    string jsonData = JsonConvert.SerializeObject(dtDeviceProduct);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "product/getListDeviceProductByDeviceId");
+                    request.Method = "POST";
+                    request.ContentType = "application/json";
+
+                    System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+                    Byte[] byteArray = encoding.GetBytes(jsonData);
+                    request.ContentLength = byteArray.Length;
+                    using (Stream dataStream = request.GetRequestStream())
+                    {
+                        dataStream.Write(byteArray, 0, byteArray.Length);
+                        dataStream.Flush();
+                    }
+                    HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                        string result = reader.ReadToEnd();
+                        DataTable products = JsonConvert.DeserializeObject<DataTable>(result);
+                        if (products.Rows.Count > 0)
+                        {
+                            dtProduct tempProduct = new dtProduct
+                            {
+                                productId = 0,
+                                productName = "No data"
+                            };
+                            if (!ContainProduct(tempProduct, Products))
+                            {
+                                Products.Add(tempProduct);
+                            }
+                            if (!ContainProduct(tempProduct, AllProducts))
+                            {
+                                AllProducts.Add(tempProduct);
+                            }
+                        }
+                        foreach (DataRow dr in products.Rows)
+                        {
+                            dtProduct tempProduct = new dtProduct
+                            {
+                                creUsrId = int.Parse(dr["creUsrId"].ToString()),
+                                creDt = dr["creDt"].ToString(),
+                                updUsrId = int.Parse(dr["updUsrId"].ToString()),
+                                updDt = dr["updDt"].ToString(),
+                                productId = int.Parse(dr["productId"].ToString()),
+                                productName = dr["productName"].ToString()
+                            };
+                            if (!ContainProduct(tempProduct, Products))
+                            {
+                                Products.Add(tempProduct);
+                            }
+                            if (!ContainProduct(tempProduct, AllProducts))
+                            {
+                                AllProducts.Add(tempProduct);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+            }
+
+        }
+
+        public void ReloadListProductDetail()
+        {
+            if (!Global_Object.ServerAlive())
+            {
+                return;
+            }
+            try
+            {
+                ProductDetails.Clear();
+                dtProductDetail productDetail = new dtProductDetail();
+                productDetail.productId = statistics.cmbProduct.SelectedValue == null ? 0 : int.Parse(statistics.cmbProduct.SelectedValue.ToString());
+                string jsonData = JsonConvert.SerializeObject(productDetail);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "product/getListProductDetailByProductId");
                 request.Method = "POST";
                 request.ContentType = "application/json";
 
@@ -360,345 +459,472 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
                     dataStream.Write(byteArray, 0, byteArray.Length);
                     dataStream.Flush();
                 }
+
                 HttpWebResponse response = request.GetResponse() as HttpWebResponse;
                 using (Stream responseStream = response.GetResponseStream())
                 {
                     StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
                     string result = reader.ReadToEnd();
-                    DataTable products = JsonConvert.DeserializeObject<DataTable>(result);
-                    if (products.Rows.Count > 0)
+                    DataTable productDetails = JsonConvert.DeserializeObject<DataTable>(result);
+                    if (productDetails.Rows.Count > 0)
                     {
-                        dtProduct tempProduct = new dtProduct
+                        dtProductDetail tempProductDetail = new dtProductDetail
                         {
-                            productId = 0,
-                            productName = "No data"
+                            productDetailId = 0,
+                            productDetailName = "No data"
                         };
-                        if (!ContainProduct(tempProduct, Products))
+                        if (!ContainProductDetail(tempProductDetail, ProductDetails))
                         {
-                            Products.Add(tempProduct);
+                            ProductDetails.Add(tempProductDetail);
                         }
-                        if (!ContainProduct(tempProduct, AllProducts))
+                        if (!ContainProductDetail(tempProductDetail, AllProductDetails))
                         {
-                            AllProducts.Add(tempProduct);
+                            AllProductDetails.Add(tempProductDetail);
                         }
                     }
-                    foreach (DataRow dr in products.Rows)
+                    foreach (DataRow dr in productDetails.Rows)
                     {
-                        dtProduct tempProduct = new dtProduct
+                        dtProductDetail tempProductDetail = new dtProductDetail
                         {
                             creUsrId = int.Parse(dr["creUsrId"].ToString()),
                             creDt = dr["creDt"].ToString(),
                             updUsrId = int.Parse(dr["updUsrId"].ToString()),
                             updDt = dr["updDt"].ToString(),
+                            productDetailId = int.Parse(dr["productDetailId"].ToString()),
                             productId = int.Parse(dr["productId"].ToString()),
-                            productName = dr["productName"].ToString()
+                            productDetailName = dr["productDetailName"].ToString()
                         };
-                        if (!ContainProduct(tempProduct, Products))
+                        if (!ContainProductDetail(tempProductDetail, ProductDetails))
                         {
-                            Products.Add(tempProduct);
+                            ProductDetails.Add(tempProductDetail);
                         }
-                        if (!ContainProduct(tempProduct, AllProducts))
+                        if (!ContainProductDetail(tempProductDetail, AllProductDetails))
                         {
-                            AllProducts.Add(tempProduct);
+                            AllProductDetails.Add(tempProductDetail);
                         }
                     }
                 }
             }
-        }
-
-        public void ReloadListProductDetail()
-        {
-            ProductDetails.Clear();
-            dtProductDetail productDetail = new dtProductDetail();
-            productDetail.productId = statistics.cmbProduct.SelectedValue == null ? 0 : int.Parse(statistics.cmbProduct.SelectedValue.ToString());
-            string jsonData = JsonConvert.SerializeObject(productDetail);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "product/getListProductDetailByProductId");
-            request.Method = "POST";
-            request.ContentType = "application/json";
-
-            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-            Byte[] byteArray = encoding.GetBytes(jsonData);
-            request.ContentLength = byteArray.Length;
-            using (Stream dataStream = request.GetRequestStream())
+            catch (Exception exc)
             {
-                dataStream.Write(byteArray, 0, byteArray.Length);
-                dataStream.Flush();
+                Console.WriteLine(exc.Message);
             }
 
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-            using (Stream responseStream = response.GetResponseStream())
-            {
-                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                string result = reader.ReadToEnd();
-                DataTable productDetails = JsonConvert.DeserializeObject<DataTable>(result);
-                if (productDetails.Rows.Count > 0)
-                {
-                    dtProductDetail tempProductDetail = new dtProductDetail
-                    {
-                        productDetailId = 0,
-                        productDetailName = "No data"
-                    };
-                    if (!ContainProductDetail(tempProductDetail, ProductDetails))
-                    {
-                        ProductDetails.Add(tempProductDetail);
-                    }
-                    if (!ContainProductDetail(tempProductDetail, AllProductDetails))
-                    {
-                        AllProductDetails.Add(tempProductDetail);
-                    }
-                }
-                foreach (DataRow dr in productDetails.Rows)
-                {
-                    dtProductDetail tempProductDetail = new dtProductDetail
-                    {
-                        creUsrId = int.Parse(dr["creUsrId"].ToString()),
-                        creDt = dr["creDt"].ToString(),
-                        updUsrId = int.Parse(dr["updUsrId"].ToString()),
-                        updDt = dr["updDt"].ToString(),
-                        productDetailId = int.Parse(dr["productDetailId"].ToString()),
-                        productId = int.Parse(dr["productId"].ToString()),
-                        productDetailName = dr["productDetailName"].ToString()
-                    };
-                    if (!ContainProductDetail(tempProductDetail, ProductDetails))
-                    {
-                        ProductDetails.Add(tempProductDetail);
-                    }
-                    if (!ContainProductDetail(tempProductDetail, AllProductDetails))
-                    {
-                        AllProductDetails.Add(tempProductDetail);
-                    }
-                }
-            }
         }
 
         public void ReloadListBuffer()
         {
-            Buffers.Clear();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "buffer/getListBuffer");
-            request.Method = "GET";
-            request.ContentType = @"application/json";
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-            using (Stream responseStream = response.GetResponseStream())
+            if (!Global_Object.ServerAlive())
             {
-                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                string result = reader.ReadToEnd();
-                DataTable buffers = JsonConvert.DeserializeObject<DataTable>(result);
-                if (buffers.Rows.Count > 0)
+                return;
+            }
+            try
+            {
+                Buffers.Clear();
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "buffer/getListBuffer");
+                request.Method = "GET";
+                request.ContentType = @"application/json";
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                using (Stream responseStream = response.GetResponseStream())
                 {
-                    dtBuffer tempBuffer = new dtBuffer
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    string result = reader.ReadToEnd();
+                    DataTable buffers = JsonConvert.DeserializeObject<DataTable>(result);
+                    if (buffers.Rows.Count > 0)
                     {
-                        bufferId = 0,
-                        bufferName = "No data"
-                    };
-                    if (!ContainBuffer(tempBuffer, Buffers))
-                    {
-                        Buffers.Add(tempBuffer);
+                        dtBuffer tempBuffer = new dtBuffer
+                        {
+                            bufferId = 0,
+                            bufferName = "No data"
+                        };
+                        if (!ContainBuffer(tempBuffer, Buffers))
+                        {
+                            Buffers.Add(tempBuffer);
+                        }
+                        if (!ContainBuffer(tempBuffer, AllBuffers))
+                        {
+                            AllBuffers.Add(tempBuffer);
+                        }
                     }
-                    if (!ContainBuffer(tempBuffer, AllBuffers))
+                    foreach (DataRow dr in buffers.Rows)
                     {
-                        AllBuffers.Add(tempBuffer);
-                    }
-                }
-                foreach (DataRow dr in buffers.Rows)
-                {
-                    dtBuffer tempBuffer = new dtBuffer
-                    {
-                        creUsrId = int.Parse(dr["creUsrId"].ToString()),
-                        creDt = dr["creDt"].ToString(),
-                        updUsrId = int.Parse(dr["updUsrId"].ToString()),
-                        updDt = dr["updDt"].ToString(),
+                        dtBuffer tempBuffer = new dtBuffer
+                        {
+                            creUsrId = int.Parse(dr["creUsrId"].ToString()),
+                            creDt = dr["creDt"].ToString(),
+                            updUsrId = int.Parse(dr["updUsrId"].ToString()),
+                            updDt = dr["updDt"].ToString(),
 
-                        bufferId = int.Parse(dr["bufferId"].ToString()),
-                        bufferName = dr["bufferName"].ToString(),
-                        bufferNameOld = dr["bufferNameOld"].ToString(),
-                        bufferCheckIn = dr["bufferCheckIn"].ToString(),
-                        bufferData = dr["bufferData"].ToString(),
-                        maxRow = int.Parse(dr["maxRow"].ToString()),
-                        maxBay = int.Parse(dr["maxBay"].ToString()),
-                        maxRowOld = int.Parse(dr["maxRowOld"].ToString()),
-                        maxBayOld = int.Parse(dr["maxBayOld"].ToString()),
-                        bufferReturn = bool.Parse(dr["bufferReturn"].ToString()),
-                        bufferReturnOld = bool.Parse(dr["bufferReturnOld"].ToString()),
-                        //pallets
-                    };
-                    if (!ContainBuffer(tempBuffer, Buffers))
-                    {
-                        Buffers.Add(tempBuffer);
-                    }
-                    if (!ContainBuffer(tempBuffer, AllBuffers))
-                    {
-                        AllBuffers.Add(tempBuffer);
+                            bufferId = int.Parse(dr["bufferId"].ToString()),
+                            bufferName = dr["bufferName"].ToString(),
+                            bufferNameOld = dr["bufferNameOld"].ToString(),
+                            bufferCheckIn = dr["bufferCheckIn"].ToString(),
+                            bufferData = dr["bufferData"].ToString(),
+                            maxRow = int.Parse(dr["maxRow"].ToString()),
+                            maxBay = int.Parse(dr["maxBay"].ToString()),
+                            maxRowOld = int.Parse(dr["maxRowOld"].ToString()),
+                            maxBayOld = int.Parse(dr["maxBayOld"].ToString()),
+                            bufferReturn = bool.Parse(dr["bufferReturn"].ToString()),
+                            bufferReturnOld = bool.Parse(dr["bufferReturnOld"].ToString()),
+                            //pallets
+                        };
+                        if (!ContainBuffer(tempBuffer, Buffers))
+                        {
+                            Buffers.Add(tempBuffer);
+                        }
+                        if (!ContainBuffer(tempBuffer, AllBuffers))
+                        {
+                            AllBuffers.Add(tempBuffer);
+                        }
                     }
                 }
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
             }
         }
 
         public void ReloadListTimeWork()
         {
-            TimeWorks.Clear();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "timeWork/getListTimeWork");
-            request.Method = "GET";
-            request.ContentType = @"application/json";
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-            using (Stream responseStream = response.GetResponseStream())
+            if (!Global_Object.ServerAlive())
             {
-                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                string result = reader.ReadToEnd();
-                DataTable timeWorks = JsonConvert.DeserializeObject<DataTable>(result);
-                if (timeWorks.Rows.Count > 0)
-                {
-                    dtTimeWork tempTimeWork = new dtTimeWork
-                    {
-                        timeWorkId = 0,
-                        timeWorkName = "No data"
-                    };
-                    if (!ContainTimeWork(tempTimeWork, TimeWorks))
-                    {
-                        TimeWorks.Add(tempTimeWork);
-                    }
-                    if (!ContainTimeWork(tempTimeWork, AllTimeWorks))
-                    {
-                        AllTimeWorks.Add(tempTimeWork);
-                    }
-                }
-                foreach (DataRow dr in timeWorks.Rows)
-                {
-                    dtTimeWork tempTimeWork = new dtTimeWork
-                    {
-                        creUsrId = int.Parse(dr["creUsrId"].ToString()),
-                        creDt = dr["creDt"].ToString(),
-                        updUsrId = int.Parse(dr["updUsrId"].ToString()),
-                        updDt = dr["updDt"].ToString(),
-                        timeWorkId = int.Parse(dr["timeWorkId"].ToString()),
-                        timeWorkName = dr["timeWorkName"].ToString(),
-                        startTime = dr["startTime"].ToString(),
-                        endTime = dr["endTime"].ToString(),
-                    };
-                    if (!ContainTimeWork(tempTimeWork, TimeWorks))
-                    {
-                        TimeWorks.Add(tempTimeWork);
-                    }
-                    if (!ContainTimeWork(tempTimeWork, AllTimeWorks))
-                    {
-                        AllTimeWorks.Add(tempTimeWork);
-                    }
-                }
-
+                return;
             }
+            try
+            {
+                TimeWorks.Clear();
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "timeWork/getListTimeWork");
+                request.Method = "GET";
+                request.ContentType = @"application/json";
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    string result = reader.ReadToEnd();
+                    DataTable timeWorks = JsonConvert.DeserializeObject<DataTable>(result);
+                    if (timeWorks.Rows.Count > 0)
+                    {
+                        dtTimeWork tempTimeWork = new dtTimeWork
+                        {
+                            timeWorkId = 0,
+                            timeWorkName = "No data"
+                        };
+                        if (!ContainTimeWork(tempTimeWork, TimeWorks))
+                        {
+                            TimeWorks.Add(tempTimeWork);
+                        }
+                        if (!ContainTimeWork(tempTimeWork, AllTimeWorks))
+                        {
+                            AllTimeWorks.Add(tempTimeWork);
+                        }
+                    }
+                    foreach (DataRow dr in timeWorks.Rows)
+                    {
+                        dtTimeWork tempTimeWork = new dtTimeWork
+                        {
+                            creUsrId = int.Parse(dr["creUsrId"].ToString()),
+                            creDt = dr["creDt"].ToString(),
+                            updUsrId = int.Parse(dr["updUsrId"].ToString()),
+                            updDt = dr["updDt"].ToString(),
+                            timeWorkId = int.Parse(dr["timeWorkId"].ToString()),
+                            timeWorkName = dr["timeWorkName"].ToString(),
+                            startTime = dr["startTime"].ToString(),
+                            endTime = dr["endTime"].ToString(),
+                        };
+                        if (!ContainTimeWork(tempTimeWork, TimeWorks))
+                        {
+                            TimeWorks.Add(tempTimeWork);
+                        }
+                        if (!ContainTimeWork(tempTimeWork, AllTimeWorks))
+                        {
+                            AllTimeWorks.Add(tempTimeWork);
+                        }
+                    }
+
+                }
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+            }
+
         }
 
-        public void ReloadDataGridTask()
+        public void ReloadDataGridCharge()
         {
-
-            dtRobotProcess robotProcess = new dtRobotProcess();
-            if (statistics.cmbRobot.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbRobot.SelectedValue.ToString()))
+            if (!Global_Object.ServerAlive())
             {
-                robotProcess.robotId = statistics.cmbRobot.SelectedValue.ToString();
+                return;
             }
-
-            if (statistics.cmbDevice.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbDevice.SelectedValue.ToString()) && int.Parse(statistics.cmbDevice.SelectedValue.ToString()) > 0)
+            try
             {
-                robotProcess.deviceId = int.Parse(statistics.cmbDevice.SelectedValue.ToString());
-            }
-
-            if (statistics.cmbProduct.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbProduct.SelectedValue.ToString()) && int.Parse(statistics.cmbProduct.SelectedValue.ToString()) > 0)
-            {
-                robotProcess.productId = int.Parse(statistics.cmbProduct.SelectedValue.ToString());
-            }
-
-            if (statistics.cmbProductDetail.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbProductDetail.SelectedValue.ToString()) && int.Parse(statistics.cmbProductDetail.SelectedValue.ToString()) > 0)
-            {
-                robotProcess.productDetailId = int.Parse(statistics.cmbProductDetail.SelectedValue.ToString());
-            }
-
-            if (statistics.cmbOperationType.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbOperationType.SelectedValue.ToString()) && int.Parse(statistics.cmbOperationType.SelectedValue.ToString()) >= 0)
-            {
-                robotProcess.operationType = int.Parse(statistics.cmbOperationType.SelectedValue.ToString());
-            }
-            else
-            {
-                robotProcess.operationType = -1;
-            }
-
-            if (statistics.cmbBuffer.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbBuffer.SelectedValue.ToString()) && int.Parse(statistics.cmbBuffer.SelectedValue.ToString()) > 0)
-            {
-                robotProcess.bufferId = int.Parse(statistics.cmbBuffer.SelectedValue.ToString());
-            }
-
-            if (statistics.cmbShift.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbShift.SelectedValue.ToString()) && int.Parse(statistics.cmbShift.SelectedValue.ToString()) > 0)
-            {
-                robotProcess.timeWorkId = int.Parse(statistics.cmbShift.SelectedValue.ToString());
-                DateTime selectedDate = (DateTime)statistics.dtpActiveDate.SelectedDate;
-                string activeDate = selectedDate.Year + "-" + selectedDate.Month.ToString("00.") + "-" + selectedDate.Day.ToString("00.");
-                robotProcess.activeDate = activeDate;
-            }
-
-            string jsonSend = JsonConvert.SerializeObject(robotProcess);
-            this.listRobotProcess.Clear();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "reportRobot/getReportRobotProcess");
-            request.Method = "POST";
-            request.ContentType = "application/json";
-
-            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-            Byte[] byteArray = encoding.GetBytes(jsonSend);
-            request.ContentLength = byteArray.Length;
-            using (Stream dataStream = request.GetRequestStream())
-            {
-                dataStream.Write(byteArray, 0, byteArray.Length);
-                dataStream.Flush();
-            }
-
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-            using (Stream responseStream = response.GetResponseStream())
-            {
-                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                string result = reader.ReadToEnd();
-                DataTable reportRobotProcess = JsonConvert.DeserializeObject<DataTable>(result);
-
-                foreach (DataRow dr in reportRobotProcess.Rows)
+                dtRobotCharge robotCharge = new dtRobotCharge();
+                if (statistics.cmbRobotRobotCharge.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbRobotRobotCharge.SelectedValue.ToString()))
                 {
-                    dtRobotProcess tempRobotProcess = new dtRobotProcess
+                    robotCharge.robotId = statistics.cmbRobotRobotCharge.SelectedValue.ToString();
+                }
+
+                if (statistics.cmbShiftRobotCharge.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbShiftRobotCharge.SelectedValue.ToString()) && int.Parse(statistics.cmbShiftRobotCharge.SelectedValue.ToString()) > 0)
+                {
+                    robotCharge.timeWorkId = int.Parse(statistics.cmbShiftRobotCharge.SelectedValue.ToString());
+                }
+
+                string jsonSend = JsonConvert.SerializeObject(robotCharge);
+                this.listRobotCharge.Clear();
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "reportRobot/getReportRobotCharge");
+                request.Method = "POST";
+                request.ContentType = "application/json";
+
+                System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+                Byte[] byteArray = encoding.GetBytes(jsonSend);
+                request.ContentLength = byteArray.Length;
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Flush();
+                }
+
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    string result = reader.ReadToEnd();
+                    DataTable reportRobotCharge = JsonConvert.DeserializeObject<DataTable>(result);
+
+                    if (reportRobotCharge.Rows.Count > 0)
                     {
-                        creUsrId = int.Parse(dr["creUsrId"].ToString()),
-                        creDt = dr["creDt"].ToString(),
-                        updUsrId = int.Parse(dr["updUsrId"].ToString()),
-                        updDt = dr["updDt"].ToString(),
+                        statistics.grvReportRobotCharge.DataContext = reportRobotCharge;
+                        foreach (DataRow dr in reportRobotCharge.Rows)
+                        {
+                            dtRobotCharge tempRobotCharage = new dtRobotCharge
+                            {
+                                creUsrId = int.Parse(dr["creUsrId"].ToString()),
+                                creDt = dr["creDt"].ToString(),
+                                updUsrId = int.Parse(dr["updUsrId"].ToString()),
+                                updDt = dr["updDt"].ToString(),
 
 
-                        robotProcessId = int.Parse(dr["robotProcessId"].ToString()),
-                        robotTaskId = dr["robotTaskId"].ToString(),
-                        gateKey = int.Parse(dr["gateKey"].ToString()),
-                        planId = int.Parse(dr["planId"].ToString()),
-                        deviceId = int.Parse(dr["deviceId"].ToString()),
-                        productId = int.Parse(dr["productId"].ToString()),
-                        productDetailId = int.Parse(dr["productDetailId"].ToString()),
-                        bufferId = int.Parse(dr["bufferId"].ToString()),
-                        palletId = int.Parse(dr["palletId"].ToString()),
-                        operationType = int.Parse(dr["operationType"].ToString()),
-                        rpBeginDatetime = dr["rpBeginDatetime"].ToString(),
-                        rpEndDatetime = dr["rpEndDatetime"].ToString(),
-                        robotProcessStastus = dr["robotProcessStastus"].ToString(),
-                        orderContent = dr["orderContent"].ToString(),
-                        robotId = dr["robotId"].ToString(),
-                        timeWorkId = int.Parse(dr["timeWorkId"].ToString()),
-                        activeDate = dr["activeDate"].ToString()
+                                robotChargeId = int.Parse(dr["robotChargeId"].ToString()),
+                                robotTaskId = dr["robotTaskId"].ToString(),
+                                chargeId = int.Parse(dr["chargeId"].ToString()),
+                                timeWorkId = int.Parse(dr["timeWorkId"].ToString()),
+                                rcBeginDatetime = dr["rpBeginDatetime"].ToString(),
+                                rcEndDatetime = dr["rpEndDatetime"].ToString(),
+                                currentBattery = dr["currentBattery"].ToString(),
+                                robotChargeStatus = dr["robotChargeStatus"].ToString(),
+                                robotId = dr["robotId"].ToString(),
+                                procedureContent = dr["procedureContent"].ToString(),
 
-                        //locationBuffer = dr["locationBuffer"].ToString(),
-                        //locationPallet = dr["locationPallet"].ToString(),
-                        //orderContent
-                    };
-                    if (!ContainRobotProcess(tempRobotProcess, this.listRobotProcess))
+                            };
+
+                            if ((tempRobotCharage.rcBeginDatetime != "") && (tempRobotCharage.rcEndDatetime != ""))
+                            {
+                                DateTime dtBegin = DateTime.ParseExact(tempRobotCharage.rcBeginDatetime, "yyyy-MM-dd HH:mm:ss",
+                                           System.Globalization.CultureInfo.InvariantCulture);
+
+                                DateTime dtEnd = DateTime.ParseExact(tempRobotCharage.rcEndDatetime, "yyyy-MM-dd HH:mm:ss",
+                                          System.Globalization.CultureInfo.InvariantCulture);
+
+                                TimeSpan duration = dtEnd.Subtract(dtBegin);
+                                tempRobotCharage.timeCharge = duration.ToString(@"hh\:mm");
+                            }
+                            else
+                            {
+
+                            }
+                            if (!ContainRobotCharge(tempRobotCharage, listRobotCharge))
+                            {
+                                //tempRobotProcess.listOperationTypes = listOperationType;
+                                this.listRobotCharge.Add(tempRobotCharage);
+                            }
+                        }
+                        //foreach (DataGridViewRow dr in grvReportRobotCharge.Rows)
+                        //{
+                        //    if (dr.Cells["rcBeginDatetime"].Value.ToString() != "" && dr.Cells["rcEndDatetime"].Value.ToString() != "")
+                        //    {
+                        //        DateTime dtBegin = DateTime.ParseExact(dr.Cells["rcBeginDatetime"].Value.ToString(), "yyyy-MM-dd HH:mm:ss",
+                        //                   System.Globalization.CultureInfo.InvariantCulture);
+
+                        //        DateTime dtEnd = DateTime.ParseExact(dr.Cells["rcEndDatetime"].Value.ToString(), "yyyy-MM-dd HH:mm:ss",
+                        //                  System.Globalization.CultureInfo.InvariantCulture);
+
+                        //        TimeSpan duration = dtEnd.Subtract(dtBegin);
+
+                        //        dr.Cells["timeCharge"].Value = duration.ToString(@"hh\:mm");
+                        //    }
+                        //}
+                    }
+                    else
                     {
-                        //tempRobotProcess.listOperationTypes = listOperationType;
-                        this.listRobotProcess.Add(tempRobotProcess);
+                        listRobotCharge.Clear();
                     }
                 }
+                if (GroupedRobotCharge.IsEditingItem)
+                    GroupedRobotCharge.CommitEdit();
+                if (GroupedRobotCharge.IsAddingNew)
+                    GroupedRobotCharge.CommitNew();
+                GroupedRobotCharge.Refresh();
             }
-            if (GroupedRobotProcess.IsEditingItem)
-                GroupedRobotProcess.CommitEdit();
-            if (GroupedRobotProcess.IsAddingNew)
-                GroupedRobotProcess.CommitNew();
-            GroupedRobotProcess.Refresh();
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+            }
+        }
+        public void ReloadDataGridTask()
+        {
+            if (!Global_Object.ServerAlive())
+            {
+                return;
+            }
+            try
+            {
+                dtRobotProcess robotProcess = new dtRobotProcess();
+                if (statistics.cmbRobot.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbRobot.SelectedValue.ToString()))
+                {
+                    robotProcess.robotId = statistics.cmbRobot.SelectedValue.ToString();
+                }
+
+                if (statistics.cmbDevice.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbDevice.SelectedValue.ToString()) && int.Parse(statistics.cmbDevice.SelectedValue.ToString()) > 0)
+                {
+                    robotProcess.deviceId = int.Parse(statistics.cmbDevice.SelectedValue.ToString());
+                }
+
+                if (statistics.cmbProduct.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbProduct.SelectedValue.ToString()) && int.Parse(statistics.cmbProduct.SelectedValue.ToString()) > 0)
+                {
+                    robotProcess.productId = int.Parse(statistics.cmbProduct.SelectedValue.ToString());
+                }
+
+                if (statistics.cmbProductDetail.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbProductDetail.SelectedValue.ToString()) && int.Parse(statistics.cmbProductDetail.SelectedValue.ToString()) > 0)
+                {
+                    robotProcess.productDetailId = int.Parse(statistics.cmbProductDetail.SelectedValue.ToString());
+                }
+
+                if (statistics.cmbOperationType.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbOperationType.SelectedValue.ToString()) && int.Parse(statistics.cmbOperationType.SelectedValue.ToString()) >= 0)
+                {
+                    robotProcess.operationType = int.Parse(statistics.cmbOperationType.SelectedValue.ToString());
+                }
+                else
+                {
+                    robotProcess.operationType = -1;
+                }
+
+                if (statistics.cmbBuffer.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbBuffer.SelectedValue.ToString()) && int.Parse(statistics.cmbBuffer.SelectedValue.ToString()) > 0)
+                {
+                    robotProcess.bufferId = int.Parse(statistics.cmbBuffer.SelectedValue.ToString());
+                }
+
+                if (statistics.cmbShift.SelectedValue != null && !string.IsNullOrEmpty(statistics.cmbShift.SelectedValue.ToString()) && int.Parse(statistics.cmbShift.SelectedValue.ToString()) > 0)
+                {
+                    robotProcess.timeWorkId = int.Parse(statistics.cmbShift.SelectedValue.ToString());
+                    DateTime selectedDate = (DateTime)statistics.dtpActiveDate.SelectedDate;
+                    string activeDate = selectedDate.Year + "-" + selectedDate.Month.ToString("00.") + "-" + selectedDate.Day.ToString("00.");
+                    robotProcess.activeDate = activeDate;
+                }
+
+                string jsonSend = JsonConvert.SerializeObject(robotProcess);
+                this.listRobotProcess.Clear();
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Global_Object.url + "reportRobot/getReportRobotProcess");
+                request.Method = "POST";
+                request.ContentType = "application/json";
+
+                System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+                Byte[] byteArray = encoding.GetBytes(jsonSend);
+                request.ContentLength = byteArray.Length;
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Flush();
+                }
+
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    string result = reader.ReadToEnd();
+                    DataTable reportRobotProcess = JsonConvert.DeserializeObject<DataTable>(result);
+                    if (reportRobotProcess.Rows.Count > 0)
+                    {
+                        //statistics.grvReportRobotProcess.DataContext = reportRobotProcess;
+                        foreach (DataRow dr in reportRobotProcess.Rows)
+                        {
+                            dtRobotProcess tempRobotProcess = new dtRobotProcess
+                            {
+                                creUsrId = int.Parse(dr["creUsrId"].ToString()),
+                                creDt = dr["creDt"].ToString(),
+                                updUsrId = int.Parse(dr["updUsrId"].ToString()),
+                                updDt = dr["updDt"].ToString(),
+
+
+                                robotProcessId = int.Parse(dr["robotProcessId"].ToString()),
+                                robotTaskId = dr["robotTaskId"].ToString(),
+                                gateKey = int.Parse(dr["gateKey"].ToString()),
+                                planId = int.Parse(dr["planId"].ToString()),
+                                deviceId = int.Parse(dr["deviceId"].ToString()),
+                                productId = int.Parse(dr["productId"].ToString()),
+                                productDetailId = int.Parse(dr["productDetailId"].ToString()),
+                                bufferId = int.Parse(dr["bufferId"].ToString()),
+                                palletId = int.Parse(dr["palletId"].ToString()),
+                                operationType = int.Parse(dr["operationType"].ToString()),
+                                rpBeginDatetime = dr["rpBeginDatetime"].ToString(),
+                                rpEndDatetime = dr["rpEndDatetime"].ToString(),
+                                robotProcessStastus = dr["robotProcessStastus"].ToString(),
+                                orderContent = dr["orderContent"].ToString(),
+                                robotId = dr["robotId"].ToString(),
+                                timeWorkId = int.Parse(dr["timeWorkId"].ToString()),
+                                activeDate = dr["activeDate"].ToString()
+
+                                //locationBuffer = dr["locationBuffer"].ToString(),
+                                //locationPallet = dr["locationPallet"].ToString(),
+                                //orderContent
+                            };
+                            if (!ContainRobotProcess(tempRobotProcess, this.listRobotProcess))
+                            {
+                                //tempRobotProcess.listOperationTypes = listOperationType;
+                                this.listRobotProcess.Add(tempRobotProcess);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        this.listRobotProcess.Clear();
+                        statistics.txtDetail.Text = "";
+                    }
+
+                }
+                if (GroupedRobotProcess.IsEditingItem)
+                    GroupedRobotProcess.CommitEdit();
+                if (GroupedRobotProcess.IsAddingNew)
+                    GroupedRobotProcess.CommitNew();
+                GroupedRobotProcess.Refresh();
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+            }
+
+        }
+
+        public void loadDetail()
+        {
+            if (statistics.grvReportRobotProcess.SelectedItem != null)
+            {
+                dtRobotProcess row = statistics.grvReportRobotProcess.SelectedItem as dtRobotProcess;
+                //robotProcessIdSelect = int.Parse(row.Cells["robotProcessId"].Value.ToString());
+                string detail = row.orderContent.ToString();
+                Dictionary<string, string> strDetail = JsonConvert.DeserializeObject<Dictionary<string, string>>(detail);
+                statistics.txtDetail.Text = "";
+                foreach (var item in strDetail)
+                {
+                    if (statistics.txtDetail.Text != "")
+                    {
+                        statistics.txtDetail.AppendText(Environment.NewLine);
+                    }
+                    statistics.txtDetail.AppendText(" - " + item.Key + ": " + item.Value);
+                }
+                statistics.txtDetail.Foreground = new SolidColorBrush(Colors.Blue);
+            }
+
         }
         public bool ContainRobotProcess(dtRobotProcess tempOpe, List<dtRobotProcess> List)
         {
@@ -707,6 +933,25 @@ namespace SeldatUnilever_Ver1._02.Management.Statistics
                 if (temp.robotProcessId > 0)
                 {
                     if (temp.robotProcessId == tempOpe.robotProcessId)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public bool ContainRobotCharge(dtRobotCharge tempOpe, List<dtRobotCharge> List)
+        {
+            foreach (dtRobotCharge temp in List)
+            {
+                if (temp.robotChargeId > 0)
+                {
+                    if (temp.robotChargeId == tempOpe.robotChargeId)
                     {
                         return true;
                     }

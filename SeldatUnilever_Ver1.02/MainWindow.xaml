@@ -143,6 +143,14 @@
                                     <iconPacks:PackIconMaterial 
                                         Kind="Thermostat"/>
                                 </Button>
+                                <Button 
+                                    Name="btn_Sound"
+                                    Margin="5 0"
+                                    Click="Btn_Sound_Click"
+                                    ToolBar.OverflowMode="AsNeeded">
+                                    <iconPacks:PackIconMaterial 
+                                        Kind="MusicBox"/>
+                                </Button>
                                 <!--<ListBox SelectedIndex="0">
                                      <StackPanel Orientation="Horizontal" 
                                      HorizontalAlignment="Stretch"

@@ -698,6 +698,7 @@
     <None Include="Resources\phat_measure.png" />
     <None Include="Resources\phat_zoom.png" />
     <None Include="Resources\test3.jpg" />
+    <None Include="Resources\ALARM.wav" />
     <Content Include="sharpdx_direct3d11_1_effects_arm.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

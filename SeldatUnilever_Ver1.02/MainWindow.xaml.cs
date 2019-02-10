@@ -7,7 +7,9 @@ using SeldatUnilever_Ver1._02.Management.Statistics;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -82,6 +84,7 @@ namespace SeldatUnilever_Ver1._02
     /// </summary>
     public partial class MainWindow : Window
     {
+        private SoundPlayer Player = null;
         public System.Timers.Timer stationTimer;
         public System.Timers.Timer robotTimer;
 
@@ -386,6 +389,33 @@ namespace SeldatUnilever_Ver1._02
         private void DeviceItemsListDg_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void Btn_Sound_Click(object sender, RoutedEventArgs e)
+        {
+            PlayWav(Properties.Resources.ALARM, true);
+        }
+        private void PlayWav(Stream stream, bool play_looping)
+        {
+            // Stop the player if it is running.
+            if (Player != null)
+            {
+                Player.Stop();
+                Player.Dispose();
+                Player = null;
+            }
+
+            // If we have no stream, we're done.
+            if (stream == null) return;
+
+            // Make the new player for the WAV stream.
+            Player = new SoundPlayer(stream);
+
+            // Play.
+            if (play_looping)
+                Player.PlayLooping();
+            else
+                Player.Play();
         }
     }
 }

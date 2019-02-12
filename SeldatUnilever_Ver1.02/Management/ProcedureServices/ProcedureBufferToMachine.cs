@@ -63,7 +63,7 @@ namespace SeldatMRMS {
                         Debug(this,"BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER");
                         try {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY) {
-                                //rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+                                rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                                 Stopwatch sw = new Stopwatch ();
                                 sw.Start ();
                                 do {

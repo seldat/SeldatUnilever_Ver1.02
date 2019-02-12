@@ -227,7 +227,7 @@ namespace SeldatMRMS {
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             // ReToGate.UpdatePalletState(PalletStatus.W);
-                            rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+                          //  rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
                             Debug(this,"RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE"); 
                         } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {

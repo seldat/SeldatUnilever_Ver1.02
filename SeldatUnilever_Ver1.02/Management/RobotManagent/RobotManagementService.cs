@@ -55,7 +55,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.WS = 6;
             prop1.Label = "Robot1";
             prop1.BatteryLevelRb = 40;
-            prop1.Url = "ws://192.168.1.9:9090";
+            prop1.Url = "ws://192.168.1.8:9090";
             prop1.ipMcuCtrl = "192.168.1.210";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 4;
@@ -266,19 +266,27 @@ namespace SeldatMRMS.Management.RobotManagent
         {
            
                 ResultRobotReady result = null;
-        
+                
                 if (RobotUnityWaitTaskList.Count > 0)
                 {
                     foreach (RobotUnity robot in RobotUnityWaitTaskList.Values)
                     {
-                        if (robot.webSocket.IsAlive)
+
+                    try
+                    {
+                        if (robot.webSocket != null)
                         {
-                            if (robot.getBattery())
+                            if (robot.webSocket.IsAlive)
                             {
-                                RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                                if (robot.getBattery())
+                                {
+                                    RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                                }
+                                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
                             }
-                            result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
                         }
+                    }
+                    catch { Console.WriteLine("Error WaitTask In RobotManagement Service Remove Robot"); }
                     }
                 }
       
@@ -300,14 +308,24 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 foreach (RobotUnity robot in RobotUnityReadyList.Values)
                 {
-                    if (robot.webSocket.IsAlive)
+                    try
                     {
-                        if (robot.getBattery())
+                        if (robot.webSocket != null)
                         {
-                            RemoveRobotUnityReadyList(robot.properties.NameId);
+                            if (robot.webSocket.IsAlive)
+                            {
+                                if (robot.getBattery())
+                                {
+                                    RemoveRobotUnityReadyList(robot.properties.NameId);
+                                }
+                                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                                break;
+                            }
                         }
-                        result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
-                        break;
+                    }
+                    catch
+                    {
+                         Console.WriteLine("Error ReadyTask in  RobotManagement Service Remove Robot");
                     }
                 }
             }

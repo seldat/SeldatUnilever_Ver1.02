@@ -42,6 +42,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         {
                 OrderItem orderItem = null;
                 RobotUnity robot = null;
+                int cntOrderNull=1;
                 while (Alive)
                 {
                     //Console.WriteLine(processAssignAnTaskWait);
@@ -62,24 +63,46 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 }
                                 else
                                 {
-                                    processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_HAS_ANTASK;
+
+                                    if (deviceItemsList.Count > 0)
+                                    {
+                                        processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_HAS_ANTASK;
+                                    }
                                     
                                 }
                             }
                             break;
                         case ProcessAssignAnTaskWait.PROC_ANY_CHECK_HAS_ANTASK:
-                            orderItem = Gettask();
-                            if (orderItem != null)
-                            {
-                                processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK;
-                            }
-                            else
-                            {
-                            MoveElementToEnd();
-                                processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
-                            }
+
+                                orderItem = Gettask();
+
+                                if (orderItem != null)
+                                {
+                                    processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK;
+                                    cntOrderNull = 0;
+                                    break;
+                                }
+                                else
+                                {
+                                    MoveElementToEnd();
+                                    cntOrderNull++;
+                                }
+                                if (cntOrderNull > deviceItemsList.Count) // khi robot không còn nhận duoc task
+                                {
+                                    processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY;
+                                    cntOrderNull = 0;
+                                }
+                                else
+                                {
+                                    processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
+                                }
                             break;
-                        case ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK:
+                    case ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY:
+                            procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
+                            robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                            processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
+                        break;
+                    case ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK:
                             SelectProcedureItem(robot, orderItem);
                             // xoa order đầu tiên trong danh sach devicelist[0] sau khi gán task
                             deviceItemsList[0].RemoveFirstOrder();

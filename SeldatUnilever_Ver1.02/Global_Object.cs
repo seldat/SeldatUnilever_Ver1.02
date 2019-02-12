@@ -123,6 +123,7 @@ namespace SeldatMRMS
             //=====================================================
         }
         public static Point LaserOriginalCoor = new Point(740,506);
+      //  public static Point LaserOriginalCoor = new Point(740, 406);
         public static Point OriginPoint = new Point(0, 0);
         public static Point CoorLaser(Point canvas)
         {

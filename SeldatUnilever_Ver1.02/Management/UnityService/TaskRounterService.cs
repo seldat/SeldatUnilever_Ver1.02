@@ -22,6 +22,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             PROC_ANY_CHECK_ROBOT_BATTERYLEVEL,
             PROC_ANY_SET_TRAFFIC_RISKAREA_ON,
             PROC_ANY_CHECK_ROBOT_OUTSIDEREADY,
+            PROC_ANY_CHECK_ROBOT_GOTO_READY
         }
         protected enum ProcessAssignTaskReady
         {

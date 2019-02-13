@@ -55,11 +55,11 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.WS = 6;
             prop1.Label = "Robot1";
             prop1.BatteryLevelRb = 40;
-            prop1.Url = "ws://192.168.1.8:9090";
-            prop1.ipMcuCtrl = "192.168.1.210";
+            prop1.Url = "ws://192.168.1.13:9090";
+            prop1.ipMcuCtrl = "192.168.1.212";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 4;
-            prop1.BatteryLowLevel = 10;
+            prop1.BatteryLowLevel = 80;
             prop1.RequestChargeBattery = false;
             prop1.Width = 1.8;
             prop1.Height = 2.5;
@@ -269,24 +269,24 @@ namespace SeldatMRMS.Management.RobotManagent
                 
                 if (RobotUnityWaitTaskList.Count > 0)
                 {
-                    foreach (RobotUnity robot in RobotUnityWaitTaskList.Values)
+                    for (int index=0;index<RobotUnityWaitTaskList.Count;index++)
                     {
+                        RobotUnity robot =RobotUnityWaitTaskList.ElementAt(index).Value;
 
-                    try
-                    {
-                        if (robot.webSocket != null)
+                        try
                         {
-                            if (robot.webSocket.IsAlive)
+                            if (robot.webSocket != null)
                             {
-                                if (robot.getBattery())
+                                if (robot.webSocket.IsAlive)
                                 {
-                                    RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                                     result = new ResultRobotReady() { robot = RobotUnityRegistedList[robot.properties.NameId], onReristryCharge = robot.getBattery() };
+                                     RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                                     break;
                                 }
-                                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
                             }
                         }
-                    }
-                    catch { Console.WriteLine("Error WaitTask In RobotManagement Service Remove Robot"); }
+                        catch { Console.WriteLine("Error WaitTask In RobotManagement Service Remove Robot");
+                        }
                     }
                 }
       
@@ -314,11 +314,8 @@ namespace SeldatMRMS.Management.RobotManagent
                         {
                             if (robot.webSocket.IsAlive)
                             {
-                                if (robot.getBattery())
-                                {
-                                    RemoveRobotUnityReadyList(robot.properties.NameId);
-                                }
-                                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                                result = new ResultRobotReady() { robot = RobotUnityRegistedList[robot.properties.NameId], onReristryCharge = robot.getBattery() };
+                                RemoveRobotUnityReadyList(robot.properties.NameId);
                                 break;
                             }
                         }

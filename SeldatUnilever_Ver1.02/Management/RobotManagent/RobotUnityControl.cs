@@ -226,7 +226,6 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.pose.Position = new Point (posX, posY);
             properties.pose.AngleW = posTheta;
             properties.pose.Angle = posTheta * 180 / Math.PI;
-           // tam PoseHandler (properties.pose, this);
             Draw ();
             TrafficUpdate();
 

@@ -13,6 +13,12 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpServerRounter
 {
     public class HttpProcessor
     {
+        public enum StatusHttPResponse
+        {
+            STATUS_MESSAGE_SUCCESS=200,
+            STATUS_MESSAGE_ERROR=201,
+            STATUS_MESSAGE_NOACCEPTED=202
+        }
         public TcpClient socket;
         public HttpServer srv;
 
@@ -170,7 +176,7 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpServerRounter
                 ms.Seek(0, SeekOrigin.Begin);
             }
             srv.handlePOSTRequest(this, new StreamReader(ms));
-            handlePOSTResponse(this, new StreamReader(ms));
+            handlePOSTResponse(this, StatusHttPResponse.STATUS_MESSAGE_SUCCESS);
         }
         public void handlePostResponse()
         {
@@ -186,17 +192,19 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpServerRounter
 
         public void writeFailure()
         {
-            outputStream.WriteLine("HTTP/1.0 404 File not found");
+            /*outputStream.WriteLine("HTTP/1.0 404 File not found");
             outputStream.WriteLine("Connection: close");
-            outputStream.WriteLine("");
+            outputStream.WriteLine("");*/
+            handlePOSTResponse(this, StatusHttPResponse.STATUS_MESSAGE_ERROR);
+
         }
-        public void handlePOSTResponse(HttpProcessor p, StreamReader inputData)
+        public void handlePOSTResponse(HttpProcessor p, StatusHttPResponse scode)
         {
             p.writeSuccess();
             // string text = System.IO.File.ReadAllText("C:\\Users\\luat.tran\\source\\repos\\TestServer\\TestServer\\HttpServerRounter\\datajson.json");
 
             dynamic product = new JObject();
-            product.status = "OK";
+            product.status = (int)scode;
             Console.WriteLine("" + product.ToString());
             p.outputStream.WriteLine(product.ToString());
         }

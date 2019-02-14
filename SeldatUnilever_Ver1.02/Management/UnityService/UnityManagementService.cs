@@ -59,7 +59,8 @@ namespace SeldatMRMS.Management.UnityService
             deviceRegistrationService.listen();
             deviceRegistrationService.RegistryMainWindow(this.mainWindow);
 
-            assigmentTaskService.Start();
+            //assigmentTaskService.Start();
+            MessageBox.Show("Bấm Start Để Bắt Đầu !");
         }
         public void Dispose()
         {

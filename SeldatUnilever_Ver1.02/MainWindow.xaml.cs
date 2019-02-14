@@ -364,6 +364,7 @@ namespace SeldatUnilever_Ver1._02
             btn_Stop.IsEnabled = false;
             btn_Play_icon.Foreground = new SolidColorBrush(Colors.Green);
             btn_Stop_icon.Foreground = new SolidColorBrush(Colors.Red);
+            unityService.assigmentTaskService.Dispose();
 
         }
 
@@ -374,6 +375,7 @@ namespace SeldatUnilever_Ver1._02
             btn_Stop.IsEnabled = true;
             btn_Play_icon.Foreground = new SolidColorBrush(Colors.Red);
             btn_Stop_icon.Foreground = new SolidColorBrush(Colors.Green);
+            unityService.assigmentTaskService.Start();
         }
 
         private void btn_RiskArea_Click(object sender, RoutedEventArgs e)

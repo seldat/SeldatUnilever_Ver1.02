@@ -208,7 +208,7 @@ namespace SeldatMRMS.Management
 
                 prioritLevel.IndexOnMainRoad = trafficManagementService.FindIndexZoneRegister(properties.pose.Position);
                 // cập nhật vùng riskzone // update vùng risk area cho robot
-                RiskZoneRegister rZR = trafficManagementService.FindRiskZone(properties.pose.Position);
+                RiskZoneRegister rZR = trafficManagementService.FindRiskZone(properties.pose.Position, IndexZoneDefaultFind.ZONE_OP,true);
                 if (rZR != null)
                 {
                     UpdateRiskAraParams(rZR.L1, rZR.L2, rZR.WS, rZR.distance);

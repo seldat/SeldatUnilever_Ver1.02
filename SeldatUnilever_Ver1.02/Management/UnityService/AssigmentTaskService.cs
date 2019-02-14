@@ -30,7 +30,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             threadprocessAssignAnTaskWait=new Thread(AssignTask);
             threadprocessAssignTaskReady=new Thread(AssignTaskAtReady);
             threadprocessAssignAnTaskWait.Start();
-            //threadprocessAssignTaskReady.Start();
+            threadprocessAssignTaskReady.Start();
         }
         public void Dispose()
         {

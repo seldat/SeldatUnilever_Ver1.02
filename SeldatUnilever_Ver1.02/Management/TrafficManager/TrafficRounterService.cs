@@ -19,6 +19,14 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
 {
     public class TrafficRounterService
     {
+        public enum IndexZoneDefaultFind
+        {
+
+            ZONE_OP =255,
+            ZONE_STREET=254,
+            ZONE_RDSTR=200
+            
+        }
         public ListCollectionView Grouped_PropertiesTrafficZoneList { get; private set; }
         public List<ZoneRegister> PropertiesTrafficZoneList;
         public ListCollectionView Grouped_PropertiesRiskZoneList { get; private set; }
@@ -248,6 +256,26 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             con.Close();
         }*/
 
+        public RiskZoneRegister FindRiskZone(Point p,IndexZoneDefaultFind index,bool ignore)// sử dụng với chỉ số mặt định sẽ được bỏ qua
+        {
+            RiskZoneRegister trz = null;
+            foreach (var rz in RiskZoneRegisterList.Values)
+            {
+                if((int)index==rz.Index)
+                {
+                    if(ignore)
+                    {
+                        continue;
+                    }
+                }
+                if (ExtensionService.IsInPolygon(rz.GetZone(), p))
+                {
+                    trz = rz;
+                    break;
+                }
+            }
+            return trz;
+        }
         public RiskZoneRegister FindRiskZone(Point p)
         {
             RiskZoneRegister trz = null;

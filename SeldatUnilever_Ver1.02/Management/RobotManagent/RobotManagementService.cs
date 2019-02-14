@@ -278,11 +278,12 @@ namespace SeldatMRMS.Management.RobotManagent
                         {
                             if (robot.webSocket.IsAlive)
                             {
+                                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
                                 if (robot.getBattery())
                                 {
                                     RemoveRobotUnityWaitTaskList(robot.properties.NameId);
                                 }
-                                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                                
                             }
                         }
                     }
@@ -314,11 +315,12 @@ namespace SeldatMRMS.Management.RobotManagent
                         {
                             if (robot.webSocket.IsAlive)
                             {
+                                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
                                 if (robot.getBattery())
                                 {
                                     RemoveRobotUnityReadyList(robot.properties.NameId);
                                 }
-                                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                                
                                 break;
                             }
                         }

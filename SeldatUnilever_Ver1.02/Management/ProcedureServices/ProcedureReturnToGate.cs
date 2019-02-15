@@ -61,7 +61,7 @@ namespace SeldatMRMS {
             ProcedureReturnToGate ReToGate = (ProcedureReturnToGate) ojb;
             RobotUnity rb = ReToGate.robot;
             // DataReturnToGate p = ReToGate.points;
-            DoorService ds = ReToGate.door.DoorMezzamineReturnBack;
+            DoorService ds = ReToGate.door.DoorMezzamineReturn;
             TrafficManagementService Traffic = ReToGate.Traffic;
             Debug(this,"Start");
             while (ProRun) {
@@ -194,7 +194,7 @@ namespace SeldatMRMS {
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
-                        if (true == ds.Open (DoorService.DoorId.DOOR_MEZZAMINE_RETURN_BACK)) {
+                        if (true == ds.Open (DoorService.DoorType.DOOR_BACK)) {
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_OPEN_DOOR;
                             Debug(this,"RETGATE_ROBOT_WAITTING_OPEN_DOOR"); 
                         } else {
@@ -203,7 +203,7 @@ namespace SeldatMRMS {
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
-                        if (true == ds.WaitOpen (DoorService.DoorId.DOOR_MEZZAMINE_RETURN_BACK, TIME_OUT_OPEN_DOOR)) {
+                        if (true == ds.WaitOpen (DoorService.DoorType.DOOR_BACK, TIME_OUT_OPEN_DOOR)) {
                             rb.SendCmdAreaPallet (ds.config.infoPallet);
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN;
                             Debug(this,"RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN"); 
@@ -238,7 +238,7 @@ namespace SeldatMRMS {
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            if (ds.Close (DoorService.DoorId.DOOR_MEZZAMINE_RETURN_BACK)) {
+                            if (ds.Close (DoorService.DoorType.DOOR_BACK)) {
                                 StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_CLOSE_GATE;
                                 Debug(this,"RETGATE_ROBOT_WAITTING_CLOSE_GATE"); 
                             } else {
@@ -251,7 +251,7 @@ namespace SeldatMRMS {
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
-                        if (true == ds.WaitClose (DoorService.DoorId.DOOR_MEZZAMINE_RETURN_BACK, TIME_OUT_CLOSE_DOOR)) {
+                        if (true == ds.WaitClose (DoorService.DoorType.DOOR_BACK, TIME_OUT_CLOSE_DOOR)) {
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             Debug(this,"RETGATE_ROBOT_WAITTING_CLOSE_GATE"); 

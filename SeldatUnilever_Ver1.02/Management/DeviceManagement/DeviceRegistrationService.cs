@@ -12,6 +12,8 @@ using Newtonsoft.Json.Linq;
 using SeldatUnilever_Ver1._02;
 using SelDatUnilever_Ver1._00.Communication;
 using SelDatUnilever_Ver1._00.Communication.HttpServerRounter;
+using static SelDatUnilever_Ver1._00.Communication.HttpServerRounter.HttpProcessor;
+using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 {
@@ -68,40 +70,37 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             String data = inputData.ReadToEnd();
             JObject results = JObject.Parse(data);
             String userName = (String)results["userName"];
+            StatusOrderResponse statusOrder = null;
             if (HasDeviceItemAt(userName) >= 0)
             {
-                FindDeviceItem(userName).ParseData(data);
+                statusOrder= FindDeviceItem(userName).ParseData(data);
+                
             }
             else
             {
                 DeviceItem deviceItem = new DeviceItem();
                 deviceItem.userName = userName;
-                deviceItem.ParseData(data);
+                statusOrder=deviceItem.ParseData(data);
                 deviceItemList.Add(deviceItem);
                 
             }
-            
+            if(statusOrder.status==(int)StatusOrderCode.ORDER_STATUS_SUCCESS)
+            {
+                p.handlePOSTResponse(p, StatusHttPResponse.STATUS_MESSAGE_SUCCESS);
+            }
+            else if (statusOrder.status == (int)StatusOrderCode.ORDER_STATUS_ERROR_DATA)
+            {
+                p.handlePOSTResponse(p, StatusHttPResponse.STATUS_MESSAGE_ERROR);
+            }
+            if (statusOrder.status == (int)StatusOrderCode.ORDER_STATUS_NOACCEPTED)
+            {
+                p.handlePOSTResponse(p, StatusHttPResponse.STATUS_MESSAGE_NOACCEPTED);
+            }
         }
 
         public List<DeviceItem> GetDeviceItemList()
         {
             return deviceItemList;
-        }
-
-        public void AddNewDeviceItem ()
-        {
-            DeviceItem temptemp = new DeviceItem();
-            temptemp.userName = "test" + DateTime.Now.ToString();
-            temptemp.oneOrderList.Add(new DeviceItem.OrderItem()
-            {
-                OrderId = DateTime.Now.ToLongTimeString()
-            });
-            deviceItemList.Add(temptemp);
-            //if (GroupedDeviceItems.IsEditingItem)
-            //    GroupedDeviceItems.CommitEdit();
-            //if (GroupedDeviceItems.IsAddingNew)
-            //    GroupedDeviceItems.CommitNew();
-            //GroupedDeviceItems.Refresh();
         }
 
     }

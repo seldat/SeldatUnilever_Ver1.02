@@ -176,7 +176,7 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpServerRounter
                 ms.Seek(0, SeekOrigin.Begin);
             }
             srv.handlePOSTRequest(this, new StreamReader(ms));
-            handlePOSTResponse(this, StatusHttPResponse.STATUS_MESSAGE_SUCCESS);
+            
         }
         public void handlePostResponse()
         {

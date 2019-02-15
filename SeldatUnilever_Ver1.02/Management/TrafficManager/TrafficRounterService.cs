@@ -59,6 +59,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             public double WS { get => _WS; set { _WS = value; RaisePropertyChanged("WS"); } }
             private double _distance;
             public double distance { get => _distance; set { _distance = value; RaisePropertyChanged("Distance"); } }
+            private double _Speed;
+            public double Speed { get => _Speed; set { _Speed = value; RaisePropertyChanged("Speed"); } }
             public Point[] GetZone()
             {
                 return new Point[4] { Point1, Point2, Point3, Point4 };
@@ -129,6 +131,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             pRtemp.L2 = 40;
             pRtemp.WS = 60;
             pRtemp.distance = 40;
+            pRtemp.Speed = (double)RobotUnity.RobotSpeedLevel.ROBOT_SPEED_NORMAL;
             PropertiesRiskZoneList.Add(pRtemp);
             Grouped_PropertiesRiskZoneList.Refresh();
             RiskZoneRegisterList.Add(pRtemp.NameId, pRtemp);

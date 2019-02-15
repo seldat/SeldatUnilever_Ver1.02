@@ -49,7 +49,7 @@ namespace SeldatMRMS.Management.RobotManagent
             ROBOT_SPEED_STOP = 0,
         }
         public bool getBattery () {
-            return properties.RequestChargeBattery;
+            return true;// properties.RequestChargeBattery;
         }
 
         public class PropertiesRobotUnity : NotifyUIBase

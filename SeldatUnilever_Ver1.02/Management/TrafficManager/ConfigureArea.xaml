@@ -40,6 +40,8 @@
 
                     <DataGridTextColumn Width="*" Header="Point4" 
                                         Binding="{Binding Path=Point4, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="DIR-OUT" 
+                                        Binding="{Binding Path=Dir_Out, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Detail" 
                                         Binding="{Binding Path=Detail, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 

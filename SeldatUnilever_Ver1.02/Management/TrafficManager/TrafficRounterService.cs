@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SeldatMRMS;
+using SeldatMRMS.Management;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using System;
@@ -19,6 +20,10 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
 {
     public class TrafficRounterService
     {
+        public enum DIROUT_OPZONE
+        {
+
+        }
         public enum IndexZoneDefaultFind
         {
 
@@ -82,6 +87,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             public Point Point3 { get => _Point3; set { _Point3 = value; RaisePropertyChanged("Point3"); } }
             private Point _Point4;
             public Point Point4 { get => _Point4; set { _Point4 = value; RaisePropertyChanged("Point4"); } }
+            private TrafficRobotUnity.BrDirection _Dir_Out;
+            public TrafficRobotUnity.BrDirection Dir_Out { get => _Dir_Out; set { _Dir_Out = value; RaisePropertyChanged("Dir_Out"); } }
             public String _Detail;
             public String Detail { get => _Detail; set { _Detail = value; RaisePropertyChanged("Detail"); } }
             public Point[] GetZone()
@@ -331,6 +338,20 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 }
             }
             return zoneName;
+        }
+        public TrafficRobotUnity.BrDirection GetDirDirection_Zone(Point p)
+        {
+            TrafficRobotUnity.BrDirection dir = TrafficRobotUnity.BrDirection.FORWARD;
+            foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
+            {
+
+                if (ExtensionService.IsInPolygon(r.GetZone(),p))
+                {
+                    dir = r.Dir_Out;
+                    break;
+                }
+            }
+            return dir;
         }
         public bool HasRobotUnityinArea(Point goal)
         {

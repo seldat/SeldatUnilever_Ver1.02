@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using SeldatMRMS;
+using SelDatUnilever_Ver1._00.Communication.HttpBridge;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -50,6 +52,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             TYPEREQUEST_MACHINE_TO_RETURN = 4,
             TYPEREQUEST_RETURN_TO_GATE = 5,
             TYPEREQUEST_CLEAR = 6,
+            TYPEREQUEST_OPEN_BACKDOOR_DELIVERY_PALLET = 7,
+            TYPEREQUEST_CLOSE_BACKDOOR_DELIVERY_PALLET = 8,
+            TYPEREQUEST_OPEN_BACKDOOR_RETURN_PALLET = 9,
+            TYPEREQUEST_CLOSE_BACKDOOR_RETURN_PALLET = 10,
         }
         public enum TabletConTrol
         {
@@ -166,7 +172,16 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     // chu y sua 
                     product.palletStatus = PalletStatus.P.ToString();
                     order.dataRequest = product.ToString();
-                    oneOrderList.Add(order);
+
+                    if (Convert.ToInt32(CreatePlanBuffer(order)) > 0)
+                    {
+                        oneOrderList.Add(order);
+                    }
+                    else
+                    {
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_NOACCEPTED, ErrorMessage = "" };
+                        return statusOrderResponse;
+                    }
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
                 {
@@ -310,6 +325,14 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
                     oneOrderList.Remove(oneOrderList.Find(e=>e.userName==userName));
                 }
+                else if(typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_BACKDOOR_DELIVERY_PALLET)
+                {
+                    // same deviceID forklift
+                }
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLOSE_BACKDOOR_DELIVERY_PALLET)
+                {
+                    // same deviceID forklift
+                }
                 statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_SUCCESS, ErrorMessage = "" };
             }
             catch(Exception e)
@@ -319,8 +342,31 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             }
             return statusOrderResponse;
         }
+        public String RequestDataProcedure(String dataReq, String url)
+        {
+            //String url = Global_Object.url+"plan/getListPlanPallet";
+            BridgeClientRequest clientRequest=new BridgeClientRequest();
+            // String url = "http://localhost:8080";
+            var data = clientRequest.PostCallAPI(url, dataReq);
+            if (data.Result != null)
+            {
+                return data.Result;
+            }
+            return null;
+        }
+        public String CreatePlanBuffer(OrderItem order)
+        {
+            dynamic product = new JObject();
+            product.timeWorkId = 1;
+            product.activeDate = order.activeDate;
+            product.productId = order.productId;
+            product.productDetailId = order.productDetailId;
+            product.updUsrId = Global_Object.userLogin;
+            product.palletAmount = 1;
+            String response = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/createPlanPallet");
+            return response;
+        }
 
-       
     }
    
 }

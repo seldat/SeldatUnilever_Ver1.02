@@ -227,10 +227,10 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 Console.WriteLine(e.ToString());
             }
         }
-        protected void StartClient(String ip, Int32 port)
+        protected void StartClient(/*String ip, Int32 port*/)
         {
-            this.Ip = ip;
-            this.Port = port;
+            //this.Ip = ip;
+            //this.Port = port;
             // Connect to a remote device.  
             try
             {

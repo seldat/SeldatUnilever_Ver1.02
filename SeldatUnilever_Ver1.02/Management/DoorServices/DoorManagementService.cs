@@ -51,7 +51,7 @@ namespace SeldatMRMS.Management.DoorServices
             DoorInfoConfig doorICF_MUB = new DoorInfoConfig()
             {
                 Id = DoorId.DOOR_MEZZAMINE_UP,
-                Ip = "192.168.1.230",
+                Ip = "192.168.1.240",
                 Port = 8081,
                 infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
@@ -65,7 +65,7 @@ namespace SeldatMRMS.Management.DoorServices
             DoorInfoConfig doorICF_MRB = new DoorInfoConfig()
             {
                 Id = DoorId.DOOR_MEZZAMINE_RETURN,
-                Ip = "192.168.1.231",
+                Ip = "192.168.1.241",
                 Port = 8081,
                 infoPallet = "{\"pallet\":1,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",

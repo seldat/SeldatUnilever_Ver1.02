@@ -6,7 +6,6 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
 {
     public class TranferData : RouterComPort
     {
-        private const UInt32 TIME_OUT_WAIT_RESPONSE = 60000;
         private const UInt32 RESENT_MAX_TIME = 10;
         private UInt32 numResent = 0;
         private const byte ACK = 0;

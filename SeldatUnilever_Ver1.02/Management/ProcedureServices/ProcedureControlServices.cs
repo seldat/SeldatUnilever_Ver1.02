@@ -23,8 +23,8 @@ namespace SeldatMRMS {
         public ReadyChargerProcedureDB readyChargerProcedureDB;
         public OrderItem order;
 
-        const UInt32 TIME_OUT_OPEN_DOOR = 60000; /* ms */
-        const UInt32 TIME_OUT_CLOSE_DOOR = 60000; /* ms */
+        public const UInt32 TIME_OUT_OPEN_DOOR = 60000; /* ms */
+        public const UInt32 TIME_OUT_CLOSE_DOOR = 60000; /* ms */
 
         public enum ProcedureCode {
             PROC_CODE_BUFFER_TO_MACHINE = 0,

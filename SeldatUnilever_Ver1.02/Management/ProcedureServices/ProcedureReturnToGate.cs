@@ -28,8 +28,6 @@ namespace SeldatMRMS {
         public DoorManagementService door;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
-        const UInt32 TIME_OUT_OPEN_DOOR = 600000; /* ms */
-        const UInt32 TIME_OUT_CLOSE_DOOR = 600000; /* ms */
 
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;

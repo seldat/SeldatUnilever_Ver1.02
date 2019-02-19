@@ -6,7 +6,6 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
 {
     public class TranferData : RouterComPort
     {
-        private const UInt32 TIME_OUT_WAIT_RESPONSE = 60000;
         private const UInt32 RESENT_MAX_TIME = 10;
         private UInt32 numResent = 0;
         private const byte ACK = 0;
@@ -29,7 +28,9 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
         };
         public TranferData(String ip, Int32 port)
         {
-            StartClient(ip,port);
+            //StartClient(ip,port);
+            this.Ip = ip;
+            this.Port = port;
         }
 
         protected byte CalChecksum(byte[] data, UInt32 len)
@@ -50,8 +51,11 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
             bool flagGetRespone = true;
             bool result = true;
 
+            this.StartClient(); // open socket
+
             Console.WriteLine("len send {0}", dataSend.Length);
             if(false == SendCMD(dataSend)){
+                this.Close();
                 return false;
             }
             while (true == flagGetRespone)
@@ -93,6 +97,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                                         flagGetRespone = false;
                                         Console.WriteLine("Send data success");
                                         numResent = 0;
+                                        this.Close();
                                         return true;
                                     }
                                 }
@@ -108,6 +113,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 if (numResent < RESENT_MAX_TIME)
                 {
                     if(false == SendCMD(dataSend)){
+                        this.Close();
                         return false;
                     }
                     numResent++;
@@ -121,6 +127,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                     flagGetRespone = false;
                 }
             }
+            this.Close();
             return result;
         }
         protected bool Tranfer(byte[] dataSend) {

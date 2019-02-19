@@ -17,7 +17,8 @@ namespace SeldatMRMS
 {
     public class RegisterProcedureService
     {
-        protected DoorManagementService doorService;
+        public DoorManagementService doorService;
+        //protected DoorManagementService doorService;
         protected ChargerManagementService chargerService;
         protected TrafficManagementService trafficService;
         protected DeviceRegistrationService deviceService;

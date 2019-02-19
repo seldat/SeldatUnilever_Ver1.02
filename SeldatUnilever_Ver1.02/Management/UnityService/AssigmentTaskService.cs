@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotManagementService;
 using static SeldatMRMS.RegisterProcedureService;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
@@ -40,81 +41,100 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         }
         public void AssignTask()
         {
-                OrderItem orderItem = null;
-                RobotUnity robot = null;
-                int cntOrderNull=1;
-                while (Alive)
+            OrderItem orderItem = null;
+            RobotUnity robot = null;
+            int cntOrderNull=1;
+            while (Alive)
+            {
+#if true
+                procedureService.doorService.DoorMezzamineUp.Open(DoorType.DOOR_FRONT);
+                Thread.Sleep(3000);
+                procedureService.doorService.DoorMezzamineUp.Close(DoorType.DOOR_FRONT);
+                Thread.Sleep(3000);
+                procedureService.doorService.DoorMezzamineUp.Open(DoorType.DOOR_BACK);
+                Thread.Sleep(3000);
+                procedureService.doorService.DoorMezzamineUp.Close(DoorType.DOOR_BACK);
+                Thread.Sleep(3000);
+                //procedureService.doorService.DoorMezzamineReturn.Open(DoorType.DOOR_FRONT);
+                //Thread.Sleep(1000);
+                //procedureService.doorService.DoorMezzamineReturn.Close(DoorType.DOOR_FRONT);
+                //Thread.Sleep(1000);
+                //procedureService.doorService.DoorMezzamineReturn.Open(DoorType.DOOR_BACK);
+                //Thread.Sleep(1000);
+                //procedureService.doorService.DoorMezzamineReturn.Close(DoorType.DOOR_BACK);
+                //Thread.Sleep(1000);
+#else
+            //Console.WriteLine(processAssignAnTaskWait);
+            switch (processAssignAnTaskWait)
                 {
-                    //Console.WriteLine(processAssignAnTaskWait);
-                    switch (processAssignAnTaskWait)
-                    {
-                        case ProcessAssignAnTaskWait.PROC_ANY_IDLE:
-                            break;
-                        case ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST:
-
-                            ResultRobotReady result = robotManageService.GetRobotUnityWaitTaskItem0();
-                            if (result != null)
-                            {
-                                robot = result.robot;
-                                if (result.onReristryCharge)
-                                {
-                                    // registry charge procedure
-                                    procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
-                                }
-                                else
-                                {
-
-                                    if (deviceItemsList.Count > 0)
-                                    {
-                                        processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_HAS_ANTASK;
-                                    }
-                                    
-                                }
-                            }
-                            break;
-                        case ProcessAssignAnTaskWait.PROC_ANY_CHECK_HAS_ANTASK:
-
-                                orderItem = Gettask();
-
-                                if (orderItem != null)
-                                {
-                                    processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK;
-                                    cntOrderNull = 0;
-                                    break;
-                                }
-                                else
-                                {
-                                    MoveElementToEnd();
-                                    cntOrderNull++;
-                                }
-                                if (cntOrderNull > deviceItemsList.Count) // khi robot không còn nhận duoc task
-                                {
-                                    processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY;
-                                    cntOrderNull = 0;
-                                }
-                                else
-                                {
-                                    processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
-                                }
-                            break;
-                    case ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY:
-                            procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
-                            robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameId);
-                            processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
+                    case ProcessAssignAnTaskWait.PROC_ANY_IDLE:
                         break;
-                    case ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK:
-                            SelectProcedureItem(robot, orderItem);
-                            // xoa order đầu tiên trong danh sach devicelist[0] sau khi gán task
-                            deviceItemsList[0].RemoveFirstOrder();
-                            MoveElementToEnd(); // sort Task List
-                            // xoa khoi list cho
-                            robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameId);
-                            processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
-                            break;
+                    case ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST:
 
-                    }
-                Thread.Sleep(1000);
+                        ResultRobotReady result = robotManageService.GetRobotUnityWaitTaskItem0();
+                        if (result != null)
+                        {
+                            robot = result.robot;
+                            if (result.onReristryCharge)
+                            {
+                                // registry charge procedure
+                                procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
+                            }
+                            else
+                            {
+
+                                if (deviceItemsList.Count > 0)
+                                {
+                                    processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_HAS_ANTASK;
+                                }
+                                    
+                            }
+                        }
+                        break;
+                    case ProcessAssignAnTaskWait.PROC_ANY_CHECK_HAS_ANTASK:
+
+                            orderItem = Gettask();
+
+                            if (orderItem != null)
+                            {
+                                processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK;
+                                cntOrderNull = 0;
+                                break;
+                            }
+                            else
+                            {
+                                MoveElementToEnd();
+                                cntOrderNull++;
+                            }
+                            if (cntOrderNull > deviceItemsList.Count) // khi robot không còn nhận duoc task
+                            {
+                                processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY;
+                                cntOrderNull = 0;
+                            }
+                            else
+                            {
+                                processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
+                            }
+                        break;
+                case ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY:
+                        procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
+                        robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                        processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
+                    break;
+                case ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK:
+                        SelectProcedureItem(robot, orderItem);
+                        // xoa order đầu tiên trong danh sach devicelist[0] sau khi gán task
+                        deviceItemsList[0].RemoveFirstOrder();
+                        MoveElementToEnd(); // sort Task List
+                        // xoa khoi list cho
+                        robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                        processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
+                        break;
+
                 }
+#endif
+                Thread.Sleep(1000);
+            }
      
         }
         public void SelectProcedureItem(RobotUnity robot,OrderItem orderItem)

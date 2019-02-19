@@ -46,7 +46,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             int cntOrderNull=1;
             while (Alive)
             {
-#if true
+#if false
                 procedureService.doorService.DoorMezzamineUp.Open(DoorType.DOOR_FRONT);
                 Thread.Sleep(3000);
                 procedureService.doorService.DoorMezzamineUp.Close(DoorType.DOOR_FRONT);

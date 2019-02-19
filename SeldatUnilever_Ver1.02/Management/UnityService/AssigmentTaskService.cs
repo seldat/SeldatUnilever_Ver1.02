@@ -60,7 +60,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 {
                                     // registry charge procedure
                                     procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
-                                }
+                                    robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                            }
                                 else
                                 {
 
@@ -89,8 +90,9 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 }
                                 if (cntOrderNull > deviceItemsList.Count) // khi robot không còn nhận duoc task
                                 {
-                                    processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY;
-                                    cntOrderNull = 0;
+                                       processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST; // remove
+                                        //processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY; // mở lại 
+                                         cntOrderNull = 0;
                                 }
                                 else
                                 {

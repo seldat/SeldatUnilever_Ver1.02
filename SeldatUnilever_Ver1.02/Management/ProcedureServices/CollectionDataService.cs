@@ -158,6 +158,7 @@ namespace SelDatUnilever_Ver1
                     }
                 }
             }
+            Console.WriteLine(""+poseTemp.Position.ToString());
             return poseTemp;
         }
 

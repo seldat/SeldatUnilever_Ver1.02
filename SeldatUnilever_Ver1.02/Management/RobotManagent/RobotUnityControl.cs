@@ -100,6 +100,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public String ipMcuCtrl{ get => _ipMcuCtrl; set { _ipMcuCtrl = value; RaisePropertyChanged("IpMCU"); } }
             private int _portMcuCtrl;
             public int portMcuCtrl{ get => _portMcuCtrl; set {_portMcuCtrl = value; RaisePropertyChanged("PortMCU"); } }
+            public double speedInSpecicalArea =(double) RobotSpeedLevel.ROBOT_SPEED_NORMAL;
         }
 
         public enum RequestCommandLineDetect {

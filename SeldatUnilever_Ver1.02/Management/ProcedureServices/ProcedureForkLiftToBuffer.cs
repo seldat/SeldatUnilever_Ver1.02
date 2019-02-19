@@ -30,8 +30,7 @@ namespace SeldatMRMS
         public DoorService door;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
-        const UInt32 TIME_OUT_OPEN_DOOR = 600000; /* ms */
-        const UInt32 TIME_OUT_CLOSE_DOOR = 600000; /* ms */
+
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureForkLiftToBuffer (RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base (robot) {
@@ -39,7 +38,7 @@ namespace SeldatMRMS
             resCmd = ResponseCommand.RESPONSE_NONE;
             this.robot = robot;
             // this.points = new DataForkLiftToBuffer();
-            door = doorservice.DoorMezzamineUpBack;
+            door = doorservice.DoorMezzamineUp;
             // this.points.PointFrontLineGate = this.door.config.PointFrontLine;
             // this.points.PointPickPalletIn = this.door.config.PointOfPallet;
             this.Traffic = traffiicService;
@@ -144,7 +143,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
-                        if (ds.Open (DoorService.DoorId.DOOR_MEZZAMINE_UP_BACK)) {
+                        if (ds.Open (DoorService.DoorType.DOOR_BACK)) {
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_OPEN_DOOR;
                             Debug(this,"FORBUF_ROBOT_WAITTING_OPEN_DOOR"); 
                         } else {
@@ -153,7 +152,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
-                        if (true == ds.WaitOpen (DoorService.DoorId.DOOR_MEZZAMINE_UP_BACK, TIME_OUT_OPEN_DOOR)) {
+                        if (true == ds.WaitOpen (DoorService.DoorType.DOOR_BACK, TIME_OUT_OPEN_DOOR)) {
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_OPEN_DOOR_SUCCESS;
                             Debug(this,"FORBUF_ROBOT_OPEN_DOOR_SUCCESS"); 
                         } else {
@@ -189,7 +188,7 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE) {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            if (ds.Close (DoorService.DoorId.DOOR_MEZZAMINE_UP_BACK)) {
+                            if (ds.Close (DoorService.DoorType.DOOR_BACK)) {
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CLOSE_GATE;
                                 Debug(this,"FORBUF_ROBOT_WAITTING_CLOSE_GATE"); 
                             } else {
@@ -203,7 +202,7 @@ namespace SeldatMRMS
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
                         try {
-                            if (true == ds.WaitClose (DoorService.DoorId.DOOR_MEZZAMINE_UP_BACK, TIME_OUT_CLOSE_DOOR)) {
+                            if (true == ds.WaitClose (DoorService.DoorType.DOOR_BACK, TIME_OUT_CLOSE_DOOR)) {
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (FlToBuf.GetCheckInBuffer ());
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
@@ -228,7 +227,7 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try {
                             if (false == Traffic.HasRobotUnityinArea (FlToBuf.GetAnyPointInBuffer().Position)) {
-                                createPlanBuffer();
+                               // createPlanBuffer();
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped (FlToBuf.GetFrontLineBuffer ());
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;

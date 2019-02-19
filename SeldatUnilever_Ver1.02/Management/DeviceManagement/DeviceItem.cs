@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using SeldatMRMS;
+using SelDatUnilever_Ver1._00.Communication.HttpBridge;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,9 +16,21 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 {
     public class DeviceItem : NotifyUIBase
     {
+        public enum StatusOrderCode
+        {
+            ORDER_STATUS_SUCCESS=200,
+            ORDER_STATUS_ERROR_DATA = 201,
+            ORDER_STATUS_NOACCEPTED = 202
+
+        }
+        public class StatusOrderResponse
+        {
+            public int status;
+            public String ErrorMessage;
+        }
         public enum PalletCtrl
         {
-            Pallet_CTRL_DOWN =0,
+            Pallet_CTRL_DOWN = 0,
             Pallet_CTRL_UP = 1
 
         }
@@ -32,11 +46,16 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         }
         public enum TyeRequest
         {
-            TYPEREQUEST_FORLIFT_TO_BUFFER=1,
-            TYPEREQUEST_BUFFER_TO_MACHINE=2,
-            TYPEREQUEST_BUFFER_TO_RETURN=3,
-            TYPEREQUEST_MACHINE_TO_RETURN=4,
+            TYPEREQUEST_FORLIFT_TO_BUFFER = 1,
+            TYPEREQUEST_BUFFER_TO_MACHINE = 2,
+            TYPEREQUEST_BUFFER_TO_RETURN = 3,
+            TYPEREQUEST_MACHINE_TO_RETURN = 4,
             TYPEREQUEST_RETURN_TO_GATE = 5,
+            TYPEREQUEST_CLEAR = 6,
+            TYPEREQUEST_OPEN_BACKDOOR_DELIVERY_PALLET = 7,
+            TYPEREQUEST_CLOSE_BACKDOOR_DELIVERY_PALLET = 8,
+            TYPEREQUEST_OPEN_BACKDOOR_RETURN_PALLET = 9,
+            TYPEREQUEST_CLOSE_BACKDOOR_RETURN_PALLET = 10,
         }
         public enum TabletConTrol
         {
@@ -53,15 +72,15 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         public class OrderItem
         {
             public OrderItem() { }
-            public String OrderId { get; set; }
+            private String OrderId { get; set; }
             public int planId { get; set; }
             public int deviceId;
             public String productDetailName { get; set; }
             public int productId { get; set; }
             public int productDetailId { get; set; }
-            
-            public TyeRequest typeReq; // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
-            public String activeDate;
+
+            public TyeRequest typeReq { get; set; } // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
+            public String activeDate { get; set; }
             public int timeWorkId;
             public String palletStatus;
             public int palletId;
@@ -72,9 +91,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public DataPallet palletAtMachine;
             public String userName;
             public int bufferId;
+            public int palletAmount;
         }
         public string userName { get; set; } // dia chi Emei
-        public string codeID { get; set; }
+        public string codeID;
         public List<OrderItem> oneOrderList { get; set; }
         public int orderedAmount = 0;
         public int doneAmount = 0;
@@ -124,130 +144,231 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         {
 
         }
-        public void ParseData(String dataReq)
+        public StatusOrderResponse ParseData(String dataReq)
         {
-
-            JObject results = JObject.Parse(dataReq);
-            int typeReq= (int)results["typeReq"];
-            if (typeReq==(int)TyeRequest. TYPEREQUEST_FORLIFT_TO_BUFFER)
+            StatusOrderResponse statusOrderResponse = null;
+            try
             {
-                OrderItem order = new OrderItem();
-                order.typeReq = (TyeRequest)typeReq;
-                order.userName = (String)results["userName"];
-                order.productDetailId = (int)results["productDetailId"];
-                order.productId = (int)results["productId"];
-                order.planId = (int)results["planId"];
-                order.deviceId =(int)results["deviceId"];
-                order.timeWorkId = (int)results["timeWorkId"];
-                order.activeDate = (string)results["activeDate"];
-               // order.palletStatus = (String)results["palletStatus"];
-                dynamic product = new JObject();
-                product.timeWorkId = order.timeWorkId;
-                product.activeDate = order.activeDate;
-                product.productId = order.productId;
-                product.productDetailId = order.productDetailId;
-
-                // chu y sua 
-                product.palletStatus= PalletStatus.P.ToString();
-                order.dataRequest = product.ToString();
-                oneOrderList.Add(order);
-            }
-            else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
-            {
-                int len = (int)results["length"];
-
-                for (int i = 0; i < len; i++)
+                JObject results = JObject.Parse(dataReq);
+                int typeReq = (int)results["typeReq"];
+                if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
                 {
                     OrderItem order = new OrderItem();
                     order.typeReq = (TyeRequest)typeReq;
                     order.userName = (String)results["userName"];
                     order.productDetailId = (int)results["productDetailId"];
-                    order.productDetailName = (String)results["productDetailName"];
                     order.productId = (int)results["productId"];
                     order.planId = (int)results["planId"];
                     order.deviceId = (int)results["deviceId"];
                     order.timeWorkId = (int)results["timeWorkId"];
-                    order.activeDate = (string)DateTime.Now.ToString("yyyy-MM-dd");
-                   // order.palletStatus = (String)results["palletStatus"];
-                    String jsonDPst=(string)results["datapallet"][i];
-                    JObject stuffPallet =JObject.Parse(jsonDPst);
-                    double xx = (double)stuffPallet["line"]["x"];
-                    double yy = (double)stuffPallet["line"]["y"];
-                    double angle = (double)stuffPallet["line"]["angle"];
-                    int row = (int)stuffPallet["pallet"]["row"];
-                    int bay = (int)stuffPallet["pallet"]["bay"];
-                    int directMain = (int)stuffPallet["pallet"]["dir_main"];
-                    int directSub = (int)stuffPallet["pallet"]["dir_sub"];
-                    int directOut = (int)stuffPallet["pallet"]["dir_out"];
-                    order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = directOut };
+                    order.activeDate = (string)results["activeDate"];
+                    // order.palletStatus = (String)results["palletStatus"];
+                    dynamic product = new JObject();
+                    product.timeWorkId = order.timeWorkId;
+                    product.activeDate = order.activeDate;
+                    product.productId = order.productId;
+                    product.productDetailId = order.productDetailId;
+
+                    // chu y sua 
+                    product.palletStatus = PalletStatus.P.ToString();
+                    order.dataRequest = product.ToString();
+
+                    if (Convert.ToInt32(CreatePlanBuffer(order)) > 0)
+                    {
+                        oneOrderList.Add(order);
+                    }
+                    else
+                    {
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_NOACCEPTED, ErrorMessage = "" };
+                        return statusOrderResponse;
+                    }
+                }
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
+                {
+                    int len = (int)results["length"];
+                    int palletAmountInBuffer = (int)results["palletAmount"];
+                    int productDetailId = (int)results["productDetailId"];
+                    int cntOrderReg = 0;
+                    int orderAmount = 0;
+                    foreach (OrderItem ord in oneOrderList)
+                    {
+                        if (productDetailId == ord.productDetailId)
+                        {
+                            cntOrderReg++;
+                        }
+                    }
+
+                    if (cntOrderReg == 0) // chưa có order với productdetailID nào uoc đăng ký. thêm vào đúng số lượng trong orderlist
+                    {
+                        if (len <= palletAmountInBuffer) // nếu số lượn yêu cầu nhỏ hơn bằng số pallet có trong buffer add vào orderlist 
+                            orderAmount = len;
+                        else // nếu số lượng yêu cầu nhiều hơn số pallet có trong buffer thì add vào orderlist
+                            orderAmount = palletAmountInBuffer;
+                    }
+                    else if (cntOrderReg >= palletAmountInBuffer) // số lượng yêu cầu trước đó bằng hoặc hơn số lượng yêu cầu hiện tại. không duoc phép đưa vào thêm
+                    {
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_NOACCEPTED, ErrorMessage = "" };
+                        return statusOrderResponse;
+                    }
+                    else if (cntOrderReg < palletAmountInBuffer) // số lượng yêu cầu hiện tại nhỏ hơn thì phải tính lại số lượng để bổ sung vào thêm
+                    {
+                        int availableOrder = palletAmountInBuffer - cntOrderReg; // tính số lượng pallet có thể 
+                        int willOrder = availableOrder - len; // số lượng pallet sẽ duoc add thêm vào orederlist
+                        if (willOrder > 0)
+                        {
+                            orderAmount = willOrder;
+                        }
+                        else if (willOrder == 0)
+                        {
+                            orderAmount = len;
+                        }
+                        else
+                        {
+                            orderAmount = availableOrder;
+                        }
+
+                    }
+                    for (int i = 0; i < orderAmount; i++)
+                    {
+
+                        OrderItem order = new OrderItem();
+                        order.typeReq = (TyeRequest)typeReq;
+                        order.userName = (String)results["userName"];
+                        order.productDetailId = (int)results["productDetailId"];
+                        order.productDetailName = (String)results["productDetailName"];
+                        order.productId = (int)results["productId"];
+                        order.planId = (int)results["planId"];
+                        order.deviceId = (int)results["deviceId"];
+                        order.timeWorkId = (int)results["timeWorkId"];
+                        order.activeDate = (string)results["activeDate"];
+                        // order.palletStatus = (String)results["palletStatus"];
+                        String jsonDPst = (string)results["datapallet"][i];
+                        JObject stuffPallet = JObject.Parse(jsonDPst);
+                        double xx = (double)stuffPallet["line"]["x"];
+                        double yy = (double)stuffPallet["line"]["y"];
+                        double angle = (double)stuffPallet["line"]["angle"];
+                        int row = (int)stuffPallet["pallet"]["row"];
+                        int bay = (int)stuffPallet["pallet"]["bay"];
+                        int directMain = (int)stuffPallet["pallet"]["dir_main"];
+                        int directSub = (int)stuffPallet["pallet"]["dir_sub"];
+                        int directOut = (int)stuffPallet["pallet"]["dir_out"];
+                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = directOut };
+                        dynamic product = new JObject();
+                        product.timeWorkId = order.timeWorkId;
+                        product.activeDate = order.activeDate;
+                        product.productId = order.productId;
+                        product.productDetailId = order.productDetailId;
+                        // chu y sua 
+                        product.palletStatus = PalletStatus.W.ToString(); // W
+                        order.dataRequest = product.ToString();
+                        oneOrderList.Add(order);
+                    }
+                }
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_MACHINE_TO_RETURN)
+                {
+                    int len = (int)results["length"];
+
+                    for (int i = 0; i < len; i++)
+                    {
+                        OrderItem order = new OrderItem();
+                        order.typeReq = (TyeRequest)typeReq;
+                        order.userName = (String)results["userName"];
+                        order.activeDate = (string)results["activeDate"];
+                        order.deviceId = (int)results["deviceId"];
+                        //order.palletStatus = (String)results["palletStatus"];
+                        String jsonDPst = (string)results["datapallet"][i];
+                        JObject stuffPallet = JObject.Parse(jsonDPst);
+                        double xx = (double)stuffPallet["line"]["x"];
+                        double yy = (double)stuffPallet["line"]["y"];
+                        double angle = (double)stuffPallet["line"]["angle"];
+                        int row = (int)stuffPallet["pallet"]["row"];
+                        int bay = (int)stuffPallet["pallet"]["bay"];
+                        int directMain = (int)stuffPallet["pallet"]["dir_main"];
+                        int directSub = (int)stuffPallet["pallet"]["dir_sub"];
+                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub };
+                        dynamic product = new JObject();
+                        product.timeWorkId = order.timeWorkId;
+                        product.activeDate = order.activeDate;
+                        product.productId = order.productId;
+
+                        // chu y sua 
+                        product.palletStatus = PalletStatus.F.ToString();
+                        order.dataRequest = product.ToString();
+                        oneOrderList.Add(order);
+                    }
+                }
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_RETURN)
+                {
+                    OrderItem order = new OrderItem();
+                    order.typeReq = (TyeRequest)typeReq;
+                    order.userName = (String)results["userName"];
+                    order.deviceId = (int)results["deviceId"];
+                    order.productDetailId = (int)results["productDetailId"];
+                    order.productId = (int)results["productId"];
+                    order.timeWorkId = (int)results["timeWorkId"];
+                    order.activeDate = (string)results["activeDate"];
+                    // order.palletStatus = (String)results["palletStatus"];
                     dynamic product = new JObject();
                     product.timeWorkId = order.timeWorkId;
                     product.activeDate = order.activeDate;
                     product.productId = order.productId;
                     product.productDetailId = order.productDetailId;
                     // chu y sua 
-                    product.palletStatus = PalletStatus.W.ToString(); // W
+                    product.palletStatus = PalletStatus.W.ToString();
                     order.dataRequest = product.ToString();
                     oneOrderList.Add(order);
                 }
-            }
-            else if (typeReq == (int)TyeRequest.TYPEREQUEST_MACHINE_TO_RETURN)
-            {
-                int len = (int)results["length"];
-
-                for (int i = 0; i < len; i++)
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR)
                 {
-                    OrderItem order = new OrderItem();
-                    order.typeReq = (TyeRequest)typeReq;
-                    order.userName = (String)results["userName"];
-                    order.activeDate = (string)results["activeDate"];
-                    order.deviceId = (int)results["deviceId"];
-                    //order.palletStatus = (String)results["palletStatus"];
-                    String jsonDPst = (string)results["datapallet"][i];
-                    JObject stuffPallet = JObject.Parse(jsonDPst);
-                    double xx = (double)stuffPallet["line"]["x"];
-                    double yy = (double)stuffPallet["line"]["y"];
-                    double angle = (double)stuffPallet["line"]["angle"];
-                    int row = (int)stuffPallet["pallet"]["row"];
-                    int bay = (int)stuffPallet["pallet"]["bay"];
-                    int directMain = (int)stuffPallet["pallet"]["dir_main"];
-                    int directSub = (int)stuffPallet["pallet"]["dir_sub"];
-                    order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub };
-                    dynamic product = new JObject();
-                    product.timeWorkId = order.timeWorkId;
-                    product.activeDate = order.activeDate;
-                    product.productId = order.productId;
+                    String userName = (String)results["userName"];
+                    // kiểm tra quy trình và hủy task 
 
-                    // chu y sua 
-                    product.palletStatus = PalletStatus.F.ToString();
-                    order.dataRequest = product.ToString();
-                    oneOrderList.Add(order);
+                    oneOrderList.Remove(oneOrderList.Find(e=>e.userName==userName));
                 }
+                else if(typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_BACKDOOR_DELIVERY_PALLET)
+                {
+                    // same deviceID forklift
+                }
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLOSE_BACKDOOR_DELIVERY_PALLET)
+                {
+                    // same deviceID forklift
+                }
+                statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_SUCCESS, ErrorMessage = "" };
             }
-            else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_RETURN)
+            catch(Exception e)
             {
-                OrderItem order = new OrderItem();
-                order.typeReq = (TyeRequest)typeReq;
-                order.userName = (String)results["userName"];
-                order.deviceId = (int)results["deviceId"];
-                order.productDetailId = (int)results["productDetailId"];
-                order.productId = (int)results["productId"];
-                order.timeWorkId = (int)results["timeWorkId"];
-                order.activeDate = (string)results["activeDate"];
-               // order.palletStatus = (String)results["palletStatus"];
-                dynamic product = new JObject();
-                product.timeWorkId = order.timeWorkId;
-                product.activeDate = order.activeDate;
-                product.productId = order.productId;
-                product.productDetailId = order.productDetailId;
-                // chu y sua 
-                product.palletStatus = PalletStatus.W.ToString();
-                order.dataRequest = product.ToString();
-                oneOrderList.Add(order);
+                statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_ERROR_DATA, ErrorMessage = e.Message };
+                return statusOrderResponse;
             }
+            return statusOrderResponse;
+        }
+        public String RequestDataProcedure(String dataReq, String url)
+        {
+            //String url = Global_Object.url+"plan/getListPlanPallet";
+            BridgeClientRequest clientRequest=new BridgeClientRequest();
+            // String url = "http://localhost:8080";
+            var data = clientRequest.PostCallAPI(url, dataReq);
+            if (data.Result != null)
+            {
+                return data.Result;
+            }
+            return null;
+        }
+        public String CreatePlanBuffer(OrderItem order)
+        {
+            dynamic product = new JObject();
+            product.timeWorkId = 1;
+            product.activeDate = order.activeDate;
+            product.productId = order.productId;
+            product.productDetailId = order.productDetailId;
+            product.updUsrId = Global_Object.userLogin;
+            product.palletAmount = 1;
+            String response = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/createPlanPallet");
+            return response;
         }
 
     }
+   
 }
 /*
  * {

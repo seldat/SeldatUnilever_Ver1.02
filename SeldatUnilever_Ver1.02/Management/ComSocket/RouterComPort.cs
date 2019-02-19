@@ -16,11 +16,14 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
+        protected const UInt32 TIME_OUT_WAIT_RESPONSE = 60000;
+        protected const UInt32 TIME_OUT_WAIT_CONNECT = 60000;
 
         // The response from the remote device.  
         private String response = String.Empty;
 
         public bool flagReadyReadData { get; private set; }
+        public bool flagConnected { get; private set; }
 
         public Socket client = null;
         public String Ip { get; set; }
@@ -85,7 +88,8 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                     client.RemoteEndPoint.ToString());
 
                 // Signal that the connection has been made.  
-                connectDone.Set();
+                //connectDone.Set();
+                flagConnected = true;
             }
             catch (Exception e)
             {
@@ -166,6 +170,25 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
             }
         }
 
+        protected bool WaitConnected(UInt32 timeOut)
+        {
+            bool result = true;
+            Stopwatch sw = new Stopwatch();
+            Receive(client);
+            sw.Start();
+            while (flagConnected == false)
+            {
+                if (sw.ElapsedMilliseconds > timeOut)
+                {
+                    result = false;
+                    break;
+                }
+                Thread.Sleep(50);
+            }
+            sw.Stop();
+            return result;
+        }
+
         protected bool WaitForReadyRead(UInt32 timeOut)
         {
             bool result = true;
@@ -227,11 +250,12 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 Console.WriteLine(e.ToString());
             }
         }
-        protected void StartClient(String ip, Int32 port)
+        protected void StartClient(/*String ip, Int32 port*/)
         {
-            this.Ip = ip;
-            this.Port = port;
+            //this.Ip = ip;
+            //this.Port = port;
             // Connect to a remote device.  
+            flagConnected = false;
             try
             {
                 // Establish the remote endpoint for the socket.  
@@ -241,8 +265,12 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                 client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 // Connect to the remote endpoint.  
                 client.BeginConnect(remoteEP, new AsyncCallback(ConnectCallback), client);
-                // connectDone.WaitOne();
+                //connectDone.WaitOne();
 
+                if (false == this.WaitConnected(TIME_OUT_WAIT_CONNECT))
+                {
+                    Console.WriteLine("Connnect faled______<->________");
+                }
                 // Send test data to the remote device.  
                 // Send(client, "This is a LLLLLlll test<EOF>");
                 //  sendDone.WaitOne();

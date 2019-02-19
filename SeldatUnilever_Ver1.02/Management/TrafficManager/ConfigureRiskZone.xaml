@@ -47,6 +47,8 @@
                                         Binding="{Binding Path=WS, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Distance" 
                                         Binding="{Binding Path=Distance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="Speed" 
+                                        Binding="{Binding Path=Speed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Detail" 
                                         Binding="{Binding Path=Detail, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 

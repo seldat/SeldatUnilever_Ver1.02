@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SeldatMRMS;
+using SeldatMRMS.Management;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatUnilever_Ver1._02.Management.TrafficManager;
 using System;
@@ -19,6 +20,10 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
 {
     public class TrafficRounterService
     {
+        public enum DIROUT_OPZONE
+        {
+
+        }
         public enum IndexZoneDefaultFind
         {
 
@@ -59,6 +64,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             public double WS { get => _WS; set { _WS = value; RaisePropertyChanged("WS"); } }
             private double _distance;
             public double distance { get => _distance; set { _distance = value; RaisePropertyChanged("Distance"); } }
+            private double _Speed;
+            public double Speed { get => _Speed; set { _Speed = value; RaisePropertyChanged("Speed"); } }
             public Point[] GetZone()
             {
                 return new Point[4] { Point1, Point2, Point3, Point4 };
@@ -80,6 +87,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             public Point Point3 { get => _Point3; set { _Point3 = value; RaisePropertyChanged("Point3"); } }
             private Point _Point4;
             public Point Point4 { get => _Point4; set { _Point4 = value; RaisePropertyChanged("Point4"); } }
+            private TrafficRobotUnity.BrDirection _Dir_Out;
+            public TrafficRobotUnity.BrDirection Dir_Out { get => _Dir_Out; set { _Dir_Out = value; RaisePropertyChanged("Dir_Out"); } }
             public String _Detail;
             public String Detail { get => _Detail; set { _Detail = value; RaisePropertyChanged("Detail"); } }
             public Point[] GetZone()
@@ -129,6 +138,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             pRtemp.L2 = 40;
             pRtemp.WS = 60;
             pRtemp.distance = 40;
+            pRtemp.Speed = (double)RobotUnity.RobotSpeedLevel.ROBOT_SPEED_NORMAL;
             PropertiesRiskZoneList.Add(pRtemp);
             Grouped_PropertiesRiskZoneList.Refresh();
             RiskZoneRegisterList.Add(pRtemp.NameId, pRtemp);
@@ -328,6 +338,20 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 }
             }
             return zoneName;
+        }
+        public TrafficRobotUnity.BrDirection GetDirDirection_Zone(Point p)
+        {
+            TrafficRobotUnity.BrDirection dir = TrafficRobotUnity.BrDirection.FORWARD;
+            foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
+            {
+
+                if (ExtensionService.IsInPolygon(r.GetZone(),p))
+                {
+                    dir = r.Dir_Out;
+                    break;
+                }
+            }
+            return dir;
         }
         public bool HasRobotUnityinArea(Point goal)
         {

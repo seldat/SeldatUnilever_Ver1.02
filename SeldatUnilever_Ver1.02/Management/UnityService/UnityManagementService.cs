@@ -53,7 +53,8 @@ namespace SeldatMRMS.Management.UnityService
             procedureManagementService.RegistryService(doorManagementService);
             procedureManagementService.RegistryService(chargerService);
             procedureManagementService.RegistryService(deviceRegistrationService);
-            
+
+
             robotManagementService.Registry(trafficService);
 
             deviceRegistrationService.listen();

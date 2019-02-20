@@ -269,7 +269,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
 
                 if (false == this.WaitConnected(TIME_OUT_WAIT_CONNECT))
                 {
-                    Console.WriteLine("Connnect faled______<->________");
+                    Console.WriteLine("Connnect fail______<->________");
                 }
                 // Send test data to the remote device.  
                 // Send(client, "This is a LLLLLlll test<EOF>");

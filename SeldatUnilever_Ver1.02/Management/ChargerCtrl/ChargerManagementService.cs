@@ -3,17 +3,9 @@ using Newtonsoft.Json.Linq;
 using SeldatUnilever_Ver1._02.Management.ChargerCtrl;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.OleDb;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Data;
-using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
-using static SeldatMRMS.Management.TrafficRobotUnity;
 using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 
 namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl

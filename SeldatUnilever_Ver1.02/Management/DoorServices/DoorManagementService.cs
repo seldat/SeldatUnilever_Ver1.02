@@ -23,10 +23,8 @@ namespace SeldatMRMS.Management.DoorServices
         public ListCollectionView Grouped_PropertiesDoor { get; private set; }
         public List<DoorInfoConfig> PropertiesDoor_List;
         private List<DoorInfoConfig> DoorInfoConfigList;
-        public DoorService DoorMezzamineUpBack;
-        public DoorService DoorMezzamineUpFront;
-        public DoorService DoorMezzamineReturnBack;
-        public DoorService DoorMezzamineReturnFront;
+        public DoorService DoorMezzamineUp;
+        public DoorService DoorMezzamineReturn;
         public DoorElevator DoorElevator;
         public DoorConfigure doorConfigure;
         public DoorManagementService(){
@@ -37,11 +35,13 @@ namespace SeldatMRMS.Management.DoorServices
 
             LoadConfigure();
             
-            DoorMezzamineUpBack = new DoorService(DoorInfoConfigList[0]);
-            DoorMezzamineUpFront = new DoorService(DoorInfoConfigList[1]);
-            DoorMezzamineReturnBack = new DoorService(DoorInfoConfigList[2]);
-            DoorMezzamineReturnFront = new DoorService(DoorInfoConfigList[3]);
-            doorConfigure = new DoorConfigure(this);
+            DoorMezzamineUp = new DoorService(DoorInfoConfigList[0]);
+            DoorMezzamineReturn = new DoorService(DoorInfoConfigList[1]);
+            try
+            {
+                doorConfigure = new DoorConfigure(this);
+            }
+            catch { }
         }
     
         public void AddDoor()
@@ -53,8 +53,8 @@ namespace SeldatMRMS.Management.DoorServices
         {
             DoorInfoConfig doorICF_MUB = new DoorInfoConfig()
             {
-                Id = DoorId.DOOR_MEZZAMINE_UP_FRONT,
-                Ip = "192.168.1.1",
+                Id = DoorId.DOOR_MEZZAMINE_UP,
+                Ip = "192.168.1.240",
                 Port = 8081,
                 infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
@@ -65,24 +65,10 @@ namespace SeldatMRMS.Management.DoorServices
             PropertiesDoor_List.Add(doorICF_MUB);
             DoorInfoConfigList.Add(doorICF_MUB);
 
-            DoorInfoConfig doorICF_MUF = new DoorInfoConfig()
-            {
-                Id = DoorId.DOOR_MEZZAMINE_UP_BACK,
-                Ip = "192.168.1.2",
-                Port = 8081,
-                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
-                PointFrontLineStr = "1,2,3",
-                PointCheckInGateStr = "0.0,0.0,0.0"
-            };
-            doorICF_MUF.ParsePointCheckInGateValue(doorICF_MUF.PointCheckInGateStr);
-            doorICF_MUF.ParsePointFrontLineValue(doorICF_MUF.PointFrontLineStr);
-            PropertiesDoor_List.Add(doorICF_MUF);
-            DoorInfoConfigList.Add(doorICF_MUF);
-
             DoorInfoConfig doorICF_MRB = new DoorInfoConfig()
             {
-                Id = DoorId.DOOR_MEZZAMINE_RETURN_FRONT,
-                Ip = "192.168.1.3",
+                Id = DoorId.DOOR_MEZZAMINE_RETURN,
+                Ip = "192.168.1.241",
                 Port = 8081,
                 infoPallet = "{\"pallet\":1,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
                 PointFrontLineStr = "1,2,3",
@@ -92,20 +78,6 @@ namespace SeldatMRMS.Management.DoorServices
             doorICF_MRB.ParsePointFrontLineValue(doorICF_MRB.PointFrontLineStr);
             PropertiesDoor_List.Add(doorICF_MRB);
             DoorInfoConfigList.Add(doorICF_MRB);
-
-            DoorInfoConfig doorICF_MRF = new DoorInfoConfig()
-            {
-                Id = DoorId.DOOR_MEZZAMINE_RETURN_BACK,
-                Ip = "192.168.1.4",
-                Port = 8081,
-                infoPallet = "{\"pallet\":1,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
-                PointFrontLineStr = "1,2,3",
-                PointCheckInGateStr = "0.0,0.0,0.0"
-            };
-            doorICF_MRF.ParsePointCheckInGateValue(doorICF_MRF.PointCheckInGateStr);
-            doorICF_MRF.ParsePointFrontLineValue(doorICF_MRF.PointFrontLineStr);
-            PropertiesDoor_List.Add(doorICF_MRF);
-            DoorInfoConfigList.Add(doorICF_MRF);
 
             Grouped_PropertiesDoor.Refresh();
         }
@@ -156,40 +128,6 @@ namespace SeldatMRMS.Management.DoorServices
             return false;
         }
        
-        public void LoadDoorConfigure()
-        {
-            string name = "Door";
-            String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Configure.xlsx");
-            
-            string constr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +
-                            path +
-                            ";Extended Properties='Excel 12.0 XML;HDR=YES;';";
-            OleDbConnection con = new OleDbConnection(constr);
-            OleDbCommand oconn = new OleDbCommand("Select * From [" + name + "$]", con);
-            con.Open();
-
-            OleDbDataAdapter sda = new OleDbDataAdapter(oconn);
-            DataTable data = new DataTable();
-            sda.Fill(data);
-            
-            foreach (DataRow row in data.Rows)
-            {
-                DoorInfoConfig ptemp = new DoorInfoConfig();
-                ptemp.Id = (DoorId)double.Parse(row.Field<String>("ID"));
-                ptemp.Ip = row.Field<String>("IP");
-                ptemp.Port = int.Parse(row.Field<String>("Port"));
-                ptemp.PointCheckInGate = new Pose(double.Parse(row.Field<String>("PointCheckInGate").Split(',')[0]),
-                                                double.Parse(row.Field<String>("PointCheckInGate").Split(',')[1]),
-                                                double.Parse(row.Field<String>("PointCheckInGate").Split(',')[2]));
-                ptemp.PointFrontLine = new Pose(double.Parse(row.Field<String>("PointFrontLine").Split(',')[0]),
-                                                double.Parse(row.Field<String>("PointFrontLine").Split(',')[1]),
-                                                double.Parse(row.Field<String>("PointFrontLine").Split(',')[2]));
-                ptemp.infoPallet = row.Field<String>("InfoPallet").ToString();
- 
-                DoorInfoConfigList.Add(ptemp);
-            }
-            con.Close();
-        }
         public void ResetAllDoors()
         {
 

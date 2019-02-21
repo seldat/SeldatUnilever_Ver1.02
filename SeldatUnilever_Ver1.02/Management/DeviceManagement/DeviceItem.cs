@@ -1,15 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
 using SeldatMRMS;
+using SeldatMRMS.Management.DoorServices;
 using SelDatUnilever_Ver1._00.Communication.HttpBridge;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
-using static SeldatMRMS.Management.TrafficRobotUnity;
 using static SelDatUnilever_Ver1.CollectionDataService;
 
 namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
@@ -52,10 +48,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             TYPEREQUEST_MACHINE_TO_RETURN = 4,
             TYPEREQUEST_RETURN_TO_GATE = 5,
             TYPEREQUEST_CLEAR = 6,
-            TYPEREQUEST_OPEN_BACKDOOR_DELIVERY_PALLET = 7,
-            TYPEREQUEST_CLOSE_BACKDOOR_DELIVERY_PALLET = 8,
-            TYPEREQUEST_OPEN_BACKDOOR_RETURN_PALLET = 9,
-            TYPEREQUEST_CLOSE_BACKDOOR_RETURN_PALLET = 10,
+            TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET = 7,
+            TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET = 8,
+            TYPEREQUEST_OPEN_FRONTDOOR_RETURN_PALLET = 9,
+            TYPEREQUEST_CLOSE_FRONTDOOR_RETURN_PALLET = 10,
         }
         public enum TabletConTrol
         {
@@ -98,6 +94,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         public List<OrderItem> oneOrderList { get; set; }
         public int orderedAmount = 0;
         public int doneAmount = 0;
+
         public DeviceItem()
         {
             oneOrderList = new List<OrderItem>();
@@ -325,13 +322,32 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
                     oneOrderList.Remove(oneOrderList.Find(e=>e.userName==userName));
                 }
-                else if(typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_BACKDOOR_DELIVERY_PALLET)
+                else if(typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET)
                 {
                     // same deviceID forklift
+                    try
+                    {
+                        new DoorManagementService().DoorMezzamineUp.Open(DoorType.DOOR_FRONT);                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine("control door failed");
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_ERROR_DATA, ErrorMessage = e.Message };
+                        return statusOrderResponse;
+                    }
                 }
-                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLOSE_BACKDOOR_DELIVERY_PALLET)
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET)
                 {
                     // same deviceID forklift
+                    try
+                    {
+                        new DoorManagementService().DoorMezzamineUp.Close(DoorType.DOOR_FRONT);
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine("control door failed");
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_ERROR_DATA, ErrorMessage = e.Message };
+                        return statusOrderResponse;
+                    }
                 }
                 statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_SUCCESS, ErrorMessage = "" };
             }

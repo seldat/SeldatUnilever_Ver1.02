@@ -12,11 +12,11 @@ namespace DoorControllerService
     {
         private enum CmdDoor
         {
-            CMD_GET_ID_DOOR = 0x61,
-            RES_GET_ID_DOOR, /*0x62 */
-            CMD_SET_ID_DOOR, /*0x63 */
-            RES_SET_ID_DOOR, /*0x64 */
-            CMD_GET_STATUS_DOOR, /*0x65 */
+            //CMD_GET_ID_DOOR = 0x61,
+            //RES_GET_ID_DOOR, /*0x62 */
+            //CMD_SET_ID_DOOR, /*0x63 */
+            //RES_SET_ID_DOOR, /*0x64 */
+            CMD_GET_STATUS_DOOR = 0x65, /*0x65 */
             RES_GET_STATUS_DOOR, /*0x66 */
             CMD_OPEN_DOOR, /*0x67 */
             RES_OPEN_DOOR, /*0x68 */
@@ -25,19 +25,25 @@ namespace DoorControllerService
         }
         public enum DoorId
         {
-            DOOR_MEZZAMINE_UP_FRONT = 0x01,
-            DOOR_MEZZAMINE_UP_BACK, /* 0x02 */
-            DOOR_MEZZAMINE_RETURN_FRONT, /* 0x03 */
-            DOOR_MEZZAMINE_RETURN_BACK, /* 0x04 */
-            DOOR_ELEVATOR, /* 0x05 */
+            DOOR_MEZZAMINE_UP = 0x01,
+            DOOR_MEZZAMINE_RETURN, /* 0x02 */
+            DOOR_ELEVATOR, /* 0x03 */
         }
+        public enum DoorType
+        {
+            DOOR_FRONT = 0x01,
+            DOOR_BACK, /* 0x02 */
+        };
         public enum DoorStatus
         {
-            DOOR_CLOSE = 0x01,
+            DOOR_UNKNOW = 0x00,
+            DOOR_CLOSE,
             DOOR_OPEN, /* 0x02 */
             DOOR_CLOSING, /* 0x03 */
             DOOR_OPENING, /* 0x04 */
-            DOOR_ERROR /* 0x05 */
+            DOOR_ERROR, /* 0x05 */
+            DOOR_START_CLOSE,
+            DOOR_START_OPEN
         }
 
         public class DoorInfoConfig:NotifyUIBase
@@ -90,46 +96,46 @@ namespace DoorControllerService
             //SetId(cf.id);
         }
 
-        public bool GetId(ref DataReceive data)
-        {
-#if true
-            bool ret = true;
-#else
-            bool ret = false;
-            byte[] dataSend = new byte[6];
+//        public bool GetId(ref DataReceive data)
+//        {
+//#if true
+//            bool ret = true;
+//#else
+//            bool ret = false;
+//            byte[] dataSend = new byte[6];
 
-            dataSend[0] = 0xFA;
-            dataSend[1] = 0x55;
-            dataSend[2] = (byte)CmdDoor.CMD_GET_ID_DOOR;
-            dataSend[3] = 0x04;
-            dataSend[4] = 0x00;
-            dataSend[5] = CalChecksum(dataSend,3);
-            ret = this.Tranfer(dataSend,ref data);
-#endif
-            return ret;
-        }
-        public bool SetId(DoorId id)
-        {
-#if true
-            bool ret = true;
-#else
-            bool ret = false;
-            byte[] dataSend = new byte[7];
+//            dataSend[0] = 0xFA;
+//            dataSend[1] = 0x55;
+//            dataSend[2] = (byte)CmdDoor.CMD_GET_ID_DOOR;
+//            dataSend[3] = 0x04;
+//            dataSend[4] = 0x00;
+//            dataSend[5] = CalChecksum(dataSend,3);
+//            ret = this.Tranfer(dataSend,ref data);
+//#endif
+//            return ret;
+//        }
+//        public bool SetId(DoorId id)
+//        {
+//#if true
+//            bool ret = true;
+//#else
+//            bool ret = false;
+//            byte[] dataSend = new byte[7];
 
-            dataSend[0] = 0xFA;
-            dataSend[1] = 0x55;
-            dataSend[2] = (byte)CmdDoor.CMD_SET_ID_DOOR;
-            dataSend[3] = 0x05;
-            dataSend[4] = 0x00;
-            dataSend[5] = (byte)id;
-            dataSend[6] = CalChecksum(dataSend,4);
-            ret = this.Tranfer(dataSend);
-#endif
-            return ret;
-        }
-        public bool GetStatus(ref DataReceive data,DoorId id)
+//            dataSend[0] = 0xFA;
+//            dataSend[1] = 0x55;
+//            dataSend[2] = (byte)CmdDoor.CMD_SET_ID_DOOR;
+//            dataSend[3] = 0x05;
+//            dataSend[4] = 0x00;
+//            dataSend[5] = (byte)id;
+//            dataSend[6] = CalChecksum(dataSend,4);
+//            ret = this.Tranfer(dataSend);
+//#endif
+//            return ret;
+//        }
+        public bool GetStatus(ref DataReceive data,DoorType id)
         {
-#if true
+#if false
             bool ret = true;
 #else
             bool ret = false;
@@ -146,9 +152,9 @@ namespace DoorControllerService
 #endif
             return ret;
         }
-        public bool Open(DoorId id)
+        public bool Open(DoorType id)
         {
-#if true
+#if false
             bool ret = true;
 #else
             bool ret = false;
@@ -165,9 +171,9 @@ namespace DoorControllerService
 #endif
             return ret;
         }
-        public bool Close(DoorId id)
+        public bool Close(DoorType id)
         {
-#if true
+#if false
             bool ret = true;
 #else
             bool ret = false;
@@ -185,10 +191,10 @@ namespace DoorControllerService
             return ret;
         }
 
-        public bool WaitOpen(DoorId id, UInt32 timeOut)
+        public bool WaitOpen(DoorType id, UInt32 timeOut)
         {
             bool result = true;
-#if false
+#if true
             Stopwatch sw = new Stopwatch();
             DataReceive status = new DataReceive();
             this.Open(id);
@@ -202,16 +208,20 @@ namespace DoorControllerService
                     break;
                 }
                 this.GetStatus(ref status,id);
+                if (status.data[0] == (byte)DoorStatus.DOOR_ERROR) {
+                    result = false;
+                    break;
+                }
             } while (status.data[0] != (byte)DoorStatus.DOOR_OPEN);
             sw.Stop();
 #endif
             return result;
         }
 
-        public bool WaitClose(DoorId id, UInt32 timeOut)
+        public bool WaitClose(DoorType id, UInt32 timeOut)
         {
             bool result = true;
-#if false
+#if true
             Stopwatch sw = new Stopwatch();
             DataReceive status = new DataReceive();
             this.Close(id);
@@ -225,6 +235,11 @@ namespace DoorControllerService
                     break;
                 }
                 this.GetStatus(ref status,id);
+                if (status.data[0] == (byte)DoorStatus.DOOR_ERROR)
+                {
+                    result = false;
+                    break;
+                }
             } while (status.data[0] != (byte)DoorStatus.DOOR_CLOSE);
             sw.Stop();
 #endif

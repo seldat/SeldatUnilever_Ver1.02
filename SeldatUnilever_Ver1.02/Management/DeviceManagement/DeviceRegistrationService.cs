@@ -22,7 +22,6 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
         public MainWindow mainWindow;
         public List<DeviceItem> deviceItemList;
-        
 
         public DeviceRegistrationService(int port) : base(port)
         {

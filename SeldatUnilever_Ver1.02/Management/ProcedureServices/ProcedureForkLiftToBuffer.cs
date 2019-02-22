@@ -204,7 +204,7 @@ namespace SeldatMRMS
                         try {
                             if (true == ds.WaitClose (DoorService.DoorType.DOOR_BACK, TIME_OUT_CLOSE_DOOR)) {
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                rb.SendPoseStamped (FlToBuf.GetCheckInBuffer ());
+                                rb.SendPoseStamped (FlToBuf.GetCheckInBuffer (true));
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
                                 Debug(this,"FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER"); 
                             } else {
@@ -226,10 +226,10 @@ namespace SeldatMRMS
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try {
-                            if (false == Traffic.HasRobotUnityinArea (FlToBuf.GetAnyPointInBuffer().Position)) {
+                            if (false == Traffic.HasRobotUnityinArea (FlToBuf.GetAnyPointInBuffer(true).Position)) {
                                // createPlanBuffer();
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                rb.SendPoseStamped (FlToBuf.GetFrontLineBuffer ());
+                                rb.SendPoseStamped (FlToBuf.GetFrontLineBuffer (true));
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
                                 Debug(this,"FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER"); 
                             }
@@ -242,7 +242,7 @@ namespace SeldatMRMS
                         try {
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT) {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                rb.SendCmdAreaPallet (FlToBuf.GetInfoOfPalletBuffer (PistonPalletCtrl.PISTON_PALLET_DOWN));
+                                rb.SendCmdAreaPallet (FlToBuf.GetInfoOfPalletBuffer (PistonPalletCtrl.PISTON_PALLET_DOWN,true));
                                 // rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_FORWARD_DIRECTION);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_DROPDOWN_PALLET_BUFFER;

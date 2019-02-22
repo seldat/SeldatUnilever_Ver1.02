@@ -41,6 +41,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public int directMain;
             public int directSub;
             public int directOut;
+            public int line_ord;
             public PalletCtrl palletCtrl;
             public Pose linePos;
         }
@@ -237,10 +238,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.productDetailId = (int)results["productDetailId"];
                         order.productDetailName = (String)results["productDetailName"];
                         order.productId = (int)results["productId"];
-                        order.planId = (int)results["planId"];
+                       // order.planId = (int)results["planId"];
                         order.deviceId = (int)results["deviceId"];
-                        order.timeWorkId = (int)results["timeWorkId"];
-                        order.activeDate = (string)results["activeDate"];
+                        //order.timeWorkId = (int)results["timeWorkId"];
+                        order.activeDate = (string)DateTime.Now.ToString("yyyy-MM-dd");
                         // order.palletStatus = (String)results["palletStatus"];
                         String jsonDPst = (string)results["datapallet"][i];
                         JObject stuffPallet = JObject.Parse(jsonDPst);
@@ -252,7 +253,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         int directMain = (int)stuffPallet["pallet"]["dir_main"];
                         int directSub = (int)stuffPallet["pallet"]["dir_sub"];
                         int directOut = (int)stuffPallet["pallet"]["dir_out"];
-                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = directOut };
+                        int line_ord = (int)stuffPallet["pallet"]["line_ord"];
+                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = directOut,line_ord=line_ord };
                         dynamic product = new JObject();
                         product.timeWorkId = order.timeWorkId;
                         product.activeDate = order.activeDate;
@@ -285,7 +287,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         int bay = (int)stuffPallet["pallet"]["bay"];
                         int directMain = (int)stuffPallet["pallet"]["dir_main"];
                         int directSub = (int)stuffPallet["pallet"]["dir_sub"];
-                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub };
+                        int line_ord = (int)stuffPallet["pallet"]["line_ord"];
+                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub ,line_ord=line_ord};
                         dynamic product = new JObject();
                         product.timeWorkId = order.timeWorkId;
                         product.activeDate = order.activeDate;

@@ -236,6 +236,7 @@ namespace SelDatUnilever_Ver1
                         int directSub = (int)stuff["pallet"]["dir_sub"];
                         int directOut = (int)stuff["pallet"]["dir_out"];
                         string subline = (string)stuff["pallet"]["hasSubLine"];
+                        int line_ord=(int)stuff["pallet"]["line_ord"];
 
                         infoPallet.pallet = pisCtrl; /* dropdown */
                         infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
@@ -243,6 +244,7 @@ namespace SelDatUnilever_Ver1
                         infoPallet.hasSubLine = subline; /* yes or no */
                         infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
                         infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                        infoPallet.line_ord = line_ord;
                         infoPallet.row = row;
                         break;
                     }
@@ -261,6 +263,7 @@ namespace SelDatUnilever_Ver1
             infoPallet.dir_main = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directMain;
             infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directSub;
             infoPallet.dir_out= (TrafficRobotUnity.BrDirection)order.palletAtMachine.directOut;
+            infoPallet.line_ord =order.palletAtMachine.line_ord;
             infoPallet.row = order.palletAtMachine.row;
 
             return JsonConvert.SerializeObject(infoPallet);
@@ -284,12 +287,14 @@ namespace SelDatUnilever_Ver1
                 int directMain = (int)stuff["pallet"]["dir_main"];
                 int directSub = (int)stuff["pallet"]["dir_sub"];
                 int directOut = (int)stuff["pallet"]["dir_out"];
+                int line_ord = (int)stuff["pallet"]["line_ord"];
                 infoPallet.pallet = pisCtrl; /* dropdown */
                 infoPallet.bay = bay;
                 infoPallet.hasSubLine = "yes"; /* no */
                 infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain; 
                 infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub;
                 infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                infoPallet.line_ord = line_ord;
                 infoPallet.row = row;
 
             }

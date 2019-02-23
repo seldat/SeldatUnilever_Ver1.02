@@ -213,7 +213,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         case ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY:
 
                             // kiem tra robot tai vung ready
-                            if(!trafficService.RobotIsInArea("",robot.properties.pose.Position))
+                            if(!trafficService.RobotIsInArea("READY",robot.properties.pose.Position))
                             {
                                 // xoa khoi list cho
                                 robotManageService.RemoveRobotUnityReadyList(robot.properties.NameId);

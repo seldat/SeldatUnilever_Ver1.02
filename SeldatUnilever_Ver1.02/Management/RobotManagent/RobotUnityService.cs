@@ -99,6 +99,10 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             return new Point((TopHeader().X + BottomHeader().X) / 2, (TopHeader().Y + BottomHeader().Y) / 2);
         }
+        public virtual Point MiddleHeaderCv()
+        {
+            return new Point((TopHeaderCv().X + BottomHeaderCv().X) / 2, (TopHeaderCv().Y + BottomHeaderCv().Y) / 2);
+        }
         public virtual Point TopTail()
         {
             double x = properties.pose.Position.X + Math.Sqrt(Math.Abs(properties.L2) * Math.Abs(properties.L2) + Math.Abs(properties.WS / 2) * Math.Abs(properties.WS / 2)) * Math.Cos(properties.pose.AngleW + Math.Atan2(-properties.WS / 2, -properties.L2));
@@ -207,11 +211,15 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public Point[] FullRiskArea()
         {
-            return new Point[4] { TopHeader(), BottomHeader(), TopTail(), BottomTail() };
+            return new Point[4] { TopHeader(), BottomHeader(),  BottomTail(), TopTail() };
         }
         public Point[] FullRiskAreaCv()
         {
-            return new Point[4] { TopHeaderCv(), BottomHeaderCv(), TopTailCv(), BottomTailCv() };
+            Console.WriteLine(TopHeaderCv().ToString());
+            Console.WriteLine(BottomHeaderCv().ToString());
+            Console.WriteLine(BottomTailCv().ToString());
+            Console.WriteLine(TopTailCv().ToString());
+            return new Point[4] { TopHeaderCv(), BottomHeaderCv(), BottomTailCv(), TopTailCv() };
         }
         public bool FindHeaderIsCloseRiskArea(Point p)
         {
@@ -231,7 +239,7 @@ namespace SeldatMRMS.Management.RobotManagent
             // Console.WriteLine("kHOAN CACH " + ExtensionService.CalDistance(properties.pose.Position, p));
             Point pp = Global_Object.CoorCanvas(properties.pose.Position);
             double ddd = ExtensionService.CalDistance(Global_Object.CoorCanvas(properties.pose.Position), p);
-            return ExtensionService.CalDistance(Global_Object.CoorCanvas( properties.pose.Position), p) < DistInterCv ? true : false;
+            return ExtensionService.CalDistance(Global_Object.CoorCanvas( properties.pose.Position), p) < 60 ?true :false;
 
         }
         public bool FindHeaderIntersectsFullRiskArea(Point p)
@@ -240,6 +248,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public bool FindHeaderIntersectsFullRiskAreaCv(Point p)
         {
+
             return ExtensionService.IsInPolygon(FullRiskAreaCv(), p);
         }
         public bool FindHeaderIntersectsRiskAreaHeader(Point p)

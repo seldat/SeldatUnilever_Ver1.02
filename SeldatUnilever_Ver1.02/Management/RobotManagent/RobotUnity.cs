@@ -360,8 +360,8 @@ namespace SeldatMRMS.Management.RobotManagent {
                 props.contentTranslate = new TranslateTransform(0, 0);
                 props.contentTransformGroup.Children[1] = props.contentTranslate;
                // headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X-5, MiddleHeader().Y-5);
-                headerPoint.RenderTransform = new TranslateTransform(Global_Object.CoorCanvas(MiddleHeader()).X-5, Global_Object.CoorCanvas(MiddleHeader()).Y+0.5);
-                //headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X - 5, MiddleHeader().Y + 0.5);
+               // headerPoint.RenderTransform = new TranslateTransform(Global_Object.CoorCanvas(MiddleHeader()).X-5, Global_Object.CoorCanvas(MiddleHeader()).Y+0.5);
+                headerPoint.RenderTransform = new TranslateTransform(MiddleHeaderCv().X - 5, MiddleHeaderCv().Y + 0.5);
 
                 PathGeometry pgeometry = new PathGeometry();
                 PathFigure pF = new PathFigure();

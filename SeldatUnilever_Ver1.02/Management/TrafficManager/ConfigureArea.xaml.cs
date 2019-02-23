@@ -27,10 +27,14 @@ namespace SeldatUnilever_Ver1._02.Management.TrafficManager
         TrafficRounterService trafficRounterService;
         public ConfigureArea(TrafficRounterService trafficRounterService, string cultureName = null)
         {
-            InitializeComponent();
-            ApplyLanguage(cultureName);
-            this.trafficRounterService = trafficRounterService;
-            DataContext = trafficRounterService;
+            try
+            {
+                InitializeComponent();
+                ApplyLanguage(cultureName);
+                this.trafficRounterService = trafficRounterService;
+                DataContext = trafficRounterService;
+            }
+            catch { }
         }
 
         public void ApplyLanguage(string cultureName = null)

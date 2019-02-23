@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
@@ -81,12 +82,17 @@ namespace SeldatMRMS.Management
             TurnOnSupervisorTraffic(false);
             RobotUnitylist = new List<RobotUnity>();
             prioritLevel = new PriorityLevel();
+
+            new Thread(TrafficUpdate).Start(); 
         }
         public PriorityLevel prioritLevel;
         public void RegisteRobotInAvailable(Dictionary<String,RobotUnity> RobotUnitylistdc)
         {
-            foreach(var r in RobotUnitylistdc.Values)
-              this.RobotUnitylist.Add(r);
+            foreach (var r in RobotUnitylistdc.Values)
+            {
+                if(!r.properties.NameId.Equals(this.properties.NameId))
+                    this.RobotUnitylist.Add(r);
+            }
             TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
         }
         public void Registry(TrafficManagementService trafficManagementService)
@@ -100,9 +106,15 @@ namespace SeldatMRMS.Management
             {
                 foreach(RobotUnity r in RobotUnityRiskList.Values)
                 {
-                   bool onTouch= FindHeaderIntersectsFullRiskArea(this.TopHeader()) | FindHeaderIntersectsFullRiskArea(this.MiddleHeader()) | FindHeaderIntersectsFullRiskArea(this.BottomHeader());
-                    if(onTouch)
+                    Point thCV = Global_Object.CoorCanvas(this.TopHeader());
+                    Point mdCV = Global_Object.CoorCanvas(this.MiddleHeader());
+                    Point bhCV = Global_Object.CoorCanvas(this.BottomHeader());
+                    // bool onTouch= FindHeaderIntersectsFullRiskArea(this.TopHeader()) | FindHeaderIntersectsFullRiskArea(this.MiddleHeader()) | FindHeaderIntersectsFullRiskArea(this.BottomHeader());
+                    bool onTouch = FindHeaderIntersectsFullRiskAreaCv(thCV) | FindHeaderIntersectsFullRiskAreaCv(mdCV) | FindHeaderIntersectsFullRiskAreaCv(bhCV);
+
+                    if (onTouch)
                     {
+                        Console.WriteLine(r.properties.NameId+" => CheckIntersection");
                         robot = r;
                         break;
                     }
@@ -115,7 +127,9 @@ namespace SeldatMRMS.Management
             bool iscloseDistance = false;
             foreach(RobotUnity r in RobotUnitylist)
             {
-                bool onFound = r.FindHeaderIsCloseRiskArea(this.properties.pose.Position);
+                Point rP =Global_Object.CoorCanvas( MiddleHeader());
+               // bool onFound = r.FindHeaderIsCloseRiskArea(this.properties.pose.Position);
+                bool onFound = r.FindHeaderIsCloseRiskAreaCv(rP);
                 if (onFound)
                 {
                     // if robot in list is near but add in risk list robot
@@ -145,22 +159,42 @@ namespace SeldatMRMS.Management
         }
         public void DetectTouchedPosition(RobotUnity robot) // determine traffic state
         {
-                if (robot.FindHeaderIntersectsRiskAreaHeader(this.TopHeader()) || robot.FindHeaderIntersectsRiskAreaHeader(this.MiddleHeader())|| robot.FindHeaderIntersectsRiskAreaHeader(this.BottomHeader()))
+
+            Point thCV = Global_Object.CoorCanvas(this.TopHeader());
+            Point mhCV = Global_Object.CoorCanvas(this.MiddleHeader());
+            Point bhCV = Global_Object.CoorCanvas(this.BottomHeader());
+
+
+
+            //if (robot.FindHeaderIntersectsRiskAreaHeader(this.TopHeader()) || robot.FindHeaderIntersectsRiskAreaHeader(this.MiddleHeader())|| robot.FindHeaderIntersectsRiskAreaHeader(this.BottomHeader()))
+                if (robot.FindHeaderIntersectsRiskAreaHeaderCv(thCV) || robot.FindHeaderIntersectsRiskAreaHeaderCv(mhCV) || robot.FindHeaderIntersectsRiskAreaHeaderCv(bhCV))
+
                 {
                     TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_HEADER;
-                }
-                else if (robot.FindHeaderIntersectsRiskAreaTail(this.TopHeader())|| robot.FindHeaderIntersectsRiskAreaTail(this.MiddleHeader())|| robot.FindHeaderIntersectsRiskAreaTail(this.BottomHeader()))
+                Console.WriteLine(robot.properties.NameId + " =>"+ TrafficBehaviorStateTracking);
+            }
+           // else if (robot.FindHeaderIntersectsRiskAreaTail(this.TopHeader()) || robot.FindHeaderIntersectsRiskAreaTail(this.MiddleHeader()) || robot.FindHeaderIntersectsRiskAreaTail(this.BottomHeader()))
+
+
+                else if (robot.FindHeaderIntersectsRiskAreaTailCv(thCV)|| robot.FindHeaderIntersectsRiskAreaTailCv(mhCV)|| robot.FindHeaderIntersectsRiskAreaTailCv(bhCV))
                 {
                     TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_TAIL;
-                }
-                else if (robot.FindHeaderIntersectsRiskAreaRightSide(this.TopHeader())|| robot.FindHeaderIntersectsRiskAreaRightSide(this.MiddleHeader())|| robot.FindHeaderIntersectsRiskAreaRightSide(this.BottomHeader()))
-                {
-                    TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_SIDE;
-                }
-                else if (robot.FindHeaderIntersectsRiskAreaLeftSide(this.TopHeader()) || robot.FindHeaderIntersectsRiskAreaLeftSide(this.MiddleHeader()) || robot.FindHeaderIntersectsRiskAreaLeftSide(this.BottomHeader()))
-                {
-                    TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_SIDE;
-                }
+                Console.WriteLine(robot.properties.NameId + " =>"+ TrafficBehaviorStateTracking);
+            }
+             //   else if (robot.FindHeaderIntersectsRiskAreaRightSide(this.TopHeader())|| robot.FindHeaderIntersectsRiskAreaRightSide(this.MiddleHeader())|| robot.FindHeaderIntersectsRiskAreaRightSide(this.BottomHeader()))
+                 else if (robot.FindHeaderIntersectsRiskAreaRightSideCv(thCV) || robot.FindHeaderIntersectsRiskAreaRightSideCv(mhCV) || robot.FindHeaderIntersectsRiskAreaRightSideCv(bhCV))
+
+            {
+                TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_SIDE;
+                Console.WriteLine(robot.properties.NameId + " =>"+ TrafficBehaviorStateTracking);
+            }
+              //  else if (robot.FindHeaderIntersectsRiskAreaLeftSide(this.TopHeader()) || robot.FindHeaderIntersectsRiskAreaLeftSide(this.MiddleHeader()) || robot.FindHeaderIntersectsRiskAreaLeftSide(this.BottomHeader()))
+                 else if (robot.FindHeaderIntersectsRiskAreaLeftSideCv(thCV) || robot.FindHeaderIntersectsRiskAreaLeftSideCv(mhCV) || robot.FindHeaderIntersectsRiskAreaLeftSideCv(bhCV))
+
+            {
+                TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_SIDE;
+                Console.WriteLine(robot.properties.NameId + " =>"+ TrafficBehaviorStateTracking);
+            }
           
         }
         public void TrafficBehavior(RobotUnity robot)
@@ -169,6 +203,7 @@ namespace SeldatMRMS.Management
             {
                 case TrafficBehaviorState.HEADER_TOUCH_NOTOUCH:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                    Console.WriteLine(this.properties.Label + " => NORMAL");
                     // robot speed normal;
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_HEADER:
@@ -180,23 +215,28 @@ namespace SeldatMRMS.Management
                        if(robot.prioritLevel.OnAuthorizedPriorityProcedure)
                         {
                             SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                            Console.WriteLine(this.properties.Label + " => STOP");
                         }
                         else
                         {
                             SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                            Console.WriteLine(this.properties.Label + " => NORMAL");
                         }
                     }
                     else if(prioritLevel.IndexOnMainRoad < robot.prioritLevel.IndexOnMainRoad)
                     {
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                        Console.WriteLine(this.properties.Label + " => STOP");
                     }
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_TAIL:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    Console.WriteLine(this.properties.Label+ " => STOP");
                     // robot stop
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_SIDE:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    Console.WriteLine(this.properties.Label+ " => STOP");
                     break;
 
             }
@@ -205,21 +245,28 @@ namespace SeldatMRMS.Management
         {
             flagSupervisorTraffic = flagtraffic;
         }
-        public override void TrafficUpdate() {
-
-                prioritLevel.IndexOnMainRoad = trafficManagementService.FindIndexZoneRegister(properties.pose.Position);
-                // cập nhật vùng riskzone // update vùng risk area cho robot
-                RiskZoneRegister rZR = trafficManagementService.FindRiskZone(properties.pose.Position, IndexZoneDefaultFind.ZONE_OP,true);
-                if (rZR != null)
+        public  void TrafficUpdate() {
+            while (true)
+            {
+                try
                 {
-                    UpdateRiskAraParams(rZR.L1, rZR.L2, rZR.WS, rZR.distance);
+                    prioritLevel.IndexOnMainRoad = trafficManagementService.FindIndexZoneRegister(properties.pose.Position);
+                    // cập nhật vùng riskzone // update vùng risk area cho robot
+                    RiskZoneRegister rZR = trafficManagementService.FindRiskZone(properties.pose.Position, IndexZoneDefaultFind.ZONE_OP, true);
+                    if (rZR != null)
+                    {
+                        UpdateRiskAraParams(rZR.L1, rZR.L2, rZR.WS, rZR.distance);
+                    }
+                    else
+                    {
+                        UpdateRiskAraParams(DfL1, DfL2, DfWS, DfDistanceInter);
+                    }
+                    // giám sát an toàn
+                    SupervisorTraffic();
                 }
-                else
-                {
-                    UpdateRiskAraParams(DfL1, DfL2, DfWS, DfDistanceInter);
-                }
-                // giám sát an toàn
-                SupervisorTraffic();
+                catch { }
+                Thread.Sleep(500);
+            }
         
         }
         protected override void SupervisorTraffic() {
@@ -240,6 +287,7 @@ namespace SeldatMRMS.Management
                     {
                         RobotUnityRiskList.Clear();
                     }
+                    Console.WriteLine(this.properties.Label+"=> Normal No touch");
                     TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
                     TrafficBehavior(null);
                 }

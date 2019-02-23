@@ -154,18 +154,33 @@ namespace SeldatMRMS.Management.RobotManagent
             return new Point((TopHeader().X + TopTail().X) / 2, (TopHeader().Y + BottomHeader().Y) / 2);
         }
 
-
+        public virtual Point MiddleAllCv()
+        {
+            return new Point((TopHeaderCv().X + TopTailCv().X) / 2, (TopHeaderCv().Y + BottomHeaderCv().Y) / 2);
+        }
 
         public Point[] RiskAreaHeader()  // From Point : TopHeader / BottomHeader / RigtSide // LeftSide
         {
             //  Console.WriteLine("rISK Header " + TopHeader1() + " " + BottomHeader1() + " " + TopHeader2() + " " + BottomHeader2());
             return new Point[3] { TopHeader(), BottomHeader(), MiddleAll() };
         }
+
+        public Point[] RiskAreaHeaderCv()  // From Point : TopHeader / BottomHeader / RigtSide // LeftSide
+        {
+            //  Console.WriteLine("rISK Header " + TopHeader1() + " " + BottomHeader1() + " " + TopHeader2() + " " + BottomHeader2());
+            return new Point[3] { TopHeaderCv(), BottomHeaderCv(), MiddleAllCv() };
+        }
         public Point[] RiskAreaTail()  // From Point : TopTail / BottomTail / RigtSide // LeftSide
         {
             // Console.WriteLine("rISK tAIL " + TopTail1() + " " + BottomTail1() + " " + TopTail2() + " " + BottomTail2());
 
             return new Point[3] { TopTail(), BottomTail(), MiddleAll() };
+        }
+        public Point[] RiskAreaTailCv()  // From Point : TopTail / BottomTail / RigtSide // LeftSide
+        {
+            // Console.WriteLine("rISK tAIL " + TopTail1() + " " + BottomTail1() + " " + TopTail2() + " " + BottomTail2());
+
+            return new Point[3] { TopTailCv(), BottomTailCv(), MiddleAllCv() };
         }
 
         public Point[] RiskAreaRightSide()  // From Point : TopHeader / TopTail / Middle TAil //Middle HEader
@@ -174,14 +189,29 @@ namespace SeldatMRMS.Management.RobotManagent
             return new Point[3] { BottomTail(), BottomHeader(), MiddleAll() };
 
         }
+        public Point[] RiskAreaRightSideCv()  // From Point : TopHeader / TopTail / Middle TAil //Middle HEader
+        {
+            //  Console.WriteLine("Right Side " + BottomHeader2() + " " + BottomTail2() + " " + RightHeader() + " " + RightTail());
+            return new Point[3] { BottomTailCv(), BottomHeaderCv(), MiddleAllCv() };
+
+        }
         public Point[] RiskAreaLeftSide()  // From Point : BOttom Header / Bottom Tail / Middle TAil //Middle HEader
         {
             // Console.WriteLine("Left Side "+TopHeader() +" "+ TopTail() +" "+ LeftHeader()+" "+ LeftTail());
             return new Point[3] { TopHeader(), TopTail(), MiddleAll() };
         }
+        public Point[] RiskAreaLeftSideCv()  // From Point : BOttom Header / Bottom Tail / Middle TAil //Middle HEader
+        {
+            // Console.WriteLine("Left Side "+TopHeader() +" "+ TopTail() +" "+ LeftHeader()+" "+ LeftTail());
+            return new Point[3] { TopHeaderCv(), TopTailCv(), MiddleAllCv() };
+        }
         public Point[] FullRiskArea()
         {
             return new Point[4] { TopHeader(), BottomHeader(), TopTail(), BottomTail() };
+        }
+        public Point[] FullRiskAreaCv()
+        {
+            return new Point[4] { TopHeaderCv(), BottomHeaderCv(), TopTailCv(), BottomTailCv() };
         }
         public bool FindHeaderIsCloseRiskArea(Point p)
         {
@@ -193,27 +223,58 @@ namespace SeldatMRMS.Management.RobotManagent
             return ExtensionService.CalDistance(properties.pose.Position, p) < properties.DistInter ? true : false;
 
         }
+        public bool FindHeaderIsCloseRiskAreaCv(Point p)
+        {
+            // return ExtensionService.CalDistance(TopHeader(),p)<properties.DistanceIntersection || ExtensionService.CalDistance(BottomHeader(), p) < properties.DistanceIntersection || ExtensionService.CalDistance(MiddleHeader(), p) < properties.DistanceIntersection ? true:false;
+            //Console.WriteLine("Vi tri robot "+ this.properties.NameID+" = " + properties.pose.Position);
+            // Console.WriteLine("Vi tien gan " + p.ToString());
+            // Console.WriteLine("kHOAN CACH " + ExtensionService.CalDistance(properties.pose.Position, p));
+            Point pp = Global_Object.CoorCanvas(properties.pose.Position);
+            double ddd = ExtensionService.CalDistance(Global_Object.CoorCanvas(properties.pose.Position), p);
+            return ExtensionService.CalDistance(Global_Object.CoorCanvas( properties.pose.Position), p) < DistInterCv ? true : false;
+
+        }
         public bool FindHeaderIntersectsFullRiskArea(Point p)
         {
             return ExtensionService.IsInPolygon(FullRiskArea(), p);
+        }
+        public bool FindHeaderIntersectsFullRiskAreaCv(Point p)
+        {
+            return ExtensionService.IsInPolygon(FullRiskAreaCv(), p);
         }
         public bool FindHeaderIntersectsRiskAreaHeader(Point p)
         {
             return ExtensionService.IsInPolygon(RiskAreaHeader(), p);
         }
+        public bool FindHeaderIntersectsRiskAreaHeaderCv(Point p)
+        {
+            return ExtensionService.IsInPolygon(RiskAreaHeaderCv(), p);
+        }
         public bool FindHeaderIntersectsRiskAreaTail(Point p)
         {
             return ExtensionService.IsInPolygon(RiskAreaTail(), p);
+        }
+        public bool FindHeaderIntersectsRiskAreaTailCv(Point p)
+        {
+            return ExtensionService.IsInPolygon(RiskAreaTailCv(), p);
         }
         public bool FindHeaderIntersectsRiskAreaLeftSide(Point p)
         {
 
             return ExtensionService.IsInPolygon(RiskAreaLeftSide(), p);
         }
+        public bool FindHeaderIntersectsRiskAreaLeftSideCv(Point p)
+        {
+
+            return ExtensionService.IsInPolygon(RiskAreaLeftSideCv(), p);
+        }
         public bool FindHeaderIntersectsRiskAreaRightSide(Point p)
         {
             return ExtensionService.IsInPolygon(RiskAreaRightSide(), p);
         }
-
+        public bool FindHeaderIntersectsRiskAreaRightSideCv(Point p)
+        {
+            return ExtensionService.IsInPolygon(RiskAreaRightSideCv(), p);
+        }
     }
 }

@@ -361,15 +361,23 @@ namespace SeldatMRMS.Management.RobotManagent {
                 props.contentTransformGroup.Children[1] = props.contentTranslate;
                // headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X-5, MiddleHeader().Y-5);
                 headerPoint.RenderTransform = new TranslateTransform(Global_Object.CoorCanvas(MiddleHeader()).X-5, Global_Object.CoorCanvas(MiddleHeader()).Y+0.5);
+                //headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X - 5, MiddleHeader().Y + 0.5);
+
                 PathGeometry pgeometry = new PathGeometry();
                 PathFigure pF = new PathFigure();
-                pF.StartPoint = TopHeaderCv();
+               pF.StartPoint = TopHeaderCv();
+
+               // pF.StartPoint = new Point(TopHeader().X * 10, TopHeader().Y * 10);
                 LineSegment pp = new LineSegment();
 
-                pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv() });
+                 pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv()});
                 pF.Segments.Add(new LineSegment() { Point = BottomTailCv() });
                 pF.Segments.Add(new LineSegment() { Point = TopTailCv() });
                 pF.Segments.Add(new LineSegment() { Point = TopHeaderCv() });
+            // pF.Segments.Add(new LineSegment() { Point = new Point(BottomHeader().X*10, BottomHeader().Y * 10) });
+                //pF.Segments.Add(new LineSegment() { Point = new Point(BottomTail().X * 10, BottomTail().Y * 10) });
+              //  pF.Segments.Add(new LineSegment() { Point = new Point(TopTail().X * 10, TopTail().Y * 10) });
+                //pF.Segments.Add(new LineSegment() { Point = new Point(TopHeader().X * 10, TopHeader().Y * 10) });
                 pgeometry.Figures.Add(pF);
                 riskArea.Data = pgeometry;
 

@@ -237,7 +237,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.productId = (int)results["productId"];
                        // order.planId = (int)results["planId"];
                         order.deviceId = (int)results["deviceId"];
-                        //order.timeWorkId = (int)results["timeWorkId"];
+                        order.timeWorkId = 1;
                         order.activeDate = (string)DateTime.Now.ToString("yyyy-MM-dd");
                         // order.palletStatus = (String)results["palletStatus"];
                         String jsonDPst = (string)results["datapallet"][i];
@@ -381,6 +381,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             product.productId = order.productId;
             product.productDetailId = order.productDetailId;
             product.updUsrId = Global_Object.userLogin;
+            product.deviceId = order.deviceId;
             product.palletAmount = 1;
             String response = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/createPlanPallet");
             return response;

@@ -222,9 +222,9 @@ namespace SelDatUnilever_Ver1
                 var bufferResults = results[0];
                 String checkinResults = (String)bufferResults["bufferCheckIn"];
                 JObject stuff = JObject.Parse(checkinResults);
-                double x = (double)stuff["x"];
-                double y = (double)stuff["y"];
-                double angle = (double)stuff["angle"];
+                double x = (double)stuff["checkin"]["x"];
+                double y = (double)stuff["checkin"]["y"];
+                double angle = (double)stuff["checkin"]["angle"];
                 poseTemp = new Pose(x, y, angle );
 
             }
@@ -241,8 +241,10 @@ namespace SelDatUnilever_Ver1
             if (collectionData.Length > 0)
             {
                 JArray results = JArray.Parse(collectionData);
-                var bufferResults = results[0];
-                var palletInfo = bufferResults["pallets"][0];
+                var result = results[0];
+             //   var bufferResults = result["buffers"][0];
+               
+                var palletInfo = result["pallets"][0];
                 JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
                 double x = (double)stuff["line"]["x"];
                 double y = (double)stuff["line"]["y"];
@@ -275,11 +277,13 @@ namespace SelDatUnilever_Ver1
                             var palletInfo = bufferResults["pallets"][0];
                             palletId = (int)palletInfo["palletId"];
                             JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                            
                             int row = (int)stuff["pallet"]["row"];
                             int bay = (int)stuff["pallet"]["bay"];
                             int directMain = (int)stuff["pallet"]["dir_main"];
                             int directSub = (int)stuff["pallet"]["dir_sub"];
                             int directOut = (int)stuff["pallet"]["dir_out"];
+                            int line_ord= (int)stuff["pallet"]["line_ord"];
                             string subline = (string)stuff["pallet"]["hasSubLine"];
 
                             infoPallet.pallet = pisCtrl; /* dropdown */
@@ -289,6 +293,7 @@ namespace SelDatUnilever_Ver1
                             infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
                             infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
                             infoPallet.row = row;
+                            infoPallet.line_ord = line_ord;
                             break;
                         }
                     }
@@ -305,6 +310,7 @@ namespace SelDatUnilever_Ver1
                     int directMain = (int)stuff["pallet"]["dir_main"];
                     int directSub = (int)stuff["pallet"]["dir_sub"];
                     int directOut = (int)stuff["pallet"]["dir_out"];
+                    int line_ord = (int)stuff["pallet"]["line_ord"];
                     string subline = (string)stuff["pallet"]["hasSubLine"];
 
                     infoPallet.pallet = pisCtrl; /* dropdown */
@@ -314,6 +320,7 @@ namespace SelDatUnilever_Ver1
                     infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
                     infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
                     infoPallet.row = row;
+                    infoPallet.line_ord = line_ord;
                 }
             }
             return JsonConvert.SerializeObject(infoPallet);
@@ -337,6 +344,7 @@ namespace SelDatUnilever_Ver1
         public String GetInfoOfPalletReturn(TrafficRobotUnity.PistonPalletCtrl pisCtrl)
         {
             JInfoPallet infoPallet = new JInfoPallet();
+
             dynamic product = new JObject();
             product.palletStatus = order.palletStatus;
             String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "buffer/getListBufferReturn");
@@ -352,6 +360,7 @@ namespace SelDatUnilever_Ver1
                 int directMain = (int)stuff["pallet"]["dir_main"];
                 int directSub = (int)stuff["pallet"]["dir_sub"];
                 int directOut = (int)stuff["pallet"]["dir_out"];
+                int line_ord = (int)stuff["pallet"]["line_ord"];
                 infoPallet.pallet = pisCtrl; /* dropdown */
                 infoPallet.bay = bay;
                 infoPallet.hasSubLine = "yes"; /* no */
@@ -359,6 +368,7 @@ namespace SelDatUnilever_Ver1
                 infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub;
                 infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
                 infoPallet.row = row;
+                infoPallet.line_ord = line_ord;
 
             }
             return JsonConvert.SerializeObject(infoPallet);

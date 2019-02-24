@@ -26,8 +26,12 @@ namespace SeldatMRMS
         public Object obj;
         public SolvedProblem(string cultureName = null)
         {
-            InitializeComponent();
-            ApplyLanguage(cultureName);
+            try
+            {
+                InitializeComponent();
+                ApplyLanguage(cultureName);
+            }
+            catch { }
 
         }
         public void Registry(Object obj)

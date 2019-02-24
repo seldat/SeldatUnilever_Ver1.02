@@ -210,7 +210,7 @@ namespace SeldatMRMS.Management
             {
                 case TrafficBehaviorState.HEADER_TOUCH_NOTOUCH:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                    Console.WriteLine(this.properties.Label + " => NORMAL");
+                   // Console.WriteLine(this.properties.Label + " => NORMAL");
                     // robot speed normal;
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_HEADER:
@@ -222,28 +222,33 @@ namespace SeldatMRMS.Management
                        if(robot.prioritLevel.OnAuthorizedPriorityProcedure)
                         {
                             SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                            Console.WriteLine(this.properties.Label + " => STOP");
+                           // Console.WriteLine(this.properties.Label + " => STOP");
                         }
                         else
                         {
                             SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                            Console.WriteLine(this.properties.Label + " => NORMAL");
+                           // Console.WriteLine(this.properties.Label + " => NORMAL");
                         }
                     }
                     else if(prioritLevel.IndexOnMainRoad < robot.prioritLevel.IndexOnMainRoad)
                     {
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                        Console.WriteLine(this.properties.Label + " => STOP");
+                       // Console.WriteLine(this.properties.Label + " => STOP");
+                    }
+                    else
+                    {
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                      //  Console.WriteLine(this.properties.Label + " => STOP");
                     }
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_TAIL:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                    Console.WriteLine(this.properties.Label+ " => STOP");
+                   // Console.WriteLine(this.properties.Label+ " => STOP");
                     // robot stop
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_SIDE:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                    Console.WriteLine(this.properties.Label+ " => STOP");
+                  //  Console.WriteLine(this.properties.Label+ " => STOP");
                     break;
 
             }
@@ -294,7 +299,7 @@ namespace SeldatMRMS.Management
                     {
                         RobotUnityRiskList.Clear();
                     }
-                    Console.WriteLine(this.properties.Label+"=> Normal No touch");
+                   // Console.WriteLine(this.properties.Label+"=> Normal No touch");
                     TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
                     TrafficBehavior(null);
                 }

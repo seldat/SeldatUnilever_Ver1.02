@@ -125,6 +125,13 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             ZoneRegisterList.Add(ptemp.NameId, ptemp);
 
         }
+        public void RegistryRobotList(Dictionary<String, RobotUnity> RobotUnitylistdc)
+        {
+            foreach (var r in RobotUnitylistdc.Values)
+            {
+                RobotUnityListOnTraffic.Add(r);
+            }
+        }
         public void InitializeRiskZone()
         {
 
@@ -360,10 +367,19 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
             {
 
-                if (ExtensionService.IsInPolygon(r.GetZone(), goal))
+                if (r.Index < 255)
                 {
-                    zoneName = r.NameId;
-                    break;
+                    if (ExtensionService.IsInPolygon(r.GetZone(), goal))
+                    {
+                        zoneName = r.NameId;
+                        /* Console.WriteLine("vung getzone"+r.NameId);
+                         Console.WriteLine("Goal" + goal);
+                         Console.WriteLine("P1 " + r.Point1);
+                         Console.WriteLine("P2 " + r.Point2);
+                         Console.WriteLine("P3 " + r.Point3);
+                         Console.WriteLine("P4 " + r.Point4);*/
+                        break;
+                    }
                 }
             }
             foreach (RobotUnity r in RobotUnityListOnTraffic) // xác định robot có trong khu vực

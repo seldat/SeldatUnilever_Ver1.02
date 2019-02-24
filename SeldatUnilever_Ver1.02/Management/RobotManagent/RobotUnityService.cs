@@ -215,10 +215,10 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public Point[] FullRiskAreaCv()
         {
-            Console.WriteLine(TopHeaderCv().ToString());
+           /* Console.WriteLine(TopHeaderCv().ToString());
             Console.WriteLine(BottomHeaderCv().ToString());
             Console.WriteLine(BottomTailCv().ToString());
-            Console.WriteLine(TopTailCv().ToString());
+            Console.WriteLine(TopTailCv().ToString());*/
             return new Point[4] { TopHeaderCv(), BottomHeaderCv(), BottomTailCv(), TopTailCv() };
         }
         public bool FindHeaderIsCloseRiskArea(Point p)

@@ -35,7 +35,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public Dictionary<String, RobotUnity> RobotUnityWaitTaskList = new Dictionary<string, RobotUnity>();
         public Dictionary<String, RobotUnity> RobotUnityReadyList = new Dictionary<string, RobotUnity>();
         public ConfigureRobotUnity configureForm;
-        private TrafficManagementService trafficManagementService=new TrafficManagementService();
+        private TrafficManagementService trafficManagementService;
         private Canvas canvas;
         public RobotManagementService(Canvas canvas) {
             this.canvas = canvas;
@@ -43,7 +43,7 @@ namespace SeldatMRMS.Management.RobotManagent
             Grouped_PropertiesRobotUnity = (ListCollectionView)CollectionViewSource.GetDefaultView(PropertiesRobotUnity_List);
             configureForm = new ConfigureRobotUnity(this, Thread.CurrentThread.CurrentCulture.ToString());
             //LoadConfigure();
-          TestRobotProceure();
+          //TestRobotProceure();
         }
 
         public void TestRobotProceure()
@@ -72,7 +72,7 @@ namespace SeldatMRMS.Management.RobotManagent
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
-          //  r1.Start(prop1.Url);
+            r1.Start(prop1.Url);
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
             AddRobotUnityWaitTaskList(r1);
@@ -89,7 +89,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.WS = 6;
             prop2.Label = "Robot2";
             prop2.BatteryLevelRb = 40;
-            prop2.Url = "ws://192.168.1.5:9090";
+            prop2.Url = "ws://192.168.1.161:9090";
             prop2.ipMcuCtrl = "192.168.1.210";
             prop2.portMcuCtrl = 8081;
             prop2.DistInter = 80;
@@ -106,21 +106,25 @@ namespace SeldatMRMS.Management.RobotManagent
             r2.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r2.properties);
             RobotUnityRegistedList.Add(r2.properties.NameId, r2);
-          //  r2.Start(prop2.Url);
+            r2.Start(prop2.Url);
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
             AddRobotUnityWaitTaskList(r2);
           
             r2.TurnOnSupervisorTraffic(true);
-          /*  r2.properties.pose.Position = new Point(-14.2, -0.5);
-            r2.properties.pose.Angle = -180;
-            r2.properties.pose.AngleW = -180 * Math.PI / 180;*/
+            /*  r2.properties.pose.Position = new Point(-14.2, -0.5);
+              r2.properties.pose.Angle = -180;
+              r2.properties.pose.AngleW = -180 * Math.PI / 180;*/
+
+            r1.Registry(trafficManagementService);
+            r2.Registry(trafficManagementService);
 
             r2.RegisteRobotInAvailable(RobotUnityRegistedList);
             r1.RegisteRobotInAvailable(RobotUnityRegistedList);
 
             r1.StartTraffic();
             r2.StartTraffic();
+            trafficManagementService.RegistryRobotList(RobotUnityRegistedList);
         }
         public void Initialize()
         {

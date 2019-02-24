@@ -13,20 +13,6 @@ namespace SeldatMRMS.Management.TrafficManager
     {
       
         public TrafficManagementService() { }
-        public void AddRobotUnityToTraffic(List<RobotUnity> elements)
-        {
-            RobotUnityListOnTraffic = elements;
-            RobotUnityListOnTraffic.ForEach(e => e.PoseHandler += PoseRobotHandler);
-        }
-        public void ReleaseRobotUnityToTraffic(List<RobotUnity> elements)
-        {           
-            RobotUnityListOnTraffic.ForEach(e => e.PoseHandler -= PoseRobotHandler);
-            RobotUnityListOnTraffic.Clear();
-        }
-        public void PoseRobotHandler(Pose p, Object obj)
-        {
-            var robot = obj as RobotUnity;
-            robot.prioritLevel.IndexOnMainRoad = (int)FindIndexZoneRegister(p.Position);
-        }
+     
     }
 }

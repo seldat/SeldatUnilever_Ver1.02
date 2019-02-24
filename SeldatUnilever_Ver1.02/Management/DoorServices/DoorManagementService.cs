@@ -56,9 +56,9 @@ namespace SeldatMRMS.Management.DoorServices
                 Id = DoorId.DOOR_MEZZAMINE_UP,
                 Ip = "192.168.1.240",
                 Port = 8081,
-                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
-                PointFrontLineStr = "1,2,3",
-                PointCheckInGateStr = "0.0,0.0,0.0"
+                infoPallet = "{\"pallet\":0,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+                PointFrontLineStr = "2.54,-6.78,90",
+                PointCheckInGateStr = "17.88,0.7,0"
             };
             doorICF_MUB.ParsePointCheckInGateValue(doorICF_MUB.PointCheckInGateStr);
             doorICF_MUB.ParsePointFrontLineValue(doorICF_MUB.PointFrontLineStr);
@@ -70,9 +70,9 @@ namespace SeldatMRMS.Management.DoorServices
                 Id = DoorId.DOOR_MEZZAMINE_RETURN,
                 Ip = "192.168.1.241",
                 Port = 8081,
-                infoPallet = "{\"pallet\":1,\"dir_main\":1,\"dir_out\":1,\"bay\":0,\"hasSubLine\":\"no\",\"dir_sub\":0,\"row\":0}",
-                PointFrontLineStr = "1,2,3",
-                PointCheckInGateStr = "0.0,0.0,0.0"
+                infoPallet = "{\"pallet\":1,\"dir_main\":1,\"dir_out\":1,\"bay\":1,\"hasSubLine\":\"no\",\"line_ord\":0,\"dir_sub\":0,\"row\":0}",
+                 PointFrontLineStr = "2.54,-6.78,90",
+                PointCheckInGateStr = "17.88,0.7,0"
             };
             doorICF_MRB.ParsePointCheckInGateValue(doorICF_MRB.PointCheckInGateStr);
             doorICF_MRB.ParsePointFrontLineValue(doorICF_MRB.PointFrontLineStr);

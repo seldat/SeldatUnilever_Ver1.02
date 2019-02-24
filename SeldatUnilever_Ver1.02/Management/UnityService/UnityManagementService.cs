@@ -56,6 +56,7 @@ namespace SeldatMRMS.Management.UnityService
 
 
             robotManagementService.Registry(trafficService);
+            robotManagementService.TestRobotProceure();
 
             deviceRegistrationService.listen();
             deviceRegistrationService.RegistryMainWindow(this.mainWindow);

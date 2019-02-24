@@ -126,6 +126,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
+                       // Debug(this, "FORBUF_ROBOT_WAITTING_GOTO_GATE ===> FLAG " + Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position));
                         if (false == Traffic.HasRobotUnityinArea (ds.config.PointFrontLine.Position)) {
                             rb.UpdateRiskAraParams(40,rb.properties.L2,rb.properties.WS,rb.properties.DistInter);
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;

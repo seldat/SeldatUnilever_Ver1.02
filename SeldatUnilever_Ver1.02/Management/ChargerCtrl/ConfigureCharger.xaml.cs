@@ -28,11 +28,15 @@ namespace SeldatUnilever_Ver1._02.Management.ChargerCtrl
         ChargerManagementService chargerManagementService;
         public ConfigureCharger(ChargerManagementService chargerManagementService, string cultureName = null)
         {
-            InitializeComponent();
-            ApplyLanguage(cultureName);
-            Loaded += ConfigureCharger_Loaded;
-            this.chargerManagementService = chargerManagementService;
-            DataContext = chargerManagementService;
+            try
+            {
+                InitializeComponent();
+                ApplyLanguage(cultureName);
+                Loaded += ConfigureCharger_Loaded;
+                this.chargerManagementService = chargerManagementService;
+                DataContext = chargerManagementService;
+            }
+            catch { }
         }
 
         private void ConfigureCharger_Loaded(object sender, RoutedEventArgs e)

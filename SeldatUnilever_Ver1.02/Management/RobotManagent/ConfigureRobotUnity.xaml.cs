@@ -27,10 +27,14 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         private RobotManagementService robotManagementService;
         public ConfigureRobotUnity(RobotManagementService robotManagementService, string cultureName = null)
         {
-            InitializeComponent();
-            ApplyLanguage(cultureName);
-            this.robotManagementService = robotManagementService;
-            DataContext = robotManagementService;
+            try
+            {
+                InitializeComponent();
+                ApplyLanguage(cultureName);
+                this.robotManagementService = robotManagementService;
+                DataContext = robotManagementService;
+            }
+            catch { }
         }
 
         public void ApplyLanguage(string cultureName = null)

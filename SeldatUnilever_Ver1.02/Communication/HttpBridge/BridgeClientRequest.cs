@@ -25,7 +25,7 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpBridge
                     if (response != null)
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine(jsonString);
+                       // Console.WriteLine(jsonString);
                         return jsonString;
                     }
                 }

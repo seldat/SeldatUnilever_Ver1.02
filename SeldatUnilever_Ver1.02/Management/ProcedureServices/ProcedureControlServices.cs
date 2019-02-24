@@ -229,7 +229,8 @@ namespace SeldatMRMS {
             bool keepRun = true;
             ProcedureControlServices p = (ProcedureControlServices)obj;
             Debug (obj,"ErrorCode -> " + getStringError(p.errorCode));
-            ErrorProcedureHandler (obj);
+           
+            robot.RegistrySolvedForm(this);
             while (keepRun) {
                 switch (selectHandleError) {
                     case SelectHandleError.CASE_ERROR_WAITTING:
@@ -257,6 +258,7 @@ namespace SeldatMRMS {
                                 robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX);
                             }));
                         robot.PreProcedureAs = robot.ProcedureAs;
+                        ErrorProcedureHandler(obj);
                         ProRun = false;
                         keepRun = false;
                         break;
@@ -269,7 +271,7 @@ namespace SeldatMRMS {
         protected void Debug (object ojb, string log) {
             ProcedureControlServices pCs = (ProcedureControlServices) ojb;
             RobotUnity rb = pCs.GetRobotUnity ();
-            string rBid = rb.properties.NameId + " => (^_^) ";
+            string rBid = rb.properties.Label + " => (^_^) ";
 
             switch (pCs.procedureCode) {
                 case ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE:

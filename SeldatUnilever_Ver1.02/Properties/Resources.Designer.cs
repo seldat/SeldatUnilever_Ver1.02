@@ -182,6 +182,16 @@ namespace SeldatUnilever_Ver1._02.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Map_aTan___Copy2 {
+            get {
+                object obj = ResourceManager.GetObject("Map_aTan___Copy2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap mapbackground {
             get {
                 object obj = ResourceManager.GetObject("mapbackground", resourceCulture);

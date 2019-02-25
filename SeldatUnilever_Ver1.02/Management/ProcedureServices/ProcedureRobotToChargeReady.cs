@@ -346,7 +346,7 @@ namespace SeldatMRMS {
                             // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_READYAREA);
                             StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION;
                             Debug(this,"ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION"); 
-                        } else if (Traffic.RobotIsInArea ("", robot.properties.pose.Position)) {
+                        } else if (Traffic.RobotIsInArea ("READY", robot.properties.pose.Position)) {
                             robot.TurnOnSupervisorTraffic (false);
                         }
                         break;

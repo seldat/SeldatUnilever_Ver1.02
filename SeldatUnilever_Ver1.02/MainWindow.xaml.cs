@@ -104,7 +104,7 @@ namespace SeldatUnilever_Ver1._02
 
             canvasMatrixTransform = new MatrixTransform(1, 0, 0, -1, 0, 0);
 
-            ImageBrush img = LoadImage("test3");
+            ImageBrush img = LoadImage("Map_aTan___Copy2");
             map.Width = img.ImageSource.Width;
             map.Height = img.ImageSource.Height;
             map.Background = img;
@@ -150,51 +150,51 @@ namespace SeldatUnilever_Ver1._02
             frm.ShowDialog();
             if (Global_Object.userAuthor <= 2)
             {
-                myManagementWindow.Visibility = Visibility.Visible;
-               /* Dispatcher.BeginInvoke(new ThreadStart(() =>
-                {
-                    canvasControlService.ReloadAllStation();
-                }));*/
-                unityService = new UnityManagementService(this);
+               myManagementWindow.Visibility = Visibility.Visible;
+              /* Dispatcher.BeginInvoke(new ThreadStart(() =>
+            //    {
+            //        canvasControlService.ReloadAllStation();
+            //    }));*/
+               unityService = new UnityManagementService(this);
                 unityService.Initialize();
-                ctrR = new CtrlRobot(unityService.robotManagementService);
-                stationTimer = new System.Timers.Timer();
-                stationTimer.Interval = 2000;
-                stationTimer.Elapsed += OnTimedRedrawStationEvent;
-                stationTimer.AutoReset = true;
-                stationTimer.Enabled = true;
+               ctrR = new CtrlRobot(unityService.robotManagementService);
+               /* stationtimer = new system.timers.timer();
+                stationtimer.interval = 2000;
+                stationtimer.elapsed += ontimedredrawstationevent;
+                stationtimer.autoreset = true;
+                stationtimer.enabled = true;*/
             }
 
 
-            //new Thread(()=> 
-            //{
-                 
-            //            //canvasControlService.ReloadAllStation();
-           
-            //    while (true)
-            //    {
-            //        //Console.WriteLine("Begin first task...");
-            //        canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
-            //    };
+                //new Thread(()=> 
+                //{
 
-            //}).Start();
+                //            //canvasControlService.ReloadAllStation();
 
-            /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
-               {
-                   for (int i = 1; i < 5; i++)
+                //    while (true)
+                //    {
+                //        //Console.WriteLine("Begin first task...");
+                //        canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
+                //    };
+
+                //}).Start();
+
+                /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
                    {
-                       Random posX = new Random();
-                       RobotShape rbot = new RobotShape(map);
-                       rbot.rad = posX.Next(50, 120);
-                       rbot.org = new Point(600 + posX.Next(10, 50), 386 + posX.Next(10, 50));
-                       rbot.anglestep = posX.NextDouble() + 0.2;
-                       rbot.ReDraw(new Point(0, 0), 0);
-                       //rbot.ChangeTask("22");
-                       canvasControlService.list_Robot.Add(i.ToString(), rbot);
-                       Thread.Sleep(100);
-                   }
-               }));*/
-             robotTimer = new System.Timers.Timer();
+                       for (int i = 1; i < 5; i++)
+                       {
+                           Random posX = new Random();
+                           RobotShape rbot = new RobotShape(map);
+                           rbot.rad = posX.Next(50, 120);
+                           rbot.org = new Point(600 + posX.Next(10, 50), 386 + posX.Next(10, 50));
+                           rbot.anglestep = posX.NextDouble() + 0.2;
+                           rbot.ReDraw(new Point(0, 0), 0);
+                           //rbot.ChangeTask("22");
+                           canvasControlService.list_Robot.Add(i.ToString(), rbot);
+                           Thread.Sleep(100);
+                       }
+                   }));*/
+                robotTimer = new System.Timers.Timer();
              robotTimer.Interval = 10000;
              robotTimer.Elapsed += OnTimedRedrawRobotEvent;
              robotTimer.AutoReset = true;

@@ -85,7 +85,8 @@ namespace SeldatUnilever_Ver1._02
     public partial class MainWindow : Window
     {
         private SoundPlayer Player = null;
-        public System.Timers.Timer stationTimer;
+        public System.Timers.Timer stationtimer;
+       
         public System.Timers.Timer robotTimer;
 
 
@@ -158,47 +159,17 @@ namespace SeldatUnilever_Ver1._02
                unityService = new UnityManagementService(this);
                 unityService.Initialize();
                ctrR = new CtrlRobot(unityService.robotManagementService);
-               /* stationtimer = new system.timers.timer();
-                stationtimer.interval = 2000;
-                stationtimer.elapsed += ontimedredrawstationevent;
-                stationtimer.autoreset = true;
-                stationtimer.enabled = true;*/
+
+                stationtimer = new System.Timers.Timer();
+                stationtimer.Interval= 2000;
+                stationtimer.Elapsed += OnTimedRedrawStationEvent;
+                stationtimer.AutoReset = true;
+                stationtimer.Enabled = true;
+                
             }
 
 
-                //new Thread(()=> 
-                //{
-
-                //            //canvasControlService.ReloadAllStation();
-
-                //    while (true)
-                //    {
-                //        //Console.WriteLine("Begin first task...");
-                //        canvasControlService.RedrawAllStation(canvasControlService.GetDataAllStation());
-                //    };
-
-                //}).Start();
-
-                /*   Dispatcher.BeginInvoke(new ThreadStart(() =>
-                   {
-                       for (int i = 1; i < 5; i++)
-                       {
-                           Random posX = new Random();
-                           RobotShape rbot = new RobotShape(map);
-                           rbot.rad = posX.Next(50, 120);
-                           rbot.org = new Point(600 + posX.Next(10, 50), 386 + posX.Next(10, 50));
-                           rbot.anglestep = posX.NextDouble() + 0.2;
-                           rbot.ReDraw(new Point(0, 0), 0);
-                           //rbot.ChangeTask("22");
-                           canvasControlService.list_Robot.Add(i.ToString(), rbot);
-                           Thread.Sleep(100);
-                       }
-                   }));*/
-                robotTimer = new System.Timers.Timer();
-             robotTimer.Interval = 10000;
-             robotTimer.Elapsed += OnTimedRedrawRobotEvent;
-             robotTimer.AutoReset = true;
-             robotTimer.Enabled = true;
+                
         }
 
 

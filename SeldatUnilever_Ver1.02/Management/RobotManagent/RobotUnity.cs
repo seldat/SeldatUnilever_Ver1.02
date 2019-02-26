@@ -381,6 +381,9 @@ namespace SeldatMRMS.Management.RobotManagent {
                 pgeometry.Figures.Add(pF);
                 riskArea.Data = pgeometry;
 
+                props.rbID.Content = properties.pose.Position.X.ToString("0");
+                props.rbTask.Content = properties.pose.Position.Y.ToString("0");
+
             }));
 
         }

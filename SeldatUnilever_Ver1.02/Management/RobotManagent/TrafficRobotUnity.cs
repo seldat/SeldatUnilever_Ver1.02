@@ -120,7 +120,7 @@ namespace SeldatMRMS.Management
 
                     if (onTouch)
                     {
-                        Console.WriteLine(r.properties.Label+" => CheckIntersection");
+                       // Console.WriteLine(r.properties.Label+" => CheckIntersection");
                         robot = r;
                         break;
                     }
@@ -140,7 +140,7 @@ namespace SeldatMRMS.Management
                 if (onFound)
                 {
                     // if robot in list is near but add in risk list robot
-                    Console.WriteLine(r.properties.Label+ "- Intersection");
+                    //Console.WriteLine(r.properties.Label+ "- Intersection");
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
                     if(!RobotUnityRiskList.ContainsKey(r.properties.NameId))
                     {

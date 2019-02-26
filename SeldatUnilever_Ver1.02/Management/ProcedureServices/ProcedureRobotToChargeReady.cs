@@ -28,6 +28,8 @@ namespace SeldatMRMS {
         const UInt32 TIME_OUT_WAIT_TURNOFF_PC = 60000 * 5;
         const UInt32 TIME_OUT_WAIT_STATE = 60000 * 2;
         const UInt32 TIME_OUT_ROBOT_RECONNECT_SERVER = 60000 * 10;
+        const UInt32 TIME_COUNT_GET_BAT_LEVEL = 1000;
+        private UInt32 timeCountGetBatLevel = 0;
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
         public byte getBatteryLevel () {
@@ -95,6 +97,7 @@ namespace SeldatMRMS {
                         Debug(this, "ROBCHAR_ROBOT_GOTO_CHARGER");
                         robot.TurnOnSupervisorTraffic(false);
                         rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_GETIN_CHARGER);
+                        //Thread.Sleep(1000);
                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
                         Debug(this, "ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT");
                         break;
@@ -103,8 +106,8 @@ namespace SeldatMRMS {
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETIN_CHARGER)
                             {
-                                rb.Close();
                                 rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_TURNOFF_PC);
+                                rb.Dispose();
                                 StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC;
                                 sw.Start();
                                 Debug(this, "ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC");
@@ -201,20 +204,31 @@ namespace SeldatMRMS {
 #else
 #if true
                         try {
-                            result = mcuCtrl.GetBatteryLevel (ref batLevel);
-                            Console.WriteLine("=================****+++++bat level {0}+++++++++++++++++++", batLevel.data[0]);
-                            if (ErrorCodeCharger.TRUE == result) {
-                                if (batLevel.data[0] >= 82/*100*/) {
-                                    StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
-                                    Debug(this,"ROBCHAR_FINISHED_CHARGEBATTERY"); 
+                            timeCountGetBatLevel++;
+                            if(timeCountGetBatLevel >= TIME_COUNT_GET_BAT_LEVEL)
+                            {
+                                timeCountGetBatLevel = 0;
+                                result = mcuCtrl.GetBatteryLevel(ref batLevel);
+                                Console.WriteLine("=================****+++++bat level {0}+++++++++++++++++++", batLevel.data[0]);
+                                if (ErrorCodeCharger.TRUE == result)
+                                {
+                                    if (batLevel.data[0] >= 100)
+                                    {
+                                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+                                        Debug(this, "ROBCHAR_FINISHED_CHARGEBATTERY");
+                                    }
                                 }
-                            } else {
-                                if (result == ErrorCodeCharger.ERROR_CONNECT) {
-                                    errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
+                                else
+                                {
+                                    if (result == ErrorCodeCharger.ERROR_CONNECT)
+                                    {
+                                        errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
+                                    }
+                                    CheckUserHandleError(this);
                                 }
-                                CheckUserHandleError (this);
+                                rb.properties.BatteryLevelRb = (float)batLevel.data[0];
                             }
-                            rb.properties.BatteryLevelRb = (float) batLevel.data[0];
+                            
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
                             CheckUserHandleError (this);
@@ -260,8 +274,8 @@ namespace SeldatMRMS {
                         try {
                             if (true == mcuCtrl.TurnOnPcRobot ()) {
                                 Thread.Sleep(10000);
-                                rb.Start(rb.url);
-                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
+                                rb.Start(rb.properties.Url);
+                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING;
                                 Debug(this, "ROBCHAR_ROBOT_WAITTING_RECONNECTING"); 
                             } else {
                                 errorCode = ErrorCode.CAN_NOT_TURN_ON_PC;

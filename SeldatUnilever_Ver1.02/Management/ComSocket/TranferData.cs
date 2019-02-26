@@ -121,11 +121,12 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                     catch (System.Exception)
                     {
                         this.Close();
-                        Thread.Sleep(500);
+                        Thread.Sleep(1000);
                     }
                 }
                 else {
                     this.Close();
+                    Thread.Sleep(1000);
                 }
             }
             this.Close();

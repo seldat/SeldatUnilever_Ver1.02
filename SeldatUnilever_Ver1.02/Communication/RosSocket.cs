@@ -90,7 +90,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 webSocket.OnMessage -= (sender, e) => recievedOperation((WebSocket)sender, e);
                 webSocket.OnClose -= (sender, e) => OnClosedEvent((WebSocket)sender, e);
                 webSocket.OnOpen -= (sender, e) => OnOpenedEvent();
-              //  Close();
+                //  Close();
                 webSocket = null;
             }
         }
@@ -107,7 +107,6 @@ namespace SeldatMRMS.Management.RobotManagent
 
             webSocket.Close();
         }
-
         public delegate void ServiceHandler(object obj);
         public delegate void MessageHandler(Message message);
 

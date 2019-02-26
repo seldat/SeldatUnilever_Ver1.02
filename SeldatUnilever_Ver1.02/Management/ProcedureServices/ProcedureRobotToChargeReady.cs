@@ -28,6 +28,8 @@ namespace SeldatMRMS {
         const UInt32 TIME_OUT_WAIT_TURNOFF_PC = 60000 * 5;
         const UInt32 TIME_OUT_WAIT_STATE = 60000 * 2;
         const UInt32 TIME_OUT_ROBOT_RECONNECT_SERVER = 60000 * 10;
+        const UInt32 TIME_COUNT_GET_BAT_LEVEL = 1000;
+        private UInt32 timeCountGetBatLevel = 0;
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
         public byte getBatteryLevel () {
@@ -60,7 +62,7 @@ namespace SeldatMRMS {
             procedureCode = ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE;
         }
 
-        public void Start (RobotGoToCharge state = RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE) {
+        public void Start (RobotGoToCharge state = RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER) {
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_CHARGE;
             StateRobotToCharge = state;
@@ -86,29 +88,72 @@ namespace SeldatMRMS {
                     case RobotGoToCharge.ROBCHAR_IDLE:
                         Debug(this,"ROBCHAR_IDLE"); 
                         break;
-                        // case RobotGoToCharge.ROBCHAR_CHARGER_CHECKSTATUS:
-                        //     if(true == chargerCtrl.WaitState(ChargerState.ST_READY,TIME_OUT_WAIT_STATE)){
-                        //         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
-                        //     }
-                        //     break; //kiểm tra kết nối và trạng thái sạc
-                    // case RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER:
-                    //     rb.SendCmdLineDetectionCtrl (RequestCommandLineDetect.REQUEST_LINEDETECT_GETIN_CHARGER);
-                    //     StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE;
-                    //     break;
+                    // case RobotGoToCharge.ROBCHAR_CHARGER_CHECKSTATUS:
+                    //     if(true == chargerCtrl.WaitState(ChargerState.ST_READY,TIME_OUT_WAIT_STATE)){
+                    //         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
+                    //     }
+                    //     break; //kiểm tra kết nối và trạng thái sạc
+                    case RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER:
+                        Debug(this, "ROBCHAR_ROBOT_GOTO_CHARGER");
+                        robot.TurnOnSupervisorTraffic(false);
+                        rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_GETIN_CHARGER);
+                        //Thread.Sleep(1000);
+                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
+                        Debug(this, "ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT");
+                        break;
+                    case RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT:
+                        try
+                        {
+                            if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETIN_CHARGER)
+                            {
+                                rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_TURNOFF_PC);
+                                rb.Dispose();
+                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC;
+                                sw.Start();
+                                Debug(this, "ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC");
+                            }
+                            else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                            {
+                                errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
+                                CheckUserHandleError(this);
+                            }
+                        }
+                        catch (System.Exception)
+                        {
+                            errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
+                            CheckUserHandleError(this);
+                        }
+                        break; //cho phép cắt nguồn robot
+                    case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC:
+                        if (true != rb.properties.IsConnected)
+                        {
+                            Debug(this, "Sleep 30s waitting turnoff power");
+                            Thread.Sleep(30000);
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE;
+                            sw.Stop();
+                            Debug(this, "ROBCHAR_ROBOT_START_CHARGE");
+                        }
+                        else
+                        {
+                            if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_TURNOFF_PC)
+                            {
+                                sw.Stop();
+                                errorCode = ErrorCode.CAN_NOT_TURN_OFF_PC;
+                                CheckUserHandleError(this);
+                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
+                            }
+                        }
+                        break;
+
                     case RobotGoToCharge.ROBCHAR_ROBOT_START_CHARGE:
                         try {
-                            // if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETIN_CHARGER) {
-                                if (true == chargerCtrl.StartCharge ()) {
-                                    StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
-                                    Debug(this,"ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER"); 
-                                } else {
-                                    errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
-                                    CheckUserHandleError (this);
-                                }
-                            // } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
-                            //     errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
-                            //     CheckUserHandleError (this);
-                            // }
+                            if (true == chargerCtrl.StartCharge ()) {
+                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
+                                Debug(this,"ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER"); 
+                            } else {
+                                errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
+                                CheckUserHandleError (this);
+                            }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
                             CheckUserHandleError (this);
@@ -118,8 +163,8 @@ namespace SeldatMRMS {
                         try {
                             result = chargerCtrl.WaitState (ChargerState.ST_CHARGING, TIME_OUT_WAIT_STATE);
                             if (ErrorCodeCharger.TRUE == result) {
-                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
-                                Debug(this,"ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT"); 
+                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_CHARGEBATTERY;
+                                Debug(this, "ROBCHAR_WAITTING_CHARGEBATTERY"); 
                             } else {
                                 if (result == ErrorCodeCharger.ERROR_CONNECT) {
                                     errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
@@ -127,50 +172,63 @@ namespace SeldatMRMS {
                                     errorCode = ErrorCode.CONTACT_CHARGER_ERROR;
                                 }
                                 CheckUserHandleError (this);
+                                //StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
                             }
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CONNECT_CHARGER_ERROR;
                             CheckUserHandleError (this);
                         }
                         break; //robot tiep xuc tram sac        
-                    case RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT:
-                        rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_TURNOFF_PC);
-                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC;
-                        Debug(this,"ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC"); 
-                        sw.Start ();
-                        break; //cho phép cắt nguồn robot
-                    case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC:
-                        if (true != rb.properties.IsConnected) {
-                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_CHARGEBATTERY;
-                            Debug(this,"ROBCHAR_WAITTING_CHARGEBATTERY"); 
-                        } else {
-                            if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_TURNOFF_PC) {
-                                sw.Stop ();
-                                errorCode = ErrorCode.CAN_NOT_TURN_OFF_PC;
-                                CheckUserHandleError (this);
-                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
-                            }
-                        }
-                        break;
+                    //case RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT:
+                    //    rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_TURNOFF_PC);
+                    //    StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC;
+                    //    Debug(this,"ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC"); 
+                    //    sw.Start ();
+                    //    break; //cho phép cắt nguồn robot
+                    //case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC:
+                    //    if (true != rb.properties.IsConnected) {
+                    //        StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_CHARGEBATTERY;
+                    //        Debug(this,"ROBCHAR_WAITTING_CHARGEBATTERY"); 
+                    //    } else {
+                    //        if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_TURNOFF_PC) {
+                    //            sw.Stop ();
+                    //            errorCode = ErrorCode.CAN_NOT_TURN_OFF_PC;
+                    //            CheckUserHandleError (this);
+                    //            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
+                    //        }
+                    //    }
+                    //    break;
                     case RobotGoToCharge.ROBCHAR_WAITTING_CHARGEBATTERY:
 #if false  //for test
                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
 #else
 #if true
                         try {
-                            result = mcuCtrl.GetBatteryLevel (ref batLevel);
-                            if (ErrorCodeCharger.TRUE == result) {
-                                if (batLevel.data[0] == 100) {
-                                    StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
-                                    Debug(this,"ROBCHAR_FINISHED_CHARGEBATTERY"); 
+                            timeCountGetBatLevel++;
+                            if(timeCountGetBatLevel >= TIME_COUNT_GET_BAT_LEVEL)
+                            {
+                                timeCountGetBatLevel = 0;
+                                result = mcuCtrl.GetBatteryLevel(ref batLevel);
+                                Console.WriteLine("=================****+++++bat level {0}+++++++++++++++++++", batLevel.data[0]);
+                                if (ErrorCodeCharger.TRUE == result)
+                                {
+                                    if (batLevel.data[0] >= 100)
+                                    {
+                                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
+                                        Debug(this, "ROBCHAR_FINISHED_CHARGEBATTERY");
+                                    }
                                 }
-                            } else {
-                                if (result == ErrorCodeCharger.ERROR_CONNECT) {
-                                    errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
+                                else
+                                {
+                                    if (result == ErrorCodeCharger.ERROR_CONNECT)
+                                    {
+                                        errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
+                                    }
+                                    CheckUserHandleError(this);
                                 }
-                                CheckUserHandleError (this);
+                                rb.properties.BatteryLevelRb = (float)batLevel.data[0];
                             }
-                            rb.properties.BatteryLevelRb = (float) batLevel.data[0];
+                            
                         } catch (System.Exception) {
                             errorCode = ErrorCode.CONNECT_BOARD_CTRL_ROBOT_ERROR;
                             CheckUserHandleError (this);
@@ -215,8 +273,10 @@ namespace SeldatMRMS {
 
                         try {
                             if (true == mcuCtrl.TurnOnPcRobot ()) {
-                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER;
-                                Debug(this,"ROBCHAR_WAITTING_ROBOT_CONTACT_CHARGER"); 
+                                Thread.Sleep(10000);
+                                rb.Start(rb.properties.Url);
+                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING;
+                                Debug(this, "ROBCHAR_ROBOT_WAITTING_RECONNECTING"); 
                             } else {
                                 errorCode = ErrorCode.CAN_NOT_TURN_ON_PC;
                                 CheckUserHandleError (this);
@@ -228,25 +288,30 @@ namespace SeldatMRMS {
                         break; //Hoàn Thành charge battery và thông tin giao tiếp server và trạm sạc
                     case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_RECONNECTING:
                         if (true == CheckReconnectServer (TIME_OUT_ROBOT_RECONNECT_SERVER)) {
-                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
-                            Debug(this,"ROBCHAR_ROBOT_RELEASED"); 
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER;
+                            Debug(this, "ROBCHAR_ROBOT_GETOUT_CHARGER"); 
                         } else {
                             errorCode = ErrorCode.ROBOT_CANNOT_CONNECT_SERVER_AFTER_CHARGE;
                             CheckUserHandleError (this);
                         }
                         break; //Robot mở nguồng và đợi connect lại
-                    // case RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER:
-                    //     rb.SendCmdLineDetectionCtrl (RequestCommandLineDetect.REQUEST_LINEDETECT_GETOUT_CHARGER);
-                    //     StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER;
-                    //     break;
-                    // case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER:
-                    //     if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETOUT_CHARGER) {
-                    //         StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
-                    //     } else if (resCmd == ResponseCommand.RESPONSE_ERROR) {
-                    //         errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
-                    //         CheckUserHandleError (this);
-                    //     }
-                    //     break;
+                    case RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER:
+                        rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_GETOUT_CHARGER);
+                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER;
+                        Debug(this, "ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER");
+                        break;
+                    case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER:
+                        if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETOUT_CHARGER)
+                        {
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
+                            Debug(this, "ROBCHAR_ROBOT_RELEASED");
+                        }
+                        else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                        {
+                            errorCode = ErrorCode.DETECT_LINE_CHARGER_ERROR;
+                            CheckUserHandleError(this);
+                        }
+                        break;
                     case RobotGoToCharge.ROBCHAR_ROBOT_RELEASED:
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_CHARGE;
                         // if (errorCode == ErrorCode.RUN_OK) {

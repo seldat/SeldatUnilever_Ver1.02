@@ -24,6 +24,7 @@ namespace SeldatMRMS.Management.RobotManagent
     public class RobotManagementService
     {
         public const Int32 AmountofRobotUnity = 3;
+        private const Int32 BAT_LOW_LEVEL = 15;
         public class ResultRobotReady
         {
             public RobotUnity robot;
@@ -60,7 +61,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.ipMcuCtrl = "192.168.1.210";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 80;
-            prop1.BatteryLowLevel = 10;
+            prop1.BatteryLowLevel = BAT_LOW_LEVEL;
             prop1.RequestChargeBattery = false;
             prop1.Width = 1.8;
             prop1.Height = 2.5;
@@ -94,7 +95,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.ipMcuCtrl = "192.168.1.210";
             prop2.portMcuCtrl = 8081;
             prop2.DistInter = 80;
-            prop2.BatteryLowLevel = 10;
+            prop2.BatteryLowLevel = BAT_LOW_LEVEL;
             prop2.RequestChargeBattery = false;
             prop2.Width = 1.8;
             prop2.Height = 2.5;
@@ -126,7 +127,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.ipMcuCtrl = "192.168.1.210";
             prop3.portMcuCtrl = 8081;
             prop3.DistInter = 80;
-            prop3.BatteryLowLevel = 10;
+            prop3.BatteryLowLevel = BAT_LOW_LEVEL;
             prop3.RequestChargeBattery = false;
             prop3.Width = 1.8;
             prop3.Height = 2.5;
@@ -169,6 +170,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
         public void TestRobotReadyProceure()
         {
+//#if false
             PropertiesRobotUnity prop1 = new PropertiesRobotUnity();
             prop1.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop1.L1 = 4;
@@ -180,7 +182,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.ipMcuCtrl = "192.168.1.211";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 80;
-            prop1.BatteryLowLevel = 10;
+            prop1.BatteryLowLevel = BAT_LOW_LEVEL;
             prop1.RequestChargeBattery = false;
             prop1.Width = 1.8;
             prop1.Height = 2.5;
@@ -214,7 +216,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.ipMcuCtrl = "192.168.1.212";
             prop2.portMcuCtrl = 8081;
             prop2.DistInter = 80;
-            prop2.BatteryLowLevel = 10;
+            prop2.BatteryLowLevel = BAT_LOW_LEVEL;
             prop2.RequestChargeBattery = false;
             prop2.Width = 1.8;
             prop2.Height = 2.5;
@@ -234,6 +236,8 @@ namespace SeldatMRMS.Management.RobotManagent
 
             r2.TurnOnSupervisorTraffic(false);
 
+//#endif
+
             PropertiesRobotUnity prop3 = new PropertiesRobotUnity();
             prop3.NameId = "RSD" + RobotUnityRegistedList.Count;
             prop3.L1 = 4;
@@ -245,7 +249,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.ipMcuCtrl = "192.168.1.213";
             prop3.portMcuCtrl = 8081;
             prop3.DistInter = 80;
-            prop3.BatteryLowLevel = 10;
+            prop3.BatteryLowLevel = BAT_LOW_LEVEL;
             prop3.RequestChargeBattery = false;
             prop3.Width = 1.8;
             prop3.Height = 2.5;
@@ -268,14 +272,13 @@ namespace SeldatMRMS.Management.RobotManagent
               r2.properties.pose.Angle = -180;
               r2.properties.pose.AngleW = -180 * Math.PI / 180;*/
 
-           // r1.Registry(trafficManagementService);
+            r1.Registry(trafficManagementService);
             r2.Registry(trafficManagementService);
-            //r3.Registry(trafficManagementService);
+            r3.Registry(trafficManagementService);
 
-           // r1.RegisteRobotInAvailable(RobotUnityRegistedList);
-            r2.RegisteRobotInAvailable(RobotUnityRegistedList);
-            
-           // r3.RegisteRobotInAvailable(RobotUnityRegistedList);
+            //r2.RegisteRobotInAvailable(RobotUnityRegistedList);
+            //r1.RegisteRobotInAvailable(RobotUnityRegistedList);
+            r3.RegisteRobotInAvailable(RobotUnityRegistedList);
 
             r1.StartTraffic();
             r2.StartTraffic();
@@ -355,7 +358,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.ipMcuCtrl = "192.168.1.211";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 4;
-            prop1.BatteryLowLevel = 20;
+            prop1.BatteryLowLevel = BAT_LOW_LEVEL;
             prop1.RequestChargeBattery = false;
             prop1.Width = 1.8;
             prop1.Height = 2.5;
@@ -385,7 +388,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.ipMcuCtrl = "192.168.1.212";
             prop2.portMcuCtrl = 8081;
             prop2.DistInter = 40;
-            prop2.BatteryLowLevel = 20;
+            prop2.BatteryLowLevel = BAT_LOW_LEVEL;
             prop2.RequestChargeBattery = false;
             prop2.Width = 1.8;
             prop2.Height = 2.5;
@@ -414,7 +417,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.ipMcuCtrl = "192.168.1.213";
             prop3.portMcuCtrl = 8081;
             prop3.DistInter = 40;
-            prop3.BatteryLowLevel = 20;
+            prop3.BatteryLowLevel = BAT_LOW_LEVEL;
             prop3.RequestChargeBattery = false;
             prop3.Width = 1.8;
             prop3.Height = 2.5;

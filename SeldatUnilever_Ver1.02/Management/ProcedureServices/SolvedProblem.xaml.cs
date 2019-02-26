@@ -38,6 +38,10 @@ namespace SeldatMRMS
         {
             this.obj=obj;
         }
+        public void Dispose()
+        {
+            this.obj = null;
+        }
         public SolvedProblem(Object obj, string cultureName = null)
         {
             InitializeComponent();
@@ -198,8 +202,8 @@ namespace SeldatMRMS
                 proc.robot.properties.problemContent = new TextRange(problemInfo.Document.ContentStart, problemInfo.Document.ContentEnd).Text;
                 proc.robot.properties.solvedProblemContent = new TextRange(solvedProblemInfo.Document.ContentStart, solvedProblemInfo.Document.ContentEnd).Text;
                 proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
-                MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
-                MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
+               // MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+               // MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
                 proc.selectHandleError = shError;
@@ -214,8 +218,8 @@ namespace SeldatMRMS
                 proc.robot.properties.problemContent = new TextRange(problemInfo.Document.ContentStart, problemInfo.Document.ContentEnd).Text;
                 proc.robot.properties.solvedProblemContent = new TextRange(solvedProblemInfo.Document.ContentStart, solvedProblemInfo.Document.ContentEnd).Text;
                 proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
-                MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
-                MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
+              //  MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+             //   MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
                 proc.selectHandleError = shError;
@@ -230,8 +234,8 @@ namespace SeldatMRMS
                 proc.robot.properties.problemContent = new TextRange(problemInfo.Document.ContentStart, problemInfo.Document.ContentEnd).Text;
                 proc.robot.properties.solvedProblemContent = new TextRange(solvedProblemInfo.Document.ContentStart, solvedProblemInfo.Document.ContentEnd).Text;
                 proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
-                MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
-                MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
+             //   MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+             //   MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
                 proc.selectHandleError = shError;
@@ -246,8 +250,8 @@ namespace SeldatMRMS
                 proc.robot.properties.problemContent = new TextRange(problemInfo.Document.ContentStart, problemInfo.Document.ContentEnd).Text;
                 proc.robot.properties.solvedProblemContent = new TextRange(solvedProblemInfo.Document.ContentStart, solvedProblemInfo.Document.ContentEnd).Text;
                 proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
-                MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
-                MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
+             //   MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+            //    MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
                 proc.selectHandleError = shError;
@@ -263,8 +267,8 @@ namespace SeldatMRMS
                 proc.robot.properties.problemContent = new TextRange(problemInfo.Document.ContentStart, problemInfo.Document.ContentEnd).Text;
                 proc.robot.properties.solvedProblemContent = new TextRange(solvedProblemInfo.Document.ContentStart, solvedProblemInfo.Document.ContentEnd).Text;
                 proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
-                MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
-                MessageBox.Show(JsonConvert.SerializeObject(proc.readyChargerProcedureDB));
+            //    MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+             //   MessageBox.Show(JsonConvert.SerializeObject(proc.readyChargerProcedureDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpReadyChargerProcedureDB(proc.readyChargerProcedureDB);
                 proc.selectHandleError = shError;
@@ -279,8 +283,8 @@ namespace SeldatMRMS
                 proc.robot.properties.problemContent = new TextRange(problemInfo.Document.ContentStart, problemInfo.Document.ContentEnd).Text;
                 proc.robot.properties.solvedProblemContent = new TextRange(solvedProblemInfo.Document.ContentStart, solvedProblemInfo.Document.ContentEnd).Text;
                 proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
-                MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
-                MessageBox.Show(JsonConvert.SerializeObject(proc.readyChargerProcedureDB));
+             //   MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+            //    MessageBox.Show(JsonConvert.SerializeObject(proc.readyChargerProcedureDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpReadyChargerProcedureDB(proc.readyChargerProcedureDB);
                 proc.selectHandleError = shError;
@@ -299,6 +303,7 @@ namespace SeldatMRMS
          
             UpdateInformation(SelectHandleError.CASE_ERROR_EXIT);
             Hide();
+            Dispose();
         }
 
         private void contProcBtn_Click(object sender, RoutedEventArgs e)
@@ -306,6 +311,7 @@ namespace SeldatMRMS
       
             UpdateInformation(SelectHandleError.CASE_ERROR_CONTINUOUS);
             Hide();
+            Dispose();
         }
 
         private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

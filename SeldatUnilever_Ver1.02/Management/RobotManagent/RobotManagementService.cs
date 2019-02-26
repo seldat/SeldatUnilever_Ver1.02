@@ -268,13 +268,14 @@ namespace SeldatMRMS.Management.RobotManagent
               r2.properties.pose.Angle = -180;
               r2.properties.pose.AngleW = -180 * Math.PI / 180;*/
 
-            r1.Registry(trafficManagementService);
+           // r1.Registry(trafficManagementService);
             r2.Registry(trafficManagementService);
-            r3.Registry(trafficManagementService);
+            //r3.Registry(trafficManagementService);
 
+           // r1.RegisteRobotInAvailable(RobotUnityRegistedList);
             r2.RegisteRobotInAvailable(RobotUnityRegistedList);
-            r1.RegisteRobotInAvailable(RobotUnityRegistedList);
-            r3.RegisteRobotInAvailable(RobotUnityRegistedList);
+            
+           // r3.RegisteRobotInAvailable(RobotUnityRegistedList);
 
             r1.StartTraffic();
             r2.StartTraffic();
@@ -287,6 +288,60 @@ namespace SeldatMRMS.Management.RobotManagent
             // add robot trong traffic quản lý
             trafficManagementService.RegistryRobotList(RobotUnityRegistedList);
         }
+
+        public void robot2test()
+        {
+            PropertiesRobotUnity prop2 = new PropertiesRobotUnity();
+            prop2.NameId = "RSD" + RobotUnityRegistedList.Count;
+            prop2.L1 = 4;
+            prop2.L2 = 4;
+            prop2.WS = 5;
+            prop2.Label = "Robot2";
+            prop2.BatteryLevelRb = 40;
+            prop2.Url = "ws://192.168.1.182:9090";
+            prop2.ipMcuCtrl = "192.168.1.212";
+            prop2.portMcuCtrl = 8081;
+            prop2.DistInter = 60;
+            prop2.BatteryLowLevel = 10;
+            prop2.RequestChargeBattery = false;
+            prop2.Width = 1.8;
+            prop2.Height = 2.5;
+            prop2.Length = 2.2;
+            prop2.ChargeID = ChargerId.CHARGER_ID_2;
+            prop2.Scale = 10;
+            RobotUnity r2 = new RobotUnity();
+            r2.Initialize(this.canvas);
+            r2.UpdateProperties(prop2);
+            r2.ConnectionStatusHandler += ConnectionStatusHandler;
+            PropertiesRobotUnity_List.Add(r2.properties);
+            RobotUnityRegistedList.Add(r2.properties.NameId, r2);
+            r2.Start(prop2.Url);
+            // đăng ký robot list to many robot quan trong
+            // AddRobotUnityReadyList(r1);
+            AddRobotUnityReadyList(r2);
+
+            r2.TurnOnSupervisorTraffic(false);
+
+            
+            r2.Registry(trafficManagementService);
+            //r3.Registry(trafficManagementService);
+
+            // r1.RegisteRobotInAvailable(RobotUnityRegistedList);
+            r2.RegisteRobotInAvailable(RobotUnityRegistedList);
+
+            // r3.RegisteRobotInAvailable(RobotUnityRegistedList);
+
+            
+            r2.StartTraffic();
+    
+
+           
+            r2.PreProcedureAs = ProcedureControlAssign.PRO_READY;
+
+            // add robot trong traffic quản lý
+            trafficManagementService.RegistryRobotList(RobotUnityRegistedList);
+        }
+ 
         public void Initialize()
         {
             PropertiesRobotUnity prop1 = new PropertiesRobotUnity();

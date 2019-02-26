@@ -43,12 +43,12 @@ namespace SeldatMRMS.Management.RobotManagent
 
         public double DfL1 = 40;
         public double DfL2 = 40;
-        public double DfWS = 60;
+        public double DfWS = 50;
         public double DfDistanceInter = 40;
 
         public double DfL1Cv = 40;
         public double DfL2Cv = 40;
-        public double DfWSCv = 60;
+        public double DfWSCv = 50;//60
         public double DfDistInterCv = 40;
 
         public RobotUnityService()
@@ -239,7 +239,7 @@ namespace SeldatMRMS.Management.RobotManagent
             // Console.WriteLine("kHOAN CACH " + ExtensionService.CalDistance(properties.pose.Position, p));
             Point pp = Global_Object.CoorCanvas(properties.pose.Position);
             double ddd = ExtensionService.CalDistance(Global_Object.CoorCanvas(properties.pose.Position), p);
-            return ExtensionService.CalDistance(Global_Object.CoorCanvas( properties.pose.Position), p) < 60 ?true :false;
+            return ExtensionService.CalDistance(Global_Object.CoorCanvas( properties.pose.Position), p) < 40 ?true :false;
 
         }
         public bool FindHeaderIntersectsFullRiskArea(Point p)

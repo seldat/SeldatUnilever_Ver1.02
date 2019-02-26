@@ -133,7 +133,7 @@ namespace SeldatMRMS.Management
             bool iscloseDistance = false;
             foreach(RobotUnity r in RobotUnitylist)
             {
-                if (r.flagSupervisorTraffic)
+              //  if (r.flagSupervisorTraffic)
                 {
                     Point rP = MiddleHeaderCv();
                     // bool onFound = r.FindHeaderIsCloseRiskArea(this.properties.pose.Position);
@@ -142,7 +142,7 @@ namespace SeldatMRMS.Management
                     if (onFound)
                     {
                         // if robot in list is near but add in risk list robot
-                        //Console.WriteLine(r.properties.Label+ "- Intersection");
+                        Console.WriteLine(r.properties.Label+ "- Intersection");
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
                         if (!RobotUnityRiskList.ContainsKey(r.properties.NameId))
                         {

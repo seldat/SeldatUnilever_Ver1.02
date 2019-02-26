@@ -72,6 +72,7 @@ namespace SeldatMRMS.Management.RobotManagent
                         break;
                     else
                         webSocket=null;
+                    Thread.Sleep(4000);
                 }
                 
                

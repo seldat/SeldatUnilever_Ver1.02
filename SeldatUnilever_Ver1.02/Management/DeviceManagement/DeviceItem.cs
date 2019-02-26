@@ -284,8 +284,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         int bay = (int)stuffPallet["pallet"]["bay"];
                         int directMain = (int)stuffPallet["pallet"]["dir_main"];
                         int directSub = (int)stuffPallet["pallet"]["dir_sub"];
+                        int dir_out = (int)stuffPallet["pallet"]["dir_out"];
                         int line_ord = (int)stuffPallet["pallet"]["line_ord"];
-                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub ,line_ord=line_ord};
+                        
+                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub,directOut=dir_out ,line_ord=line_ord};
                         dynamic product = new JObject();
                         product.timeWorkId = order.timeWorkId;
                         product.activeDate = order.activeDate;

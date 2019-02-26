@@ -263,6 +263,14 @@ namespace SeldatMRMS.Management.RobotManagent {
                 //solvedProblem.Show();
             }
         }
+        public void DestroyRegistrySolvedForm()
+        {
+            //  if(obj.GetType()==typeof(ProcedureControlServices))
+            {
+                solvedProblem.Dispose();
+                //solvedProblem.Show();
+            }
+        }
         public void DisplaySolvedForm()
         {
             if (solvedProblem.obj != null)

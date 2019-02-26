@@ -382,14 +382,18 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                     }
                 }
             }
-            foreach (RobotUnity r in RobotUnityListOnTraffic) // xác định robot có trong khu vực
+            try
             {
-
-                if (ExtensionService.IsInPolygon(ZoneRegisterList[zoneName].GetZone(), r.properties.pose.Position))
+                foreach (RobotUnity r in RobotUnityListOnTraffic) // xác định robot có trong khu vực
                 {
-                    hasRobot = true;
+
+                    if (ExtensionService.IsInPolygon(ZoneRegisterList[zoneName].GetZone(), r.properties.pose.Position))
+                    {
+                        hasRobot = true;
+                    }
                 }
             }
+            catch { }
             return hasRobot;
         }
         public bool HasRobotUnityinArea(String AreaName)

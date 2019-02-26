@@ -74,7 +74,7 @@ namespace SeldatMRMS.Management
             // public Int32 palletId;
         }
         private List<RobotUnity> RobotUnitylist;
-        private bool flagSupervisorTraffic;
+        public bool flagSupervisorTraffic;
         private Dictionary<String,RobotUnity> RobotUnityRiskList=new Dictionary<string, RobotUnity>();
         private TrafficBehaviorState TrafficBehaviorStateTracking;
         private TrafficManagementService trafficManagementService;
@@ -133,26 +133,29 @@ namespace SeldatMRMS.Management
             bool iscloseDistance = false;
             foreach(RobotUnity r in RobotUnitylist)
             {
-                Point rP =MiddleHeaderCv();
-               // bool onFound = r.FindHeaderIsCloseRiskArea(this.properties.pose.Position);
-                bool onFound = r.FindHeaderIsCloseRiskAreaCv(rP);
-               
-                if (onFound)
+                if (r.flagSupervisorTraffic)
                 {
-                    // if robot in list is near but add in risk list robot
-                    //Console.WriteLine(r.properties.Label+ "- Intersection");
-                    SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
-                    if(!RobotUnityRiskList.ContainsKey(r.properties.NameId))
+                    Point rP = MiddleHeaderCv();
+                    // bool onFound = r.FindHeaderIsCloseRiskArea(this.properties.pose.Position);
+                    bool onFound = r.FindHeaderIsCloseRiskAreaCv(rP);
+
+                    if (onFound)
                     {
-                        RobotUnityRiskList.Add(r.properties.NameId,r);
+                        // if robot in list is near but add in risk list robot
+                        //Console.WriteLine(r.properties.Label+ "- Intersection");
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
+                        if (!RobotUnityRiskList.ContainsKey(r.properties.NameId))
+                        {
+                            RobotUnityRiskList.Add(r.properties.NameId, r);
+                        }
+                        // reduce speed robot control
+                        iscloseDistance = true;
                     }
-                    // reduce speed robot control
-                    iscloseDistance = true;
-                }
-                else
-                {
-                    // if robot in list is far but before registe in list, must remove in list
-                    RemoveRiskList(r.properties.NameId);
+                    else
+                    {
+                        // if robot in list is far but before registe in list, must remove in list
+                        RemoveRiskList(r.properties.NameId);
+                    }
                 }
             }
             return iscloseDistance;

@@ -177,7 +177,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.Label = "Robot1";
             prop1.BatteryLevelRb = 40;
             prop1.Url = "ws://192.168.1.181:9090";
-            prop1.ipMcuCtrl = "192.168.1.210";
+            prop1.ipMcuCtrl = "192.168.1.211";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 80;
             prop1.BatteryLowLevel = 10;
@@ -211,7 +211,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.Label = "Robot2";
             prop2.BatteryLevelRb = 40;
             prop2.Url = "ws://192.168.1.182:9090";
-            prop2.ipMcuCtrl = "192.168.1.211";
+            prop2.ipMcuCtrl = "192.168.1.212";
             prop2.portMcuCtrl = 8081;
             prop2.DistInter = 80;
             prop2.BatteryLowLevel = 10;
@@ -242,7 +242,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.Label = "Robot3";
             prop3.BatteryLevelRb = 40;
             prop3.Url = "ws://192.168.1.183:9090";
-            prop3.ipMcuCtrl = "192.168.1.212";
+            prop3.ipMcuCtrl = "192.168.1.213";
             prop3.portMcuCtrl = 8081;
             prop3.DistInter = 80;
             prop3.BatteryLowLevel = 10;
@@ -297,7 +297,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.Label = "Robot1";
             prop1.BatteryLevelRb = 40;
             prop1.Url = "ws://192.168.80.181:9090";
-            prop1.ipMcuCtrl = "192.168.1.210";
+            prop1.ipMcuCtrl = "192.168.1.211";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 4;
             prop1.BatteryLowLevel = 20;
@@ -327,7 +327,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.Label = "Robot2";
             prop2.BatteryLevelRb = 40;
             prop2.Url = "ws://192.168.1.182:9090";
-            prop2.ipMcuCtrl = "192.168.1.211";
+            prop2.ipMcuCtrl = "192.168.1.212";
             prop2.portMcuCtrl = 8081;
             prop2.DistInter = 40;
             prop2.BatteryLowLevel = 20;
@@ -356,7 +356,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.Label = "Robot3";
             prop3.BatteryLevelRb = 40;
             prop3.Url = "ws://192.168.1.183:9090";
-            prop3.ipMcuCtrl = "192.168.1.212";
+            prop3.ipMcuCtrl = "192.168.1.213";
             prop3.portMcuCtrl = 8081;
             prop3.DistInter = 40;
             prop3.BatteryLowLevel = 20;

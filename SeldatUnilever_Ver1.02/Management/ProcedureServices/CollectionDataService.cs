@@ -361,9 +361,10 @@ namespace SelDatUnilever_Ver1
                 int directSub = (int)stuff["pallet"]["dir_sub"];
                 int directOut = (int)stuff["pallet"]["dir_out"];
                 int line_ord = (int)stuff["pallet"]["line_ord"];
+                string hasSubLine= (string)stuff["pallet"]["hasSubLine"];
                 infoPallet.pallet = pisCtrl; /* dropdown */
                 infoPallet.bay = bay;
-                infoPallet.hasSubLine = "yes"; /* no */
+                infoPallet.hasSubLine = hasSubLine;
                 infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain; 
                 infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub;
                 infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;

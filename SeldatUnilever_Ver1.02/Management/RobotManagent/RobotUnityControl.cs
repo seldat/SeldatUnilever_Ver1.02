@@ -49,7 +49,7 @@ namespace SeldatMRMS.Management.RobotManagent
             ROBOT_SPEED_STOP = 0,
         }
         public bool getBattery () {
-            return false;// properties.RequestChargeBattery;
+            return properties.RequestChargeBattery;
         }
 
         public class PropertiesRobotUnity : NotifyUIBase
@@ -108,7 +108,7 @@ namespace SeldatMRMS.Management.RobotManagent
             REQUEST_LINEDETECT_PALLETUP = 1203,
             REQUEST_LINEDETECT_PALLETDOWN = 1204,
             REQUEST_LINEDETECT_GETIN_CHARGER = 1206,
-            // REQUEST_LINEDETECT_GETOUT_CHARGER = 1207,
+            REQUEST_LINEDETECT_GETOUT_CHARGER = 1207,
             REQUEST_LINEDETECT_READYAREA = 1208,
         }
 

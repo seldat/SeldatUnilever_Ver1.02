@@ -195,6 +195,10 @@ namespace SelDatUnilever_Ver1._00.Management.ChargerCtrl
                 if(!this.GetState(ref st)){
                     result = ErrorCodeCharger.ERROR_CONNECT;
                 }
+                if (st.data[0] == (byte)ChargerState.ST_ERROR) {
+                    return ErrorCodeCharger.FALSE;
+                }
+                Console.WriteLine("status++++++++++++++++++===+++++++++++++++++++++++++ :{0}", st.data[0]);
             } while (st.data[0] != (byte)status);
             sw.Stop();
             return result;

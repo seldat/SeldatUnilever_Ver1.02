@@ -6,7 +6,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
 {
     public class TranferData : RouterComPort
     {
-        private const UInt32 RESENT_MAX_TIME = 10;
+        private const UInt32 RESENT_MAX_TIME = 100;
         private UInt32 numResent = 0;
         private const byte ACK = 0;
         private const byte NACK = 1;
@@ -51,15 +51,29 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
             bool flagGetRespone = true;
             bool result = true;
 
-            this.StartClient(); // open socket
-
-            Console.WriteLine("len send {0}", dataSend.Length);
-            if(false == SendCMD(dataSend)){
-                this.Close();
-                return false;
-            }
+            //this.StartClient(); // open socket
+            numResent = 0;
+            //Console.WriteLine("len send {0}", dataSend.Length);
             while (true == flagGetRespone)
             {
+                if (numResent < RESENT_MAX_TIME)
+                {
+                    this.StartClient(); // open socket
+                    if (false == SendCMD(dataSend))
+                    {
+                        this.Close();
+                        return false;
+                    }
+                    numResent++;
+                    Console.WriteLine("Try resent {0}", numResent);
+                }
+                else
+                {
+                    Console.WriteLine("Send data fail");
+                    numResent = 0;
+                    result = false;
+                    flagGetRespone = false;
+                }
                 Console.WriteLine("Waitting response");
                 if (this.WaitForReadyRead(TIME_OUT_WAIT_RESPONSE))
                 {
@@ -68,7 +82,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                         Console.WriteLine("have data receive");
                         DataReceive dataRx = GetDataRec();
                         byte[] data = new byte[dataRx.length];
-                        Buffer.BlockCopy(dataRx.data,0,data,0,dataRx.length);
+                        Buffer.BlockCopy(dataRx.data, 0, data, 0, dataRx.length);
                         ResPacket resPaket = new ResPacket();
                         resPaket.header = (UInt16)((data[1] << 8) | data[0]);
                         resPaket.command = data[2];
@@ -76,7 +90,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                         resPaket.ack = data[5];
                         UInt16 len = (UInt16)(resPaket.length - 4);
                         resPaket.data = new byte[len];
-                        Buffer.BlockCopy(data,6,resPaket.data,0,len);
+                        Buffer.BlockCopy(data, 6, resPaket.data, 0, len);
                         if (resPaket.header == 0x55FA)
                         {
                             Console.WriteLine("check header ok");
@@ -85,7 +99,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                                 Console.WriteLine("calChecksum ok");
                                 if (resPaket.ack == ACK)
                                 {
-                                    if (resPaket.command == (byte)(dataSend[2]+1))
+                                    if (resPaket.command == (byte)(dataSend[2] + 1))
                                     {
                                         if (len > 1)
                                         {
@@ -102,29 +116,16 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
                                     }
                                 }
                             }
-                        }    
+                        }
                     }
                     catch (System.Exception)
                     {
-                        Thread.Sleep(2000);   
-                    }
-                    
-                }
-                if (numResent < RESENT_MAX_TIME)
-                {
-                    if(false == SendCMD(dataSend)){
                         this.Close();
-                        return false;
+                        Thread.Sleep(500);
                     }
-                    numResent++;
-                    Console.WriteLine("Try resent {0}", numResent);
                 }
-                else
-                {
-                    Console.WriteLine("Send data fail");
-                    numResent = 0;
-                    result = false;
-                    flagGetRespone = false;
+                else {
+                    this.Close();
                 }
             }
             this.Close();

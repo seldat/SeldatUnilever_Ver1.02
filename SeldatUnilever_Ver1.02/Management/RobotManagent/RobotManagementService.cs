@@ -249,7 +249,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop3.ipMcuCtrl = "192.168.1.213";
             prop3.portMcuCtrl = 8081;
             prop3.DistInter = 80;
-            prop3.BatteryLowLevel = 20;// BAT_LOW_LEVEL;
+            prop3.BatteryLowLevel = 81;// BAT_LOW_LEVEL;
             prop3.RequestChargeBattery = false;
             prop3.Width = 1.8;
             prop3.Height = 2.5;

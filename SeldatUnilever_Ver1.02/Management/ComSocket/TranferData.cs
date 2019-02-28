@@ -58,6 +58,7 @@ namespace SelDatUnilever_Ver1._00.Management.ComSocket
             {
                 if (numResent < RESENT_MAX_TIME)
                 {
+                    this.Close();
                     this.StartClient(); // open socket
                     if (false == SendCMD(dataSend))
                     {

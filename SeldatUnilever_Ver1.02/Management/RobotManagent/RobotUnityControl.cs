@@ -3,6 +3,7 @@ using SelDatUnilever_Ver1._00.Management;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using System;
 using System.ComponentModel;
+using System.Timers;
 using System.Windows;
 using WebSocketSharp;
 
@@ -17,6 +18,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public event Action<LaserWarningCode> AGVLaserWarningCallBack;
         public event Action<Pose, Object> PoseHandler;
         public event Action<Object, ConnectionStatus> ConnectionStatusHandler;
+        private Timer timerCheckKeepAlive;
 
         private const float delBatterry = 2;
         public class Pose
@@ -182,14 +184,25 @@ namespace SeldatMRMS.Management.RobotManagent
         protected virtual void SupervisorTraffic() { }
         public RobotUnityControl()
         {
+            timerCheckKeepAlive = new Timer();
+            timerCheckKeepAlive.Interval = 1000; /* 5s */
+            timerCheckKeepAlive.Elapsed += checkKeepAliveEvent;
+            timerCheckKeepAlive.AutoReset = true;
+            timerCheckKeepAlive.Enabled = true;
+        }
 
+        private void checkKeepAliveEvent(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            StandardInt32 msg = new StandardInt32();
+            msg.data = 1234;
+            this.Publish(paramsRosSocket.publication_checkAliveTimeOut, msg);
         }
         public void createRosTerms () {
             int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler);
             paramsRosSocket.publication_ctrlrobotdriving = this.Advertise ("/ctrlRobotDriving", "std_msgs/Int32");
             int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler);
             paramsRosSocket.publication_robotnavigation = this.Advertise ("/robot_navigation", "geometry_msgs/PoseStamped");
-            paramsRosSocket.publication_checkAliveTimeOut = this.Advertise ("/checkAliveTimeOut", "std_msgs/String");
+            paramsRosSocket.publication_checkAliveTimeOut = this.Advertise ("/checkAliveTimeOut", "std_msgs/Int32");
             paramsRosSocket.publication_linedetectionctrl = this.Advertise ("/linedetectionctrl", "std_msgs/Int32");
             paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet", "std_msgs/Int32");
             paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet", "std_msgs/String");

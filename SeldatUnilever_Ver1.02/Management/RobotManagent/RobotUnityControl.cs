@@ -44,8 +44,8 @@ namespace SeldatMRMS.Management.RobotManagent
             public double Angle { get; set; } // radian
         }
         public enum RobotSpeedLevel {
-            ROBOT_SPEED_NORMAL = 100,
-            ROBOT_SPEED_SLOW = 50,
+            ROBOT_SPEED_NORMAL = 2,
+            ROBOT_SPEED_SLOW = 1,
             ROBOT_SPEED_STOP = 0,
         }
         public bool getBattery () {

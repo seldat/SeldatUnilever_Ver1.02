@@ -336,6 +336,7 @@ namespace SelDatUnilever_Ver1
             infoPallet.dir_main = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directMain;
             infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directSub;
             infoPallet.dir_out= (TrafficRobotUnity.BrDirection)order.palletAtMachine.directOut;
+            infoPallet.line_ord = order.palletAtMachine.line_ord;
             infoPallet.row = order.palletAtMachine.row;
 
             return JsonConvert.SerializeObject(infoPallet);

@@ -303,7 +303,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.WS = 5;
             prop2.Label = "Robot2";
             prop2.BatteryLevelRb = 40;
-            prop2.Url = "ws://192.168.1.182:9090";
+            prop2.Url = "ws://192.168.1.181:9090";
             prop2.ipMcuCtrl = "192.168.1.212";
             prop2.portMcuCtrl = 8081;
             prop2.DistInter = 60;
@@ -312,7 +312,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop2.Width = 1.8;
             prop2.Height = 2.5;
             prop2.Length = 2.2;
-            prop2.ChargeID = ChargerId.CHARGER_ID_2;
+            prop2.ChargeID = ChargerId.CHARGER_ID_1;
             prop2.Scale = 10;
             RobotUnity r2 = new RobotUnity();
             r2.Initialize(this.canvas);

@@ -56,13 +56,20 @@ namespace SeldatMRMS.Management.RobotManagent {
         public Props props;
         public Border border;
         public LoadedConfigureInformation loadConfigureInformation;
+        public RobotManagementService robotService;
         public SolvedProblem solvedProblem;
         public Robot3D robot3DModel = null;
         public RobotUnity(){
             solvedProblem = new SolvedProblem();
 
         }
-
+        MenuItem problemSolutionItem = new MenuItem();
+        MenuItem startItem = new MenuItem();
+        MenuItem pauseItem = new MenuItem();
+        MenuItem connectItem = new MenuItem();
+        MenuItem disconnectItem = new MenuItem();
+        MenuItem addReadyListItem = new MenuItem();
+        MenuItem addWaitTaskListItem = new MenuItem();
         public void Initialize(Canvas canvas)
         {
             this.canvas = canvas;
@@ -78,72 +85,40 @@ namespace SeldatMRMS.Management.RobotManagent {
             props.isHovering = false;
             border.ContextMenu = new ContextMenu ();
             
-            MenuItem problemSolutionItem = new MenuItem();
+            
             problemSolutionItem.Header = "Problem Solution";
             problemSolutionItem.Click += PoblemSolutionItem;
             //===================================
-            MenuItem startItem = new MenuItem();
+           
             startItem.Header = "Start";
             startItem.Click += StartMenu;
             //===================================
-            MenuItem pauseItem = new MenuItem();
+           
             pauseItem.Header = "Pause";
             pauseItem.Click += PauseMenu;
+            pauseItem.IsEnabled = true;
 
-            MenuItem mainMenuWorkList = new MenuItem();
-            mainMenuWorkList.Header = "Registry WorkList";
+            addReadyListItem.Header = "Add Ready List";
+            addReadyListItem.Click += AddReadyListMenu;
+            addReadyListItem.IsEnabled = true;
 
-            MenuItem itemw0 = new MenuItem();
-            itemw0.Header = "Ready Area";
-            itemw0.IsCheckable = true;
-            itemw0.Checked += Itemw0_Checked;
-            mainMenuWorkList.Items.Add(itemw0);
-
-            MenuItem itemw1 = new MenuItem();
-            itemw1.Header = "Wait Task";
-            itemw1.Checked += Itemw0_Checked;
-            mainMenuWorkList.Items.Add(itemw1);
-
-            MenuItem mainMenuProc = new MenuItem();
-            mainMenuProc.Header = "Registry Procedure";
-
-            MenuItem item0 = new MenuItem();
-            item0.Header = "All";
-            mainMenuProc.Items.Add(item0);
-            item0.IsCheckable = true;
-            MenuItem item1 = new MenuItem();
-            item1.Header = "ForkLift To Buffer";
-            mainMenuProc.Items.Add(item1);
-            item0.IsCheckable = false;
-            MenuItem item2 = new MenuItem();
-            item2.Header = "Buffer To Machine";
-            mainMenuProc.Items.Add(item2);
-            MenuItem item3 = new MenuItem();
-            item3.Header = "Buffer To Return";
-            mainMenuProc.Items.Add(item3);
-            MenuItem item4 = new MenuItem();
-            item4.Header = "Return To Gate";
-            mainMenuProc.Items.Add(item4);
-
-
-
-
-
+            addWaitTaskListItem.Header = "Add WaitTask List";
+            addWaitTaskListItem.Click += AddReadyListMenu;
+            addWaitTaskListItem.IsEnabled = true;
 
 
             border.ContextMenu.Items.Add(problemSolutionItem);
             border.ContextMenu.Items.Add(startItem);
             border.ContextMenu.Items.Add(pauseItem);
-            border.ContextMenu.Items.Add(mainMenuWorkList);
-            border.ContextMenu.Items.Add(mainMenuProc);
-
-           //====================EVENT=====================
-           //MouseLeave += MouseLeavePath;
-           //MouseMove += MouseHoverPath;
-           //MouseLeftButtonDown += MouseLeftButtonDownPath;
-           //MouseRightButtonDown += MouseRightButtonDownPath;
-           //===================CREATE=====================
-           //Name = "Robotx" + Global_Mouse.EncodeTransmissionTimestamp();
+            border.ContextMenu.Items.Add(addReadyListItem);
+            border.ContextMenu.Items.Add(addWaitTaskListItem);
+            //====================EVENT=====================
+            //MouseLeave += MouseLeavePath;
+            //MouseMove += MouseHoverPath;
+            //MouseLeftButtonDown += MouseLeftButtonDownPath;
+            //MouseRightButtonDown += MouseRightButtonDownPath;
+            //===================CREATE=====================
+            //Name = "Robotx" + Global_Mouse.EncodeTransmissionTimestamp();
             props.mainGrid = new Grid ();
             props.statusGrid = new Grid ();
             props.statusBorder = new Border ();
@@ -263,6 +238,10 @@ namespace SeldatMRMS.Management.RobotManagent {
                 //solvedProblem.Show();
             }
         }
+        public void RegistryRobotService(RobotManagementService robotService)
+        {
+            this.robotService = robotService;
+        }
         public void DestroyRegistrySolvedForm()
         {
             //  if(obj.GetType()==typeof(ProcedureControlServices))
@@ -340,6 +319,20 @@ namespace SeldatMRMS.Management.RobotManagent {
         private void PauseMenu(object sender, RoutedEventArgs e)
         {
             SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+        }
+        private void AddReadyListMenu(object sender, RoutedEventArgs e)
+        {
+            DisposeProcedure();
+            robotService.RemoveRobotUnityReadyList(this.properties.NameId);
+            robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
+            robotService.AddRobotUnityReadyList(this);
+        }
+        private void AddWaitTaskListMenu(object sender, RoutedEventArgs e)
+        {
+            DisposeProcedure();
+            robotService.RemoveRobotUnityReadyList(this.properties.NameId);
+            robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
+            robotService.AddRobotUnityWaitTaskList(this);
         }
         private void StartMenu(object sender, RoutedEventArgs e)
         {

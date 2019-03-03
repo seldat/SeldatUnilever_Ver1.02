@@ -78,7 +78,8 @@ namespace SeldatMRMS.Management.RobotManagent
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
             AddRobotUnityWaitTaskList(r1);
-            
+            r1.RegistryRobotService(this);
+
             r1.TurnOnSupervisorTraffic(true);
         /*    r1.properties.pose.Position = new Point(-7.2,0.5);
             r1.properties.pose.Angle = -180;
@@ -112,7 +113,8 @@ namespace SeldatMRMS.Management.RobotManagent
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
             AddRobotUnityWaitTaskList(r2);
-          
+            r2.RegistryRobotService(this);
+
             r2.TurnOnSupervisorTraffic(true);
 
 
@@ -144,6 +146,7 @@ namespace SeldatMRMS.Management.RobotManagent
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
             AddRobotUnityWaitTaskList(r3);
+            r3.RegistryRobotService(this);
 
             r3.TurnOnSupervisorTraffic(true);
             /*  r2.properties.pose.Position = new Point(-14.2, -0.5);
@@ -195,10 +198,12 @@ namespace SeldatMRMS.Management.RobotManagent
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
+
             
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
             AddRobotUnityReadyList(r1);
+            r1.RegistryRobotService(this);
 
             r1.TurnOnSupervisorTraffic(false);
             /*    r1.properties.pose.Position = new Point(-7.2,0.5);
@@ -232,6 +237,7 @@ namespace SeldatMRMS.Management.RobotManagent
           //  r2.Start(prop2.Url);
             // đăng ký robot list to many robot quan trong
             AddRobotUnityReadyList(r2);
+            r2.RegistryRobotService(this);
 
             r2.TurnOnSupervisorTraffic(false);
 
@@ -265,6 +271,7 @@ namespace SeldatMRMS.Management.RobotManagent
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
             AddRobotUnityReadyList(r3);
+            r3.RegistryRobotService(this);
 
             r3.TurnOnSupervisorTraffic(false);
             /*  r2.properties.pose.Position = new Point(-14.2, -0.5);
@@ -333,6 +340,8 @@ namespace SeldatMRMS.Management.RobotManagent
 
             // r1.RegisteRobotInAvailable(RobotUnityRegistedList);
             r2.RegisteRobotInAvailable(RobotUnityRegistedList);
+
+            r2.RegistryRobotService(this);
 
             // r3.RegisteRobotInAvailable(RobotUnityRegistedList);
 

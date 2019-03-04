@@ -31,6 +31,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public object ProcedureControl;
         public ProcedureRegistryInRobotUnity proRegistryInRobot;
         public ProcedureControlAssign  PreProcedureAs;
+        public ProcedureControlAssign ProcedureRobotAssigned;
         public ProcedureControlAssign ProcedureAs;
         public bool SelectedATask { get; set; }
        
@@ -42,7 +43,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
         public void DisposeProcedure()
         {
-            switch(PreProcedureAs)
+            switch(ProcedureRobotAssigned)
             {
                 case ProcedureControlAssign.PRO_BUFFER_TO_MACHINE:
                     if (proRegistryInRobot.pBM != null)

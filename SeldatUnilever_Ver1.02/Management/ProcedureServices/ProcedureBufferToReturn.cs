@@ -268,6 +268,7 @@ namespace SeldatMRMS {
                         // }
                         ProRun = false;
                         Debug(this,"RELEASED");
+                        UpdateInformation(this);
                         break;
                     default:
                         break;

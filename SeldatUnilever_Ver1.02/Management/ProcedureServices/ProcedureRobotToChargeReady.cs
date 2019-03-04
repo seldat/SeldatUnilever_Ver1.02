@@ -320,7 +320,8 @@ namespace SeldatMRMS {
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
-                        Debug(this,"RELEASED"); 
+                        Debug(this,"RELEASED");
+                        UpdateInformation(this);
                         break; // trả robot về robotmanagement để nhận quy trình mới
                     default:
                         break;
@@ -440,7 +441,8 @@ namespace SeldatMRMS {
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
-                        Debug(this,"RELEASED"); 
+                        Debug(this,"RELEASED");
+                        UpdateInformation(this);
                         break;
                 }
                 Thread.Sleep (5);

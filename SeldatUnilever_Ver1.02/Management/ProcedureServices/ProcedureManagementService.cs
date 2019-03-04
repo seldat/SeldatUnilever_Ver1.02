@@ -133,6 +133,7 @@ namespace SeldatMRMS {
                 element.procedureDataItems.EndTime = DateTime.Now;
                 element.procedureDataItems.StatusProcedureDelivered = "OK";
                 RegisterProcedureItemList.Remove (element);
+                
             });
         }
 

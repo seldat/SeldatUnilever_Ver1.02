@@ -242,7 +242,8 @@ namespace SeldatMRMS {
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
-                        Debug(this,"RELEASED"); 
+                        Debug(this,"RELEASED");
+                        UpdateInformation(this);
                         break;
                     default:
                         break;

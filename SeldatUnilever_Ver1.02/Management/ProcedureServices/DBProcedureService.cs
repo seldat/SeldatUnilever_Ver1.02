@@ -173,7 +173,7 @@ namespace SeldatMRMS
                 // MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
-                proc.selectHandleError = shError;
+            //    proc.selectHandleError = shError;
 
 
             }
@@ -187,7 +187,7 @@ namespace SeldatMRMS
                 //   MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
-                proc.selectHandleError = shError;
+              //  proc.selectHandleError = shError;
 
 
             }
@@ -201,7 +201,7 @@ namespace SeldatMRMS
                 //   MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
-                proc.selectHandleError = shError;
+               // proc.selectHandleError = shError;
 
 
             }
@@ -215,7 +215,7 @@ namespace SeldatMRMS
                 //    MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
-                proc.selectHandleError = shError;
+            //    proc.selectHandleError = shError;
 
 
             }
@@ -230,7 +230,7 @@ namespace SeldatMRMS
                 //   MessageBox.Show(JsonConvert.SerializeObject(proc.readyChargerProcedureDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpReadyChargerProcedureDB(proc.readyChargerProcedureDB);
-                proc.selectHandleError = shError;
+              //  proc.selectHandleError = shError;
 
             }
             else if (obj.GetType() == typeof(ProcedureRobotToCharger))
@@ -244,7 +244,7 @@ namespace SeldatMRMS
                 //    MessageBox.Show(JsonConvert.SerializeObject(proc.readyChargerProcedureDB));
                 proc.SendHttpRobotTaskItem(proc.robotTaskDB);
                 proc.SendHttpReadyChargerProcedureDB(proc.readyChargerProcedureDB);
-                proc.selectHandleError = shError;
+              //  proc.selectHandleError = shError;
 
 
             }

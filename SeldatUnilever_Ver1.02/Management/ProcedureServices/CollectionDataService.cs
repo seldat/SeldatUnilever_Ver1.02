@@ -201,7 +201,7 @@ namespace SelDatUnilever_Ver1
                     poseTemp = new Pose(x, y, angle);
                 }
             }
-            Console.WriteLine(""+poseTemp.Position.ToString());
+          //  Console.WriteLine(""+poseTemp.Position.ToString());
             return poseTemp;
         }
 

@@ -102,7 +102,7 @@ namespace SeldatUnilever_Ver1._02
             InitializeComponent();
             ApplyLanguage();
             Loaded += MainWindow_Loaded;
-
+            Closed += MainWindow_Closed;
             canvasMatrixTransform = new MatrixTransform(1, 0, 0, -1, 0, 0);
 
             ImageBrush img = LoadImage("Map_aTan___Copy2");
@@ -118,6 +118,11 @@ namespace SeldatUnilever_Ver1._02
             //DataContext = this;
             //DataContext = new ViewModel();
 
+        }
+
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            Environment.Exit(Environment.ExitCode);
         }
 
         private void OnTimedRedrawStationEvent(object sender, ElapsedEventArgs e)

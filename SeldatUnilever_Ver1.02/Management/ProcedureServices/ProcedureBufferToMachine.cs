@@ -47,6 +47,7 @@ namespace SeldatMRMS {
             // StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
+            UpdateInformationInProc(this, ProcessStatus.F);
         }
         public void Procedure (object ojb) {
             ProcedureBufferToMachine BfToMa = (ProcedureBufferToMachine) ojb;
@@ -245,6 +246,7 @@ namespace SeldatMRMS {
                         // }
                         ProRun = false;
                         Debug(this,"RELEASED");
+                        UpdateInformationInProc(this, ProcessStatus.S);
                         break;
                     default:
                         break;

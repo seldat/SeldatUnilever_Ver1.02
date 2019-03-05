@@ -76,6 +76,7 @@ namespace SeldatMRMS {
             // StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
+            UpdateInformationInProc(this, ProcessStatus.F);
         }
         public void Procedure (object ojb) {
             ProcedureRobotToCharger RbToChar = (ProcedureRobotToCharger) ojb;
@@ -320,7 +321,8 @@ namespace SeldatMRMS {
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
-                        Debug(this,"RELEASED"); 
+                        Debug(this,"RELEASED");
+                        UpdateInformationInProc(this, ProcessStatus.S);
                         break; // trả robot về robotmanagement để nhận quy trình mới
                     default:
                         break;
@@ -387,6 +389,7 @@ namespace SeldatMRMS {
             // StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
+            UpdateInformationInProc(this, ProcessStatus.F);
         }
 
         public void Procedure (object ojb) {
@@ -440,7 +443,8 @@ namespace SeldatMRMS {
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
-                        Debug(this,"RELEASED"); 
+                        Debug(this,"RELEASED");
+                        UpdateInformationInProc(this, ProcessStatus.S);
                         break;
                 }
                 Thread.Sleep (5);

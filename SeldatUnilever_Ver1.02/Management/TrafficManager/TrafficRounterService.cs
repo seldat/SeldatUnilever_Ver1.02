@@ -36,7 +36,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
         public List<ZoneRegister> PropertiesTrafficZoneList;
         public ListCollectionView Grouped_PropertiesRiskZoneList { get; private set; }
         public List<RiskZoneRegister> PropertiesRiskZoneList;
-
+        public const int HasRobotUnityinAreaValue = 200;
         protected List<RobotUnity> RobotUnityListOnTraffic = new List<RobotUnity>();
         public class RiskZoneRegister : NotifyUIBase
         {
@@ -367,21 +367,16 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
             {
 
-                if (r.Index < 255)
+                if (r.Index < HasRobotUnityinAreaValue)
                 {
                     if (ExtensionService.IsInPolygon(r.GetZone(), goal))
                     {
                         zoneName = r.NameId;
-                        /* Console.WriteLine("vung getzone"+r.NameId);
-                         Console.WriteLine("Goal" + goal);
-                         Console.WriteLine("P1 " + r.Point1);
-                         Console.WriteLine("P2 " + r.Point2);
-                         Console.WriteLine("P3 " + r.Point3);
-                         Console.WriteLine("P4 " + r.Point4);*/
                         break;
                     }
                 }
             }
+           // MessageBox.Show(zoneName);
             try
             {
                 foreach (RobotUnity r in RobotUnityListOnTraffic) // xác định robot có trong khu vực

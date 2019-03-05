@@ -1,12 +1,15 @@
-﻿using SeldatMRMS;
+﻿using Newtonsoft.Json.Linq;
+using SeldatMRMS;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SelDatUnilever_Ver1._00.Communication.HttpBridge;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SelDatUnilever_Ver1._00.Management.UnityService
@@ -76,8 +79,122 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             if (deviceItemsList.Count > 0)
             {
                 item = deviceItemsList[0].GetOrder();
+                try
+                {
+                    if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
+                    {
+                        if (CheckAvailableFrontLineBuffer(item, false) != null)
+                        {
+                            return item;
+                        }
+                        else
+                            return null;
+                    }
+                    else if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_RETURN)
+                    {
+                        if (CheckAvailableFrontLineBuffer(item, false) != null) // check buffer
+                        {
+                            if (CheckAvailableFrontLineReturn(item) != null) // check return 
+                            {
+                                return item;
+                            }
+                            else
+                                return null;
+                        }
+                        else
+                            return null;
+                    }
+                    else if (item.typeReq == TyeRequest.TYPEREQUEST_MACHINE_TO_RETURN)
+                    {
+                        if (CheckAvailableFrontLineReturn(item) != null)
+                        {
+                            return item;
+                        }
+                        else
+                            return null;
+                    }
+                }
+                catch { }
             }
+
             return item;
+            
+        }
+        public Pose CheckAvailableFrontLineBuffer(OrderItem order, bool onPlandId = false)
+        {
+            Pose poseTemp = null;
+            String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+            if (collectionData.Length > 0)
+            {
+                JArray results = JArray.Parse(collectionData);
+                if (onPlandId)
+                {
+                    foreach (var result in results)
+                    {
+                        int temp_planId = (int)result["planId"];
+                        if (temp_planId == order.planId)
+                        {
+                            var bufferResults = result["buffers"][0];
+                            var palletInfo = bufferResults["pallets"][0];
+                            JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                            double x = (double)stuff["line"]["x"];
+                            double y = (double)stuff["line"]["y"];
+                            double angle = (double)stuff["line"]["angle"];
+                            poseTemp = new Pose(x, y, angle);
+                            break;
+
+                        }
+                    }
+                }
+                else
+                {
+                    var result = results[0];
+                    var bufferResults = result["buffers"][0];
+                    var palletInfo = bufferResults["pallets"][0];
+                    JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                    double x = (double)stuff["line"]["x"];
+                    double y = (double)stuff["line"]["y"];
+                    double angle = (double)stuff["line"]["angle"];
+                    poseTemp = new Pose(x, y, angle);
+                }
+            }
+            //  Console.WriteLine(""+poseTemp.Position.ToString());
+            return poseTemp;
+        }
+        public Pose CheckAvailableFrontLineReturn(OrderItem order)
+        {
+
+            Pose poseTemp = null;
+            dynamic product = new JObject();
+            product.palletStatus = order.palletStatus;
+            String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "buffer/getListBufferReturn");
+            if (collectionData.Length > 0)
+            {
+                JArray results = JArray.Parse(collectionData);
+                var result = results[0];
+                //   var bufferResults = result["buffers"][0];
+
+                var palletInfo = result["pallets"][0];
+                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                double x = (double)stuff["line"]["x"];
+                double y = (double)stuff["line"]["y"];
+                double angle = (double)stuff["line"]["angle"];
+                poseTemp = new Pose(x, y, angle);
+
+            }
+            return poseTemp;
+        }
+        public String RequestDataProcedure(String dataReq, String url)
+        {
+            //String url = Global_Object.url+"plan/getListPlanPallet";
+            BridgeClientRequest clientRequest = new BridgeClientRequest();
+            // String url = "http://localhost:8080";
+            var data = clientRequest.PostCallAPI(url, dataReq);
+            if (data.Result != null)
+            {
+                return data.Result;
+            }
+            return null;
         }
     }
 }

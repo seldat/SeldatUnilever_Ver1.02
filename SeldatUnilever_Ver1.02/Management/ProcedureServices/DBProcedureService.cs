@@ -160,6 +160,99 @@ namespace SeldatMRMS
                 rcEndDatetime = DateTime.Now.ToString("yy//MM/dd hh:mm tt");
                 robotChargeStatus=status;
             }
+           
+        }
+        public void UpdateInformationInProc(Object obj, ProcessStatus status)
+        {
+            try
+            {
+                if (obj.GetType() == typeof(ProcedureForkLiftToBuffer))
+                {
+                    var proc = obj as ProcedureForkLiftToBuffer;
+                    proc.procedureDataItemsDB.GetParams(status.ToString());
+                    // proc.robot.properties.detailInfo = new TextRange(detailInfo.Document.ContentStart, detailInfo.Document.ContentEnd).Text;
+                    proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
+                    // MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+                    // MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
+                    proc.SendHttpRobotTaskItem(proc.robotTaskDB);
+                    proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
+                    // proc.selectHandleError = shError;
+
+
+                }
+                else if (obj.GetType() == typeof(ProcedureBufferToMachine))
+                {
+                    var proc = obj as ProcedureBufferToMachine;
+                    proc.procedureDataItemsDB.GetParams(status.ToString());
+                    //proc.robot.properties.detailInfo = new TextRange(detailInfo.Document.ContentStart, detailInfo.Document.ContentEnd).Text;
+                    proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
+                    //  MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+                    //   MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
+                    proc.SendHttpRobotTaskItem(proc.robotTaskDB);
+                    proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
+                    //  proc.selectHandleError = shError;
+
+
+                }
+                else if (obj.GetType() == typeof(ProcedureMachineToReturn))
+                {
+                    var proc = obj as ProcedureMachineToReturn;
+                    proc.procedureDataItemsDB.GetParams(status.ToString());
+                    // proc.robot.properties.detailInfo = new TextRange(detailInfo.Document.ContentStart, detailInfo.Document.ContentEnd).Text;
+                    proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
+                    //   MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+                    //   MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
+                    proc.SendHttpRobotTaskItem(proc.robotTaskDB);
+                    proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
+                    // proc.selectHandleError = shError;
+
+
+                }
+                else if (obj.GetType() == typeof(ProcedureBufferToReturn))
+                {
+                    var proc = obj as ProcedureBufferToReturn;
+                    proc.procedureDataItemsDB.GetParams(status.ToString());
+                    //  proc.robot.properties.detailInfo = new TextRange(detailInfo.Document.ContentStart, detailInfo.Document.ContentEnd).Text;
+                    proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
+                    //   MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+                    //    MessageBox.Show(JsonConvert.SerializeObject(proc.procedureDataItemsDB));
+                    proc.SendHttpRobotTaskItem(proc.robotTaskDB);
+                    proc.SendHttpProcedureDataItem(proc.procedureDataItemsDB);
+
+
+
+                }
+                else if (obj.GetType() == typeof(ProcedureRobotToReady))
+                {
+                    var proc = obj as ProcedureRobotToReady;
+                    proc.readyChargerProcedureDB.Registry(proc.robotTaskDB.robotTaskId);
+                    proc.readyChargerProcedureDB.GetParams(status.ToString());
+                    //  proc.robot.properties.detailInfo = new TextRange(detailInfo.Document.ContentStart, detailInfo.Document.ContentEnd).Text;
+                    proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
+                    //    MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+                    //   MessageBox.Show(JsonConvert.SerializeObject(proc.readyChargerProcedureDB));
+                    proc.SendHttpRobotTaskItem(proc.robotTaskDB);
+                    proc.SendHttpReadyChargerProcedureDB(proc.readyChargerProcedureDB);
+
+
+                }
+                else if (obj.GetType() == typeof(ProcedureRobotToCharger))
+                {
+                    var proc = obj as ProcedureRobotToCharger;
+                    proc.readyChargerProcedureDB.Registry(proc.chargerCtrl, proc.robotTaskDB.robotTaskId);
+                    proc.readyChargerProcedureDB.GetParams(status.ToString());
+                    // proc.robot.properties.detailInfo = new TextRange(detailInfo.Document.ContentStart, detailInfo.Document.ContentEnd).Text;
+                    proc.robotTaskDB.procedureContent = JsonConvert.SerializeObject(proc.robot.properties).ToString();
+                    //   MessageBox.Show(JsonConvert.SerializeObject(proc.robotTaskDB));
+                    //    MessageBox.Show(JsonConvert.SerializeObject(proc.readyChargerProcedureDB));
+                    proc.SendHttpRobotTaskItem(proc.robotTaskDB);
+                    proc.SendHttpReadyChargerProcedureDB(proc.readyChargerProcedureDB);
+                    //proc.selectHandleError = shError;
+
+
+                }
+            }
+            catch { }
         }
     }
 }

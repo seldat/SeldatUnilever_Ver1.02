@@ -45,6 +45,7 @@ namespace SeldatMRMS {
             // StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
+            UpdateInformationInProc(this, ProcessStatus.F);
         }
         public void Procedure (object ojb) {
             ProcedureMachineToReturn BfToRe = (ProcedureMachineToReturn) ojb;
@@ -242,7 +243,8 @@ namespace SeldatMRMS {
                         //     ErrorProcedureHandler (this);
                         // }
                         ProRun = false;
-                        Debug(this,"RELEASED"); 
+                        Debug(this,"RELEASED");
+                        UpdateInformationInProc(this, ProcessStatus.S);
                         break;
                     default:
                         break;

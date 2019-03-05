@@ -182,8 +182,11 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 }
                                 else
                                 {
-                                MoveElementToEnd();
-                                processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_HAS_ANTASK;
+                                    MoveElementToEnd();
+                                    if (deviceItemsList.Count > 0)
+                                    {
+                                        processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_HAS_ANTASK;
+                                    }
                                 }
                             }
                             break;

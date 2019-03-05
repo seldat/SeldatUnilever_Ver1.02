@@ -238,7 +238,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                        // order.planId = (int)results["planId"];
                         order.deviceId = (int)results["deviceId"];
                         order.timeWorkId = 1;
-                        order.activeDate = (string)DateTime.Now.ToString("yyyy-MM-dd");
+                       // order.activeDate = (string)DateTime.Now.ToString("yyyy-MM-dd");
                         // order.palletStatus = (String)results["palletStatus"];
                         String jsonDPst = (string)results["datapallet"][i];
                         JObject stuffPallet = JObject.Parse(jsonDPst);

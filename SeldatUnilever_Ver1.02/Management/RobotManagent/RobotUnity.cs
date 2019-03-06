@@ -70,13 +70,14 @@ namespace SeldatMRMS.Management.RobotManagent {
         MenuItem disconnectItem = new MenuItem();
         MenuItem addReadyListItem = new MenuItem();
         MenuItem addWaitTaskListItem = new MenuItem();
+        MenuItem logOutItem = new MenuItem();
         public void Initialize(Canvas canvas)
         {
             this.canvas = canvas;
             //ModelVisual3D layer = new ModelVisual3D();
            // robot3DModel = new Robot3D(properties.NameId, layer);
             riskArea = new Path ();
-            riskArea.Stroke = new SolidColorBrush (Colors.OrangeRed);
+            riskArea.Stroke = new SolidColorBrush (Colors.MediumBlue);
             riskArea.StrokeThickness = 1;
             border = new Border ();
             border.ToolTip = "";
@@ -98,20 +99,27 @@ namespace SeldatMRMS.Management.RobotManagent {
             pauseItem.Click += PauseMenu;
             pauseItem.IsEnabled = true;
 
-            addReadyListItem.Header = "Add Ready List";
+            logOutItem.Header = "Log";
+            logOutItem.Click += LogOut;
+            logOutItem.IsEnabled = true;
+
+            addReadyListItem.Header = "Add To Ready Mode";
             addReadyListItem.Click += AddReadyListMenu;
             addReadyListItem.IsEnabled = true;
 
-            addWaitTaskListItem.Header = "Add WaitTask List";
-            addWaitTaskListItem.Click += AddReadyListMenu;
+            addWaitTaskListItem.Header = "Add To WaitTask Mode";
+            addWaitTaskListItem.Click += AddWaitTaskListMenu;
             addWaitTaskListItem.IsEnabled = true;
+
 
 
             border.ContextMenu.Items.Add(problemSolutionItem);
             border.ContextMenu.Items.Add(startItem);
             border.ContextMenu.Items.Add(pauseItem);
+            border.ContextMenu.Items.Add(logOutItem);
             border.ContextMenu.Items.Add(addReadyListItem);
             border.ContextMenu.Items.Add(addWaitTaskListItem);
+            
             //====================EVENT=====================
             //MouseLeave += MouseLeavePath;
             //MouseMove += MouseHoverPath;
@@ -321,19 +329,53 @@ namespace SeldatMRMS.Management.RobotManagent {
             SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
         }
         private void AddReadyListMenu(object sender, RoutedEventArgs e)
+        {        
+            string msgtext = "Hãy đảm bảo Robot đã được đưa về vị trí trạm Sạc, Quy trình trước đó sẽ được hủy !";
+            string txt = "Cảnh báo";
+            MessageBoxButton button = MessageBoxButton.OKCancel;
+            MessageBoxResult result = MessageBox.Show(msgtext, txt, button);
+            switch (result)
+            {
+                case MessageBoxResult.OK:
+                    DisposeProcedure();
+                    TurnOnSupervisorTraffic(false);
+                    robotService.RemoveRobotUnityReadyList(this.properties.NameId);
+                    robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
+                    robotService.AddRobotUnityReadyList(this);
+                    break;
+                case MessageBoxResult.Cancel:
+                    break;
+            }
+        }
+        public void LogOut(object sender, RoutedEventArgs e)
         {
-            DisposeProcedure();
-            TurnOnSupervisorTraffic(false);
-            robotService.RemoveRobotUnityReadyList(this.properties.NameId);
-            robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
-            robotService.AddRobotUnityReadyList(this);
+            robotLogOut.Show();
+        }
+        public void ShowText(String text)
+        {
+            robotLogOut.ShowText(this.properties.Label,text);
+           
         }
         private void AddWaitTaskListMenu(object sender, RoutedEventArgs e)
         {
-            DisposeProcedure();
-            robotService.RemoveRobotUnityReadyList(this.properties.NameId);
-            robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
-            robotService.AddRobotUnityWaitTaskList(this);
+
+
+            string msgtext = "Quy trình trước đó sẽ được hủy, Robot sẽ bắt đầu với quy trình mới !";
+            string txt = "Cảnh báo";
+            MessageBoxButton button = MessageBoxButton.OKCancel;
+            MessageBoxResult result = MessageBox.Show(msgtext, txt, button);
+            switch (result)
+            {
+                case MessageBoxResult.OK:
+                    DisposeProcedure();
+                    TurnOnSupervisorTraffic(true);
+                    robotService.RemoveRobotUnityReadyList(this.properties.NameId);
+                    robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
+                    robotService.AddRobotUnityWaitTaskList(this);
+                    break;
+                case MessageBoxResult.Cancel:
+                    break;
+            }
         }
         private void StartMenu(object sender, RoutedEventArgs e)
         {
@@ -348,45 +390,52 @@ namespace SeldatMRMS.Management.RobotManagent {
         }      
         public override void Draw () {
 
-
-            //Render Robot
-           this.border.Dispatcher.BeginInvoke(new System.Threading.ThreadStart(() =>
+           if (webSocket != null)
             {
-               
-                props.rbRotateTransform.Angle = -properties.pose.Angle;
-                Point cPoint = Global_Object.CoorCanvas(properties.pose.Position);
-                props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
-                props.rbTransformGroup.Children[1] = props.rbTranslate;
-                //Render Status
-                props.contentRotateTransform.Angle = (properties.pose.Angle);
-                props.contentTranslate = new TranslateTransform(0, 0);
-                props.contentTransformGroup.Children[1] = props.contentTranslate;
-               // headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X-5, MiddleHeader().Y-5);
-               // headerPoint.RenderTransform = new TranslateTransform(Global_Object.CoorCanvas(MiddleHeader()).X-5, Global_Object.CoorCanvas(MiddleHeader()).Y+0.5);
-                headerPoint.RenderTransform = new TranslateTransform(MiddleHeaderCv().X -2.5, MiddleHeaderCv().Y - 1);
+              if (webSocket.IsAlive)
+                {
 
-                PathGeometry pgeometry = new PathGeometry();
-                PathFigure pF = new PathFigure();
-               pF.StartPoint = TopHeaderCv();
+                    //Render Robot
+                    this.border.Dispatcher.BeginInvoke(new System.Threading.ThreadStart(() =>
+                     {
 
-               // pF.StartPoint = new Point(TopHeader().X * 10, TopHeader().Y * 10);
-                LineSegment pp = new LineSegment();
+                         props.rbRotateTransform.Angle = -properties.pose.Angle;
+                         Point cPoint = Global_Object.CoorCanvas(properties.pose.Position);
+                         props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
+                         props.rbTransformGroup.Children[1] = props.rbTranslate;
+                     //Render Status
+                     props.contentRotateTransform.Angle = (properties.pose.Angle);
+                         props.contentTranslate = new TranslateTransform(0, 0);
+                         props.contentTransformGroup.Children[1] = props.contentTranslate;
+                     // headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X-5, MiddleHeader().Y-5);
+                     // headerPoint.RenderTransform = new TranslateTransform(Global_Object.CoorCanvas(MiddleHeader()).X-5, Global_Object.CoorCanvas(MiddleHeader()).Y+0.5);
+                     headerPoint.RenderTransform = new TranslateTransform(MiddleHeaderCv().X - 2.5, MiddleHeaderCv().Y - 1);
 
-                 pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv()});
-                pF.Segments.Add(new LineSegment() { Point = BottomTailCv() });
-                pF.Segments.Add(new LineSegment() { Point = TopTailCv() });
-                pF.Segments.Add(new LineSegment() { Point = TopHeaderCv() });
-            // pF.Segments.Add(new LineSegment() { Point = new Point(BottomHeader().X*10, BottomHeader().Y * 10) });
-                //pF.Segments.Add(new LineSegment() { Point = new Point(BottomTail().X * 10, BottomTail().Y * 10) });
-              //  pF.Segments.Add(new LineSegment() { Point = new Point(TopTail().X * 10, TopTail().Y * 10) });
-                //pF.Segments.Add(new LineSegment() { Point = new Point(TopHeader().X * 10, TopHeader().Y * 10) });
-                pgeometry.Figures.Add(pF);
-                riskArea.Data = pgeometry;
+                         PathGeometry pgeometry = new PathGeometry();
+                         PathFigure pF = new PathFigure();
+                         pF.StartPoint = TopHeaderCv();
 
-                props.rbID.Content = properties.pose.Position.X.ToString("0");
-                props.rbTask.Content = properties.pose.Position.Y.ToString("0");
+                     // pF.StartPoint = new Point(TopHeader().X * 10, TopHeader().Y * 10);
+                     LineSegment pp = new LineSegment();
 
-            }));
+                         pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv() });
+                         pF.Segments.Add(new LineSegment() { Point = BottomTailCv() });
+                         pF.Segments.Add(new LineSegment() { Point = TopTailCv() });
+                         pF.Segments.Add(new LineSegment() { Point = TopHeaderCv() });
+                     // pF.Segments.Add(new LineSegment() { Point = new Point(BottomHeader().X*10, BottomHeader().Y * 10) });
+                     //pF.Segments.Add(new LineSegment() { Point = new Point(BottomTail().X * 10, BottomTail().Y * 10) });
+                     //  pF.Segments.Add(new LineSegment() { Point = new Point(TopTail().X * 10, TopTail().Y * 10) });
+                     //pF.Segments.Add(new LineSegment() { Point = new Point(TopHeader().X * 10, TopHeader().Y * 10) });
+                     pgeometry.Figures.Add(pF);
+                         riskArea.Data = pgeometry;
+
+                         props.rbID.Content = properties.pose.Position.X.ToString("0");
+                         props.rbTask.Content = properties.pose.Position.Y.ToString("0");
+
+
+                     }));
+                }
+            }
 
         }
 

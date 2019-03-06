@@ -70,7 +70,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     case ProcessAssignAnTaskWait.PROC_ANY_IDLE:
                         break;
                     case ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST:
-
                         ResultRobotReady result = robotManageService.GetRobotUnityWaitTaskItem0();
                         if (result != null)
                         {
@@ -170,6 +169,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         case ProcessAssignTaskReady.PROC_READY_IDLE:
                             break;
                         case ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST:
+
 
                             ResultRobotReady result = robotManageService.GetRobotUnityReadyItem0();
                             if(result!=null)

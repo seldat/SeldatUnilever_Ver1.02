@@ -278,6 +278,9 @@
       <DependentUpon>ConfigureRobotUnity.xaml</DependentUpon>
     </Compile>
     <Compile Include="Management\RobotManagent\RobotBaseService.cs" />
+    <Compile Include="Management\RobotManagent\RobotLogOut.xaml.cs">
+      <DependentUpon>RobotLogOut.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Management\RobotManagent\RobotManagementService.cs" />
     <Compile Include="Management\RobotManagent\RobotUnity.cs" />
     <Compile Include="Management\RobotManagent\RobotUnityControl.cs" />
@@ -421,6 +424,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Management\RobotManagent\ConfigureRobotUnity.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\RobotManagent\RobotLogOut.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

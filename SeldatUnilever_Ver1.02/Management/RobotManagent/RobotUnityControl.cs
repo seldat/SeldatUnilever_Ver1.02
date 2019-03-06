@@ -1,4 +1,5 @@
 ﻿using SeldatMRMS.Communication;
+using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using SelDatUnilever_Ver1._00.Management;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using System;
@@ -19,7 +20,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public event Action<Pose, Object> PoseHandler;
         public event Action<Object, ConnectionStatus> ConnectionStatusHandler;
         private Timer timerCheckKeepAlive;
-
+        public RobotLogOut robotLogOut;
         private const float delBatterry = 2;
         public class Pose
         {
@@ -189,6 +190,7 @@ namespace SeldatMRMS.Management.RobotManagent
             timerCheckKeepAlive.Elapsed += checkKeepAliveEvent;
             timerCheckKeepAlive.AutoReset = true;
             timerCheckKeepAlive.Enabled = true;
+            robotLogOut = new RobotLogOut(this.properties.Label);
         }
 
         private void checkKeepAliveEvent(Object source, System.Timers.ElapsedEventArgs e)
@@ -209,8 +211,8 @@ namespace SeldatMRMS.Management.RobotManagent
             float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
             int subscription_AGV_LaserError = this.Subscribe ("/AGV_LaserError", "std_msgs/String", AGVLaserErrorHandler);
             int subscription_AGV_LaserWarning = this.Subscribe ("/AGV_LaserWarning", "std_msgs/String", AGVLaserWarningHandler);
-            /*of chau test*/
-          //  paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
+
+            //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
             //paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
          //   paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
           //  paramsRosSocket.publication_TestLaserWarning = this.Advertise ("/AGV_LaserWarning", "std_msgs/String");
@@ -243,13 +245,14 @@ namespace SeldatMRMS.Management.RobotManagent
             Draw ();
             TrafficUpdate();
 
-
         }
         private void FinishedStatesHandler (Communication.Message message) {
             try
             {
                 StandardInt32 standard = (StandardInt32)message;
+                robotLogOut.ShowText(this.properties.Label,"Finished State [" + standard.data + "]");
                 FinishStatesCallBack(standard.data);
+               
             }
             catch { }
 
@@ -358,6 +361,7 @@ namespace SeldatMRMS.Management.RobotManagent
             data.pose.orientation.z = (float) Math.Sin (theta / 2);
             data.pose.orientation.w = (float) Math.Cos (theta / 2);
             this.Publish (paramsRosSocket.publication_robotnavigation, data);
+            robotLogOut.ShowText(this.properties.Label,"Send Pose => "+ data.ToString());
         }
         public void SetSpeed (RobotSpeedLevel robotspeed) {
             StandardInt32 msg = new StandardInt32 ();
@@ -369,23 +373,27 @@ namespace SeldatMRMS.Management.RobotManagent
             StandardInt32 msg = new StandardInt32 ();
             msg.data = Convert.ToInt32 (cmd);
             this.Publish (paramsRosSocket.publication_linedetectionctrl, msg);
+            robotLogOut.ShowText(this.properties.Label, "SendCmdLineDetectionCtrl => " + msg.data);
         }
 
         public void SendCmdPosPallet (RequestCommandPosPallet cmd) {
             StandardInt32 msg = new StandardInt32 ();
             msg.data = Convert.ToInt32 (cmd);
             this.Publish (paramsRosSocket.publication_postPallet, msg);
+            robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
         }
         public void SendCmdAreaPallet (String cmd) {
             StandardString msg = new StandardString ();
             msg.data = cmd;
             Console.WriteLine(cmd);
             this.Publish (paramsRosSocket.publication_cmdAreaPallet, msg);
+            robotLogOut.ShowText(this.properties.Label, "SendCmdAreaPallet => " + msg.data);
         }
 
         protected override void OnOpenedEvent () {
             properties.IsConnected = true;
-            Console.WriteLine ("connected Robot");
+           
+            robotLogOut.ShowText(this.properties.Label, properties.Label +" Connected to Ros Master");
             createRosTerms ();
             
             //   ConnectionStatusHandler(this, ConnectionStatus.CON_OK);
@@ -393,6 +401,8 @@ namespace SeldatMRMS.Management.RobotManagent
 
         protected override void OnClosedEvent (object sender, CloseEventArgs e) {
             //ConnectionStatusHandler(this, ConnectionStatus.CON_FAILED);
+            robotLogOut.ShowText(this.properties.Label, properties.Label + " Disconnected to Ros Master");
+            robotLogOut.ShowText(this.properties.Label, properties.Label + " Reconnecting...");
             properties.IsConnected = false;
             this.url = properties.URL;
             base.OnClosedEvent (sender, e);

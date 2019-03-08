@@ -2,7 +2,7 @@
 using SeldatMRMS;
 using SeldatMRMS.Management.DoorServices;
 using SelDatUnilever_Ver1._00.Communication.HttpBridge;
-using System;
+using System; 
 using System.Collections.Generic;
 using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
@@ -12,13 +12,18 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 {
     public class DeviceItem : NotifyUIBase
     {
-        public enum StatusOrderCode
+        public enum StatusOrderResponseCode
         {
-            ORDER_STATUS_SUCCESS=200,
-            ORDER_STATUS_ERROR_DATA = 201,
-            ORDER_STATUS_NOACCEPTED = 202
+            ORDER_STATUS_RESPONSE_SUCCESS=200,
+            ORDER_STATUS_RESPONSE_ERROR_DATA = 201,
+            ORDER_STATUS_RESPONSE_NOACCEPTED = 202,
+            ORDER_WAITING=300,
+            ORDER_DELIVERING = 301,
+            ORDER_FINISH = 302,
+
 
         }
+
         public class StatusOrderResponse
         {
             public int status;
@@ -75,6 +80,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public String productDetailName { get; set; }
             public int productId { get; set; }
             public int productDetailId { get; set; }
+            public StatusOrderResponse status { get; set; }
 
             public TyeRequest typeReq { get; set; } // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
             public String activeDate { get; set; }
@@ -84,15 +90,17 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public int updUsrId;
             public int lengthPallet;
             public String dataRequest;
-            public bool status = false; // chua hoan thanh
+           // public bool status = false; // chua hoan thanh
             public DataPallet palletAtMachine;
             public String userName;
             public int bufferId;
             public int palletAmount;
+            
         }
         public string userName { get; set; } // dia chi Emei
         public string codeID;
         public List<OrderItem> oneOrderList { get; set; }
+        public List<OrderItem> OrderedItemList { get; set; }
         public int orderedAmount = 0;
         public int doneAmount = 0;
 
@@ -111,6 +119,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 case CommandRequest.CMD_DATA_STATE:
                     break;
             }
+        }
+        public void StatusOrderItem(OrderItem item, StatusOrderResponse statusOrderResponse)
+        {
+
         }
         public void RemoveFirstOrder()
         {
@@ -177,7 +189,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                     else
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_NOACCEPTED, ErrorMessage = "" };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, ErrorMessage = "" };
                         return statusOrderResponse;
                     }
                 }
@@ -205,7 +217,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                     else if (cntOrderReg >= palletAmountInBuffer) // số lượng yêu cầu trước đó bằng hoặc hơn số lượng yêu cầu hiện tại. không duoc phép đưa vào thêm
                     {
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_NOACCEPTED, ErrorMessage = "" };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, ErrorMessage = "" };
                         return statusOrderResponse;
                     }
                     else if (cntOrderReg < palletAmountInBuffer) // số lượng yêu cầu hiện tại nhỏ hơn thì phải tính lại số lượng để bổ sung vào thêm
@@ -336,7 +348,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     catch(Exception e)
                     {
                         Console.WriteLine("control door failed");
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_ERROR_DATA, ErrorMessage = e.Message };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
                         return statusOrderResponse;
                     }
                 }
@@ -350,15 +362,15 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     catch(Exception e)
                     {
                         Console.WriteLine("control door failed");
-                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_ERROR_DATA, ErrorMessage = e.Message };
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
                         return statusOrderResponse;
                     }
                 }
-                statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_SUCCESS, ErrorMessage = "" };
+                statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_SUCCESS, ErrorMessage = "" };
             }
             catch(Exception e)
             {
-                statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderCode.ORDER_STATUS_ERROR_DATA, ErrorMessage = e.Message };
+                statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
                 return statusOrderResponse;
             }
             return statusOrderResponse;

@@ -118,7 +118,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -129,7 +130,7 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try
                         {
-                            if (false == Traffic.HasRobotUnityinArea(BfToMa.GetFrontLineBuffer().Position))
+                            if (false == Traffic.HasRobotUnityinArea(BfToMa.GetAnyPointInBuffer().Position))
                             {
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped(BfToMa.GetFrontLineBuffer());
@@ -146,7 +147,7 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         try
                         {
-                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -231,7 +232,7 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET:
                         try
                         {
-                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_DOWN));

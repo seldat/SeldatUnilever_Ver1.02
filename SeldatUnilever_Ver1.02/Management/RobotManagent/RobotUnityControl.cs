@@ -1,4 +1,5 @@
-﻿using SeldatMRMS.Communication;
+﻿using Newtonsoft.Json;
+using SeldatMRMS.Communication;
 using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using SelDatUnilever_Ver1._00.Management;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
@@ -43,6 +44,9 @@ namespace SeldatMRMS.Management.RobotManagent
                 //this.AngleW = 0;
             }
             public Point Position { get; set; }
+            public double Vx { get; set; }
+            public double Vy { get; set; }
+            public double Vw { get; set; }
             public double AngleW { get; set; } // radian
             public double Angle { get; set; } // radian
         }
@@ -104,6 +108,13 @@ namespace SeldatMRMS.Management.RobotManagent
             private int _portMcuCtrl;
             public int portMcuCtrl{ get => _portMcuCtrl; set {_portMcuCtrl = value; RaisePropertyChanged("PortMCU"); } }
             public double speedInSpecicalArea =(double) RobotSpeedLevel.ROBOT_SPEED_NORMAL;
+            public double errorVx=0.0001;
+            public double errorVy=0.0001;
+		    public double errorW=0.0001;
+		    public double errorDx=0.5;
+		    public double errorDy=0.5;
+            public Point goalPoint;
+
         }
 
         public enum RequestCommandLineDetect {
@@ -211,11 +222,12 @@ namespace SeldatMRMS.Management.RobotManagent
             float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
             int subscription_AGV_LaserError = this.Subscribe ("/AGV_LaserError", "std_msgs/String", AGVLaserErrorHandler);
             int subscription_AGV_LaserWarning = this.Subscribe ("/AGV_LaserWarning", "std_msgs/String", AGVLaserWarningHandler);
+            int subscription_Odom= this.Subscribe("/odom", "nav_msgs/Odometry", OdometryCallback, 100);
 
             //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
             //paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
-         //   paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
-          //  paramsRosSocket.publication_TestLaserWarning = this.Advertise ("/AGV_LaserWarning", "std_msgs/String");
+            //   paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
+            //  paramsRosSocket.publication_TestLaserWarning = this.Advertise ("/AGV_LaserWarning", "std_msgs/String");
         }
 
         private void BatteryVolHandler (Communication.Message message) {
@@ -255,6 +267,14 @@ namespace SeldatMRMS.Management.RobotManagent
                
             }
             catch { }
+
+        }
+        private void OdometryCallback(Communication.Message message)
+        {
+            NavigationOdometry standard = (NavigationOdometry)message;
+            properties.pose.Vx = standard.twist.twist.linear.x;
+            properties.pose.Vy = standard.twist.twist.linear.y;
+            properties.pose.Vw = standard.twist.twist.angular.z;
 
         }
         private void AGVLaserErrorHandler (Communication.Message message) {
@@ -361,7 +381,9 @@ namespace SeldatMRMS.Management.RobotManagent
             data.pose.orientation.z = (float) Math.Sin (theta / 2);
             data.pose.orientation.w = (float) Math.Cos (theta / 2);
             this.Publish (paramsRosSocket.publication_robotnavigation, data);
-            robotLogOut.ShowText(this.properties.Label,"Send Pose => "+ data.ToString());
+            robotLogOut.ShowText(this.properties.Label,"Send Pose => "+ JsonConvert.SerializeObject(data).ToString());
+            // lưu vị trí đích đến
+            properties.goalPoint = new Point(data.pose.position.x, data.pose.position.y);
         }
         public void SetSpeed (RobotSpeedLevel robotspeed) {
             StandardInt32 msg = new StandardInt32 ();
@@ -381,6 +403,16 @@ namespace SeldatMRMS.Management.RobotManagent
             msg.data = Convert.ToInt32 (cmd);
             this.Publish (paramsRosSocket.publication_postPallet, msg);
             robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
+        }
+        public bool ReachedGoal()
+        {
+           double _currentgoal_Ex = Math.Abs(Math.Abs(properties.pose.Position.X) - Math.Abs(properties.goalPoint.X));
+           double _currentgoal_Ey = Math.Abs(Math.Abs(properties.pose.Position.Y) - Math.Abs(properties.goalPoint.Y));
+            if (Math.Abs(properties.pose.Vx) < properties.errorVx && Math.Abs(properties.pose.Vy) < properties.errorVy && Math.Abs(properties.pose.Vw) < properties.errorW && _currentgoal_Ex<= properties.errorDx && _currentgoal_Ey<= properties.errorDy)
+            {
+                return true;
+            }
+            return false;
         }
         public void SendCmdAreaPallet (String cmd) {
             StandardString msg = new StandardString ();

@@ -342,6 +342,7 @@ namespace SeldatMRMS.Management.RobotManagent {
                     robotService.RemoveRobotUnityReadyList(this.properties.NameId);
                     robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
                     robotService.AddRobotUnityReadyList(this);
+                    Draw();
                     break;
                 case MessageBoxResult.Cancel:
                     break;
@@ -372,6 +373,7 @@ namespace SeldatMRMS.Management.RobotManagent {
                     robotService.RemoveRobotUnityReadyList(this.properties.NameId);
                     robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
                     robotService.AddRobotUnityWaitTaskList(this);
+                    Draw();
                     break;
                 case MessageBoxResult.Cancel:
                     break;

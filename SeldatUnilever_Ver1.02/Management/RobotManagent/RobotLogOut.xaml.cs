@@ -19,6 +19,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
     /// </summary>
     public partial class RobotLogOut : Window
     {
+        String title;
         public RobotLogOut(String name)
         {
             InitializeComponent();
@@ -33,8 +34,9 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                     Dispatcher.Invoke(() =>
                     {
                         this.Title = src;
+                        title = src;
                         txt_logout.AppendText(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + ": " + txt + Environment.NewLine);
-                        
+                        txt_logout.ScrollToEnd();
                     });
                 }
                 catch { }
@@ -49,7 +51,9 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                     Dispatcher.Invoke(() =>
                     {
                         txt_logout_traffic.AppendText(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + ": " + txt + Environment.NewLine);
-
+                     
+                        // scroll it automatically
+                        txt_logout_traffic.ScrollToEnd();
                     });
                 }
                 catch { }
@@ -79,6 +83,16 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         private void Btn_clear_Click(object sender, RoutedEventArgs e)
         {
             Clear();
+        }
+
+        private void Btn_save_Click(object sender, RoutedEventArgs e)
+        {
+            String procedureStr = new TextRange(txt_logout.Document.ContentStart, txt_logout.Document.ContentEnd).Text;
+            String trafficStr = new TextRange(txt_logout.Document.ContentStart, txt_logout.Document.ContentEnd).Text;
+            String pathpcd = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), title+"_LogOutProcedure");
+            System.IO.File.WriteAllText(pathpcd, procedureStr);
+            String pathtrf = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), title+"_LogOutTraffic");
+            System.IO.File.WriteAllText(pathtrf, trafficStr);
         }
     }
 }

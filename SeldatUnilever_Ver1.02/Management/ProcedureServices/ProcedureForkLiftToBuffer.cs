@@ -140,7 +140,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -161,7 +161,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_GATE:
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -265,7 +265,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -294,7 +294,7 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         try
                         {
-                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.SendCmdAreaPallet(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true));

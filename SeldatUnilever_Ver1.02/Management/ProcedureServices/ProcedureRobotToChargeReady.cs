@@ -464,7 +464,7 @@ namespace SeldatMRMS
                         robot.ShowText("ROBREA_ROBOT_WAITTING_GOTO_READYSTATION");
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                         {
                             rb.SendCmdAreaPallet(RbToRd.points.PointOfCharger);
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -474,7 +474,7 @@ namespace SeldatMRMS
                         }
                         else if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
                         {
-                            robot.TurnOnSupervisorTraffic(false);
+                           // robot.TurnOnSupervisorTraffic(false);
                         }
                         break;
                     // case RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION: // đang đợi dò line để đến vị trí line trong buffer
@@ -498,6 +498,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_RELEASED:
+                        robot.TurnOnSupervisorTraffic(false);
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);

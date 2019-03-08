@@ -151,7 +151,7 @@ namespace SeldatMRMS.Management
                     if (onFound)
                     {
                         // if robot in list is near but add in risk list robot
-                        robotLogOut.ShowTextTraffic(r.properties.Label + "- Intersection");
+                   //     robotLogOut.ShowTextTraffic(r.properties.Label + "- Intersection");
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
                         if (!RobotUnityRiskList.ContainsKey(r.properties.NameId))
                         {
@@ -190,7 +190,7 @@ namespace SeldatMRMS.Management
 
             {
                 TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_HEADER;
-                robotLogOut.ShowTextTraffic(this.properties.Label + " =>" + TrafficBehaviorStateTracking + " " + robot.properties.Label);
+              robotLogOut.ShowTextTraffic(this.properties.Label + " =>" + TrafficBehaviorStateTracking + " " + robot.properties.Label);
             }
             // else if (robot.FindHeaderIntersectsRiskAreaTail(this.TopHeader()) || robot.FindHeaderIntersectsRiskAreaTail(this.MiddleHeader()) || robot.FindHeaderIntersectsRiskAreaTail(this.BottomHeader()))
 
@@ -198,21 +198,21 @@ namespace SeldatMRMS.Management
             else if (robot.FindHeaderIntersectsRiskAreaTailCv(thCV) || robot.FindHeaderIntersectsRiskAreaTailCv(mhCV) || robot.FindHeaderIntersectsRiskAreaTailCv(bhCV))
             {
                 TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_TAIL;
-                robotLogOut.ShowTextTraffic(this.properties.Label + " =>" + TrafficBehaviorStateTracking + " " + robot.properties.Label);
+              robotLogOut.ShowTextTraffic(this.properties.Label + " =>" + TrafficBehaviorStateTracking + " " + robot.properties.Label);
             }
             //   else if (robot.FindHeaderIntersectsRiskAreaRightSide(this.TopHeader())|| robot.FindHeaderIntersectsRiskAreaRightSide(this.MiddleHeader())|| robot.FindHeaderIntersectsRiskAreaRightSide(this.BottomHeader()))
             else if (robot.FindHeaderIntersectsRiskAreaRightSideCv(thCV) || robot.FindHeaderIntersectsRiskAreaRightSideCv(mhCV) || robot.FindHeaderIntersectsRiskAreaRightSideCv(bhCV))
 
             {
                 TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_SIDE;
-                robotLogOut.ShowTextTraffic(this.properties.Label + " =>" + TrafficBehaviorStateTracking + " " + robot.properties.Label);
+              robotLogOut.ShowTextTraffic(this.properties.Label + " =>" + TrafficBehaviorStateTracking + " " + robot.properties.Label);
             }
             //  else if (robot.FindHeaderIntersectsRiskAreaLeftSide(this.TopHeader()) || robot.FindHeaderIntersectsRiskAreaLeftSide(this.MiddleHeader()) || robot.FindHeaderIntersectsRiskAreaLeftSide(this.BottomHeader()))
             else if (robot.FindHeaderIntersectsRiskAreaLeftSideCv(thCV) || robot.FindHeaderIntersectsRiskAreaLeftSideCv(mhCV) || robot.FindHeaderIntersectsRiskAreaLeftSideCv(bhCV))
 
             {
                 TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_SIDE;
-                robotLogOut.ShowTextTraffic(this.properties.Label + " =>" + TrafficBehaviorStateTracking + " " + robot.properties.Label);
+             robotLogOut.ShowTextTraffic(this.properties.Label + " =>" + TrafficBehaviorStateTracking + " " + robot.properties.Label);
             }
 
         }
@@ -222,7 +222,7 @@ namespace SeldatMRMS.Management
             {
                 case TrafficBehaviorState.HEADER_TOUCH_NOTOUCH:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                    robotLogOut.ShowTextTraffic(this.properties.Label + " => NORMAL");
+                 //   robotLogOut.ShowTextTraffic(this.properties.Label + " => NORMAL");
                     // robot speed normal;
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_HEADER:
@@ -247,28 +247,28 @@ namespace SeldatMRMS.Management
                     else if (prioritLevel.IndexOnMainRoad < robot.prioritLevel.IndexOnMainRoad)
                     {
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                        robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
+                    robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
                         TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
                         robotModeFree = robot;
                     }
                     else
                     {
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                        robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
+                     robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
                     }
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_TAIL:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                     TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
                     robotModeFree = robot;
-                    robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
+                  robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
                     // robot stop
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_SIDE:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                     TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
                     robotModeFree = robot;
-                   robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
+                 robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
                     break;
                 case TrafficBehaviorState.MODE_FREE:
                     // 8m
@@ -276,7 +276,7 @@ namespace SeldatMRMS.Management
                     {
                         TrafficBehaviorStateTracking = TrafficBehaviorState.SLOW_DOWN;
                     }
-                    robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
+                robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
                     break;
                 case TrafficBehaviorState.SLOW_DOWN:
                     // 8m
@@ -284,13 +284,13 @@ namespace SeldatMRMS.Management
                     {
                         TrafficBehaviorStateTracking = TrafficBehaviorState.NORMAL_SPEED;
                     }
-                    robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
+                 robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
                     break;
                 case TrafficBehaviorState.NORMAL_SPEED:
                     // 8m
                     TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
                     robotModeFree = null;
-                    robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
+                 robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
                     break;
 
             }
@@ -350,7 +350,7 @@ namespace SeldatMRMS.Management
                     {
                         RobotUnityRiskList.Clear();
                     }
-                    //  robotLogOut.ShowTextTraffic(this.properties.Label+"=> Normal No touch");
+                    //robotLogOut.ShowTextTraffic(this.properties.Label+"=> Normal No touch");
 
                     TrafficBehavior(robotModeFree);
                 }

@@ -369,6 +369,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
 
                 if (r.Index < HasRobotUnityinAreaValue)
                 {
+                    Console.WriteLine("-----------------" + goal.ToString());
+                    Console.WriteLine("--- "+ r.NameId + "--- "+ JsonConvert.SerializeObject(r.GetZone()).ToString());
                     if (ExtensionService.IsInPolygon(r.GetZone(), goal))
                     {
                         zoneName = r.NameId;
@@ -376,12 +378,11 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                     }
                 }
             }
-           // MessageBox.Show(zoneName);
             try
             {
                 foreach (RobotUnity r in RobotUnityListOnTraffic) // xác định robot có trong khu vực
                 {
-
+                    
                     if (ExtensionService.IsInPolygon(ZoneRegisterList[zoneName].GetZone(), r.properties.pose.Position))
                     {
                         hasRobot = true;

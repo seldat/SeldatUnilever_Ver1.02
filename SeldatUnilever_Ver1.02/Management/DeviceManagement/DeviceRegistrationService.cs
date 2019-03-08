@@ -83,15 +83,15 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 deviceItemList.Add(deviceItem);
                 
             }
-            if(statusOrder.status==(int)StatusOrderCode.ORDER_STATUS_SUCCESS)
+            if(statusOrder.status==(int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_SUCCESS)
             {
                 p.handlePOSTResponse(p, StatusHttPResponse.STATUS_MESSAGE_SUCCESS);
             }
-            else if (statusOrder.status == (int)StatusOrderCode.ORDER_STATUS_ERROR_DATA)
+            else if (statusOrder.status == (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA)
             {
                 p.handlePOSTResponse(p, StatusHttPResponse.STATUS_MESSAGE_ERROR);
             }
-            if (statusOrder.status == (int)StatusOrderCode.ORDER_STATUS_NOACCEPTED)
+            if (statusOrder.status == (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED)
             {
                 p.handlePOSTResponse(p, StatusHttPResponse.STATUS_MESSAGE_NOACCEPTED);
             }

@@ -19,7 +19,7 @@
         <Grid Grid.Row="0">
             <GroupBox Header="Control" FontSize="15"  BorderThickness="2" BorderBrush="Black">
                 <Grid>
-                    <RichTextBox   Name="txt_logout" VerticalScrollBarVisibility="Visible"  />
+                    <RichTextBox Grid.Row="0"  Name="txt_logout" VerticalScrollBarVisibility="Visible"  />
                 </Grid>
 
             </GroupBox>

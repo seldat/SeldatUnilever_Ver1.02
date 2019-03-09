@@ -392,9 +392,7 @@ namespace SeldatMRMS.Management.RobotManagent {
         }      
         public override void Draw () {
 
-           if (webSocket != null)
-            {
-              if (webSocket.IsAlive)
+              if (properties.IsConnected)
                 {
 
                     //Render Robot
@@ -436,7 +434,7 @@ namespace SeldatMRMS.Management.RobotManagent {
 
 
                      }));
-                }
+            
             }
 
         }

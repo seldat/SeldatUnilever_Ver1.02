@@ -142,6 +142,7 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                         {
+                            robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             rb.UpdateRiskAraParams(0, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
@@ -153,6 +154,7 @@ namespace SeldatMRMS
                                                                           // robot.ShowText( "FORBUF_ROBOT_WAITTING_GOTO_GATE ===> FLAG " + Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position));
                         if (false == Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position))
                         {
+                            robot.SetTrafficAtCheckIn(false);
                             rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             rb.SendPoseStamped(ds.config.PointFrontLine);
@@ -267,6 +269,7 @@ namespace SeldatMRMS
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                         {
+                            robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY;
@@ -278,6 +281,7 @@ namespace SeldatMRMS
                         {
                             if (false == Traffic.HasRobotUnityinArea(FlToBuf.GetAnyPointInBuffer(true).Position))
                             {
+                                robot.SetTrafficAtCheckIn(false);
                                 // createPlanBuffer();
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped(FlToBuf.GetFrontLineBuffer(true));

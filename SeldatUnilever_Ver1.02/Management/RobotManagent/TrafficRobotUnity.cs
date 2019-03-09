@@ -84,7 +84,7 @@ namespace SeldatMRMS.Management
         private TrafficBehaviorState TrafficBehaviorStateTracking;
         private TrafficManagementService trafficManagementService;
         private RobotUnity robotModeFree;
-        private const double DistanceToSetSlowDown = 8; // sau khi dừng robot phai doi khoan cach len duoc tren 8m thi robot bat dau hoat dong lai bình thuong 8m
+        private const double DistanceToSetSlowDown = 80; // sau khi dừng robot phai doi khoan cach len duoc tren 8m thi robot bat dau hoat dong lai bình thuong 8m
         private const double DistanceToSetNormalSpeed = 12; // sau khi dừng robot phai doi khoan cach len duoc tren 8m thi robot bat dau hoat dong lai bình thuong 12m
         public TrafficRobotUnity() : base()
         {
@@ -137,9 +137,9 @@ namespace SeldatMRMS.Management
             }
             return robot;
         }
-        public bool CheckSafeDistance() // KIểm tra khoản cách an toàn/ nếu đang trong vùng close với robot khác thì giảm tốc độ, chuyển sang chế độ dò risk area
+        public int CheckSafeDistance() // KIểm tra khoản cách an toàn/ nếu đang trong vùng close với robot khác thì giảm tốc độ, chuyển sang chế độ dò risk area
         {
-            bool iscloseDistance = false;
+            int iscloseDistance = 0;
             foreach (RobotUnity r in RobotUnitylist)
             {
                 if (r.flagSupervisorTraffic)
@@ -158,12 +158,18 @@ namespace SeldatMRMS.Management
                             RobotUnityRiskList.Add(r.properties.NameId, r);
                         }
                         // reduce speed robot control
-                        iscloseDistance = true;
+                        iscloseDistance = 2;
                     }
                     else
                     {
                         // if robot in list is far but before registe in list, must remove in list
                         RemoveRiskList(r.properties.NameId);
+                        double rd = ExtensionService.CalDistance(Global_Object.CoorCanvas(this.properties.pose.Position), Global_Object.CoorCanvas(r.properties.pose.Position));
+                        if (rd < DistanceToSetSlowDown && rd > 60)
+                            iscloseDistance = 1;
+                        else
+                            iscloseDistance = 0;
+
                     }
                 }
             }
@@ -222,7 +228,7 @@ namespace SeldatMRMS.Management
             {
                 case TrafficBehaviorState.HEADER_TOUCH_NOTOUCH:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                 //   robotLogOut.ShowTextTraffic(this.properties.Label + " => NORMAL");
+                   robotLogOut.ShowTextTraffic(this.properties.Label + " => NORMAL");
                     // robot speed normal;
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_HEADER:
@@ -233,9 +239,9 @@ namespace SeldatMRMS.Management
                     {
                         if (robot.prioritLevel.OnAuthorizedPriorityProcedure)
                         {
-                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                            TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
-                            robotModeFree = robot;
+                           // SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                           //TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
+                           // robotModeFree = robot;
                             robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
                         }
                         else
@@ -248,8 +254,6 @@ namespace SeldatMRMS.Management
                     {
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                     robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
-                        TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
-                        robotModeFree = robot;
                     }
                     else
                     {
@@ -259,38 +263,29 @@ namespace SeldatMRMS.Management
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_TAIL:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                    TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
-                    robotModeFree = robot;
+                    //TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
+                    //robotModeFree = robot;
                   robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
                     // robot stop
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_SIDE:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                    TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
-                    robotModeFree = robot;
+                    //TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
+                   // robotModeFree = robot;
                  robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
                     break;
                 case TrafficBehaviorState.MODE_FREE:
                     // 8m
-                    if (ExtensionService.CalDistance(Global_Object.CoorCanvas(this.properties.pose.Position), Global_Object.CoorCanvas(robot.properties.pose.Position)) > DistanceToSetSlowDown)
+                    double rd=ExtensionService.CalDistance(Global_Object.CoorCanvas(this.properties.pose.Position), Global_Object.CoorCanvas(robot.properties.pose.Position));
+                    if (rd < DistanceToSetSlowDown && rd>6)
                     {
-                        TrafficBehaviorStateTracking = TrafficBehaviorState.SLOW_DOWN;
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
+
                     }
-                robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
-                    break;
-                case TrafficBehaviorState.SLOW_DOWN:
-                    // 8m
-                    if (ExtensionService.CalDistance(Global_Object.CoorCanvas(this.properties.pose.Position), Global_Object.CoorCanvas(robot.properties.pose.Position)) > DistanceToSetNormalSpeed)
+                    else if(rd > DistanceToSetNormalSpeed)
                     {
-                        TrafficBehaviorStateTracking = TrafficBehaviorState.NORMAL_SPEED;
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                     }
-                 robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
-                    break;
-                case TrafficBehaviorState.NORMAL_SPEED:
-                    // 8m
-                    TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
-                    robotModeFree = null;
-                 robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
                     break;
 
             }
@@ -298,6 +293,24 @@ namespace SeldatMRMS.Management
         public void TurnOnSupervisorTraffic(bool flagtraffic)
         {
             flagSupervisorTraffic = flagtraffic;
+            if(!flagtraffic)
+            { 
+                UpdateRiskAraParams(0, 0, 0, 0);
+            }
+        }
+        public void SetTrafficAtCheckIn(bool onset) // khi robot tai check in
+        {
+            if (onset)
+            {
+                flagSupervisorTraffic = false;
+                UpdateRiskAraParams(0, DfL2, DfWS, DfDistanceInter);
+            }
+            else
+            {
+                flagSupervisorTraffic = true;
+                UpdateRiskAraParams(DfL1, DfL2, DfWS, DfDistanceInter);
+            }
+
         }
         public void TrafficUpdate()
         {
@@ -305,9 +318,10 @@ namespace SeldatMRMS.Management
             {
                 try
                 {
+                    prioritLevel.IndexOnMainRoad = trafficManagementService.FindIndexZoneRegister(properties.pose.Position);
                     if (flagSupervisorTraffic)
                     {
-                        prioritLevel.IndexOnMainRoad = trafficManagementService.FindIndexZoneRegister(properties.pose.Position);
+                       
                         // cập nhật vùng riskzone // update vùng risk area cho robot
                         RiskZoneRegister rZR = trafficManagementService.FindRiskZone(properties.pose.Position, IndexZoneDefaultFind.ZONE_OP, true);
                         if (rZR != null)
@@ -319,10 +333,7 @@ namespace SeldatMRMS.Management
                             UpdateRiskAraParams(DfL1, DfL2, DfWS, DfDistanceInter);
                         }
                     }
-                    else
-                    {
-                        UpdateRiskAraParams(0, 0, 0, 0);
-                    }
+
                     // giám sát an toàn
                     SupervisorTraffic();
                 }
@@ -335,7 +346,22 @@ namespace SeldatMRMS.Management
         {
             if (flagSupervisorTraffic)
             {
-                if (CheckSafeDistance())
+                int numMode = CheckSafeDistance();
+                if (numMode == 0)
+                {
+                    if (RobotUnityRiskList.Count > 0)
+                    {
+                        RobotUnityRiskList.Clear();
+                    }
+                    TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_NOTOUCH;
+                    TrafficBehavior(null);
+                }
+                else if(numMode==1)
+                {
+                    SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
+                    robotLogOut.ShowTextTraffic("Slow Motion");
+                }
+                else if (numMode==2)
                 {
                     RobotUnity robot = CheckIntersection();
                     if (robot != null)
@@ -344,16 +370,7 @@ namespace SeldatMRMS.Management
                         TrafficBehavior(robot);
                     }
                 }
-                else
-                {
-                    if (RobotUnityRiskList.Count > 0)
-                    {
-                        RobotUnityRiskList.Clear();
-                    }
-                    //robotLogOut.ShowTextTraffic(this.properties.Label+"=> Normal No touch");
 
-                    TrafficBehavior(robotModeFree);
-                }
             }
         }
 

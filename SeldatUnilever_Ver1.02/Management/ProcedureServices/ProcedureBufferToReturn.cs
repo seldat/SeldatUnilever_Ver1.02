@@ -119,6 +119,7 @@ namespace SeldatMRMS
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                         {
+                            robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY;
@@ -130,6 +131,7 @@ namespace SeldatMRMS
                         {
                             if (false == Traffic.HasRobotUnityinArea(BfToRe.GetAnyPointInBuffer().Position))
                             {
+                                robot.SetTrafficAtCheckIn(true);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped(BfToRe.GetFrontLineBuffer());
                                 StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;

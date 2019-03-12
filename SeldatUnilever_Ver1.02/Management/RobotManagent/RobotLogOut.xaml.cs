@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -26,15 +27,15 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             
             
         }
-        public void ShowText(String src,String txt)
+        public void ShowText(String src, String txt)
         {
             Task.Run(() =>
             {
                 try { 
                     Dispatcher.Invoke(() =>
                     {
-                        this.Title = src;
-                        title = src;
+                      //  this.Title = src;
+                       // title = src;
                         txt_logout.AppendText(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + ": " + txt + Environment.NewLine);
                         txt_logout.ScrollToEnd();
                     });
@@ -89,10 +90,13 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         {
             String procedureStr = new TextRange(txt_logout.Document.ContentStart, txt_logout.Document.ContentEnd).Text;
             String trafficStr = new TextRange(txt_logout.Document.ContentStart, txt_logout.Document.ContentEnd).Text;
-            String pathpcd = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), title+"_LogOutProcedure");
-            System.IO.File.WriteAllText(pathpcd, procedureStr);
-            String pathtrf = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), title+"_LogOutTraffic");
-            System.IO.File.WriteAllText(pathtrf, trafficStr);
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                System.IO.File.WriteAllText(saveFileDialog.FileName+"_proc_"+DateTime.Now.ToString("yyyyMMddHHmmss tt")+".txt", procedureStr);
+                System.IO.File.WriteAllText(saveFileDialog.FileName+"_traf_" + DateTime.Now.ToString("yyyyMMddHHmmss tt") + ".txt", trafficStr);
+            }
         }
     }
 }

@@ -118,8 +118,10 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
-                       
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
+
+                        bool onComePoint = robot.ReachedGoal();
+                       // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && onComePoint==true )
+                        if (onComePoint)
                         {
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -149,8 +151,11 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         try
                         {
-                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
+                            bool onComePoint2 = robot.ReachedGoal();
+                            // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
+                            if (onComePoint2)
                             {
+                                robot.TurnOnCtrlSelfTraffic(false);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP));
@@ -213,6 +218,7 @@ namespace SeldatMRMS
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
+                                robot.TurnOnCtrlSelfTraffic(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 rb.SendPoseStamped(BfToMa.GetFrontLineMachine());
@@ -234,8 +240,11 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET:
                         try
                         {
-                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
+                            bool onComePoint3 = robot.ReachedGoal();
+                            //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
+                            if (onComePoint3)
                             {
+                                robot.TurnOnCtrlSelfTraffic(false);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_DOWN));
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -289,6 +298,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.TurnOnCtrlSelfTraffic(true);
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_MACHINE;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);

@@ -464,7 +464,8 @@ namespace SeldatMRMS
                         robot.ShowText("ROBREA_ROBOT_WAITTING_GOTO_READYSTATION");
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
-                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
+                       // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
+                        if ( robot.ReachedGoal())
                         {
                             rb.SendCmdAreaPallet(RbToRd.points.PointOfCharger);
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;

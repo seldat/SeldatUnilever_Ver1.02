@@ -302,6 +302,7 @@ namespace SeldatMRMS
         {
          
             UpdateInformation(SelectHandleError.CASE_ERROR_EXIT);
+            
             Hide();
             Dispose();
         }
@@ -317,6 +318,12 @@ namespace SeldatMRMS
         private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             ShowInformation();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }

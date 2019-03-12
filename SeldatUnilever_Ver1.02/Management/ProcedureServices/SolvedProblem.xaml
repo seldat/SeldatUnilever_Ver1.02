@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SeldatMRMS"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
-        Title="SolvedProblem" Height="600" Width="700" IsVisibleChanged="Window_IsVisibleChanged">
+        Title="SolvedProblem" Height="600" Width="700" IsVisibleChanged="Window_IsVisibleChanged" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0"></RowDefinition>

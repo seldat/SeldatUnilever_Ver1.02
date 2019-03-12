@@ -79,7 +79,8 @@ namespace SeldatMRMS.Management
             // public Int32 palletId;
         }
         private List<RobotUnity> RobotUnitylist;
-        public bool flagSupervisorTraffic;
+        public bool onFlagSupervisorTraffic;
+        public bool onFlagSelfTraffic;
         private Dictionary<String, RobotUnity> RobotUnityRiskList = new Dictionary<string, RobotUnity>();
         private TrafficBehaviorState TrafficBehaviorStateTracking;
         private TrafficManagementService trafficManagementService;
@@ -89,6 +90,7 @@ namespace SeldatMRMS.Management
         public TrafficRobotUnity() : base()
         {
             TurnOnSupervisorTraffic(false);
+            TurnOnCtrlSelfTraffic(true);
             RobotUnitylist = new List<RobotUnity>();
             prioritLevel = new PriorityLevel();
 
@@ -142,7 +144,7 @@ namespace SeldatMRMS.Management
             int iscloseDistance = 0;
             foreach (RobotUnity r in RobotUnitylist)
             {
-                if (r.flagSupervisorTraffic)
+                if (r.onFlagSupervisorTraffic)
                 {
                     Point rP = MiddleHeaderCv();
                     // bool onFound = r.FindHeaderIsCloseRiskArea(this.properties.pose.Position);
@@ -290,24 +292,28 @@ namespace SeldatMRMS.Management
 
             }
         }
-        public void TurnOnSupervisorTraffic(bool flagtraffic)
+        public void TurnOnSupervisorTraffic(bool onflagtraffic)
         {
-            flagSupervisorTraffic = flagtraffic;
-            if(!flagtraffic)
+            onFlagSupervisorTraffic = onflagtraffic;
+            if(!onflagtraffic)
             { 
                 UpdateRiskAraParams(0, 0, 0, 0);
             }
+        }
+        public void TurnOnCtrlSelfTraffic(bool _onflagSelftraffic)
+        {
+            this.onFlagSelfTraffic = _onflagSelftraffic;
         }
         public void SetTrafficAtCheckIn(bool onset) // khi robot tai check in
         {
             if (onset)
             {
-                flagSupervisorTraffic = false;
+                onFlagSupervisorTraffic = false;
                 UpdateRiskAraParams(0, DfL2, DfWS, DfDistanceInter);
             }
             else
             {
-                flagSupervisorTraffic = true;
+                onFlagSupervisorTraffic = true;
                 UpdateRiskAraParams(DfL1, DfL2, DfWS, DfDistanceInter);
             }
 
@@ -319,7 +325,7 @@ namespace SeldatMRMS.Management
                 try
                 {
                     prioritLevel.IndexOnMainRoad = trafficManagementService.FindIndexZoneRegister(properties.pose.Position);
-                    if (flagSupervisorTraffic)
+                    if (onFlagSupervisorTraffic)
                     {
                        
                         // cập nhật vùng riskzone // update vùng risk area cho robot
@@ -332,10 +338,12 @@ namespace SeldatMRMS.Management
                         {
                             UpdateRiskAraParams(DfL1, DfL2, DfWS, DfDistanceInter);
                         }
+                        SupervisorTraffic();
                     }
+                    
 
                     // giám sát an toàn
-                    SupervisorTraffic();
+                  
                 }
                 catch { }
                 Thread.Sleep(500);
@@ -344,7 +352,7 @@ namespace SeldatMRMS.Management
         }
         protected override void SupervisorTraffic()
         {
-            if (flagSupervisorTraffic)
+            if (onFlagSelfTraffic)
             {
                 int numMode = CheckSafeDistance();
                 if (numMode == 0)

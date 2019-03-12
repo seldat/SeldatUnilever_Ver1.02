@@ -211,17 +211,17 @@ namespace SeldatMRMS.Management.RobotManagent
             this.Publish(paramsRosSocket.publication_checkAliveTimeOut, msg);
         }
         public void createRosTerms () {
-            int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler);
+            int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler,100);
             paramsRosSocket.publication_ctrlrobotdriving = this.Advertise ("/ctrlRobotDriving", "std_msgs/Int32");
-            int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler);
+            int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler,100);
             paramsRosSocket.publication_robotnavigation = this.Advertise ("/robot_navigation", "geometry_msgs/PoseStamped");
             paramsRosSocket.publication_checkAliveTimeOut = this.Advertise ("/checkAliveTimeOut", "std_msgs/Int32");
             paramsRosSocket.publication_linedetectionctrl = this.Advertise ("/linedetectionctrl", "std_msgs/Int32");
             paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet", "std_msgs/Int32");
             paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet", "std_msgs/String");
             float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
-            int subscription_AGV_LaserError = this.Subscribe ("/AGV_LaserError", "std_msgs/String", AGVLaserErrorHandler);
-            int subscription_AGV_LaserWarning = this.Subscribe ("/AGV_LaserWarning", "std_msgs/String", AGVLaserWarningHandler);
+            int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
+            int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
             int subscription_Odom= this.Subscribe("/odom", "nav_msgs/Odometry", OdometryCallback, 100);
 
             //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
@@ -370,7 +370,8 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             properties = proR;
         }
-
+        double gx;
+        double gy;
         public void SendPoseStamped (Pose pose) {
             GeometryPoseStamped data = new GeometryPoseStamped ();
             data.header.frame_id = "map";
@@ -383,7 +384,8 @@ namespace SeldatMRMS.Management.RobotManagent
             this.Publish (paramsRosSocket.publication_robotnavigation, data);
             robotLogOut.ShowText(this.properties.Label,"Send Pose => "+ JsonConvert.SerializeObject(data).ToString());
             // lưu vị trí đích đến
-            properties.goalPoint = new Point(data.pose.position.x, data.pose.position.y);
+            gx = data.pose.position.x;
+            gy = data.pose.position.y;
         }
         public void SetSpeed (RobotSpeedLevel robotspeed) {
             StandardInt32 msg = new StandardInt32 ();
@@ -406,12 +408,36 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public bool ReachedGoal()
         {
-           double _currentgoal_Ex = Math.Abs(Math.Abs(properties.pose.Position.X) - Math.Abs(properties.goalPoint.X));
-           double _currentgoal_Ey = Math.Abs(Math.Abs(properties.pose.Position.Y) - Math.Abs(properties.goalPoint.Y));
-            if (Math.Abs(properties.pose.Vx) < properties.errorVx && Math.Abs(properties.pose.Vy) < properties.errorVy && Math.Abs(properties.pose.Vw) < properties.errorW && _currentgoal_Ex<= properties.errorDx && _currentgoal_Ey<= properties.errorDy)
+            Console.WriteLine("------------------------------  " + this.properties.NameId);
+            Console.WriteLine("Goal X=" + gx);
+            Console.WriteLine("Goal Y=" + gy);
+            double _currentgoal_Ex = Math.Abs(Math.Abs(properties.pose.Position.X) - Math.Abs(gx));
+            double _currentgoal_Ey = Math.Abs(Math.Abs(properties.pose.Position.Y) - Math.Abs(gy));
+            Console.WriteLine("Current amcl X=" + properties.pose.Position.X);
+            Console.WriteLine("Current amcl Y=" + properties.pose.Position.Y);
+            Console.WriteLine("Error amcl X=" + _currentgoal_Ex);
+            Console.WriteLine("Error amcl Y=" + _currentgoal_Ey);
+            Console.WriteLine("VX=" + properties.pose.Vx);
+            Console.WriteLine("VY=" + properties.pose.Vy);
+            if (gx == -8.59 && gy == -11.19) // truong hop dat biet
             {
-                return true;
+                Console.WriteLine("Truong hop dat biet");
+                if (Math.Abs(properties.pose.Vx) < properties.errorVx && Math.Abs(properties.pose.Vy) < properties.errorVy && Math.Abs(properties.pose.Vw) < properties.errorW)
+                {
+                    if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 3.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                        return true;
+                }
             }
+            else
+            {
+
+                if (Math.Abs(properties.pose.Vx) < properties.errorVx && Math.Abs(properties.pose.Vy) < properties.errorVy && Math.Abs(properties.pose.Vw) < properties.errorW)
+                {
+                    if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                        return true;
+                }
+            }
+
             return false;
         }
         public void SendCmdAreaPallet (String cmd) {

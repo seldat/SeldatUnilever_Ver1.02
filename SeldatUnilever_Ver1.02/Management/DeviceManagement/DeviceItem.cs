@@ -195,6 +195,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
                 {
+                    Console.WriteLine("----------------------------------------------------");
+                    Console.WriteLine(dataReq);
                     int len = (int)results["length"];
                     int palletAmountInBuffer = (int)results["palletAmount"];
                     int productDetailId = (int)results["productDetailId"];
@@ -273,7 +275,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         product.palletStatus = PalletStatus.W.ToString(); // W
                         order.dataRequest = product.ToString();
                         oneOrderList.Add(order);
+
+
                     }
+                   
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_MACHINE_TO_RETURN)
                 {

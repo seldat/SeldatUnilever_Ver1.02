@@ -260,10 +260,14 @@ namespace SeldatMRMS.Management.RobotManagent {
         }
         public void DisplaySolvedForm()
         {
-            if (solvedProblem.obj != null)
-                solvedProblem.Show();
-            else
-                MessageBox.Show("Không có nội dung lỗi!!");
+            try
+            {
+                if (solvedProblem.obj != null)
+                    solvedProblem.Show();
+                else
+                    MessageBox.Show("Không có nội dung lỗi!!");
+            }
+            catch { }
         }
         public Point CirclePoint(double radius, double angleInDegrees, Point origin)
         {

@@ -154,7 +154,7 @@ namespace SeldatMRMS.Management
                     {
                         // if robot in list is near but add in risk list robot
                    //     robotLogOut.ShowTextTraffic(r.properties.Label + "- Intersection");
-                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
+                       
                         if (!RobotUnityRiskList.ContainsKey(r.properties.NameId))
                         {
                             RobotUnityRiskList.Add(r.properties.NameId, r);
@@ -275,19 +275,6 @@ namespace SeldatMRMS.Management
                     //TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
                    // robotModeFree = robot;
                  robotLogOut.ShowTextTraffic(this.properties.Label+ " => STOP");
-                    break;
-                case TrafficBehaviorState.MODE_FREE:
-                    // 8m
-                    double rd=ExtensionService.CalDistance(Global_Object.CoorCanvas(this.properties.pose.Position), Global_Object.CoorCanvas(robot.properties.pose.Position));
-                    if (rd < DistanceToSetSlowDown && rd>6)
-                    {
-                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_SLOW);
-
-                    }
-                    else if(rd > DistanceToSetNormalSpeed)
-                    {
-                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                    }
                     break;
 
             }

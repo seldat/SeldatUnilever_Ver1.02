@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using SeldatMRMS.Management.DoorServices;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using static SeldatMRMS.DBProcedureService;
@@ -106,7 +107,19 @@ namespace SeldatMRMS {
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_READY;
                     procrr.Start ();
                     break;
-
+                case ProcedureItemSelected.PROCEDURE_FORLIFT_TO_MACHINE:
+                    ProcedureForkLiftToBuffer procfm = new ProcedureForkLiftToBuffer(robot, doorService, trafficService);
+                    ProcedureDataItems profmDataItems = new ProcedureDataItems();
+                    profmDataItems.StartTaskTime = DateTime.Now;
+                    RegisterProcedureItem itemprocfm = new RegisterProcedureItem() { item = procfm, robot = robot, procedureDataItems = profmDataItems };
+                    procfm.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                    procfm.ErrorProcedureHandler += ErrorApprearInProcedureItem;
+                    RegisterProcedureItemList.Add(itemprocfm);
+                    procfm.AssignAnOrder(orderItem);
+                    robot.proRegistryInRobot.pFB = procfm;
+                    robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
+                    procfm.Start();
+                    break;
             }
         }
         protected override void ReleaseProcedureItemHandler (Object item) {

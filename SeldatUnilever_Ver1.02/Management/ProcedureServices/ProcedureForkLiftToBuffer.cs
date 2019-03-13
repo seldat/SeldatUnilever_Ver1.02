@@ -73,7 +73,6 @@ namespace SeldatMRMS
             // DataForkLiftToBuffer p = FlToBuf.points;
             DoorService ds = FlToBuf.door;
             TrafficManagementService Traffic = FlToBuf.Traffic;
-            Console.WriteLine("ProcedureForkLiftToBuffer run...");
             robot.ShowText(" Start -> " + procedureCode);
             while (ProRun)
             {
@@ -141,8 +140,8 @@ namespace SeldatMRMS
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
                        // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if ( robot.ReachedGoal())
-                            {
+                        if ( robot.ReachedGoal())
+                        {
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -165,8 +164,8 @@ namespace SeldatMRMS
                         break;
                     case ForkLiftToBuffer.FORBUF_ROBOT_WAITTING_GOTO_GATE:
                         //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if ( robot.ReachedGoal())
-                            {
+                        if ( robot.ReachedGoal())
+                        {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_CAME_GATE_POSITION;

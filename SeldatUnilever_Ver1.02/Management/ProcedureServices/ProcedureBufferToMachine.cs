@@ -245,7 +245,6 @@ namespace SeldatMRMS
                             if (onComePoint3)
                             {
                                 robot.TurnOnCtrlSelfTraffic(false);
-                                resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_DOWN));
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET;

@@ -278,7 +278,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
         }
         private void AGVLaserErrorHandler (Communication.Message message) {
-            StandardString standard = (StandardString) message;
+          /*  StandardString standard = (StandardString) message;
             LaserErrorCode er = new LaserErrorCode ();
             bool tamddd = standard.data[0].Equals('1');
             try
@@ -304,13 +304,13 @@ namespace SeldatMRMS.Management.RobotManagent
                     er.LaserErrorLostPath = false;
                 }
             } catch (System.Exception) {
-                Console.WriteLine ("Cannot parse error laser");
+               // Console.WriteLine ("Cannot parse error laser");
             }
-            // AGVLaserErrorCallBack (er);
+            // AGVLaserErrorCallBack (er);*/
         }
 
         private void AGVLaserWarningHandler (Communication.Message message) {
-            StandardString standard = (StandardString) message;
+           /* StandardString standard = (StandardString) message;
             LaserWarningCode war = new LaserWarningCode ();
             try {
                 if (standard.data[0].Equals ('1')) {
@@ -339,9 +339,9 @@ namespace SeldatMRMS.Management.RobotManagent
                     war.LaserWarningHazardoes = false;
                 }
             } catch (System.Exception) {
-                Console.WriteLine ("Cannot parse warning laser");
+              //  Console.WriteLine ("Cannot parse warning laser");
             }
-            // AGVLaserWarningCallBack (war);
+            // AGVLaserWarningCallBack (war);*/
         }
 
         public void TestLaserError (String cmd) {
@@ -419,12 +419,14 @@ namespace SeldatMRMS.Management.RobotManagent
             Console.WriteLine("Error amcl Y=" + _currentgoal_Ey);
             Console.WriteLine("VX=" + properties.pose.Vx);
             Console.WriteLine("VY=" + properties.pose.Vy);
-            if (gx == -8.59 && gy == -11.19) // truong hop dat biet
+            double gxx = Math.Abs(gx);
+            double gyy = Math.Abs(gy);
+            if (gxx >= 8.50 && gxx<=8.65 && gyy>=11.12 && gyy <= 11.3) // truong hop dat biet
             {
                 Console.WriteLine("Truong hop dat biet");
                 if (Math.Abs(properties.pose.Vx) < properties.errorVx && Math.Abs(properties.pose.Vy) < properties.errorVy && Math.Abs(properties.pose.Vw) < properties.errorW)
                 {
-                    if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 3.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                    if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 4.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
                         return true;
                 }
             }

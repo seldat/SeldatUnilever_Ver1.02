@@ -43,9 +43,10 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                 catch { }
             });
         }
+        private readonly object obj = new object();
         public void ShowTextTraffic(String txt)
         {
-            Task.Run(() =>
+            lock(obj)
             {
                 try
                 {
@@ -58,7 +59,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                     });
                 }
                 catch { }
-            });
+            }
         }
         public void Clear()
         {

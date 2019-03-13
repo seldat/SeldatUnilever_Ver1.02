@@ -83,6 +83,26 @@ namespace SeldatMRMS {
             FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER, // doi robot di den dau line buffer.
             FORBUF_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
+
+        public enum ForkLiftToMachine
+        {
+            FORMAC_IDLE,
+            FORMAC_ROBOT_GOTO_CHECKIN_GATE, // vị trí check in liệu có quy trình nào tại cổng
+            FORMAC_ROBOT_WAITTING_GOTO_CHECKIN_GATE,
+            FORMAC_ROBOT_CAME_CHECKIN_GATE, // đã đến vị trí, kiem tra khu vuc cong san sang de di vao.
+            FORMAC_ROBOT_WAITTING_GOTO_GATE, // doi robot di den khu vuc cong
+            FORMAC_ROBOT_CAME_GATE_POSITION, // da den khu vuc cong , gui yeu cau mo cong.
+            FORMAC_ROBOT_WAITTING_OPEN_DOOR, //doi mo cong
+            FORMAC_ROBOT_OPEN_DOOR_SUCCESS, // mo cua thang cong ,gui toa do line de robot di vao gap hang
+            FORMAC_ROBOT_WAITTING_PICKUP_PALLET_IN, // doi robot gap hang
+            FORMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE, //doi robot di tro lai dau line cong.
+            FORMAC_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
+            FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
+            FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
+            FORMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
+            FORMAC_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
+        }
+
         public enum BufferToMachine {
             BUFMAC_IDLE,
             BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER,

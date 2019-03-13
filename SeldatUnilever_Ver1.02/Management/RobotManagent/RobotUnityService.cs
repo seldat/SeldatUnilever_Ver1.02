@@ -99,10 +99,29 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             return new Point((TopHeader().X + BottomHeader().X) / 2, (TopHeader().Y + BottomHeader().Y) / 2);
         }
+
         public virtual Point MiddleHeaderCv()
         {
             return new Point((TopHeaderCv().X + BottomHeaderCv().X) / 2, (TopHeaderCv().Y + BottomHeaderCv().Y) / 2);
         }
+
+        public virtual Point MiddleHeaderCv1()
+        {
+            double PRx = Global_Object.CoorCanvas(properties.pose.Position).X;
+            double PRy = Global_Object.CoorCanvas(properties.pose.Position).Y;
+            return new Point((PRx + MiddleHeaderCv().X) / 2, (PRy + MiddleHeaderCv().Y) / 2);
+        }
+        public virtual Point MiddleHeaderCv2()
+        {
+            return new Point((MiddleHeaderCv1().X + MiddleHeaderCv().X) / 2, (MiddleHeaderCv1().Y + MiddleHeaderCv().Y) / 2);
+        }
+        public virtual Point MiddleHeaderCv3()
+        {
+            double PRx = Global_Object.CoorCanvas(properties.pose.Position).X;
+            double PRy = Global_Object.CoorCanvas(properties.pose.Position).Y;
+            return new Point((MiddleHeaderCv1().X + PRx) / 2, (MiddleHeaderCv1().Y + PRy) / 2);
+        }
+
         public virtual Point TopTail()
         {
             double x = properties.pose.Position.X + Math.Sqrt(Math.Abs(properties.L2) * Math.Abs(properties.L2) + Math.Abs(properties.WS / 2) * Math.Abs(properties.WS / 2)) * Math.Cos(properties.pose.AngleW + Math.Atan2(-properties.WS / 2, -properties.L2));

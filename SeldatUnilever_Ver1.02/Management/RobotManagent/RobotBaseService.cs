@@ -17,7 +17,8 @@ namespace SeldatMRMS.Management.RobotManagent
             PRO_MACHINE_TO_RETURN,
             PRO_RETURN_TO_GATE,
             PRO_CHARGE,
-            PRO_READY
+            PRO_READY,
+            PRO_FORKLIFT_TO_MACHINE
         }
         public struct ProcedureRegistryInRobotUnity
         {

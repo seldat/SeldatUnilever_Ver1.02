@@ -18,6 +18,9 @@ namespace SeldatMRMS.Management.RobotManagent {
     public class RobotUnity : RobotBaseService {
 
         Ellipse headerPoint;
+        Ellipse headerPoint1;
+        Ellipse headerPoint2;
+        Ellipse headerPoint3;
         Path riskArea;
         double angle = 0.0f;
         public Point org = new Point (600, 350);
@@ -227,8 +230,27 @@ namespace SeldatMRMS.Management.RobotManagent {
             headerPoint.Width = 5;
             headerPoint.Height = 5;
             headerPoint.Fill = new SolidColorBrush (Colors.Red);
+
+            headerPoint1 = new Ellipse();
+            headerPoint1.Width = 5;
+            headerPoint1.Height = 5;
+            headerPoint1.Fill = new SolidColorBrush(Colors.Red);
+
+            headerPoint2 = new Ellipse();
+            headerPoint2.Width = 5;
+            headerPoint2.Height = 5;
+            headerPoint2.Fill = new SolidColorBrush(Colors.Red);
+
+            headerPoint3 = new Ellipse();
+            headerPoint3.Width = 5;
+            headerPoint3.Height = 5;
+            headerPoint3.Fill = new SolidColorBrush(Colors.Red);
+
             canvas.Children.Add (riskArea);
             canvas.Children.Add (headerPoint);
+            canvas.Children.Add(headerPoint1);
+            canvas.Children.Add(headerPoint2);
+            canvas.Children.Add(headerPoint3);
             Draw ();
 
         }
@@ -346,6 +368,7 @@ namespace SeldatMRMS.Management.RobotManagent {
                     robotService.RemoveRobotUnityReadyList(this.properties.NameId);
                     robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
                     robotService.AddRobotUnityReadyList(this);
+                    setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_OK);
                     Draw();
                     break;
                 case MessageBoxResult.Cancel:
@@ -377,6 +400,7 @@ namespace SeldatMRMS.Management.RobotManagent {
                     robotService.RemoveRobotUnityReadyList(this.properties.NameId);
                     robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
                     robotService.AddRobotUnityWaitTaskList(this);
+                    setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_OK);
                     Draw();
                     break;
                 case MessageBoxResult.Cancel:
@@ -414,6 +438,9 @@ namespace SeldatMRMS.Management.RobotManagent {
                      // headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X-5, MiddleHeader().Y-5);
                      // headerPoint.RenderTransform = new TranslateTransform(Global_Object.CoorCanvas(MiddleHeader()).X-5, Global_Object.CoorCanvas(MiddleHeader()).Y+0.5);
                      headerPoint.RenderTransform = new TranslateTransform(MiddleHeaderCv().X - 2.5, MiddleHeaderCv().Y - 1);
+                         headerPoint1.RenderTransform = new TranslateTransform(MiddleHeaderCv1().X - 2.5, MiddleHeaderCv1().Y - 1);
+                         headerPoint2.RenderTransform = new TranslateTransform(MiddleHeaderCv2().X - 2.5, MiddleHeaderCv2().Y - 1);
+                         headerPoint3.RenderTransform = new TranslateTransform(MiddleHeaderCv3().X - 2.5, MiddleHeaderCv3().Y - 1);
 
                          PathGeometry pgeometry = new PathGeometry();
                          PathFigure pF = new PathFigure();

@@ -100,14 +100,14 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         }
         public string userName { get; set; } // dia chi Emei
         public string codeID;
-        public List<OrderItem> oneOrderList { get; set; }
+        public List<OrderItem> PendingOrderList { get; set; }
         public List<OrderItem> OrderedItemList { get; set; }
         public int orderedAmount = 0;
         public int doneAmount = 0;
 
         public DeviceItem()
         {
-            oneOrderList = new List<OrderItem>();
+            PendingOrderList = new List<OrderItem>();
         }
         public void state(CommandRequest pCommandRequest, String data)
         {
@@ -127,28 +127,28 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         }
         public void RemoveFirstOrder()
         {
-            if (oneOrderList.Count > 0)
+            if (PendingOrderList.Count > 0)
             {
-                oneOrderList.RemoveAt(0);
+                PendingOrderList.RemoveAt(0);
             }
         }
         public void AddOrder(OrderItem hasOrder)
         {
-            oneOrderList.Add(hasOrder);
+            PendingOrderList.Add(hasOrder);
         }
         public OrderItem GetOrder()
         {
-            if (oneOrderList.Count > 0)
+            if (PendingOrderList.Count > 0)
             {
-                return oneOrderList[0];
+                return PendingOrderList[0];
             }
             return null;
         }
         public void ClearOrderList()
         {
-            if (oneOrderList.Count > 0)
+            if (PendingOrderList.Count > 0)
             {
-                oneOrderList.Clear();
+                PendingOrderList.Clear();
             }
         }
         public void rounter(String data)
@@ -186,7 +186,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
                     if (Convert.ToInt32(CreatePlanBuffer(order)) > 0)
                     {
-                        oneOrderList.Add(order);
+                        PendingOrderList.Add(order);
                     }
                     else
                     {
@@ -203,7 +203,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     int productDetailId = (int)results["productDetailId"];
                     int cntOrderReg = 0;
                     int orderAmount = 0;
-                    foreach (OrderItem ord in oneOrderList)
+                    foreach (OrderItem ord in PendingOrderList)
                     {
                         if (productDetailId == ord.productDetailId)
                         {
@@ -275,7 +275,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         // chu y sua 
                         product.palletStatus = PalletStatus.W.ToString(); // W
                         order.dataRequest = product.ToString();
-                        oneOrderList.Add(order);
+                        PendingOrderList.Add(order);
 
 
                     }
@@ -314,7 +314,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         // chu y sua 
                         product.palletStatus = PalletStatus.F.ToString();
                         order.dataRequest = product.ToString();
-                        oneOrderList.Add(order);
+                        PendingOrderList.Add(order);
                     }
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_RETURN)
@@ -336,14 +336,14 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     // chu y sua 
                     product.palletStatus = PalletStatus.W.ToString();
                     order.dataRequest = product.ToString();
-                    oneOrderList.Add(order);
+                    PendingOrderList.Add(order);
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR)
                 {
                     String userName = (String)results["userName"];
                     // kiểm tra quy trình và hủy task 
 
-                    oneOrderList.Remove(oneOrderList.Find(e=>e.userName==userName));
+                    PendingOrderList.Remove(PendingOrderList.Find(e=>e.userName==userName));
                 }
                 else if(typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET)
                 {

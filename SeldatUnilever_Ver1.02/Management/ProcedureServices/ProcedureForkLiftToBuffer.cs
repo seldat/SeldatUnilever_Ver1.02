@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using DoorControllerService;
+using Newtonsoft.Json;
+using SeldatMRMS.Management;
 using SeldatMRMS.Management.DoorServices;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
+using SelDatUnilever_Ver1._00.Management.DeviceManagement;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
+using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatMRMS
 {
@@ -32,8 +37,14 @@ namespace SeldatMRMS
         public DoorService door;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
+        private DeviceRegistrationService deviceService;
 
         public override event Action<Object> ReleaseProcedureHandler;
+
+        public void Registry(DeviceRegistrationService deviceService)
+        {
+            this.deviceService = deviceService;
+        }
         // public override event Action<Object> ErrorProcedureHandler;
         public ProcedureForkLiftToBuffer(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base(robot)
         {
@@ -396,6 +407,49 @@ namespace SeldatMRMS
         public override void FinishStatesCallBack(Int32 message)
         {
             this.resCmd = (ResponseCommand)message;
+        }
+        public class ForkLiftToMachineInfo
+        {
+            public Pose frontLinePose;
+            public String infoPallet;
+        }
+        public ForkLiftToMachineInfo GetPriorityTaskForkLiftToMachine(int productId)
+        {
+            ForkLiftToMachineInfo forkLiftToMachineInfo = null;
+            bool onHasOrder = false;
+            foreach (DeviceItem deviceItem in deviceService.GetDeviceItemList())
+            {
+                foreach (OrderItem order in deviceItem.PendingOrderList)
+                {
+                    if (order.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
+                    {
+                        if (order.productId == productId)
+                        {
+                            forkLiftToMachineInfo.frontLinePose = order.palletAtMachine.linePos;
+                            JInfoPallet infoPallet = new JInfoPallet();
+
+                            infoPallet.pallet = PistonPalletCtrl.PISTON_PALLET_DOWN; /* dropdown */
+                            infoPallet.bay = order.palletAtMachine.bay;
+                            infoPallet.hasSubLine = "no"; /* no */
+                            infoPallet.dir_main = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directMain;
+                            infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directSub;
+                            infoPallet.dir_out = (TrafficRobotUnity.BrDirection)order.palletAtMachine.directOut;
+                            infoPallet.line_ord = order.palletAtMachine.line_ord;
+                            infoPallet.row = order.palletAtMachine.row;
+
+                            forkLiftToMachineInfo.infoPallet = JsonConvert.SerializeObject(infoPallet);
+
+                            onHasOrder = true;
+                            deviceItem.PendingOrderList.Remove(order);
+                            break;
+                        }
+
+                    }
+                }
+                if (onHasOrder)
+                    break;
+            }
+            return forkLiftToMachineInfo;
         }
     }
 }

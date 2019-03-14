@@ -22,6 +22,7 @@ namespace SeldatMRMS {
             switch (ProcedureItem) {
                 case ProcedureItemSelected.PROCEDURE_FORLIFT_TO_BUFFER:
                     ProcedureForkLiftToBuffer procfb = new ProcedureForkLiftToBuffer (robot, doorService, trafficService);
+                    procfb.Registry(deviceService);
                     ProcedureDataItems profbDataItems = new ProcedureDataItems ();
                     profbDataItems.StartTaskTime = DateTime.Now;
                     RegisterProcedureItem itemprocfb = new RegisterProcedureItem () { item = procfb, robot = robot, procedureDataItems = profbDataItems };
@@ -31,6 +32,7 @@ namespace SeldatMRMS {
                     procfb.AssignAnOrder (orderItem);
                     robot.proRegistryInRobot.pFB = procfb;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
+
                     procfb.Start ();
                     break;
                 case ProcedureItemSelected.PROCEDURE_BUFFER_TO_MACHINE:

@@ -4,6 +4,7 @@ using SeldatMRMS.Management.DoorServices;
 using SelDatUnilever_Ver1._00.Communication.HttpBridge;
 using System; 
 using System.Collections.Generic;
+using System.IO;
 using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SelDatUnilever_Ver1.CollectionDataService;
@@ -378,7 +379,13 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
                 return statusOrderResponse;
             }
-            return statusOrderResponse;
+            try
+            {
+                String path = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "RecoderDataOrder.txt");
+                File.AppendAllText(path, DateTime.Now.ToString("yyyyMMdd HH:mm:ss tt >> ") + dataReq + Environment.NewLine + "[Response] >> " + (statusOrderResponse.status) + Environment.NewLine);
+            }
+            catch { }
+                return statusOrderResponse;
         }
         public String RequestDataProcedure(String dataReq, String url)
         {

@@ -34,6 +34,9 @@ namespace SeldatMRMS.Management.RobotManagent {
             ROBOT_STATUS_RUNNING,
             ROBOT_STATUS_ERROR,
             ROBOT_STATUS_WAIT_FIX,
+            ROBOT_STATUS_DISCONNECT,
+            ROBOT_STATUS_CONNECT,
+            ROBOT_STATUS_RECONNECT,
         }
         public struct Props {
             public string name;
@@ -114,12 +117,24 @@ namespace SeldatMRMS.Management.RobotManagent {
             addWaitTaskListItem.Click += AddWaitTaskListMenu;
             addWaitTaskListItem.IsEnabled = true;
 
+            connectItem.Header = "Connect";
+            connectItem.Click += ConnectMenu;
+            connectItem.IsEnabled = false;
+
+            disconnectItem.Header = "Disconnect";
+            disconnectItem.Click += DisConnectMenu;
+            disconnectItem.IsEnabled = true;
+
 
 
             border.ContextMenu.Items.Add(problemSolutionItem);
             border.ContextMenu.Items.Add(startItem);
             border.ContextMenu.Items.Add(pauseItem);
             border.ContextMenu.Items.Add(logOutItem);
+
+            border.ContextMenu.Items.Add(connectItem);
+            border.ContextMenu.Items.Add(disconnectItem);
+
             border.ContextMenu.Items.Add(addReadyListItem);
             border.ContextMenu.Items.Add(addWaitTaskListItem);
             
@@ -252,6 +267,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             canvas.Children.Add(headerPoint2);
             canvas.Children.Add(headerPoint3);
             Draw ();
+          //  robotLogOut.SetName(properties.Label);
 
         }
 
@@ -310,37 +326,9 @@ namespace SeldatMRMS.Management.RobotManagent {
         //    }
         //}
 
-        public void setColorRobotStatus (RobotStatusColorCode rsc) {
-            switch (rsc) {
-                case RobotStatusColorCode.ROBOT_STATUS_OK:
-                    {
-                        RobotUnity robotTemp = new RobotUnity ();
-                        robotTemp = this;
-                        robotTemp.border.Background = new SolidColorBrush (Colors.Blue);
-                        break;
-                    }
-                case RobotStatusColorCode.ROBOT_STATUS_ERROR:
-                    {
-                        RobotUnity robotTemp = new RobotUnity ();
-                        robotTemp = this;
-                        robotTemp.border.Background = new SolidColorBrush (Colors.Red);
-                        break;
-                    }
-                case RobotStatusColorCode.ROBOT_STATUS_RUNNING:
-                    {
-                        RobotUnity robotTemp = new RobotUnity ();
-                        robotTemp = this;
-                        robotTemp.border.Background = new SolidColorBrush (Colors.Green);
-                        break;
-                    }
-                case RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX:
-                    {
-                        RobotUnity robotTemp = new RobotUnity ();
-                        robotTemp = this;
-                        robotTemp.border.Background = new SolidColorBrush (Colors.Yellow);
-                        break;
-                    }
-            }
+        public void setColorRobotStatus(RobotStatusColorCode rsc)
+        {
+            setColorRobotStatus(rsc,this);
         }
         private void ChangeToolTipContent (object sender, ToolTipEventArgs e) {
             border.ToolTip = "1234567890";
@@ -365,6 +353,7 @@ namespace SeldatMRMS.Management.RobotManagent {
                 case MessageBoxResult.OK:
                     DisposeProcedure();
                     TurnOnSupervisorTraffic(false);
+                    this.PreProcedureAs = ProcedureControlAssign.PRO_READY;
                     robotService.RemoveRobotUnityReadyList(this.properties.NameId);
                     robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
                     robotService.AddRobotUnityReadyList(this);
@@ -383,6 +372,27 @@ namespace SeldatMRMS.Management.RobotManagent {
         {
             robotLogOut.ShowText(this.properties.Label,text);
            
+        }
+        private void ConnectMenu(object sender, RoutedEventArgs e)
+        {
+            if (webSocket != null)
+                Dispose();
+            onBinding = true;
+            Start(properties.Url);
+            connectItem.IsEnabled = false;
+            disconnectItem.IsEnabled = true;
+            setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CONNECT);
+
+        }
+       private void DisConnectMenu(object sender, RoutedEventArgs e)
+        {
+            if (webSocket != null)
+                Dispose();
+            onBinding = false;
+            connectItem.IsEnabled = true;
+            disconnectItem.IsEnabled = false;
+            TurnOnSupervisorTraffic(false);
+            setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
         }
         private void AddWaitTaskListMenu(object sender, RoutedEventArgs e)
         {
@@ -422,6 +432,8 @@ namespace SeldatMRMS.Management.RobotManagent {
 
               if (properties.IsConnected)
                 {
+                try
+                {
 
                     //Render Robot
                     this.border.Dispatcher.BeginInvoke(new System.Threading.ThreadStart(() =>
@@ -431,13 +443,13 @@ namespace SeldatMRMS.Management.RobotManagent {
                          Point cPoint = Global_Object.CoorCanvas(properties.pose.Position);
                          props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
                          props.rbTransformGroup.Children[1] = props.rbTranslate;
-                     //Render Status
-                     props.contentRotateTransform.Angle = (properties.pose.Angle);
+                         //Render Status
+                         props.contentRotateTransform.Angle = (properties.pose.Angle);
                          props.contentTranslate = new TranslateTransform(0, 0);
                          props.contentTransformGroup.Children[1] = props.contentTranslate;
-                     // headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X-5, MiddleHeader().Y-5);
-                     // headerPoint.RenderTransform = new TranslateTransform(Global_Object.CoorCanvas(MiddleHeader()).X-5, Global_Object.CoorCanvas(MiddleHeader()).Y+0.5);
-                     headerPoint.RenderTransform = new TranslateTransform(MiddleHeaderCv().X - 2.5, MiddleHeaderCv().Y - 1);
+                         // headerPoint.RenderTransform = new TranslateTransform(MiddleHeader().X-5, MiddleHeader().Y-5);
+                         // headerPoint.RenderTransform = new TranslateTransform(Global_Object.CoorCanvas(MiddleHeader()).X-5, Global_Object.CoorCanvas(MiddleHeader()).Y+0.5);
+                         headerPoint.RenderTransform = new TranslateTransform(MiddleHeaderCv().X - 2.5, MiddleHeaderCv().Y - 1);
                          headerPoint1.RenderTransform = new TranslateTransform(MiddleHeaderCv1().X - 2.5, MiddleHeaderCv1().Y - 1);
                          headerPoint2.RenderTransform = new TranslateTransform(MiddleHeaderCv2().X - 2.5, MiddleHeaderCv2().Y - 1);
                          headerPoint3.RenderTransform = new TranslateTransform(MiddleHeaderCv3().X - 2.5, MiddleHeaderCv3().Y - 1);
@@ -446,18 +458,18 @@ namespace SeldatMRMS.Management.RobotManagent {
                          PathFigure pF = new PathFigure();
                          pF.StartPoint = TopHeaderCv();
 
-                     // pF.StartPoint = new Point(TopHeader().X * 10, TopHeader().Y * 10);
-                     LineSegment pp = new LineSegment();
+                         // pF.StartPoint = new Point(TopHeader().X * 10, TopHeader().Y * 10);
+                         LineSegment pp = new LineSegment();
 
                          pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv() });
                          pF.Segments.Add(new LineSegment() { Point = BottomTailCv() });
                          pF.Segments.Add(new LineSegment() { Point = TopTailCv() });
                          pF.Segments.Add(new LineSegment() { Point = TopHeaderCv() });
-                     // pF.Segments.Add(new LineSegment() { Point = new Point(BottomHeader().X*10, BottomHeader().Y * 10) });
-                     //pF.Segments.Add(new LineSegment() { Point = new Point(BottomTail().X * 10, BottomTail().Y * 10) });
-                     //  pF.Segments.Add(new LineSegment() { Point = new Point(TopTail().X * 10, TopTail().Y * 10) });
-                     //pF.Segments.Add(new LineSegment() { Point = new Point(TopHeader().X * 10, TopHeader().Y * 10) });
-                     pgeometry.Figures.Add(pF);
+                         // pF.Segments.Add(new LineSegment() { Point = new Point(BottomHeader().X*10, BottomHeader().Y * 10) });
+                         //pF.Segments.Add(new LineSegment() { Point = new Point(BottomTail().X * 10, BottomTail().Y * 10) });
+                         //  pF.Segments.Add(new LineSegment() { Point = new Point(TopTail().X * 10, TopTail().Y * 10) });
+                         //pF.Segments.Add(new LineSegment() { Point = new Point(TopHeader().X * 10, TopHeader().Y * 10) });
+                         pgeometry.Figures.Add(pF);
                          riskArea.Data = pgeometry;
 
                          props.rbID.Content = properties.pose.Position.X.ToString("0");
@@ -465,6 +477,8 @@ namespace SeldatMRMS.Management.RobotManagent {
 
 
                      }));
+                }
+                catch { }
             
             }
 

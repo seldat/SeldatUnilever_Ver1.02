@@ -41,7 +41,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         #region Public
         private bool IsDisposed = false;
-
+        protected bool onBinding = true;
         protected virtual void OnClosedEvent(object sender, CloseEventArgs e)
         {
             if (!IsDisposed)
@@ -58,31 +58,43 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void Start(string url)
         {
+            /* new Thread(() =>
+             {
+                 while (onBinding)
+                 {
+                     this.url = url;
+                     IsDisposed = false;
+                     webSocket = new WebSocket(url);
+                     webSocket.OnOpen += (sender, e) => OnOpenedEvent();
+                     webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
+                     webSocket.Connect();
+                     if (webSocket.IsAlive)
+                         break;
+                     else
+                         webSocket=null;
+                     Thread.Sleep(4000);
+                 }
+
+                 if (webSocket != null)
+                 {
+                     if(webSocket.IsAlive)
+                         webSocket.OnClose += (sender, e) => OnClosedEvent((WebSocket)sender, e);
+                 }
+
+             }).Start();*/
+            //  Console.Write("");
+
             new Thread(() =>
             {
-                while (true)
-                {
                     this.url = url;
                     IsDisposed = false;
                     webSocket = new WebSocket(url);
+                    webSocket.OnClose += (sender, e) => OnClosedEvent((WebSocket)sender, e);
                     webSocket.OnOpen += (sender, e) => OnOpenedEvent();
                     webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
                     webSocket.Connect();
-                    if (webSocket.IsAlive)
-                        break;
-                    else
-                        webSocket=null;
-                    Thread.Sleep(4000);
-                }
 
-                if (webSocket != null)
-                {
-                    if(webSocket.IsAlive)
-                        webSocket.OnClose += (sender, e) => OnClosedEvent((WebSocket)sender, e);
-                }
-
-            }).Start();
-          //  Console.Write("");
+            }).Start(); 
         }
         public virtual void Dispose()
         {
@@ -273,9 +285,13 @@ namespace SeldatMRMS.Management.RobotManagent
         private void sendOperation(Operation operation)
         {
 #if DEBUG
-       //     Console.WriteLine(JsonConvert.SerializeObject(operation, Formatting.Indented));
+            //     Console.WriteLine(JsonConvert.SerializeObject(operation, Formatting.Indented));
 #endif
-            webSocket.SendAsync(Serialize(operation), null);
+            try
+            {
+                webSocket.SendAsync(Serialize(operation), null);
+            }
+            catch { }
         }
         public static byte[] Serialize(object obj)
         {

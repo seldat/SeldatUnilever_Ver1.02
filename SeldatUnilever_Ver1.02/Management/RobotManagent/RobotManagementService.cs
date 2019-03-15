@@ -174,10 +174,10 @@ namespace SeldatMRMS.Management.RobotManagent
             // add robot trong traffic quản lý
             trafficManagementService.RegistryRobotList(RobotUnityRegistedList);
 
-
-             r1.Start(prop1.Url);
+            r3.Start(prop3.Url);
+            r1.Start(prop1.Url);
             r2.Start(prop2.Url);
-         r3.Start(prop3.Url);
+        
         }
         public void Initialize()
         {

@@ -7,7 +7,9 @@ using System;
 using System.ComponentModel;
 using System.Timers;
 using System.Windows;
+using System.Windows.Media;
 using WebSocketSharp;
+using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 
 namespace SeldatMRMS.Management.RobotManagent
 {
@@ -44,9 +46,14 @@ namespace SeldatMRMS.Management.RobotManagent
                 //this.AngleW = 0;
             }
             public Point Position { get; set; }
-            public double Vx { get; set; }
-            public double Vy { get; set; }
-            public double Vw { get; set; }
+            public double VFbx { get; set; }
+            public double VFby { get; set; }
+            public double VFbw { get; set; }
+
+            public double VCtrlx { get; set; }
+            public double VCtrly { get; set; }
+            public double VCtrlw { get; set; }
+
             public double AngleW { get; set; } // radian
             public double Angle { get; set; } // radian
         }
@@ -201,9 +208,50 @@ namespace SeldatMRMS.Management.RobotManagent
             timerCheckKeepAlive.Elapsed += checkKeepAliveEvent;
             timerCheckKeepAlive.AutoReset = true;
             timerCheckKeepAlive.Enabled = true;
-            robotLogOut = new RobotLogOut(this.properties.Label);
+            robotLogOut = new RobotLogOut();
+            
         }
-
+        public virtual void setColorRobotStatus(RobotStatusColorCode rsc, RobotUnity robotTemp)
+        {
+            switch (rsc)
+            {
+                case RobotStatusColorCode.ROBOT_STATUS_OK:
+                    {
+                        robotTemp.border.Background = new SolidColorBrush(Colors.Blue);
+                        break;
+                    }
+                case RobotStatusColorCode.ROBOT_STATUS_ERROR:
+                    {
+                        robotTemp.border.Background = new SolidColorBrush(Colors.Red);
+                        break;
+                    }
+                case RobotStatusColorCode.ROBOT_STATUS_RUNNING:
+                    {
+                        robotTemp.border.Background = new SolidColorBrush(Colors.Green);
+                        break;
+                    }
+                case RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX:
+                    {
+                        robotTemp.border.Background = new SolidColorBrush(Colors.Yellow);
+                        break;
+                    }
+                case RobotStatusColorCode.ROBOT_STATUS_DISCONNECT:
+                    {
+                        robotTemp.border.Background = new SolidColorBrush(Colors.Orange);
+                        break;
+                    }
+                case RobotStatusColorCode.ROBOT_STATUS_RECONNECT:
+                    {
+                        robotTemp.border.Background = new SolidColorBrush(Colors.Yellow);
+                        break;
+                    }
+                case RobotStatusColorCode.ROBOT_STATUS_CONNECT:
+                    {
+                        robotTemp.border.Background = new SolidColorBrush(Colors.Blue);
+                        break;
+                    }
+            }
+        }
         private void checkKeepAliveEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             StandardInt32 msg = new StandardInt32();
@@ -223,6 +271,7 @@ namespace SeldatMRMS.Management.RobotManagent
             int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
             int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
             int subscription_Odom= this.Subscribe("/odom", "nav_msgs/Odometry", OdometryCallback, 100);
+            int subscription_Navi = this.Subscribe("/cmd_vel_mux/input/navi", "geometry_msgs/Twist", NaviCallback, 100);
 
             //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
             //paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
@@ -272,11 +321,19 @@ namespace SeldatMRMS.Management.RobotManagent
         private void OdometryCallback(Communication.Message message)
         {
             NavigationOdometry standard = (NavigationOdometry)message;
-            properties.pose.Vx = standard.twist.twist.linear.x;
-            properties.pose.Vy = standard.twist.twist.linear.y;
-            properties.pose.Vw = standard.twist.twist.angular.z;
+            properties.pose.VFbx = standard.twist.twist.linear.x;
+            properties.pose.VFby = standard.twist.twist.linear.y;
+            properties.pose.VFbw = standard.twist.twist.angular.z;
 
         }
+        private void NaviCallback(Communication.Message message)
+        {
+            GeometryTwist standard = (GeometryTwist)message;
+            properties.pose.VCtrlx = standard.linear.x;
+            properties.pose.VCtrly = standard.linear.y;
+            properties.pose.VCtrlw = standard.angular.z;
+        }
+
         private void AGVLaserErrorHandler (Communication.Message message) {
           /*  StandardString standard = (StandardString) message;
             LaserErrorCode er = new LaserErrorCode ();
@@ -406,37 +463,53 @@ namespace SeldatMRMS.Management.RobotManagent
             this.Publish (paramsRosSocket.publication_postPallet, msg);
             robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
         }
+        int countGoal = 0;
         public bool ReachedGoal()
         {
-            Console.WriteLine("------------------------------  " + this.properties.NameId);
-            Console.WriteLine("Goal X=" + gx);
-            Console.WriteLine("Goal Y=" + gy);
-            double _currentgoal_Ex = Math.Abs(Math.Abs(properties.pose.Position.X) - Math.Abs(gx));
-            double _currentgoal_Ey = Math.Abs(Math.Abs(properties.pose.Position.Y) - Math.Abs(gy));
-            Console.WriteLine("Current amcl X=" + properties.pose.Position.X);
-            Console.WriteLine("Current amcl Y=" + properties.pose.Position.Y);
-            Console.WriteLine("Error amcl X=" + _currentgoal_Ex);
-            Console.WriteLine("Error amcl Y=" + _currentgoal_Ey);
-            Console.WriteLine("VX=" + properties.pose.Vx);
-            Console.WriteLine("VY=" + properties.pose.Vy);
-            double gxx = Math.Abs(gx);
-            double gyy = Math.Abs(gy);
-            if (gxx >= 8.50 && gxx<=8.65 && gyy>=11.12 && gyy <= 11.3) // truong hop dat biet
+            if (countGoal ++ > 800)
             {
-                Console.WriteLine("Truong hop dat biet");
-                if (Math.Abs(properties.pose.Vx) < properties.errorVx && Math.Abs(properties.pose.Vy) < properties.errorVy && Math.Abs(properties.pose.Vw) < properties.errorW)
+                countGoal = 0;
+                Console.WriteLine("------------------------------  " + this.properties.NameId);
+                Console.WriteLine("Goal X=" + gx);
+                Console.WriteLine("Goal Y=" + gy);
+                double _currentgoal_Ex = Math.Abs(Math.Abs(properties.pose.Position.X) - Math.Abs(gx));
+                double _currentgoal_Ey = Math.Abs(Math.Abs(properties.pose.Position.Y) - Math.Abs(gy));
+                Console.WriteLine("Current amcl X=" + properties.pose.Position.X);
+                Console.WriteLine("Current amcl Y=" + properties.pose.Position.Y);
+                Console.WriteLine("Error amcl X=" + _currentgoal_Ex);
+                Console.WriteLine("Error amcl Y=" + _currentgoal_Ey);
+                Console.WriteLine("VX=" + properties.pose.VFbx);
+                Console.WriteLine("VY=" + properties.pose.VFby);
+                double gxx = Math.Abs(gx);
+                double gyy = Math.Abs(gy);
+                if (gxx >= 8.50 && gxx <= 8.65 && gyy >= 11.12 && gyy <= 11.3) // truong hop dat biet
                 {
-                    if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 4.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
-                        return true;
+                    Console.WriteLine("Truong hop dat biet");
+                    if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
+                    {
+                        if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 4.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                        {
+                            properties.pose.VCtrlx = 0;
+                            properties.pose.VCtrly = 0;
+                            properties.pose.VCtrlw = 0;
+                            return true;
+                        }
+                    }
                 }
-            }
-            else
-            {
-
-                if (Math.Abs(properties.pose.Vx) < properties.errorVx && Math.Abs(properties.pose.Vy) < properties.errorVy && Math.Abs(properties.pose.Vw) < properties.errorW)
+                else
                 {
-                    if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
-                        return true;
+                    //&& Math.Abs(properties.pose.VCtrlx) <= 0.01 && Math.Abs(properties.pose.VCtrlw) <= 0.01
+
+                    if (Math.Abs(properties.pose.VFbx) < properties.errorVx )
+                    {
+                        if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                        {
+                            properties.pose.VCtrlx = 0;
+                            properties.pose.VCtrly = 0;
+                            properties.pose.VCtrlw = 0;
+                            return true;
+                        }
+                    }
                 }
             }
 
@@ -453,7 +526,7 @@ namespace SeldatMRMS.Management.RobotManagent
         protected override void OnOpenedEvent () {
             properties.IsConnected = true;
            
-            robotLogOut.ShowText(this.properties.Label, properties.Label +" Connected to Ros Master");
+            robotLogOut.ShowText(this.properties.Label,"Connected to Ros Master");
             createRosTerms ();
             
             //   ConnectionStatusHandler(this, ConnectionStatus.CON_OK);
@@ -461,8 +534,8 @@ namespace SeldatMRMS.Management.RobotManagent
 
         protected override void OnClosedEvent (object sender, CloseEventArgs e) {
             //ConnectionStatusHandler(this, ConnectionStatus.CON_FAILED);
-            robotLogOut.ShowText(this.properties.Label, properties.Label + " Disconnected to Ros Master");
-            robotLogOut.ShowText(this.properties.Label, properties.Label + " Reconnecting...");
+            robotLogOut.ShowText(this.properties.Label,  "Disconnected to Ros Master");
+            robotLogOut.ShowText(this.properties.Label,  "Reconnecting...");
             properties.IsConnected = false;
             this.url = properties.URL;
             base.OnClosedEvent (sender, e);
@@ -470,6 +543,7 @@ namespace SeldatMRMS.Management.RobotManagent
         }
 
         public override void Dispose () {
+            robotLogOut.ShowText(this.properties.Label, "Disconnected to Ros Master");
             properties.pose.Destroy ();
             base.Dispose ();
         }

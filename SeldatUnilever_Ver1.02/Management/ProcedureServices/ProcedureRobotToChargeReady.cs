@@ -31,6 +31,7 @@ namespace SeldatMRMS
         const UInt32 TIME_OUT_WAIT_STATE = 60000 * 2;
         const UInt32 TIME_OUT_ROBOT_RECONNECT_SERVER = 60000 * 10;
         const UInt32 TIME_COUNT_GET_BAT_LEVEL = 1000;
+        const UInt32 TIME_DELAY_RELEASE_CHARGE = 60000 * 5;
         private UInt32 timeCountGetBatLevel = 0;
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
@@ -239,8 +240,9 @@ namespace SeldatMRMS
                                 Console.WriteLine("=================****+++++bat level {0}+++++++++++++++++++", batLevel.data[0]);
                                 if (ErrorCodeCharger.TRUE == result)
                                 {
-                                    if (batLevel.data[0] >= 100)
+                                    if (batLevel.data[0] >= 99)
                                     {
+                                        Thread.Sleep((int)TIME_DELAY_RELEASE_CHARGE);
                                         StateRobotToCharge = RobotGoToCharge.ROBCHAR_FINISHED_CHARGEBATTERY;
                                         robot.ShowText("ROBCHAR_FINISHED_CHARGEBATTERY");
                                     }

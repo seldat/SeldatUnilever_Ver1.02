@@ -21,45 +21,48 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
     public partial class RobotLogOut : Window
     {
         String title;
-        public RobotLogOut(String name)
+        public RobotLogOut()
         {
             InitializeComponent();
             
             
         }
+        public void SetName(String name)
+        {
+            this.Title = name;
+        }
         public void ShowText(String src, String txt)
         {
-            Task.Run(() =>
+            object obj = new object();
+            lock (obj)
             {
-                try { 
-                    Dispatcher.Invoke(() =>
+                    txt_logout.Dispatcher.Invoke(() =>
                     {
                       //  this.Title = src;
                        // title = src;
-                        txt_logout.AppendText(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + ": " + txt + Environment.NewLine);
+                        txt_logout.AppendText(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") +" ["+src+"] >> " + txt + Environment.NewLine);
                         txt_logout.ScrollToEnd();
+                        
                     });
-                }
-                catch { }
-            });
+            }
         }
-        private readonly object obj = new object();
         public void ShowTextTraffic(String txt)
         {
-            lock(obj)
+          /*  object obj = new object();
+            lock (obj)
             {
                 try
                 {
                     Dispatcher.Invoke(() =>
                     {
-                        txt_logout_traffic.AppendText(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + ": " + txt + Environment.NewLine);
+                       // txt_logout_traffic.AppendText(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") + ": " + txt + Environment.NewLine);
                      
                         // scroll it automatically
-                        txt_logout_traffic.ScrollToEnd();
+                       // txt_logout_traffic.ScrollToEnd();
                     });
                 }
                 catch { }
-            }
+            }*/
         }
         public void Clear()
         {

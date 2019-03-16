@@ -35,7 +35,6 @@ namespace SeldatMRMS
         {
             StateBufferToReturn = BufferToReturn.BUFRET_IDLE;
             this.robot = robot;
-            base.robot = robot;
             // this.points = new DataForkBufferToReturn();
             this.Traffic = traffiicService;
             procedureCode = ProcedureCode.PROC_CODE_BUFFER_TO_RETURN;
@@ -57,6 +56,7 @@ namespace SeldatMRMS
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
+            order.status = StatusOrderResponseCode.ROBOT_ERROR;
         }
         public void Procedure(object ojb)
         {
@@ -332,7 +332,7 @@ namespace SeldatMRMS
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
-                        order.status = StatusOrderResponseCode.ORDER_FINISHED;
+                        order.status = StatusOrderResponseCode.FINISHED;
                         break;
                     default:
                         break;

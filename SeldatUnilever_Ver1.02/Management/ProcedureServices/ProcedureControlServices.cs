@@ -267,7 +267,7 @@ namespace SeldatMRMS {
                         robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
                             new Action(delegate () {
                                 robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_ERROR);
-                                order.status = StatusOrderResponseCode.ORDER_ROBOT_ERROR;
+                                order.status = StatusOrderResponseCode.ROBOT_ERROR;
                             }));
                         Thread.Sleep(1000);
                         break;
@@ -278,7 +278,7 @@ namespace SeldatMRMS {
                                 robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_RUNNING);
                             }));
                         selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
-                        order.status = StatusOrderResponseCode.ORDER_DELIVERING;
+                        order.status = StatusOrderResponseCode.DELIVERING;
                         ProRun = true;
                         keepRun = false;
                         break;
@@ -288,7 +288,7 @@ namespace SeldatMRMS {
                             new Action(delegate () {
                                 robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX);
                             }));
-                        order.status = StatusOrderResponseCode.ORDER_ROBOT_ERROR;
+                        order.status = StatusOrderResponseCode.ROBOT_ERROR;
                         robot.PreProcedureAs = robot.ProcedureAs;
                         ErrorProcedureHandler(obj);
                         ProRun = false;

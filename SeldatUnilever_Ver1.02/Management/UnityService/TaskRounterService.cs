@@ -89,7 +89,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     {
                         if (CheckAvailableFrontLineBuffer(item, false) != null)
                         {
-                            item.status = StatusOrderResponseCode.ORDER_DELIVERING;
+                            item.status = StatusOrderResponseCode.DELIVERING;
                             return item;
                         }
                         else
@@ -101,7 +101,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         {
                             if (CheckAvailableFrontLineReturn(item) != null) // check return 
                             {
-                                item.status = StatusOrderResponseCode.ORDER_DELIVERING;
+                                item.status = StatusOrderResponseCode.DELIVERING;
                                 return item;
                             }
                             else
@@ -114,7 +114,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     {
                         if (CheckAvailableFrontLineReturn(item) != null)
                         {
-                            item.status = StatusOrderResponseCode.ORDER_DELIVERING;
+                            item.status = StatusOrderResponseCode.DELIVERING;
                             return item;
                         }
                         else
@@ -122,7 +122,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     }
                     else
                     {
-                        item.status = StatusOrderResponseCode.ORDER_DELIVERING;
+                        item.status = StatusOrderResponseCode.DELIVERING;
                     }
                 }
                 catch { }

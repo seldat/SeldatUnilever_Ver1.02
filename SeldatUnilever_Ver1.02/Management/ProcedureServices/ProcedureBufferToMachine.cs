@@ -35,7 +35,6 @@ namespace SeldatMRMS
         {
             StateBufferToMachine = BufferToMachine.BUFMAC_IDLE;
             this.robot = robot;
-            base.robot = robot;
             // this.points = new DataBufferToMachine();
             this.Traffic = traffiicService;
             procedureCode = ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE;
@@ -57,6 +56,7 @@ namespace SeldatMRMS
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
+            order.status = StatusOrderResponseCode.ROBOT_ERROR;
         }
         public void Procedure(object ojb)
         {
@@ -310,7 +310,7 @@ namespace SeldatMRMS
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
-                        order.status = StatusOrderResponseCode.ORDER_FINISHED;
+                        order.status = StatusOrderResponseCode.FINISHED;
                         break;
                     default:
                         break;
@@ -331,7 +331,7 @@ namespace SeldatMRMS
                 {
                     ProRun = false;
                     robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CAN_NOTGET_DATA);
-                    order.status = StatusOrderResponseCode.ORDER_NO_BUFFERDATA;
+                    order.status = StatusOrderResponseCode.NO_BUFFER_DATA;
                     robot.TurnOnSupervisorTraffic(true);
                     robot.TurnOnCtrlSelfTraffic(true);
                     robot.PreProcedureAs = robot.ProcedureAs;
@@ -342,7 +342,7 @@ namespace SeldatMRMS
                 {
                     ProRun = false;
                     robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CAN_NOTGET_DATA);
-                    order.status = StatusOrderResponseCode.ORDER_NO_BUFFERDATA;
+                    order.status = StatusOrderResponseCode.NO_BUFFER_DATA;
                     robot.TurnOnSupervisorTraffic(true);
                     robot.TurnOnCtrlSelfTraffic(true);
                     return;

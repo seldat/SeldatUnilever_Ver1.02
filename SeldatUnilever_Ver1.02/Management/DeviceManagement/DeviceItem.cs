@@ -18,12 +18,13 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             ORDER_STATUS_RESPONSE_SUCCESS=200,
             ORDER_STATUS_RESPONSE_ERROR_DATA = 201,
             ORDER_STATUS_RESPONSE_NOACCEPTED = 202,
-            ORDER_WAITING=300,
-            ORDER_DELIVERING = 301,
-            ORDER_FINISHED= 302,
-            ORDER_ROBOT_ERROR = 303,
-            ORDER_NO_BUFFERDATA = 304,
-            ORDER_CHANGED_FORKLIFT = 305,
+            PENDING=300,
+            DELIVERING = 301,
+            FINISHED= 302,
+            ROBOT_ERROR = 303,
+            NO_BUFFER_DATA = 304,
+            CHANGED_FORKLIFT = 305,
+            DESTROYED= 306,
 
 
         }
@@ -191,7 +192,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     // chu y sua 
                     product.palletStatus = PalletStatus.P.ToString();
                     order.dataRequest = product.ToString();
-                    order.status = StatusOrderResponseCode.ORDER_WAITING;
+                    order.status = StatusOrderResponseCode.PENDING;
                     order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
                     if (Convert.ToInt32(CreatePlanBuffer(order)) > 0)
                     {
@@ -287,7 +288,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         product.palletStatus = PalletStatus.W.ToString(); // W
                         order.dataRequest = product.ToString();
 
-                        order.status = StatusOrderResponseCode.ORDER_WAITING;
+                        order.status = StatusOrderResponseCode.PENDING;
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
 
@@ -329,7 +330,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         // chu y sua 
                         product.palletStatus = PalletStatus.F.ToString();
                         order.dataRequest = product.ToString();
-                        order.status = StatusOrderResponseCode.ORDER_WAITING;
+                        order.status = StatusOrderResponseCode.PENDING;
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
                     }
@@ -354,7 +355,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     // chu y sua 
                     product.palletStatus = PalletStatus.W.ToString();
                     order.dataRequest = product.ToString();
-                    order.status = StatusOrderResponseCode.ORDER_WAITING;
+                    order.status = StatusOrderResponseCode.PENDING;
                     PendingOrderList.Add(order);
                     OrderedItemList.Add(order);
                 }
@@ -363,7 +364,20 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     String userName = (String)results["userName"];
                     // kiểm tra quy trình và hủy task 
 
-                    PendingOrderList.Remove(PendingOrderList.Find(e=>e.userName==userName));
+                    foreach(OrderItem ord in PendingOrderList)
+                    {
+                        if (ord.userName.Equals(userName))
+                            PendingOrderList.Remove(ord);
+                    }
+                    foreach (OrderItem ord in OrderedItemList)
+                    {
+                        if (ord.userName.Equals(userName))
+                            if (ord.status == StatusOrderResponseCode.PENDING)
+                            {
+                                ord.status = StatusOrderResponseCode.DESTROYED;
+                            }
+                    }
+
                 }
                 else if(typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET)
                 {

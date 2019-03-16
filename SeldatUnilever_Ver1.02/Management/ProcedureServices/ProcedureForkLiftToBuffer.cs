@@ -51,7 +51,6 @@ namespace SeldatMRMS
             StateForkLift = ForkLift.FORBUF_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
             this.robot = robot;
-            base.robot = robot;
             // this.points = new DataForkLiftToBuffer();
             door = doorservice.DoorMezzamineUp;
             // this.points.PointFrontLineGate = this.door.config.PointFrontLine;
@@ -77,6 +76,7 @@ namespace SeldatMRMS
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
+            order.status = StatusOrderResponseCode.ROBOT_ERROR;
         }
         public void Procedure(object ojb)
         {
@@ -371,7 +371,7 @@ namespace SeldatMRMS
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
-                        order.status = StatusOrderResponseCode.ORDER_FINISHED;
+                        order.status = StatusOrderResponseCode.FINISHED;
                         break;
 
 
@@ -452,7 +452,7 @@ namespace SeldatMRMS
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
-                        order.status = StatusOrderResponseCode.ORDER_FINISHED;
+                        order.status = StatusOrderResponseCode.FINISHED;
                         break;
                     //////////////////////////////////////////////////////
                     default:
@@ -497,7 +497,7 @@ namespace SeldatMRMS
                             infoPallet.row = order.palletAtMachine.row;
 
                             forkLiftToMachineInfo.infoPallet = JsonConvert.SerializeObject(infoPallet);
-                            order.status = StatusOrderResponseCode.ORDER_CHANGED_FORKLIFT;
+                            order.status = StatusOrderResponseCode.CHANGED_FORKLIFT;
                             onHasOrder = true;
                             deviceItem.PendingOrderList.Remove(order);
                             break;

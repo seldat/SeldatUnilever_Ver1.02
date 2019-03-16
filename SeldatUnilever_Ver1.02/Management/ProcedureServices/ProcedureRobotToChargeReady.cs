@@ -14,6 +14,7 @@ using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 using static SelDatUnilever_Ver1._00.Management.ComSocket.RouterComPort;
+using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatMRMS
 {
@@ -421,7 +422,6 @@ namespace SeldatMRMS
         {
             StateRobotGoToReady = RobotGoToReady.ROBREA_IDLE;
             this.robot = robot;
-            base.robot = robot;
             this.Traffic = trafficService;
             this.charger = chargerService;
             points.PointFrontLine = this.charger.PropertiesCharge_List[(int)id - 1].PointFrontLine;

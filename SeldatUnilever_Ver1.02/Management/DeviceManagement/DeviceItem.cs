@@ -79,6 +79,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         public class OrderItem
         {
             public OrderItem() { }
+            public String userName { get; set; }
             private String OrderId { get; set; }
             public int planId { get; set; }
             public int deviceId;
@@ -100,7 +101,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public String dataRequest;
            // public bool status = false; // chua hoan thanh
             public DataPallet palletAtMachine;
-            public String userName;
+
             public int bufferId;
             public int palletAmount;
             

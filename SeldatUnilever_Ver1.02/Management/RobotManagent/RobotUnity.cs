@@ -37,6 +37,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             ROBOT_STATUS_DISCONNECT,
             ROBOT_STATUS_CONNECT,
             ROBOT_STATUS_RECONNECT,
+            ROBOT_STATUS_CAN_NOTGET_DATA
         }
         public struct Props {
             public string name;
@@ -326,10 +327,11 @@ namespace SeldatMRMS.Management.RobotManagent {
         //    }
         //}
 
-        public void setColorRobotStatus(RobotStatusColorCode rsc)
+        public  void setColorRobotStatus(RobotStatusColorCode rsc)
         {
-            setColorRobotStatus(rsc,this);
+            base.setColorRobotStatus(rsc,this);
         }
+
         private void ChangeToolTipContent (object sender, ToolTipEventArgs e) {
             border.ToolTip = "1234567890";
         }
@@ -375,24 +377,28 @@ namespace SeldatMRMS.Management.RobotManagent {
         }
         private void ConnectMenu(object sender, RoutedEventArgs e)
         {
-            if (webSocket != null)
-                Dispose();
+
+            Dispose();
             onBinding = true;
             Start(properties.Url);
             connectItem.IsEnabled = false;
             disconnectItem.IsEnabled = true;
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CONNECT);
-
+            MessageBox.Show("Để robot có thể tiếp tục hãy add Robot vào Ready Mode hoặc TaskWait Mode !");
         }
        private void DisConnectMenu(object sender, RoutedEventArgs e)
         {
-            if (webSocket != null)
-                Dispose();
+            DisposeProcedure();
+            Dispose();
             onBinding = false;
             connectItem.IsEnabled = true;
             disconnectItem.IsEnabled = false;
             TurnOnSupervisorTraffic(false);
+            properties.IsConnected = false;
+            robotService.RemoveRobotUnityReadyList(this.properties.NameId);
+            robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
+            MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
         }
         private void AddWaitTaskListMenu(object sender, RoutedEventArgs e)
         {

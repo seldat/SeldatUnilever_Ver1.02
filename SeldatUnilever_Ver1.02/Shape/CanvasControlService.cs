@@ -792,7 +792,7 @@ namespace SeldatMRMS
         public void ReloadListOrderItems(DeviceItem temp)
         {
             orderItemsList.Clear();
-            foreach (DeviceItem.OrderItem order in temp.PendingOrderList)
+            foreach (DeviceItem.OrderItem order in temp.OrderedItemList)
             {
                 orderItemsList.Add(order);
             }

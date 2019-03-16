@@ -98,6 +98,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             if (orderItem != null)
                             {
                                 processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK;
+                                orderItem.robot = robot.properties.Label;
                                 cntOrderNull = 0;
                                 break;
                             }
@@ -195,7 +196,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             if (orderItem != null)
                             {
                                 Console.WriteLine(processAssignTaskReady);
-                                processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_SET_TRAFFIC_RISKAREA_ON;
+                            orderItem.robot = robot.properties.Label;
+                            processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_SET_TRAFFIC_RISKAREA_ON;
                             }
                             else
                             {

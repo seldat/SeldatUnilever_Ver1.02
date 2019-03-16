@@ -39,6 +39,7 @@ namespace SeldatMRMS
             StateReturnToGate = ReturnToGate.RETGATE_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
             this.robot = robot;
+            base.robot = robot;
             // this.points = new DataReturnToGate();
             this.door = doorservice;
             this.Traffic = traffiicService;

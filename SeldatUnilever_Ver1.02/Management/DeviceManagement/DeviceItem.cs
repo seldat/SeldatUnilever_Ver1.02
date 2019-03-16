@@ -20,7 +20,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             ORDER_STATUS_RESPONSE_NOACCEPTED = 202,
             ORDER_WAITING=300,
             ORDER_DELIVERING = 301,
-            ORDER_FINISH = 302,
+            ORDER_FINISHED= 302,
+            ORDER_ROBOT_ERROR = 303,
+            ORDER_NO_BUFFERDATA = 304,
+            ORDER_CHANGED_FORKLIFT = 305,
 
 
         }
@@ -81,10 +84,13 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public String productDetailName { get; set; }
             public int productId { get; set; }
             public int productDetailId { get; set; }
-            public StatusOrderResponse status { get; set; }
+
 
             public TyeRequest typeReq { get; set; } // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
-            public String activeDate { get; set; }
+            public String activeDate;
+            public String dateTime { get; set; }
+            public String robot { get; set; }
+            public StatusOrderResponseCode status { get; set; }
             public int timeWorkId;
             public String palletStatus;
             public int palletId;
@@ -108,6 +114,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         public DeviceItem()
         {
             PendingOrderList = new List<OrderItem>();
+            OrderedItemList = new List<OrderItem>();
         }
         public void state(CommandRequest pCommandRequest, String data)
         {
@@ -135,6 +142,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         public void AddOrder(OrderItem hasOrder)
         {
             PendingOrderList.Add(hasOrder);
+            OrderedItemList.Add(hasOrder);
         }
         public OrderItem GetOrder()
         {
@@ -183,10 +191,12 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     // chu y sua 
                     product.palletStatus = PalletStatus.P.ToString();
                     order.dataRequest = product.ToString();
-
+                    order.status = StatusOrderResponseCode.ORDER_WAITING;
+                    order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
                     if (Convert.ToInt32(CreatePlanBuffer(order)) > 0)
                     {
                         PendingOrderList.Add(order);
+                        OrderedItemList.Add(order);
                     }
                     else
                     {
@@ -270,12 +280,17 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         dynamic product = new JObject();
                         product.timeWorkId = order.timeWorkId;
                         product.activeDate = order.activeDate;
+                        order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
                         product.productId = order.productId;
                         product.productDetailId = order.productDetailId;
                         // chu y sua 
                         product.palletStatus = PalletStatus.W.ToString(); // W
                         order.dataRequest = product.ToString();
+
+                        order.status = StatusOrderResponseCode.ORDER_WAITING;
                         PendingOrderList.Add(order);
+                        OrderedItemList.Add(order);
+
 
 
                     }
@@ -304,7 +319,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         int directSub = (int)stuffPallet["pallet"]["dir_sub"];
                         int dir_out = (int)stuffPallet["pallet"]["dir_out"];
                         int line_ord = (int)stuffPallet["pallet"]["line_ord"];
-                        
+                        order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
                         order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub,directOut=dir_out ,line_ord=line_ord};
                         dynamic product = new JObject();
                      //   product.timeWorkId = order.timeWorkId;
@@ -314,7 +329,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         // chu y sua 
                         product.palletStatus = PalletStatus.F.ToString();
                         order.dataRequest = product.ToString();
+                        order.status = StatusOrderResponseCode.ORDER_WAITING;
                         PendingOrderList.Add(order);
+                        OrderedItemList.Add(order);
                     }
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_RETURN)
@@ -333,10 +350,13 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     product.activeDate = order.activeDate;
                     product.productId = order.productId;
                     product.productDetailId = order.productDetailId;
+                    order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
                     // chu y sua 
                     product.palletStatus = PalletStatus.W.ToString();
                     order.dataRequest = product.ToString();
+                    order.status = StatusOrderResponseCode.ORDER_WAITING;
                     PendingOrderList.Add(order);
+                    OrderedItemList.Add(order);
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR)
                 {

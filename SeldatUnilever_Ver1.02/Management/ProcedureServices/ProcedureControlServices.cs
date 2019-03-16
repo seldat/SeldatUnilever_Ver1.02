@@ -222,7 +222,7 @@ namespace SeldatMRMS {
             ROBREA_IDLE,
             ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION, // ROBOT cho tiến vào vị trí đầu line charge su dung laser
             ROBREA_ROBOT_WAITTING_GOTO_READYSTATION, // hoàn thành đến vùng check in/ kiểm tra có robot đang làm việc vùng này và lấy vị trí line và pallet
-            // ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION, // đang đợi dò line để đến vị trí line trong buffer
+            ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION, // đang đợi dò line để đến vị trí line trong buffer
             ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION, // đến vị 
             ROBREA_ROBOT_RELEASED
         }
@@ -253,38 +253,42 @@ namespace SeldatMRMS {
 
         public SelectHandleError selectHandleError;
 
-        protected void CheckUserHandleError (object obj) {
+        protected virtual void CheckUserHandleError (object obj) {
             bool keepRun = true;
             ProcedureControlServices p = (ProcedureControlServices)obj;
             Debug (obj,"ErrorCode -> " + getStringError(p.errorCode));
-           
             robot.RegistrySolvedForm(this);
-            while (keepRun) {
-                switch (selectHandleError) {
+            while (keepRun)
+            {
+                switch (selectHandleError)
+                {
                     case SelectHandleError.CASE_ERROR_WAITTING:
                         // Global_Object.PlayWarning ();
-                        robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
-                            new Action (delegate () {
-                                robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_ERROR);
+                        robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
+                            new Action(delegate () {
+                                robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_ERROR);
+                                order.status = StatusOrderResponseCode.ORDER_ROBOT_ERROR;
                             }));
-                        Thread.Sleep (1000);
+                        Thread.Sleep(1000);
                         break;
                     case SelectHandleError.CASE_ERROR_CONTINUOUS:
                         // Global_Object.StopWarning ();
-                        robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
-                            new Action (delegate () {
-                                robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_RUNNING);
+                        robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
+                            new Action(delegate () {
+                                robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_RUNNING);
                             }));
                         selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
+                        order.status = StatusOrderResponseCode.ORDER_DELIVERING;
                         ProRun = true;
                         keepRun = false;
                         break;
                     case SelectHandleError.CASE_ERROR_EXIT:
                         // Global_Object.StopWarning ();
-                        robot.border.Dispatcher.BeginInvoke (System.Windows.Threading.DispatcherPriority.Normal,
-                            new Action (delegate () {
-                                robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX);
+                        robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
+                            new Action(delegate () {
+                                robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX);
                             }));
+                        order.status = StatusOrderResponseCode.ORDER_ROBOT_ERROR;
                         robot.PreProcedureAs = robot.ProcedureAs;
                         ErrorProcedureHandler(obj);
                         ProRun = false;

@@ -164,7 +164,7 @@ namespace SeldatMRMS
         }
         public void UpdateInformationInProc(Object obj, ProcessStatus status)
         {
-            try
+            /*try
             {
                 if (obj.GetType() == typeof(ProcedureForkLiftToBuffer))
                 {
@@ -252,7 +252,7 @@ namespace SeldatMRMS
 
                 }
             }
-            catch { }
+            catch { }*/
         }
         public void UpdateInformation(Object obj)
         {

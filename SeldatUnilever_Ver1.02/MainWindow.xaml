@@ -334,8 +334,9 @@
                                                         CanUserResizeRows="False"
                                                         CanUserDeleteRows="False"
                                                         AutoGenerateColumns="True"
+                                                        Width="Auto"
                                                         FontSize="12">
-                                                        <DataGrid.Columns>
+                                                        <DataGrid.Columns >
                                                             <!--<DataGridTemplateColumn Width="*">
                                                                  <DataGridTemplateColumn.HeaderTemplate>
                                                                  <DataTemplate>

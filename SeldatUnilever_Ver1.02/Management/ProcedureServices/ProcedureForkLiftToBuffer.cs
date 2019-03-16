@@ -51,6 +51,7 @@ namespace SeldatMRMS
             StateForkLift = ForkLift.FORBUF_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
             this.robot = robot;
+            base.robot = robot;
             // this.points = new DataForkLiftToBuffer();
             door = doorservice.DoorMezzamineUp;
             // this.points.PointFrontLineGate = this.door.config.PointFrontLine;
@@ -370,6 +371,7 @@ namespace SeldatMRMS
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
+                        order.status = StatusOrderResponseCode.ORDER_FINISHED;
                         break;
 
 
@@ -450,6 +452,7 @@ namespace SeldatMRMS
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
+                        order.status = StatusOrderResponseCode.ORDER_FINISHED;
                         break;
                     //////////////////////////////////////////////////////
                     default:
@@ -480,6 +483,7 @@ namespace SeldatMRMS
                     {
                         if (order.productId == productId)
                         {
+                            forkLiftToMachineInfo = new ForkLiftToMachineInfo();
                             forkLiftToMachineInfo.frontLinePose = order.palletAtMachine.linePos;
                             JInfoPallet infoPallet = new JInfoPallet();
 
@@ -493,7 +497,7 @@ namespace SeldatMRMS
                             infoPallet.row = order.palletAtMachine.row;
 
                             forkLiftToMachineInfo.infoPallet = JsonConvert.SerializeObject(infoPallet);
-
+                            order.status = StatusOrderResponseCode.ORDER_CHANGED_FORKLIFT;
                             onHasOrder = true;
                             deviceItem.PendingOrderList.Remove(order);
                             break;

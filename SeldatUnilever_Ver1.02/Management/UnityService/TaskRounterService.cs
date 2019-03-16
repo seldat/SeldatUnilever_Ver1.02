@@ -81,13 +81,15 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             OrderItem item = null;
             if (deviceItemsList.Count > 0)
             {
-                item = deviceItemsList[0].GetOrder();
+               
                 try
                 {
+                    item = deviceItemsList[0].GetOrder();
                     if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
                     {
                         if (CheckAvailableFrontLineBuffer(item, false) != null)
                         {
+                            item.status = StatusOrderResponseCode.ORDER_DELIVERING;
                             return item;
                         }
                         else
@@ -99,6 +101,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         {
                             if (CheckAvailableFrontLineReturn(item) != null) // check return 
                             {
+                                item.status = StatusOrderResponseCode.ORDER_DELIVERING;
                                 return item;
                             }
                             else
@@ -111,10 +114,15 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     {
                         if (CheckAvailableFrontLineReturn(item) != null)
                         {
+                            item.status = StatusOrderResponseCode.ORDER_DELIVERING;
                             return item;
                         }
                         else
                             return null;
+                    }
+                    else
+                    {
+                        item.status = StatusOrderResponseCode.ORDER_DELIVERING;
                     }
                 }
                 catch { }

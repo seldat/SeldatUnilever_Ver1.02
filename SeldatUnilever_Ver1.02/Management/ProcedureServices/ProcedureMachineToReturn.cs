@@ -6,6 +6,7 @@ using SeldatMRMS.Management.TrafficManager;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
+using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatMRMS
 {
@@ -31,6 +32,7 @@ namespace SeldatMRMS
         {
             StateMachineToReturn = MachineToReturn.MACRET_IDLE;
             this.robot = robot;
+            base.robot = robot;
             this.points = new DataMachineToReturn();
             this.Traffic = traffiicService;
             procedureCode = ProcedureCode.PROC_CODE_MACHINE_TO_RETURN;
@@ -300,6 +302,7 @@ namespace SeldatMRMS
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
+                        order.status = StatusOrderResponseCode.ORDER_FINISHED;
                         break;
                     default:
                         break;

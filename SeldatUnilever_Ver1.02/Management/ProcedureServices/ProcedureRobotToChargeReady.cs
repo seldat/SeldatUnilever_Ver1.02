@@ -10,6 +10,7 @@ using SeldatMRMS.Management.TrafficManager;
 using SeldatUnilever_Ver1._02.Management.McuCom;
 using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
+using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 using static SelDatUnilever_Ver1._00.Management.ComSocket.RouterComPort;
@@ -420,6 +421,7 @@ namespace SeldatMRMS
         {
             StateRobotGoToReady = RobotGoToReady.ROBREA_IDLE;
             this.robot = robot;
+            base.robot = robot;
             this.Traffic = trafficService;
             this.charger = chargerService;
             points.PointFrontLine = this.charger.PropertiesCharge_List[(int)id - 1].PointFrontLine;
@@ -469,24 +471,22 @@ namespace SeldatMRMS
                        // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                         if ( robot.ReachedGoal())
                         {
-                            rb.SendCmdAreaPallet(RbToRd.points.PointOfCharger);
+                            //rb.SendCmdAreaPallet(RbToRd.points.PointOfCharger);
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_READYAREA);
-                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION;
-                            robot.ShowText("ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION");
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION;
+                            robot.ShowText("ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION");
                         }
                         else if (Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
                         {
                            // robot.TurnOnSupervisorTraffic(false);
                         }
                         break;
-                    // case RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION: // đang đợi dò line để đến vị trí line trong buffer
-                    //     if (true == rb.CheckPointDetectLine(p.PointOfCharger, rb))
-                    //     {
-                    //         rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_LINEDETECT_COMING_POSITION);
-                    //         StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION;
-                    //     }
-                    //     break;
+                    case RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION: // đang đợi dò line để đến vị trí line trong buffer
+                        rb.SendCmdAreaPallet(RbToRd.points.PointOfCharger);
+                        StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION;
+                        robot.ShowText("ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION");
+                        break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION: // đến vị trả robot về robotmanagement để nhận quy trình mới
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOTO_POSITION)
                         {
@@ -508,6 +508,7 @@ namespace SeldatMRMS
                         // } else {
                         //     ErrorProcedureHandler (this);
                         // }
+                        robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_OK);
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);

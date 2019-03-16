@@ -213,44 +213,57 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public virtual void setColorRobotStatus(RobotStatusColorCode rsc, RobotUnity robotTemp)
         {
-            switch (rsc)
+            try
             {
-                case RobotStatusColorCode.ROBOT_STATUS_OK:
+                robotTemp.border.Dispatcher.Invoke(() =>
+                {
+                    switch (rsc)
                     {
-                        robotTemp.border.Background = new SolidColorBrush(Colors.Blue);
-                        break;
+                        case RobotStatusColorCode.ROBOT_STATUS_OK:
+                            {
+
+                                robotTemp.border.Background = new SolidColorBrush(Colors.Blue);
+                                break;
+                            }
+                        case RobotStatusColorCode.ROBOT_STATUS_ERROR:
+                            {
+                                robotTemp.border.Background = new SolidColorBrush(Colors.Red);
+                                break;
+                            }
+                        case RobotStatusColorCode.ROBOT_STATUS_RUNNING:
+                            {
+                                robotTemp.border.Background = new SolidColorBrush(Colors.Green);
+                                break;
+                            }
+                        case RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX:
+                            {
+                                robotTemp.border.Background = new SolidColorBrush(Colors.Yellow);
+                                break;
+                            }
+                        case RobotStatusColorCode.ROBOT_STATUS_DISCONNECT:
+                            {
+                                robotTemp.border.Background = new SolidColorBrush(Colors.Orange);
+                                break;
+                            }
+                        case RobotStatusColorCode.ROBOT_STATUS_RECONNECT:
+                            {
+                                robotTemp.border.Background = new SolidColorBrush(Colors.Yellow);
+                                break;
+                            }
+                        case RobotStatusColorCode.ROBOT_STATUS_CONNECT:
+                            {
+                                robotTemp.border.Background = new SolidColorBrush(Colors.Blue);
+                                break;
+                            }
+                        case RobotStatusColorCode.ROBOT_STATUS_CAN_NOTGET_DATA:
+                            {
+                                robotTemp.border.Background = new SolidColorBrush(Colors.YellowGreen);
+                                break;
+                            }
                     }
-                case RobotStatusColorCode.ROBOT_STATUS_ERROR:
-                    {
-                        robotTemp.border.Background = new SolidColorBrush(Colors.Red);
-                        break;
-                    }
-                case RobotStatusColorCode.ROBOT_STATUS_RUNNING:
-                    {
-                        robotTemp.border.Background = new SolidColorBrush(Colors.Green);
-                        break;
-                    }
-                case RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX:
-                    {
-                        robotTemp.border.Background = new SolidColorBrush(Colors.Yellow);
-                        break;
-                    }
-                case RobotStatusColorCode.ROBOT_STATUS_DISCONNECT:
-                    {
-                        robotTemp.border.Background = new SolidColorBrush(Colors.Orange);
-                        break;
-                    }
-                case RobotStatusColorCode.ROBOT_STATUS_RECONNECT:
-                    {
-                        robotTemp.border.Background = new SolidColorBrush(Colors.Yellow);
-                        break;
-                    }
-                case RobotStatusColorCode.ROBOT_STATUS_CONNECT:
-                    {
-                        robotTemp.border.Background = new SolidColorBrush(Colors.Blue);
-                        break;
-                    }
+                });
             }
+            catch { }
         }
         private void checkKeepAliveEvent(Object source, System.Timers.ElapsedEventArgs e)
         {

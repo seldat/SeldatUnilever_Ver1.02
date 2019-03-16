@@ -151,9 +151,18 @@ namespace SeldatMRMS.Management.RobotManagent
             r3.RegistryRobotService(this);
 
             r3.TurnOnSupervisorTraffic(false);
-            /*  r2.properties.pose.Position = new Point(-14.2, -0.5);
-              r2.properties.pose.Angle = -180;
-              r2.properties.pose.AngleW = -180 * Math.PI / 180;*/
+
+            r1.properties.pose.Position = new Point(-3.12,2.29);
+            r1.properties.pose.Angle = 90;
+            r1.properties.pose.AngleW = 90 * Math.PI / 180;
+
+            r2.properties.pose.Position = new Point(-0.2, 2.23);
+            r2.properties.pose.Angle = 90;
+            r2.properties.pose.AngleW = 90 * Math.PI / 180;
+
+            r3.properties.pose.Position = new Point(-2.76, 2.87);
+            r3.properties.pose.Angle =90;
+            r3.properties.pose.AngleW = 90 * Math.PI / 180;
 
             r1.Registry(trafficManagementService);
             r2.Registry(trafficManagementService);

@@ -4,8 +4,10 @@ using System.Threading;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
+using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
+using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatMRMS
 {
@@ -33,6 +35,7 @@ namespace SeldatMRMS
         {
             StateBufferToReturn = BufferToReturn.BUFRET_IDLE;
             this.robot = robot;
+            base.robot = robot;
             // this.points = new DataForkBufferToReturn();
             this.Traffic = traffiicService;
             procedureCode = ProcedureCode.PROC_CODE_BUFFER_TO_RETURN;
@@ -329,6 +332,7 @@ namespace SeldatMRMS
                         ProRun = false;
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
+                        order.status = StatusOrderResponseCode.ORDER_FINISHED;
                         break;
                     default:
                         break;
@@ -336,6 +340,32 @@ namespace SeldatMRMS
                 Thread.Sleep(5);
             }
             StateBufferToReturn = BufferToReturn.BUFRET_IDLE;
+        }
+
+        protected override void CheckUserHandleError(object obj)
+        {
+            if (errorCode == ErrorCode.CAN_NOT_GET_DATA)
+            {
+                if (robot.PreProcedureAs != ProcedureControlAssign.PRO_READY)
+                {
+                    ProRun = false;
+                    robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CAN_NOTGET_DATA);
+                    robot.TurnOnSupervisorTraffic(true);
+                    robot.TurnOnCtrlSelfTraffic(true);
+                    robot.PreProcedureAs = robot.ProcedureAs;
+                    ReleaseProcedureHandler(obj);
+                    return;
+                }
+                else
+                {
+                    ProRun = false;
+                    robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CAN_NOTGET_DATA);
+                    robot.TurnOnSupervisorTraffic(true);
+                    robot.TurnOnCtrlSelfTraffic(true);
+                    return;
+                }
+            }
+            base.CheckUserHandleError(obj);
         }
         public override void FinishStatesCallBack(Int32 message)
         {

@@ -87,6 +87,7 @@ namespace SeldatMRMS
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
+            selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
         }
         public void Procedure(object ojb)
         {
@@ -446,6 +447,7 @@ namespace SeldatMRMS
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
+            selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
         }
 
         public void Procedure(object ojb)

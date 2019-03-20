@@ -46,7 +46,7 @@ namespace SeldatMRMS
             this.deviceService = deviceService;
         }
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureForkLiftToBuffer(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService traffiicService) : base(robot)
+        public ProcedureForkLiftToBuffer(RobotUnity robot, DoorManagementService doorservice, TrafficManagementService trafficService) : base(robot)
         {
             StateForkLift = ForkLift.FORBUF_IDLE;
             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -55,7 +55,7 @@ namespace SeldatMRMS
             door = doorservice.DoorMezzamineUp;
             // this.points.PointFrontLineGate = this.door.config.PointFrontLine;
             // this.points.PointPickPalletIn = this.door.config.PointOfPallet;
-            this.Traffic = traffiicService;
+            this.Traffic = trafficService;
             procedureCode = ProcedureCode.PROC_CODE_FORKLIFT_TO_BUFFER;
 
         }
@@ -77,6 +77,7 @@ namespace SeldatMRMS
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
+            selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
         }
         public void Procedure(object ojb)
         {

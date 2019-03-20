@@ -141,7 +141,7 @@ namespace SeldatMRMS
                         robot.setColorRobotStatus (RobotStatusColorCode.ROBOT_STATUS_OK);
                     }));
                 if (procItem.procedureCode == ProcedureControlServices.ProcedureCode.PROC_CODE_ROBOT_TO_READY) {
-
+                    
                     robotManagementService.AddRobotUnityReadyList (robot);
 
                 } else if (procItem.procedureCode == ProcedureControlServices.ProcedureCode.PROC_CODE_ROBOT_TO_CHARGE) {

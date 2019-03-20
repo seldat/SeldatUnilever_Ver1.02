@@ -31,12 +31,12 @@ namespace SeldatMRMS
 
         public override event Action<Object> ReleaseProcedureHandler;
         // public override event Action<Object> ErrorProcedureHandler;
-        public ProcedureBufferToMachine(RobotUnity robot, TrafficManagementService traffiicService) : base(robot)
+        public ProcedureBufferToMachine(RobotUnity robot, TrafficManagementService trafficService) : base(robot)
         {
             StateBufferToMachine = BufferToMachine.BUFMAC_IDLE;
             this.robot = robot;
             // this.points = new DataBufferToMachine();
-            this.Traffic = traffiicService;
+            this.Traffic = trafficService;
             procedureCode = ProcedureCode.PROC_CODE_BUFFER_TO_MACHINE;
         }
 
@@ -57,6 +57,7 @@ namespace SeldatMRMS
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
+            selectHandleError=SelectHandleError.CASE_ERROR_EXIT;
         }
         public void Procedure(object ojb)
         {
@@ -117,6 +118,7 @@ namespace SeldatMRMS
                         catch (System.Exception)
                         {
                             errorCode = ErrorCode.CAN_NOT_GET_DATA;
+
                             CheckUserHandleError(this);
                         }
                         break;
@@ -327,7 +329,7 @@ namespace SeldatMRMS
         {
             if (errorCode == ErrorCode.CAN_NOT_GET_DATA)
             {
-                if (robot.PreProcedureAs != ProcedureControlAssign.PRO_READY)
+                if (!this.Traffic.RobotIsInArea("READY", robot.properties.pose.Position))
                 {
                     ProRun = false;
                     robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CAN_NOTGET_DATA);

@@ -204,7 +204,7 @@ namespace SeldatMRMS.Management.RobotManagent
         public RobotUnityControl()
         {
             timerCheckKeepAlive = new Timer();
-            timerCheckKeepAlive.Interval = 1000; /* 5s */
+            timerCheckKeepAlive.Interval = 500;
             timerCheckKeepAlive.Elapsed += checkKeepAliveEvent;
             timerCheckKeepAlive.AutoReset = true;
             timerCheckKeepAlive.Enabled = true;

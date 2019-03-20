@@ -18,7 +18,8 @@ namespace SeldatMRMS.Management.RobotManagent
             PRO_RETURN_TO_GATE,
             PRO_CHARGE,
             PRO_READY,
-            PRO_FORKLIFT_TO_MACHINE
+            PRO_FORKLIFT_TO_MACHINE,
+            PRO_IDLE
         }
         public struct ProcedureRegistryInRobotUnity
         {
@@ -44,51 +45,86 @@ namespace SeldatMRMS.Management.RobotManagent
 
         public void DisposeProcedure()
         {
-            switch(ProcedureRobotAssigned)
-            {
-                case ProcedureControlAssign.PRO_BUFFER_TO_MACHINE:
                     if (proRegistryInRobot.pBM != null)
                     {
                         proRegistryInRobot.pBM.Destroy();
                         proRegistryInRobot.pBM = null;
                     }
-                    break;
-                case ProcedureControlAssign.PRO_MACHINE_TO_RETURN:
+                 
                     if (proRegistryInRobot.pMR != null)
                     {
                         proRegistryInRobot.pMR.Destroy();
                         proRegistryInRobot.pMR = null;
                     }
-                    break;
-                case ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER:
                     if (proRegistryInRobot.pFB != null)
                     {
                         proRegistryInRobot.pFB.Destroy();
                         proRegistryInRobot.pFB = null;
                     }
-                    break;
-                case ProcedureControlAssign.PRO_BUFFER_TO_RETURN:
                     if (proRegistryInRobot.pBR != null)
                     {
                         proRegistryInRobot.pBR.Destroy();
                         proRegistryInRobot.pBR = null;
                     }
-                    break;
-                case ProcedureControlAssign.PRO_CHARGE:
                     if (proRegistryInRobot.pRC != null)
                     {
                         proRegistryInRobot.pRC.Destroy();
                         proRegistryInRobot.pRC = null;
                     }
-                    break;
-                case ProcedureControlAssign.PRO_READY:
                     if (proRegistryInRobot.pRR != null)
                     {
                         proRegistryInRobot.pRR.Destroy();
                         proRegistryInRobot.pRR = null;
                     }
-                    break;
-            }
         }
+
+        /* public void DisposeProcedure()
+         {
+             switch (ProcedureRobotAssigned)
+             {
+                 case ProcedureControlAssign.PRO_BUFFER_TO_MACHINE:
+                     if (proRegistryInRobot.pBM != null)
+                     {
+                         proRegistryInRobot.pBM.Destroy();
+                         proRegistryInRobot.pBM = null;
+                     }
+                     break;
+                 case ProcedureControlAssign.PRO_MACHINE_TO_RETURN:
+                     if (proRegistryInRobot.pMR != null)
+                     {
+                         proRegistryInRobot.pMR.Destroy();
+                         proRegistryInRobot.pMR = null;
+                     }
+                     break;
+                 case ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER:
+                     if (proRegistryInRobot.pFB != null)
+                     {
+                         proRegistryInRobot.pFB.Destroy();
+                         proRegistryInRobot.pFB = null;
+                     }
+                     break;
+                 case ProcedureControlAssign.PRO_BUFFER_TO_RETURN:
+                     if (proRegistryInRobot.pBR != null)
+                     {
+                         proRegistryInRobot.pBR.Destroy();
+                         proRegistryInRobot.pBR = null;
+                     }
+                     break;
+                 case ProcedureControlAssign.PRO_CHARGE:
+                     if (proRegistryInRobot.pRC != null)
+                     {
+                         proRegistryInRobot.pRC.Destroy();
+                         proRegistryInRobot.pRC = null;
+                     }
+                     break;
+                 case ProcedureControlAssign.PRO_READY:
+                     if (proRegistryInRobot.pRR != null)
+                     {
+                         proRegistryInRobot.pRR.Destroy();
+                         proRegistryInRobot.pRR = null;
+                     }
+                     break;
+             }
+         }*/
     }
 }

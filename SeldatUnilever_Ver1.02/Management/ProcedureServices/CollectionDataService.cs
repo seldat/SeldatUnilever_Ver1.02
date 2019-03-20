@@ -67,6 +67,22 @@ namespace SelDatUnilever_Ver1
             String response = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/createPlanPallet");
             return response;
         }
+
+        public void FreePlanedBuffer(PalletStatus palletStatus)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            dynamic product = new JObject();
+            product.palletId = palletId;
+            product.planId = planId;
+            product.palletStatus = palletStatus.ToString();
+            product.updUsrId = Global_Object.userLogin;
+            var data = clientRequest.PostCallAPI(url, product.ToString());
+            if (data.Result == null)
+            {
+                ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);
+            }
+        }
+
         public String RequestDataProcedure(String dataReq, String url)
         {
             //String url = Global_Object.url+"plan/getListPlanPallet";

@@ -75,6 +75,7 @@ namespace SeldatMRMS.Management.RobotManagent {
         MenuItem pauseItem = new MenuItem();
         MenuItem connectItem = new MenuItem();
         MenuItem disconnectItem = new MenuItem();
+        MenuItem turnOnOffItem = new MenuItem();
         MenuItem addReadyListItem = new MenuItem();
         MenuItem addWaitTaskListItem = new MenuItem();
         MenuItem logOutItem = new MenuItem();
@@ -126,6 +127,11 @@ namespace SeldatMRMS.Management.RobotManagent {
             disconnectItem.Click += DisConnectMenu;
             disconnectItem.IsEnabled = true;
 
+            turnOnOffItem.Header = "Set On/Off Traffic";
+            turnOnOffItem.Click += SetOnOffTrafficMenu;
+            turnOnOffItem.IsEnabled = true;
+
+
 
 
             border.ContextMenu.Items.Add(problemSolutionItem);
@@ -135,6 +141,7 @@ namespace SeldatMRMS.Management.RobotManagent {
 
             border.ContextMenu.Items.Add(connectItem);
             border.ContextMenu.Items.Add(disconnectItem);
+            border.ContextMenu.Items.Add(turnOnOffItem);
 
             border.ContextMenu.Items.Add(addReadyListItem);
             border.ContextMenu.Items.Add(addWaitTaskListItem);
@@ -333,7 +340,11 @@ namespace SeldatMRMS.Management.RobotManagent {
         }
 
         private void ChangeToolTipContent (object sender, ToolTipEventArgs e) {
-            border.ToolTip = "1234567890";
+            try
+            {
+                border.ToolTip = properties.Label;
+            }
+            catch { }
         }
 
         private void PoblemSolutionItem(object sender, RoutedEventArgs e)
@@ -400,6 +411,11 @@ namespace SeldatMRMS.Management.RobotManagent {
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
             MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
         }
+        private void SetOnOffTrafficMenu(object sender, RoutedEventArgs e)
+        {
+
+            TurnOnSupervisorTraffic(onFlagSupervisorTraffic?false:true);
+        }
         private void AddWaitTaskListMenu(object sender, RoutedEventArgs e)
         {
 
@@ -412,6 +428,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             {
                 case MessageBoxResult.OK:
                     DisposeProcedure();
+                    this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
                     TurnOnSupervisorTraffic(true);
                     robotService.RemoveRobotUnityReadyList(this.properties.NameId);
                     robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);

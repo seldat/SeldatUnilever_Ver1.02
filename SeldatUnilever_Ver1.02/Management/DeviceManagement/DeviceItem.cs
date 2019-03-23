@@ -1,10 +1,15 @@
 ﻿using Newtonsoft.Json.Linq;
 using SeldatMRMS;
 using SeldatMRMS.Management.DoorServices;
+using SeldatUnilever_Ver1._02;
 using SelDatUnilever_Ver1._00.Communication.HttpBridge;
 using System; 
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SelDatUnilever_Ver1.CollectionDataService;
@@ -104,7 +109,9 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
             public int bufferId;
             public int palletAmount;
-            
+
+
+
         }
         public string userName { get; set; } // dia chi Emei
         public string codeID;
@@ -112,11 +119,18 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         public List<OrderItem> OrderedItemList { get; set; }
         public int orderedAmount = 0;
         public int doneAmount = 0;
+        public MainWindow mainWindow;
 
         public DeviceItem()
         {
             PendingOrderList = new List<OrderItem>();
             OrderedItemList = new List<OrderItem>();
+        }
+        public DeviceItem(MainWindow mainWindow)
+        {
+            PendingOrderList = new List<OrderItem>();
+            OrderedItemList = new List<OrderItem>();
+            this.mainWindow = mainWindow;
         }
         public void state(CommandRequest pCommandRequest, String data)
         {
@@ -178,6 +192,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     order.typeReq = (TyeRequest)typeReq;
                     order.userName = (String)results["userName"];
                     order.productDetailId = (int)results["productDetailId"];
+                    order.productDetailName = (String)results["productDetailName"];
                     order.productId = (int)results["productId"];
                     order.planId = (int)results["planId"];
                     order.deviceId = (int)results["deviceId"];
@@ -294,7 +309,6 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         OrderedItemList.Add(order);
 
 
-
                     }
                    
                 }
@@ -334,6 +348,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.status = StatusOrderResponseCode.PENDING;
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
+                        
                     }
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_RETURN)

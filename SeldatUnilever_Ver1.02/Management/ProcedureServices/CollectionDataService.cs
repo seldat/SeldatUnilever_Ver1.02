@@ -24,7 +24,8 @@ namespace SelDatUnilever_Ver1
         {
             F = 200, // Free pallet
             W = 201, // Have Pallet
-            P = 202
+            P = 202,
+            H =203
 
         }
         //public int planID { get; set; }
@@ -68,21 +69,52 @@ namespace SelDatUnilever_Ver1
             return response;
         }
 
-        public void FreePlanedBuffer(PalletStatus palletStatus)
+        public void FreePlanedBuffer()
         {
             String url = Global_Object.url + "pallet/updatePalletStatus";
-            dynamic product = new JObject();
-            product.palletId = palletId;
-            product.planId = planId;
-            product.palletStatus = palletStatus.ToString();
-            product.updUsrId = Global_Object.userLogin;
-            var data = clientRequest.PostCallAPI(url, product.ToString());
-            if (data.Result == null)
+
+            int _palletId = GetPalletId(order.planId);
+            if (_palletId > 0)
             {
-                ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);
+                dynamic product = new JObject();
+                product.palletId = _palletId;
+                product.planId = order.planId;
+                product.palletStatus = PalletStatus.F.ToString();
+                product.updUsrId = Global_Object.userLogin;
+                var data = clientRequest.PostCallAPI(url, product.ToString());
+                if (data.Result == null)
+                {
+                    ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);
+                }
             }
         }
+        // lấy pallet info cho viec free the plan planed
+        public int GetPalletId(int planId)
+        {
+            int palletId = -1;
+            String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+            if (collectionData.Length > 0)
+            {
+                try
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int temp_planId = (int)result["planId"];
+                        if (temp_planId == planId)
+                        {
+                            var bufferResults = result["buffers"][0];
+                            var palletInfo = bufferResults["pallets"][0];
+                            palletId = (int)palletInfo["palletId"];
+                            break;
+                        }
+                    }
+                }
+                catch { }
 
+            }
+            return palletId;
+        }
         public String RequestDataProcedure(String dataReq, String url)
         {
             //String url = Global_Object.url+"plan/getListPlanPallet";
@@ -207,14 +239,24 @@ namespace SelDatUnilever_Ver1
                 }
                 else
                 {
-                    var result = results[0];
-                    var bufferResults = result["buffers"][0];
-                    var palletInfo = bufferResults["pallets"][0];
-                    JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                    double x = (double)stuff["line"]["x"];
-                    double y = (double)stuff["line"]["y"];
-                    double angle = (double)stuff["line"]["angle"];
-                    poseTemp = new Pose(x, y, angle);
+
+                        var result = results[0];
+                        var bufferResults = result["buffers"][0];
+                        foreach (var palletInfo in bufferResults["pallets"])
+                        {
+                        // var palletInfo = bufferResults["pallets"][0];
+                            try
+                            {
+                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                double x = (double)stuff["line"]["x"];
+                                double y = (double)stuff["line"]["y"];
+                                double angle = (double)stuff["line"]["angle"];
+                                poseTemp = new Pose(x, y, angle);
+                                break;
+                            }
+                            catch { }
+                        }
+       
                 }
             }
           //  Console.WriteLine(""+poseTemp.Position.ToString());
@@ -271,6 +313,7 @@ namespace SelDatUnilever_Ver1
             return poseTemp;
         }
 
+
         /*
          */
         public String GetInfoOfPalletBuffer(TrafficRobotUnity.PistonPalletCtrl pisCtrl, bool onPlandId = false)
@@ -316,27 +359,40 @@ namespace SelDatUnilever_Ver1
                 }
                 else
                 {
-                    var result= results[0];
-                    var bufferResults = result["buffers"][0];
-                    var palletInfo = bufferResults["pallets"][0];
-                    palletId = (int)palletInfo["palletId"];
-                    JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                    int row = (int)stuff["pallet"]["row"];
-                    int bay = (int)stuff["pallet"]["bay"];
-                    int directMain = (int)stuff["pallet"]["dir_main"];
-                    int directSub = (int)stuff["pallet"]["dir_sub"];
-                    int directOut = (int)stuff["pallet"]["dir_out"];
-                    int line_ord = (int)stuff["pallet"]["line_ord"];
-                    string subline = (string)stuff["pallet"]["hasSubLine"];
 
-                    infoPallet.pallet = pisCtrl; /* dropdown */
-                    infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
-                    infoPallet.bay = bay;
-                    infoPallet.hasSubLine = subline; /* yes or no */
-                    infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
-                    infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
-                    infoPallet.row = row;
-                    infoPallet.line_ord = line_ord;
+                        var result = results[0];
+                        var bufferResults = result["buffers"][0];
+                        foreach (var palletInfo in bufferResults["pallets"]  )
+                        {
+                            //var palletInfo = bufferResults["pallets"][0];
+                            try
+                            {
+                                palletId = (int)palletInfo["palletId"];
+                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                int row = (int)stuff["pallet"]["row"];
+                                int bay = (int)stuff["pallet"]["bay"];
+                                int directMain = (int)stuff["pallet"]["dir_main"];
+                                int directSub = (int)stuff["pallet"]["dir_sub"];
+                                int directOut = (int)stuff["pallet"]["dir_out"];
+                                int line_ord = (int)stuff["pallet"]["line_ord"];
+                                string subline = (string)stuff["pallet"]["hasSubLine"];
+
+                                infoPallet.pallet = pisCtrl; /* dropdown */
+                                infoPallet.dir_main = (TrafficRobotUnity.BrDirection)directMain;
+                                infoPallet.bay = bay;
+                                infoPallet.hasSubLine = subline; /* yes or no */
+                                infoPallet.dir_sub = (TrafficRobotUnity.BrDirection)directSub; /* right */
+                                infoPallet.dir_out = (TrafficRobotUnity.BrDirection)directOut;
+                                infoPallet.row = row;
+                                infoPallet.line_ord = line_ord;
+                                break;
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                
                 }
             }
             return JsonConvert.SerializeObject(infoPallet);

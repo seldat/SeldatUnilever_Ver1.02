@@ -77,7 +77,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             }
             else
             {
-                DeviceItem deviceItem = new DeviceItem();
+                DeviceItem deviceItem = new DeviceItem(this.mainWindow);
                 deviceItem.userName = userName;
                 statusOrder=deviceItem.ParseData(data);
                 deviceItemList.Add(deviceItem);

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
+using static SelDatUnilever_Ver1.CollectionDataService;
 
 namespace SelDatUnilever_Ver1._00.Management.UnityService
 {
@@ -89,7 +90,23 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     {
                         if (CheckAvailableFrontLineBuffer(item, false) != null)
                         {
-                            item.status = StatusOrderResponseCode.DELIVERING;
+                            /* int palletId = GetPalletId(item);
+                             if (palletId > 0)
+                             {
+                                 dynamic product = new JObject();
+                                 UpdatePalletStateToHold(palletId, item);
+                                 product.timeWorkId = item.timeWorkId;
+                                 product.activeDate = item.activeDate;
+                                 product.productId = item.productId;
+                                 product.productDetailId = item.productDetailId;
+                                 // chu y sua 
+                                 product.palletStatus = PalletStatus.H.ToString(); // W
+                                 item.dataRequest = product.ToString();
+                                 item.status = StatusOrderResponseCode.DELIVERING;
+                                 return item;
+                             }*/
+                            // return null;
+
                             return item;
                         }
                         else
@@ -101,6 +118,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         {
                             if (CheckAvailableFrontLineReturn(item) != null) // check return 
                             {
+                                //chưa sửa
                                 item.status = StatusOrderResponseCode.DELIVERING;
                                 return item;
                             }
@@ -132,6 +150,18 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             
         }
 
+        public void UpdatePalletStateToHold(int palletId,OrderItem item)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            dynamic product = new JObject();
+            product.palletId = palletId;
+            product.planId = item.planId;
+            product.palletStatus = PalletStatus.H.ToString();
+            product.updUsrId = Global_Object.userLogin;
+            String collectionData = RequestDataProcedure(product.ToString(), url);
+            Console.WriteLine(collectionData);
+
+        }
 
         public Pose CheckAvailableFrontLineBuffer(OrderItem order, bool onPlandId = false)
         {
@@ -173,6 +203,33 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             }
             //  Console.WriteLine(""+poseTemp.Position.ToString());
             return poseTemp;
+        }
+
+        public int GetPalletId(OrderItem order)
+        {
+            int palletId = -1;
+            String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+            if (collectionData.Length > 0)
+            {
+                try
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    foreach (var result in results)
+                    {
+                        int temp_planId = (int)result["planId"];
+                      //  if (temp_planId ==order.planId)
+                        {
+                            var bufferResults = result["buffers"][0];
+                            var palletInfo = bufferResults["pallets"][0];
+                            palletId = (int)palletInfo["palletId"];
+                            break;
+                        }
+                    }
+                }
+                catch { }
+
+            }
+            return palletId;
         }
         public Pose CheckAvailableFrontLineReturn(OrderItem order)
         {

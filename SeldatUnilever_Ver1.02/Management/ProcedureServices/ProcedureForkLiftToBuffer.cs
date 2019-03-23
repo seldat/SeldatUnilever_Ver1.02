@@ -266,6 +266,8 @@ namespace SeldatMRMS
                                     robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
                                 }
                                 else {
+
+                                    FreePlanedBuffer();
                                     StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE;
                                     robot.ShowText("FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE");
                                 }

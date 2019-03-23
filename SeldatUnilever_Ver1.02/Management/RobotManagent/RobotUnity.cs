@@ -21,7 +21,7 @@ namespace SeldatMRMS.Management.RobotManagent {
         Ellipse headerPoint1;
         Ellipse headerPoint2;
         Ellipse headerPoint3;
-        Path riskArea;
+        Path safetyArea;
         double angle = 0.0f;
         public Point org = new Point (600, 350);
         public double rad = 0;
@@ -84,9 +84,9 @@ namespace SeldatMRMS.Management.RobotManagent {
             this.canvas = canvas;
             //ModelVisual3D layer = new ModelVisual3D();
            // robot3DModel = new Robot3D(properties.NameId, layer);
-            riskArea = new Path ();
-            riskArea.Stroke = new SolidColorBrush (Colors.MediumBlue);
-            riskArea.StrokeThickness = 1;
+            safetyArea = new Path ();
+            safetyArea.Stroke = new SolidColorBrush (Colors.MediumBlue);
+            safetyArea.StrokeThickness = 1;
             border = new Border ();
             border.ToolTip = "";
             border.ToolTipOpening += ChangeToolTipContent;
@@ -269,7 +269,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             headerPoint3.Height = 5;
             headerPoint3.Fill = new SolidColorBrush(Colors.Red);
 
-            canvas.Children.Add (riskArea);
+            canvas.Children.Add (safetyArea);
             canvas.Children.Add (headerPoint);
             canvas.Children.Add(headerPoint1);
             canvas.Children.Add(headerPoint2);
@@ -428,8 +428,8 @@ namespace SeldatMRMS.Management.RobotManagent {
             {
                 case MessageBoxResult.OK:
                     DisposeProcedure();
-                    this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
                     TurnOnSupervisorTraffic(true);
+                    this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
                     robotService.RemoveRobotUnityReadyList(this.properties.NameId);
                     robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
                     robotService.AddRobotUnityWaitTaskList(this);
@@ -448,14 +448,15 @@ namespace SeldatMRMS.Management.RobotManagent {
         {
             this.canvas.Children.Remove(border);
             this.canvas.Children.Remove(headerPoint);
-            this.canvas.Children.Remove(riskArea);
+            this.canvas.Children.Remove(safetyArea);
             //RemoveHandle(props.name);
         }      
         public override void Draw () {
 
-              if (properties.IsConnected)
-                {
-                try
+            try
+            {
+
+             //   if (properties.IsConnected)
                 {
 
                     //Render Robot
@@ -493,7 +494,7 @@ namespace SeldatMRMS.Management.RobotManagent {
                          //  pF.Segments.Add(new LineSegment() { Point = new Point(TopTail().X * 10, TopTail().Y * 10) });
                          //pF.Segments.Add(new LineSegment() { Point = new Point(TopHeader().X * 10, TopHeader().Y * 10) });
                          pgeometry.Figures.Add(pF);
-                         riskArea.Data = pgeometry;
+                         safetyArea.Data = pgeometry;
 
                          props.rbID.Content = properties.pose.Position.X.ToString("0");
                          props.rbTask.Content = properties.pose.Position.Y.ToString("0");
@@ -501,9 +502,9 @@ namespace SeldatMRMS.Management.RobotManagent {
 
                      }));
                 }
-                catch { }
-            
+      
             }
+            catch { }
 
         }
 

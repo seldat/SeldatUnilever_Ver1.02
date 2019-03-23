@@ -290,6 +290,7 @@ namespace SeldatMRMS {
                             }));
                         order.status = StatusOrderResponseCode.ROBOT_ERROR;
                         robot.PreProcedureAs = robot.ProcedureAs;
+               
                         ErrorProcedureHandler(obj);
                         ProRun = false;
                         keepRun = false;

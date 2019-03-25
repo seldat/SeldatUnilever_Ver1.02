@@ -55,6 +55,7 @@ namespace SeldatMRMS
             UpdateInformationInProc(this, ProcessStatus.F);
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
+            this.robot.DestroyRegistrySolvedForm();
         }
         public void Procedure(object ojb)
         {

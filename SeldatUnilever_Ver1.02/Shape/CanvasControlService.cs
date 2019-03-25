@@ -805,33 +805,37 @@ namespace SeldatMRMS
 
         public void ReloadListDeviceItems()
         {
-            int index = 0;
-            Int32.TryParse(mainWindow.DeviceItemsListDg.SelectedIndex.ToString(),out index);
-            if (mainWindow.unityService.deviceRegistrationService.deviceItemList.Count > 0)
+            try
             {
-                deviceItemsList.Clear();
-                foreach (DeviceItem device in mainWindow.unityService.deviceRegistrationService.deviceItemList)
+                int index = 0;
+                Int32.TryParse(mainWindow.DeviceItemsListDg.SelectedIndex.ToString(), out index);
+                if (mainWindow.unityService.deviceRegistrationService.deviceItemList.Count > 0)
                 {
-                    deviceItemsList.Add(device);
-                }
-                if (GroupedDeviceItems.IsEditingItem)
-                    GroupedDeviceItems.CommitEdit();
-                if (GroupedDeviceItems.IsAddingNew)
-                    GroupedDeviceItems.CommitNew();
-                GroupedDeviceItems.Refresh();
-
-
-                if (mainWindow.DeviceItemsListDg.HasItems)
-                {
-                    mainWindow.DeviceItemsListDg.SelectedItem = mainWindow.DeviceItemsListDg.Items[(index > -1) ? index : 0];
-                    if (mainWindow.DeviceItemsListDg.SelectedItem != null)
+                    deviceItemsList.Clear();
+                    foreach (DeviceItem device in mainWindow.unityService.deviceRegistrationService.deviceItemList)
                     {
-                        DeviceItem temp = mainWindow.DeviceItemsListDg.SelectedItem as DeviceItem;
-                        mainWindow.canvasControlService.ReloadListOrderItems(temp);
+                        deviceItemsList.Add(device);
                     }
+                    if (GroupedDeviceItems.IsEditingItem)
+                        GroupedDeviceItems.CommitEdit();
+                    if (GroupedDeviceItems.IsAddingNew)
+                        GroupedDeviceItems.CommitNew();
+                    GroupedDeviceItems.Refresh();
 
+
+                    if (mainWindow.DeviceItemsListDg.HasItems)
+                    {
+                        mainWindow.DeviceItemsListDg.SelectedItem = mainWindow.DeviceItemsListDg.Items[(index > -1) ? index : 0];
+                        if (mainWindow.DeviceItemsListDg.SelectedItem != null)
+                        {
+                            DeviceItem temp = mainWindow.DeviceItemsListDg.SelectedItem as DeviceItem;
+                            mainWindow.canvasControlService.ReloadListOrderItems(temp);
+                        }
+
+                    }
                 }
             }
+            catch { }
         }
 
     }

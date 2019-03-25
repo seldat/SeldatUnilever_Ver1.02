@@ -1,5 +1,0 @@
-0:0:0:0:0:0:0:1 - - [16/Jan/2019:18:16:46 +0700] GET /robot/rest/buffer/getListBuffer HTTP/1.1 404 1013 http-bio-8086-exec-1 25
-0:0:0:0:0:0:0:1 - - [16/Jan/2019:18:18:28 +0700] GET /robot/rest/buffer/getListBuffer HTTP/1.1 404 1013 http-bio-8086-exec-3 1
-0:0:0:0:0:0:0:1 - - [16/Jan/2019:18:20:08 +0700] GET /robot/rest/buffer/getListBuffer HTTP/1.1 404 1013 http-bio-8086-exec-5 1
-0:0:0:0:0:0:0:1 - - [16/Jan/2019:18:20:34 +0700] GET / HTTP/1.1 404 - http-bio-8086-exec-7 0
-0:0:0:0:0:0:0:1 - - [16/Jan/2019:18:21:55 +0700] GET /robot/rest/buffer/getListBuffer HTTP/1.1 404 1013 http-bio-8086-exec-10 2

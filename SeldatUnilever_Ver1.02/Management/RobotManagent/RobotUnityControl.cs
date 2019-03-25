@@ -479,7 +479,7 @@ namespace SeldatMRMS.Management.RobotManagent
         int countGoal = 0;
         public bool ReachedGoal()
         {
-            if (countGoal ++ > 800)
+            if (countGoal ++ > 600)
             {
                 countGoal = 0;
                 Console.WriteLine("------------------------------  " + this.properties.NameId);

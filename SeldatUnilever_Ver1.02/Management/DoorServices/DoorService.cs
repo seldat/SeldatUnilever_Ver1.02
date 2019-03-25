@@ -135,7 +135,7 @@ namespace DoorControllerService
 //        }
         public bool GetStatus(ref DataReceive data,DoorType id)
         {
-#if true
+#if false
             bool ret = true;
 #else
             bool ret = false;
@@ -154,7 +154,7 @@ namespace DoorControllerService
         }
         public bool Open(DoorType id)
         {
-#if true
+#if false
             bool ret = true;
 #else
             bool ret = false;
@@ -173,7 +173,7 @@ namespace DoorControllerService
         }
         public bool Close(DoorType id)
         {
-#if true
+#if false
             bool ret = true;
 #else
             bool ret = false;
@@ -194,7 +194,7 @@ namespace DoorControllerService
         public bool WaitOpen(DoorType id, UInt32 timeOut)
         {
             bool result = true;
-#if false
+#if true
             Stopwatch sw = new Stopwatch();
             DataReceive status = new DataReceive();
             //this.Open(id);
@@ -221,7 +221,7 @@ namespace DoorControllerService
         public bool WaitClose(DoorType id, UInt32 timeOut)
         {
             bool result = true;
-#if false
+#if true
             Stopwatch sw = new Stopwatch();
             DataReceive status = new DataReceive();
             //this.Close(id);

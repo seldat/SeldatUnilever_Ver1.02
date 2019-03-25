@@ -88,7 +88,7 @@ namespace SeldatMRMS
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
-            this.robot.DestroyRegistrySolvedForm();
+         //   this.robot.DestroyRegistrySolvedForm();
         }
         public void Procedure(object ojb)
         {

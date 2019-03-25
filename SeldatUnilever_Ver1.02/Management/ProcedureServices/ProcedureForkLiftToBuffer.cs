@@ -78,8 +78,8 @@ namespace SeldatMRMS
             UpdateInformationInProc(this, ProcessStatus.F);
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
-            FreePlanedBuffer();
-            this.robot.DestroyRegistrySolvedForm();
+          // FreePlanedBuffer();
+           // this.robot.DestroyRegistrySolvedForm();
         }
         public void Procedure(object ojb)
         {
@@ -475,6 +475,10 @@ namespace SeldatMRMS
         {
             public Pose frontLinePose;
             public String infoPallet;
+        }
+        protected override void CheckUserHandleError(object obj)
+        {
+            base.CheckUserHandleError(this);
         }
         public ForkLiftToMachineInfo GetPriorityTaskForkLiftToMachine(int productId)
         {

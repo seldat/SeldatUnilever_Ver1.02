@@ -60,7 +60,7 @@ namespace SeldatMRMS
             //reset status pallet Faile H->Ws
             UpdatePalletState(PalletStatus.W);
             selectHandleError =SelectHandleError.CASE_ERROR_EXIT;
-            this.robot.DestroyRegistrySolvedForm();
+            //this.robot.DestroyRegistrySolvedForm();
         }
         public void Procedure(object ojb)
         {
@@ -69,8 +69,8 @@ namespace SeldatMRMS
             // DataBufferToMachine p = BfToMa.points;
             TrafficManagementService Traffic = BfToMa.Traffic;
             robot.ShowText(" Start -> "+ procedureCode);
-            GetFrontLineBuffer(false);
-            ProRun = false;
+            //GetFrontLineBuffer(false);
+          //  ProRun = false;
             while (ProRun)
             {
                 switch (StateBufferToMachine)

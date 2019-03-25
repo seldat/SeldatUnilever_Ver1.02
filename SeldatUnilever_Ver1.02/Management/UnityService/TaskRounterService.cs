@@ -90,7 +90,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     {
                         if (CheckAvailableFrontLineBuffer(item, false) != null)
                         {
-                            /* int palletId = GetPalletId(item);
+                            int palletId = GetPalletId(item);
                              if (palletId > 0)
                              {
                                  dynamic product = new JObject();
@@ -104,7 +104,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                  item.dataRequest = product.ToString();
                                  item.status = StatusOrderResponseCode.DELIVERING;
                                  return item;
-                             }*/
+                             }
                             // return null;
 
                             return item;

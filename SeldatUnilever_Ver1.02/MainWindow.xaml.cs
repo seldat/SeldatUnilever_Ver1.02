@@ -125,7 +125,7 @@ namespace SeldatUnilever_Ver1._02
             Environment.Exit(Environment.ExitCode);
         }
 
-        private void OnTimedRedrawStationEvent(object sender, ElapsedEventArgs e)
+        private void OnTimedOrderListEvent(object sender, ElapsedEventArgs e)
         {
             Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
@@ -167,7 +167,7 @@ namespace SeldatUnilever_Ver1._02
 
                 stationtimer = new System.Timers.Timer();
                 stationtimer.Interval = 2000;
-                stationtimer.Elapsed += OnTimedRedrawStationEvent;
+                stationtimer.Elapsed += OnTimedOrderListEvent;
                 stationtimer.AutoReset = true;
                 stationtimer.Enabled = true;
 

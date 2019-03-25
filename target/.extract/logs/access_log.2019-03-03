@@ -1,7 +1,0 @@
-0:0:0:0:0:0:0:1 - - [03/Mar/2019:09:04:16 +0700] POST /robot/rest/user/getUserInfo HTTP/1.1 200 1638 http-bio-8081-exec-1 312
-0:0:0:0:0:0:0:1 - - [03/Mar/2019:09:16:21 +0700] POST /robot/rest/user/getUserInfo HTTP/1.1 200 1638 http-bio-8081-exec-3 8
-0:0:0:0:0:0:0:1 - - [03/Mar/2019:09:27:57 +0700] POST /robot/rest/user/getUserInfo HTTP/1.1 200 1638 http-bio-8081-exec-5 5
-0:0:0:0:0:0:0:1 - - [03/Mar/2019:09:54:39 +0700] POST /robot/rest/user/getUserInfo HTTP/1.1 200 1638 http-bio-8081-exec-7 4
-0:0:0:0:0:0:0:1 - - [03/Mar/2019:11:02:46 +0700] POST /robot/rest/user/getUserInfo HTTP/1.1 200 1638 http-bio-8081-exec-9 4
-0:0:0:0:0:0:0:1 - - [03/Mar/2019:11:06:26 +0700] POST /robot/rest/user/getUserInfo HTTP/1.1 200 1638 http-bio-8081-exec-1 5
-0:0:0:0:0:0:0:1 - - [03/Mar/2019:20:39:01 +0700] POST /robot/rest/user/getUserInfo HTTP/1.1 200 1638 http-bio-8081-exec-3 4

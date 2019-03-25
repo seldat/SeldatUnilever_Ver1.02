@@ -60,6 +60,7 @@ namespace SeldatMRMS
             //reset status pallet Faile H->Ws
             UpdatePalletState(PalletStatus.W);
             selectHandleError =SelectHandleError.CASE_ERROR_EXIT;
+            this.robot.DestroyRegistrySolvedForm();
         }
         public void Procedure(object ojb)
         {

@@ -443,11 +443,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             BridgeClientRequest clientRequest=new BridgeClientRequest();
             // String url = "http://localhost:8080";
             var data = clientRequest.PostCallAPI(url, dataReq);
-            if (data.Result != null)
-            {
-                return data.Result;
-            }
-            return null;
+
+            return data.Result;
         }
         public String CreatePlanBuffer(OrderItem order)
         {

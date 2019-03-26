@@ -82,40 +82,46 @@ namespace SeldatMRMS
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                             {
-                                rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
-                                Stopwatch sw = new Stopwatch();
-                                sw.Start();
-                                do
+                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE))
                                 {
-                                    if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                    Stopwatch sw = new Stopwatch();
+                                    sw.Start();
+                                    do
                                     {
-                                        resCmd = ResponseCommand.RESPONSE_NONE;
-                                        rb.SendPoseStamped(ReToGate.GetCheckInBuffer());
-                                        StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY;
-                                        robot.ShowText("RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY");
-                                        break;
-                                    }
-                                    else if (resCmd == ResponseCommand.RESPONSE_ERROR)
-                                    {
-                                        errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        CheckUserHandleError(this);
-                                        break;
-                                    }
-                                    if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
-                                    {
-                                        errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        CheckUserHandleError(this);
-                                        break;
-                                    }
-                                    Thread.Sleep(100);
-                                } while (true);
-                                sw.Stop();
+                                        if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                        {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
+                                            if (rb.SendPoseStamped(ReToGate.GetCheckInBuffer()))
+                                            {
+                                                StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY;
+                                                robot.ShowText("RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY");
+                                            }
+                                            break;
+                                        }
+                                        else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                                        {
+                                            errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                            CheckUserHandleError(this);
+                                            break;
+                                        }
+                                        if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
+                                        {
+                                            errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                            CheckUserHandleError(this);
+                                            break;
+                                        }
+                                        Thread.Sleep(100);
+                                    } while (true);
+                                    sw.Stop();
+                                }
                             }
                             else
                             {
-                                rb.SendPoseStamped(ReToGate.GetCheckInBuffer());
-                                StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY;
-                                robot.ShowText("RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY");
+                                if (rb.SendPoseStamped(ReToGate.GetCheckInBuffer()))
+                                {
+                                    StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY;
+                                    robot.ShowText("RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY");
+                                }
                             }
                         }
                         catch (System.Exception)
@@ -129,9 +135,11 @@ namespace SeldatMRMS
                         {
                             if (false == Traffic.HasRobotUnityinArea(ReToGate.GetFrontLineReturn().Position))
                             {
-                                rb.SendPoseStamped(ReToGate.GetFrontLineReturn());
-                                StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_CAME_FRONTLINE_RETURN;
-                                robot.ShowText("RETGATE_ROBOT_WAITTING_CAME_FRONTLINE_RETURN");
+                                if (rb.SendPoseStamped(ReToGate.GetFrontLineReturn()))
+                                {
+                                    StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_CAME_FRONTLINE_RETURN;
+                                    robot.ShowText("RETGATE_ROBOT_WAITTING_CAME_FRONTLINE_RETURN");
+                                }
                             }
                         }
                         catch (System.Exception)
@@ -146,11 +154,13 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                rb.SendCmdAreaPallet(ReToGate.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_UP));
-                                // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN;
-                                robot.ShowText("RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN");
+                                if (rb.SendCmdAreaPallet(ReToGate.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_UP)))
+                                {
+                                    // rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
+                                    rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN;
+                                    robot.ShowText("RETGATE_ROBOT_WAITTING_PICKUP_PALLET_RETURN");
+                                }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -191,9 +201,11 @@ namespace SeldatMRMS
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                            rb.SendPoseStamped(ds.config.PointCheckInGate);
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
-                            robot.ShowText("RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
+                            if (rb.SendPoseStamped(ds.config.PointCheckInGate))
+                            {
+                                StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
+                                robot.ShowText("RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
+                            }
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -218,9 +230,11 @@ namespace SeldatMRMS
                         if (false == Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position))
                         {
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                            rb.SendPoseStamped(ds.config.PointFrontLine);
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_GATE;
-                            robot.ShowText("RETGATE_ROBOT_WAITTING_GOTO_GATE");
+                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
+                            {
+                                StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_GATE;
+                                robot.ShowText("RETGATE_ROBOT_WAITTING_GOTO_GATE");
+                            }
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_GATE:
@@ -247,9 +261,11 @@ namespace SeldatMRMS
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
                         if (true == ds.WaitOpen(DoorService.DoorType.DOOR_BACK, TIME_OUT_OPEN_DOOR))
                         {
-                            rb.SendCmdAreaPallet(ds.config.infoPallet);
-                            StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN;
-                            robot.ShowText("RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN");
+                            if (rb.SendCmdAreaPallet(ds.config.infoPallet))
+                            {
+                                StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN;
+                                robot.ShowText("RETGATE_ROBOT_WAITTING_DROPDOWN_PALLET_RETURN");
+                            }
                         }
                         else
                         {

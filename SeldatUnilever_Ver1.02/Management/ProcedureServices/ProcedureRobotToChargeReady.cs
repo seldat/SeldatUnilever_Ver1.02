@@ -112,21 +112,25 @@ namespace SeldatMRMS
                     case RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER:
                         robot.ShowText("ROBCHAR_ROBOT_GOTO_CHARGER");
                         robot.TurnOnSupervisorTraffic(false);
-                        rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_GETIN_CHARGER);
-                        //Thread.Sleep(1000);
-                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
-                        robot.ShowText("ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT");
+                        if (rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_GETIN_CHARGER))
+                        {
+                            //Thread.Sleep(1000);
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT;
+                            robot.ShowText("ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT");
+                        }
                         break;
                     case RobotGoToCharge.ROBCHAR_ROBOT_ALLOW_CUTOFF_POWER_ROBOT:
                         try
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETIN_CHARGER)
                             {
-                                rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_TURNOFF_PC);
-                                rb.Dispose();
-                                StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC;
-                                sw.Start();
-                                robot.ShowText("ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC");
+                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_TURNOFF_PC))
+                                {
+                                    rb.Dispose();
+                                    StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC;
+                                    sw.Start();
+                                    robot.ShowText("ROBCHAR_ROBOT_WAITTING_CUTOFF_POWER_PC");
+                                }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -346,9 +350,11 @@ namespace SeldatMRMS
                         }
                         break; //Robot mở nguồng và đợi connect lại
                     case RobotGoToCharge.ROBCHAR_ROBOT_GETOUT_CHARGER:
-                        rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_GETOUT_CHARGER);
-                        StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER;
-                        robot.ShowText("ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER");
+                        if (rb.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_GETOUT_CHARGER))
+                        {
+                            StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER;
+                            robot.ShowText("ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER");
+                        }
                         break;
                     case RobotGoToCharge.ROBCHAR_ROBOT_WAITTING_GETOUT_CHARGER:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_DETECTLINE_GETOUT_CHARGER)
@@ -466,9 +472,11 @@ namespace SeldatMRMS
                         robot.ShowText("ROBREA_IDLE");
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION: // ROBOT cho tiến vào vị trí đầu line charge su dung laser
-                        rb.SendPoseStamped(p.PointFrontLine);
-                        StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;
-                        robot.ShowText("ROBREA_ROBOT_WAITTING_GOTO_READYSTATION");
+                        if (rb.SendPoseStamped(p.PointFrontLine))
+                        {
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION;
+                            robot.ShowText("ROBREA_ROBOT_WAITTING_GOTO_READYSTATION");
+                        }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_GOTO_READYSTATION: // Robot dang di toi dau line ready station
                        // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
@@ -486,9 +494,11 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAIITNG_DETECTLINE_TO_READYSTATION: // đang đợi dò line để đến vị trí line trong buffer
-                        rb.SendCmdAreaPallet(RbToRd.points.PointOfCharger);
-                        StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION;
-                        robot.ShowText("ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION");
+                        if (rb.SendCmdAreaPallet(RbToRd.points.PointOfCharger))
+                        {
+                            StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION;
+                            robot.ShowText("ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION");
+                        }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_WAITTING_CAME_POSITION_READYSTATION: // đến vị trả robot về robotmanagement để nhận quy trình mới
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOTO_POSITION)

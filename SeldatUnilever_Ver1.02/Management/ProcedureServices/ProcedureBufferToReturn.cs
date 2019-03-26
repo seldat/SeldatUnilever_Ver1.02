@@ -77,40 +77,47 @@ namespace SeldatMRMS
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                             {
-                                rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
-                                Stopwatch sw = new Stopwatch();
-                                sw.Start();
-                                do
+                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE))
                                 {
-                                    if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                    Stopwatch sw = new Stopwatch();
+                                    sw.Start();
+                                    do
                                     {
-                                        resCmd = ResponseCommand.RESPONSE_NONE;
-                                        rb.SendPoseStamped(BfToRe.GetCheckInBuffer());
-                                        StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
-                                        robot.ShowText("BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
-                                        break;
-                                    }
-                                    else if (resCmd == ResponseCommand.RESPONSE_ERROR)
-                                    {
-                                        errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        CheckUserHandleError(this);
-                                        break;
-                                    }
-                                    if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
-                                    {
-                                        errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        CheckUserHandleError(this);
-                                        break;
-                                    }
-                                    Thread.Sleep(100);
-                                } while (true);
-                                sw.Stop();
+                                        if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                        {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
+
+                                            if (rb.SendPoseStamped(BfToRe.GetCheckInBuffer()))
+                                            {
+                                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
+                                                robot.ShowText("BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
+                                            }
+                                            break;
+                                        }
+                                        else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                                        {
+                                            errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                            CheckUserHandleError(this);
+                                            break;
+                                        }
+                                        if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
+                                        {
+                                            errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                            CheckUserHandleError(this);
+                                            break;
+                                        }
+                                        Thread.Sleep(100);
+                                    } while (true);
+                                    sw.Stop();
+                                }
                             }
                             else
                             {
-                                rb.SendPoseStamped(BfToRe.GetCheckInBuffer());
-                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
-                                robot.ShowText("BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
+                                if (rb.SendPoseStamped(BfToRe.GetCheckInBuffer()))
+                                {
+                                    StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
+                                    robot.ShowText("BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
+                                }
                             }
                         }
                         catch (System.Exception)
@@ -138,9 +145,11 @@ namespace SeldatMRMS
                             {
                                 robot.SetTrafficAtCheckIn(true);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                rb.SendPoseStamped(BfToRe.GetFrontLineBuffer());
-                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
-                                robot.ShowText("BUFRET_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                if (rb.SendPoseStamped(BfToRe.GetFrontLineBuffer()))
+                                {
+                                    StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;
+                                    robot.ShowText("BUFRET_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER");
+                                }
                             }
                         }
                         catch (System.Exception)
@@ -156,10 +165,12 @@ namespace SeldatMRMS
                                 if ( robot.ReachedGoal())
                                 {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP));
-                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                robot.ShowText("BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
+                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP)))
+                                {
+                                    StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER;
+                                    rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    robot.ShowText("BUFRET_ROBOT_WAITTING_PICKUP_PALLET_BUFFER");
+                                }
                             }
                         }
                         catch (System.Exception)
@@ -219,9 +230,11 @@ namespace SeldatMRMS
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                rb.SendPoseStamped(BfToRe.GetCheckInReturn());
-                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_RETURN;
-                                robot.ShowText("BUFRET_ROBOT_GOTO_CHECKIN_RETURN");
+                                if (rb.SendPoseStamped(BfToRe.GetCheckInReturn()))
+                                {
+                                    StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_RETURN;
+                                    robot.ShowText("BUFRET_ROBOT_GOTO_CHECKIN_RETURN");
+                                }
                             }
                             else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                             {
@@ -253,9 +266,11 @@ namespace SeldatMRMS
                             {
                                 rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                rb.SendPoseStamped(BfToRe.GetFrontLineReturn());
-                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET;
-                                robot.ShowText("BUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET");
+                                if (rb.SendPoseStamped(BfToRe.GetFrontLineReturn()))
+                                {
+                                    StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET;
+                                    robot.ShowText("BUFRET_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET");
+                                }
                             }
                         }
                         catch (System.Exception)
@@ -271,10 +286,12 @@ namespace SeldatMRMS
                             if (robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
-                                rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN));
-                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                robot.ShowText("BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
+                                if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
+                                {
+                                    StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET;
+                                    rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                    robot.ShowText("BUFRET_ROBOT_WAITTING_DROPDOWN_PALLET");
+                                }
                             }
                         }
                         catch (System.Exception)

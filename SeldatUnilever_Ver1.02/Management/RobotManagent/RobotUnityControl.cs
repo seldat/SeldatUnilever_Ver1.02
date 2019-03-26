@@ -442,39 +442,75 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         double gx;
         double gy;
-        public void SendPoseStamped (Pose pose) {
-            GeometryPoseStamped data = new GeometryPoseStamped ();
-            data.header.frame_id = "map";
-            data.pose.position.x = (float) pose.Position.X;
-            data.pose.position.y = (float) pose.Position.Y;
-            data.pose.position.z = 0;
-            double theta = pose.AngleW;
-            data.pose.orientation.z = (float) Math.Sin (theta / 2);
-            data.pose.orientation.w = (float) Math.Cos (theta / 2);
-            this.Publish (paramsRosSocket.publication_robotnavigation, data);
-            robotLogOut.ShowText(this.properties.Label,"Send Pose => "+ JsonConvert.SerializeObject(data).ToString());
-            // lưu vị trí đích đến
-            gx = data.pose.position.x;
-            gy = data.pose.position.y;
+        public bool SendPoseStamped (Pose pose) {
+
+            try
+            {
+                GeometryPoseStamped data = new GeometryPoseStamped();
+                data.header.frame_id = "map";
+                data.pose.position.x = (float)pose.Position.X;
+                data.pose.position.y = (float)pose.Position.Y;
+                data.pose.position.z = 0;
+                double theta = pose.AngleW;
+                data.pose.orientation.z = (float)Math.Sin(theta / 2);
+                data.pose.orientation.w = (float)Math.Cos(theta / 2);
+                this.Publish(paramsRosSocket.publication_robotnavigation, data);
+                robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
+                // lưu vị trí đích đến
+                gx = data.pose.position.x;
+                gy = data.pose.position.y;
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
-        public void SetSpeed (RobotSpeedLevel robotspeed) {
-            StandardInt32 msg = new StandardInt32 ();
-            msg.data = Convert.ToInt32 (robotspeed);
-            this.Publish (paramsRosSocket.publication_ctrlrobotdriving, msg);
+        public bool SetSpeed (RobotSpeedLevel robotspeed) {
+
+            try
+            {
+                StandardInt32 msg = new StandardInt32();
+                msg.data = Convert.ToInt32(robotspeed);
+                this.Publish(paramsRosSocket.publication_ctrlrobotdriving, msg);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public void SendCmdLineDetectionCtrl (RequestCommandLineDetect cmd) {
-            StandardInt32 msg = new StandardInt32 ();
-            msg.data = Convert.ToInt32 (cmd);
-            this.Publish (paramsRosSocket.publication_linedetectionctrl, msg);
-            robotLogOut.ShowText(this.properties.Label, "SendCmdLineDetectionCtrl => " + msg.data);
+        public bool SendCmdLineDetectionCtrl (RequestCommandLineDetect cmd) {
+
+            try
+            {
+                StandardInt32 msg = new StandardInt32();
+                msg.data = Convert.ToInt32(cmd);
+                this.Publish(paramsRosSocket.publication_linedetectionctrl, msg);
+                robotLogOut.ShowText(this.properties.Label, "SendCmdLineDetectionCtrl => " + msg.data);
+
+                return true;
+            }
+            catch {
+                return false;
+            }
         }
 
-        public void SendCmdPosPallet (RequestCommandPosPallet cmd) {
-            StandardInt32 msg = new StandardInt32 ();
-            msg.data = Convert.ToInt32 (cmd);
-            this.Publish (paramsRosSocket.publication_postPallet, msg);
-            robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
+        public bool SendCmdPosPallet (RequestCommandPosPallet cmd) {
+            try
+            {
+                StandardInt32 msg = new StandardInt32();
+                msg.data = Convert.ToInt32(cmd);
+                this.Publish(paramsRosSocket.publication_postPallet, msg);
+                robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
+
+                return true;
+            }
+            catch {
+                return false;
+            }
         }
         int countGoal = 0;
         public bool ReachedGoal()
@@ -528,12 +564,23 @@ namespace SeldatMRMS.Management.RobotManagent
 
             return false;
         }
-        public void SendCmdAreaPallet (String cmd) {
-            StandardString msg = new StandardString ();
-            msg.data = cmd;
-            Console.WriteLine(cmd);
-            this.Publish (paramsRosSocket.publication_cmdAreaPallet, msg);
-            robotLogOut.ShowText(this.properties.Label, "SendCmdAreaPallet => " + msg.data);
+        public bool SendCmdAreaPallet (String cmd) {
+
+   
+                    try
+                    {
+                        StandardString msg = new StandardString();
+                        msg.data = cmd;
+                        Console.WriteLine(cmd);
+                        this.Publish(paramsRosSocket.publication_cmdAreaPallet, msg);
+                        robotLogOut.ShowText(this.properties.Label, "SendCmdAreaPallet => " + msg.data);
+                        return true;
+                    }
+                    catch {
+                        return false;
+                }
+       
+           
         }
 
         protected override void OnOpenedEvent () {
@@ -541,7 +588,11 @@ namespace SeldatMRMS.Management.RobotManagent
            
             robotLogOut.ShowText(this.properties.Label,"Connected to Ros Master");
             createRosTerms ();
-            Draw();
+            try
+            {
+                Draw();
+            }
+            catch { }
             
             //   ConnectionStatusHandler(this, ConnectionStatus.CON_OK);
         }

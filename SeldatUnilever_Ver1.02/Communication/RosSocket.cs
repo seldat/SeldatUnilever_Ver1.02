@@ -46,8 +46,14 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             if (!IsDisposed)
             {
-                Close();
+                try
+                {
+                    Close();
+                    
+                }
+                catch { }
                 webSocket.Connect();
+
             }
         }
         protected virtual void OnOpenedEvent() { }

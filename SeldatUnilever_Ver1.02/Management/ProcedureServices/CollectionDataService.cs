@@ -84,10 +84,7 @@ namespace SelDatUnilever_Ver1
                     product.palletStatus = PalletStatus.F.ToString();
                     product.updUsrId = Global_Object.userLogin;
                     var data = RequestDataProcedure(product.ToString(), url);
-                    if (data.Result == null)
-                    {
-                        ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);
-                    }
+
                 }
             
         }
@@ -123,12 +120,8 @@ namespace SelDatUnilever_Ver1
             //String url = Global_Object.url+"plan/getListPlanPallet";
             // String url = "http://localhost:8080";
             BridgeClientRequest clientRequest=new BridgeClientRequest();
-             var data = clientRequest.PostCallAPI(url, dataReq);
-            if (data.Result != null)
-            {
-                return data.Result;
-            }
-            return null;
+            var data = clientRequest.PostCallAPI(url, dataReq);
+            return data.Result;
         }
 
         public Pose GetCheckInBuffer(bool onPlandId=false)
@@ -461,10 +454,7 @@ namespace SelDatUnilever_Ver1
             product.palletStatus = palletStatus.ToString();
             product.updUsrId = Global_Object.userLogin;
             var data = RequestDataProcedure( product.ToString(),url);
-            if (data.Result == null)
-            {
-                ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);
-            }
+
         }
 
         protected virtual void ReceiveResponseHandler(String msg) { }

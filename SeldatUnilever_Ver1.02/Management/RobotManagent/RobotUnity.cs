@@ -399,17 +399,17 @@ namespace SeldatMRMS.Management.RobotManagent {
         }
        private void DisConnectMenu(object sender, RoutedEventArgs e)
         {
-            DisposeProcedure();
-            Dispose();
-            onBinding = false;
-            connectItem.IsEnabled = true;
-            disconnectItem.IsEnabled = false;
-            TurnOnSupervisorTraffic(false);
-            properties.IsConnected = false;
-            robotService.RemoveRobotUnityReadyList(this.properties.NameId);
-            robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
-            setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
-            MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
+                DisposeProcedure();
+                Dispose();
+                onBinding = false;
+                connectItem.IsEnabled = true;
+                disconnectItem.IsEnabled = false;
+                TurnOnSupervisorTraffic(false);
+                properties.IsConnected = false;
+                robotService.RemoveRobotUnityReadyList(this.properties.NameId);
+                robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
+                setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
+                MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
         }
         private void SetOnOffTrafficMenu(object sender, RoutedEventArgs e)
         {
@@ -456,7 +456,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             try
             {
 
-             //   if (properties.IsConnected)
+                if (properties.IsConnected)
                 {
 
                     //Render Robot

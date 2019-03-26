@@ -132,6 +132,11 @@ namespace SeldatMRMS
                     //    break;
             }
         }
+
+        public void DisposeProcedure()
+        {
+
+        }
         protected override void ReleaseProcedureItemHandler (Object item) {
             Task.Run (() => {
                 ProcedureControlServices procItem = item as ProcedureControlServices;

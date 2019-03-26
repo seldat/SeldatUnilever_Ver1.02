@@ -36,20 +36,20 @@ namespace SelDatUnilever_Ver1
         //public String activeDate;
         // public int timeWorkID;
         public List<Pose> checkInBuffer = new List<Pose>();
-        protected BridgeClientRequest clientRequest;
+        
         protected int palletId { get; set; }
         protected int planId { get; set; }
         public CollectionDataService()
         {
-            clientRequest = new BridgeClientRequest();
-            clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
+           // clientRequest = new BridgeClientRequest();
+           // clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
             planId = -1;
         }
         public CollectionDataService(OrderItem order)
         {
             this.order = order;
-            clientRequest = new BridgeClientRequest();
-            clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
+            //clientRequest = new BridgeClientRequest();
+           // clientRequest.ReceiveResponseHandler += ReceiveResponseHandler;
 
         }
         public virtual void AssignAnOrder(OrderItem order)
@@ -69,24 +69,27 @@ namespace SelDatUnilever_Ver1
             return response;
         }
 
-        public void FreePlanedBuffer()
+        public virtual void FreePlanedBuffer()
         {
-            String url = Global_Object.url + "pallet/updatePalletStatus";
 
-            int _palletId = GetPalletId(order.planId);
-            if (_palletId > 0)
-            {
-                dynamic product = new JObject();
-                product.palletId = _palletId;
-                product.planId = order.planId;
-                product.palletStatus = PalletStatus.F.ToString();
-                product.updUsrId = Global_Object.userLogin;
-                var data = clientRequest.PostCallAPI(url, product.ToString());
-                if (data.Result == null)
+                
+                String url = Global_Object.url + "pallet/updatePalletStatus";
+
+                int _palletId = GetPalletId(order.planId);
+                if (_palletId > 0)
                 {
-                    ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);
+                    dynamic product = new JObject();
+                    product.palletId = _palletId;
+                    product.planId = order.planId;
+                    product.palletStatus = PalletStatus.F.ToString();
+                    product.updUsrId = Global_Object.userLogin;
+                    var data = RequestDataProcedure(product.ToString(), url);
+                    if (data.Result == null)
+                    {
+                        ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);
+                    }
                 }
-            }
+            
         }
         // lấy pallet info cho viec free the plan planed
         public int GetPalletId(int planId)
@@ -119,7 +122,8 @@ namespace SelDatUnilever_Ver1
         {
             //String url = Global_Object.url+"plan/getListPlanPallet";
             // String url = "http://localhost:8080";
-            var data = clientRequest.PostCallAPI(url, dataReq);
+            BridgeClientRequest clientRequest=new BridgeClientRequest();
+             var data = clientRequest.PostCallAPI(url, dataReq);
             if (data.Result != null)
             {
                 return data.Result;
@@ -456,7 +460,7 @@ namespace SelDatUnilever_Ver1
             product.planId = planId;
             product.palletStatus = palletStatus.ToString();
             product.updUsrId = Global_Object.userLogin;
-            var data = clientRequest.PostCallAPI(url, product.ToString());
+            var data = RequestDataProcedure( product.ToString(),url);
             if (data.Result == null)
             {
                 ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);

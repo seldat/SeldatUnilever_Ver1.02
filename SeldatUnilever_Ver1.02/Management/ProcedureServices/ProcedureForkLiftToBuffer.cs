@@ -72,14 +72,20 @@ namespace SeldatMRMS
         }
         public void Destroy()
         {
+            
+          //  FreePlanedBuffer();
             // StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
-            FreePlanedBuffer();
+            
             this.robot.DestroyRegistrySolvedForm();
+        }
+        public override void FreePlanedBuffer()
+        {
+            base.FreePlanedBuffer();
         }
         public void Procedure(object ojb)
         {
@@ -466,6 +472,10 @@ namespace SeldatMRMS
                 Thread.Sleep(5);
             }
             StateForkLift = ForkLift.FORBUF_IDLE;
+        }
+        protected override void CheckUserHandleError(object obj)
+        {
+            CheckUserHandleError(this);
         }
         public override void FinishStatesCallBack(Int32 message)
         {

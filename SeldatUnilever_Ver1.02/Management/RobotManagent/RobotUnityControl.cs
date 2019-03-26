@@ -541,6 +541,7 @@ namespace SeldatMRMS.Management.RobotManagent
            
             robotLogOut.ShowText(this.properties.Label,"Connected to Ros Master");
             createRosTerms ();
+            Draw();
             
             //   ConnectionStatusHandler(this, ConnectionStatus.CON_OK);
         }

@@ -112,6 +112,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
 
 
+
+
         }
         public string userName { get; set; } // dia chi Emei
         public string codeID;
@@ -157,8 +159,12 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         }
         public void AddOrder(OrderItem hasOrder)
         {
-            PendingOrderList.Add(hasOrder);
-            OrderedItemList.Add(hasOrder);
+            try
+            {
+                PendingOrderList.Add(hasOrder);
+                OrderedItemList.Add(hasOrder);
+            }
+            catch { }
         }
         public OrderItem GetOrder()
         {

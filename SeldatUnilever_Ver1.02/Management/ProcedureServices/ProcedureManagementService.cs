@@ -33,6 +33,7 @@ namespace SeldatMRMS
                     break;
                 case ProcedureItemSelected.PROCEDURE_BUFFER_TO_MACHINE:
                     ProcedureBufferToMachine procbm = new ProcedureBufferToMachine (robot, trafficService);
+                    procbm.Registry(deviceService);
                     ProcedureDataItems prcobmDataItems = new ProcedureDataItems ();
                     prcobmDataItems.StartTaskTime = DateTime.Now;
                     RegisterProcedureItem itemprocbm = new RegisterProcedureItem () { item = procbm, robot = robot, procedureDataItems = prcobmDataItems };

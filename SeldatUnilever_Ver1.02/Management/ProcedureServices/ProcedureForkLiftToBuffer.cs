@@ -83,9 +83,44 @@ namespace SeldatMRMS
             selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
             
             this.robot.DestroyRegistrySolvedForm();
+
+            RestoreOrderItem();
         }
 
+        public void RestoreOrderItem()
+        {
+            OrderItem _order = new OrderItem();
+            _order.activeDate = order.activeDate;
+            _order.bufferId = order.bufferId;
 
+            dynamic product = new JObject();
+            product.timeWorkId = order.timeWorkId;
+            product.activeDate = order.activeDate;
+            product.productId = order.productId;
+            product.productDetailId = order.productDetailId;
+            product.palletStatus = PalletStatus.P.ToString();
+            _order.dataRequest = product.ToString();
+
+            _order.dateTime = order.dateTime;
+            _order.deviceId = order.deviceId;
+            _order.palletAtMachine = order.palletAtMachine;
+            _order.palletId = order.palletId;
+            _order.palletStatus = order.palletStatus;
+            _order.planId = order.planId;
+            _order.productDetailId = order.productDetailId;
+            _order.productDetailName = order.productDetailName;
+            _order.productId = order.productId;
+            _order.robot = "";
+            _order.typeReq = order.typeReq;
+            _order.updUsrId = order.updUsrId;
+            _order.userName = order.userName;
+            _order.lengthPallet = order.lengthPallet;
+            _order.palletAmount = order.palletAmount;
+            _order.bufferId = order.bufferId;
+            _order.status = StatusOrderResponseCode.PENDING;
+
+            deviceService.FindDeviceItem(_order.userName).AddOrder(_order);
+        }
         public void FreePlanedBuffer()
         {
 

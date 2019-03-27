@@ -73,17 +73,9 @@ namespace SeldatMRMS
         }
         public void Destroy()
         {
-            
-          //  FreePlanedBuffer();
-            // StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
-            ProRun = false;
-            UpdateInformationInProc(this, ProcessStatus.F);
-            order.status = StatusOrderResponseCode.ROBOT_ERROR;
-            selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
-            
-            this.robot.DestroyRegistrySolvedForm();
 
+            // StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
+            StateForkLift = ForkLift.FORMAC_ROBOT_DESTROY;
             RestoreOrderItem();
         }
 
@@ -121,55 +113,7 @@ namespace SeldatMRMS
 
             deviceService.FindDeviceItem(_order.userName).AddOrder(_order);
         }
-        public void FreePlanedBuffer()
-        {
-
-
-            String url = Global_Object.url + "pallet/updatePalletStatus";
-
-            int _palletId = GetPalletId(order.planId);
-            if (_palletId > 0)
-            {
-                dynamic product = new JObject();
-                product.palletId = _palletId;
-                product.planId = order.planId;
-                product.palletStatus = PalletStatus.F.ToString();
-                product.updUsrId = Global_Object.userLogin;
-                var data = RequestDataProcedure(product.ToString(), url);
-                if (data.Result != "")
-                {
-                  //  ErrorHandler(ProcedureMessages.ProcMessage.MESSAGE_ERROR_UPDATE_PALLETSTATUS);
-                }
-            }
-
-        }
-        // lấy pallet info cho viec free the plan planed
-        public int GetPalletId(int planId)
-        {
-            int palletId = -1;
-            String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
-            if (collectionData.Length > 0)
-            {
-                try
-                {
-                    JArray results = JArray.Parse(collectionData);
-                    foreach (var result in results)
-                    {
-                        int temp_planId = (int)result["planId"];
-                        if (temp_planId == planId)
-                        {
-                            var bufferResults = result["buffers"][0];
-                            var palletInfo = bufferResults["pallets"][0];
-                            palletId = (int)palletInfo["palletId"];
-                            break;
-                        }
-                    }
-                }
-                catch { }
-
-            }
-            return palletId;
-        }
+        
         public void Procedure(object ojb)
         {
             ProcedureForkLiftToBuffer FlToBuf = (ProcedureForkLiftToBuffer)ojb;
@@ -571,6 +515,16 @@ namespace SeldatMRMS
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.status = StatusOrderResponseCode.FINISHED;
+                        break;
+                    case ForkLift.FORMAC_ROBOT_DESTROY: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                        ProRun = false;
+                        UpdateInformationInProc(this, ProcessStatus.F);
+                        order.status = StatusOrderResponseCode.ROBOT_ERROR;
+                        selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
+                        this.robot.DestroyRegistrySolvedForm();
+                 
+                        FreePlanedBuffer();
                         break;
                     //////////////////////////////////////////////////////
                     default:

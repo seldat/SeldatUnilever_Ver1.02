@@ -22,19 +22,15 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpBridge
                    
                     var content = new StringContent(jsonObject, Encoding.UTF8, "application/json");
                     var response = await client.PostAsync(url, content);
-                    if (response != null)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                       // Console.WriteLine(jsonString);
-                        return jsonString;
-                    }
+                    String jsonString = await response.Content.ReadAsStringAsync();
+                    return jsonString;
                 }
             }
             catch (Exception ex)
             {
                
             }
-            return null;
+            return "";
         }
         public static async Task<string> _PostCallAPIAsync(string url, String jsonObject)
         {
@@ -45,19 +41,15 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpBridge
 
                     var content = new StringContent(jsonObject, Encoding.UTF8, "application/json");
                     var response = await client.PostAsync(url, content);
-                    if (response != null)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        // Console.WriteLine(jsonString);
-                        return jsonString;
-                    }
+                    String jsonString = await response.Content.ReadAsStringAsync();
+                    return jsonString;
                 }
             }
             catch (Exception ex)
             {
 
             }
-            return null;
+            return "";
         }
         public async Task<String> GetCallAPI(string url)
         {
@@ -66,18 +58,15 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpBridge
                 using (HttpClient client = new HttpClient())
                 {
                     var response = await client.GetAsync(url);
-                    if (response != null)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        return jsonString;
-                    }
+                    String jsonString = await response.Content.ReadAsStringAsync();
+                    return jsonString;
                 }
             }
             catch (Exception ex)
             {
 
             }
-            return null;
+            return "";
         }
     }
 }

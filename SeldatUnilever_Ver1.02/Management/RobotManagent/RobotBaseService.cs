@@ -21,7 +21,7 @@ namespace SeldatMRMS.Management.RobotManagent
             PRO_FORKLIFT_TO_MACHINE,
             PRO_IDLE
         }
-        public struct ProcedureRegistryInRobotUnity
+        public class ProcedureRegistryInRobotUnity
         {
             public ProcedureBufferToMachine pBM { get; set; }
             public ProcedureBufferToReturn pBR { get; set; }
@@ -31,7 +31,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public ProcedureRobotToReady pRR { get; set; }
         }
         public object ProcedureControl;
-        public ProcedureRegistryInRobotUnity proRegistryInRobot;
+        public ProcedureRegistryInRobotUnity proRegistryInRobot=new ProcedureRegistryInRobotUnity();
         public ProcedureControlAssign  PreProcedureAs;
         public ProcedureControlAssign ProcedureRobotAssigned;
         public ProcedureControlAssign ProcedureAs;
@@ -59,7 +59,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     if (proRegistryInRobot.pFB != null)
                     {
                         proRegistryInRobot.pFB.Destroy();
-                       proRegistryInRobot.pFB = null;
+                      // proRegistryInRobot.pFB = null;
                     }
                     if (proRegistryInRobot.pBR != null)
                     {

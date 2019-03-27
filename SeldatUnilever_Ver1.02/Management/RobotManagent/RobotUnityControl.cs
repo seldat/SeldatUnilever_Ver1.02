@@ -76,6 +76,7 @@ namespace SeldatMRMS.Management.RobotManagent
             private String _Url { get; set; }
             public String Url { get => _Url; set { _Url = value; RaisePropertyChanged("Url"); } }
             public Pose pose= new Pose();
+            public Pose poseRoot = new Pose();
             public String URL;
             public bool IsConnected { get; set; }
             private double _L1 { get; set; }

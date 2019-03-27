@@ -58,7 +58,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.WS = 3;
             prop1.Label = "Robot1";
             prop1.BatteryLevelRb = 40;
-            prop1.Url = "ws://192.168.1.181:9090";
+            prop1.Url = "ws://192.168.1.121:9090";
             prop1.ipMcuCtrl = "192.168.1.211";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 8;
@@ -152,17 +152,29 @@ namespace SeldatMRMS.Management.RobotManagent
 
             r3.TurnOnSupervisorTraffic(false);
 
-            r1.properties.pose.Position = new Point(-3.12,2.29);
+            r1.properties.pose.Position = new Point(-8,8);
             r1.properties.pose.Angle = 90;
             r1.properties.pose.AngleW = 90 * Math.PI / 180;
 
-            r2.properties.pose.Position = new Point(-0.2, 2.23);
+            r1.properties.poseRoot.Position = new Point(-8, 8);
+            r1.properties.poseRoot.Angle = 90;
+            r1.properties.poseRoot.AngleW = 90 * Math.PI / 180;
+
+            r2.properties.pose.Position = new Point(-5, 8);
             r2.properties.pose.Angle = 90;
             r2.properties.pose.AngleW = 90 * Math.PI / 180;
 
-            r3.properties.pose.Position = new Point(-2.76, 2.87);
+            r2.properties.poseRoot.Position = new Point(-5, 8);
+            r2.properties.poseRoot.Angle = 90;
+            r2.properties.poseRoot.AngleW = 90 * Math.PI / 180;
+
+            r3.properties.pose.Position = new Point(-2, 8);
             r3.properties.pose.Angle =90;
             r3.properties.pose.AngleW = 90 * Math.PI / 180;
+
+            r3.properties.poseRoot.Position = new Point(-2, 8);
+            r3.properties.poseRoot.Angle = 90;
+            r3.properties.poseRoot.AngleW = 90 * Math.PI / 180;
 
             r1.Registry(trafficManagementService);
             r2.Registry(trafficManagementService);
@@ -184,9 +196,9 @@ namespace SeldatMRMS.Management.RobotManagent
             trafficManagementService.RegistryRobotList(RobotUnityRegistedList);
 
            //
-            r1.Start(prop1.Url);
-            r2.Start(prop2.Url);
-            r3.Start(prop3.Url);
+          //  r1.Start(prop1.Url);
+          //  r2.Start(prop2.Url);
+          //  r3.Start(prop3.Url);
 
         }
         public void Initialize()

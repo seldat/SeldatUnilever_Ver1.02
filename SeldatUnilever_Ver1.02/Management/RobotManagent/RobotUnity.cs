@@ -121,11 +121,11 @@ namespace SeldatMRMS.Management.RobotManagent {
 
             connectItem.Header = "Connect";
             connectItem.Click += ConnectMenu;
-            connectItem.IsEnabled = false;
+            connectItem.IsEnabled = true;
 
             disconnectItem.Header = "Disconnect";
             disconnectItem.Click += DisConnectMenu;
-            disconnectItem.IsEnabled = true;
+            disconnectItem.IsEnabled = false;
 
             turnOnOffItem.Header = "Set On/Off Traffic";
             turnOnOffItem.Click += SetOnOffTrafficMenu;
@@ -274,6 +274,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             canvas.Children.Add(headerPoint1);
             canvas.Children.Add(headerPoint2);
             canvas.Children.Add(headerPoint3);
+            setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
             Draw ();
           //  robotLogOut.SetName(properties.Label);
 
@@ -370,7 +371,6 @@ namespace SeldatMRMS.Management.RobotManagent {
                     robotService.RemoveRobotUnityReadyList(this.properties.NameId);
                     robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
                     robotService.AddRobotUnityReadyList(this);
-                    setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_OK);
                     Draw();
                     break;
                 case MessageBoxResult.Cancel:
@@ -402,21 +402,28 @@ namespace SeldatMRMS.Management.RobotManagent {
                 DisposeProcedure();
                 Dispose();
                 onBinding = false;
-                connectItem.IsEnabled = true;
-                disconnectItem.IsEnabled = false;
-                TurnOnSupervisorTraffic(false);
-                properties.IsConnected = false;
-                robotService.RemoveRobotUnityReadyList(this.properties.NameId);
-                robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
-                setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
+                Reset();
                 MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
         }
-        private void SetOnOffTrafficMenu(object sender, RoutedEventArgs e)
+        public void Reset()
+        {
+            properties.pose.Position = properties.poseRoot.Position;
+            properties.pose.Angle = properties.poseRoot.Angle;
+            properties.pose.AngleW = properties.poseRoot.AngleW;
+            connectItem.IsEnabled = true;
+            disconnectItem.IsEnabled = false;
+            TurnOnSupervisorTraffic(false);
+            properties.IsConnected = false;
+            robotService.RemoveRobotUnityReadyList(this.properties.NameId);
+            robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
+            setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
+        }
+        public void SetOnOffTrafficMenu(object sender, RoutedEventArgs e)
         {
 
             TurnOnSupervisorTraffic(onFlagSupervisorTraffic?false:true);
         }
-        private void AddWaitTaskListMenu(object sender, RoutedEventArgs e)
+        public void AddWaitTaskListMenu(object sender, RoutedEventArgs e)
         {
 
 
@@ -427,13 +434,13 @@ namespace SeldatMRMS.Management.RobotManagent {
             switch (result)
             {
                 case MessageBoxResult.OK:
+
                     DisposeProcedure();
                     TurnOnSupervisorTraffic(true);
                     this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
                     robotService.RemoveRobotUnityReadyList(this.properties.NameId);
                     robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
                     robotService.AddRobotUnityWaitTaskList(this);
-                    setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_OK);
                     Draw();
                     break;
                 case MessageBoxResult.Cancel:
@@ -456,7 +463,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             try
             {
 
-                if (properties.IsConnected)
+              //  if (properties.IsConnected)
                 {
 
                     //Render Robot

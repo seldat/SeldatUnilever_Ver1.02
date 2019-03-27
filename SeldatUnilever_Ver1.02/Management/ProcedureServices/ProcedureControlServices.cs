@@ -90,6 +90,7 @@ namespace SeldatMRMS {
             FORMAC_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
             FORMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
             FORMAC_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
+            FORMAC_ROBOT_DESTROY, // trả robot về robotmanagement để nhận quy trình mới
         }
 
         //public enum ForkLiftToMachine
@@ -133,6 +134,7 @@ namespace SeldatMRMS {
             BUFMAC_ROBOT_WAITTING_DROPDOWN_PALLET,
             BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE,
             BUFMAC_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
+            BUFMAC_ROBOT_DESTROY, // trả robot về robotmanagement để nhận quy trình mới
         }
 
         public enum BufferToReturn {

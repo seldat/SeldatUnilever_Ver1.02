@@ -69,13 +69,10 @@ namespace SelDatUnilever_Ver1
             return response;
         }
 
-        public virtual void FreePlanedBuffer()
+        public void FreePlanedBuffer()
         {
-
-                
                 String url = Global_Object.url + "pallet/updatePalletStatus";
-
-                int _palletId = GetPalletId(order.planId);
+                int _palletId = GetPalletId(order.planId,true);
                 if (_palletId > 0)
                 {
                     dynamic product = new JObject();
@@ -88,8 +85,25 @@ namespace SelDatUnilever_Ver1
                 }
             
         }
+
+        public void FreeHoldBuffer()
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            int _palletId = GetPalletId(order.planId,false);
+            if (_palletId > 0)
+            {
+                dynamic product = new JObject();
+                product.palletId = _palletId;
+                product.planId = order.planId;
+                product.palletStatus = PalletStatus.W.ToString();
+                product.updUsrId = Global_Object.userLogin;
+                var data = RequestDataProcedure(product.ToString(), url);
+
+            }
+
+        }
         // lấy pallet info cho viec free the plan planed
-        public int GetPalletId(int planId)
+        public int GetPalletId(int planId,bool onPlanId)
         {
             int palletId = -1;
             String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
@@ -98,15 +112,34 @@ namespace SelDatUnilever_Ver1
                 try
                 {
                     JArray results = JArray.Parse(collectionData);
-                    foreach (var result in results)
+                    if (onPlanId)
                     {
-                        int temp_planId = (int)result["planId"];
-                        if (temp_planId == planId)
+
+                        foreach (var result in results)
                         {
-                            var bufferResults = result["buffers"][0];
-                            var palletInfo = bufferResults["pallets"][0];
-                            palletId = (int)palletInfo["palletId"];
-                            break;
+                            int temp_planId = (int)result["planId"];
+                            if (temp_planId == planId)
+                            {
+                                var bufferResults = result["buffers"][0];
+                                var palletInfo = bufferResults["pallets"][0];
+                                palletId = (int)palletInfo["palletId"];
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var result = results[0];
+                        var bufferResults = result["buffers"][0];
+                        foreach (var palletInfo in bufferResults["pallets"])
+                        {
+                            try
+                            {
+                                palletId = (int)palletInfo["palletId"];
+                                break;
+                            }
+                            catch
+                            { }
                         }
                     }
                 }

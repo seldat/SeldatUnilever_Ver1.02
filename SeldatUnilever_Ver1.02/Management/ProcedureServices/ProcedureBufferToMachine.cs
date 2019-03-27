@@ -58,15 +58,7 @@ namespace SeldatMRMS
         }
         public void Destroy()
         {
-            // StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;
-            robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
-            ProRun = false;
-            UpdateInformationInProc(this, ProcessStatus.F);
-            order.status = StatusOrderResponseCode.ROBOT_ERROR;
-            //reset status pallet Faile H->Ws
-            UpdatePalletState(PalletStatus.W);
-            selectHandleError =SelectHandleError.CASE_ERROR_EXIT;
-            //this.robot.DestroyRegistrySolvedForm();
+            StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_DESTROY;
         }
 
         public void RestoreOrderItem()
@@ -376,6 +368,18 @@ namespace SeldatMRMS
                         robot.ShowText("RELEASED");
                         UpdateInformationInProc(this, ProcessStatus.S);
                         order.status = StatusOrderResponseCode.FINISHED;
+                        break;
+                    case BufferToMachine.BUFMAC_ROBOT_DESTROY:
+                        // StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;
+                        robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                        ProRun = false;
+                        UpdateInformationInProc(this, ProcessStatus.F);
+                        order.status = StatusOrderResponseCode.ROBOT_ERROR;
+                        //reset status pallet Faile H->Ws
+                        UpdatePalletState(PalletStatus.W);
+                        selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
+                        FreeHoldBuffer();
+                        //this.robot.DestroyRegistrySolvedForm();
                         break;
                     default:
                         break;

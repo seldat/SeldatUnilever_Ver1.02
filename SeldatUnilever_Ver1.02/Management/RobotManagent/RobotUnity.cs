@@ -394,16 +394,18 @@ namespace SeldatMRMS.Management.RobotManagent {
             Start(properties.Url);
             connectItem.IsEnabled = false;
             disconnectItem.IsEnabled = true;
-            setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CONNECT);
             MessageBox.Show("Để robot có thể tiếp tục hãy add Robot vào Ready Mode hoặc TaskWait Mode !");
         }
        private void DisConnectMenu(object sender, RoutedEventArgs e)
         {
+
                 DisposeProcedure();
                 Dispose();
+                MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
                 onBinding = false;
                 Reset();
-                MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
+                
+         
         }
         public void Reset()
         {
@@ -462,6 +464,14 @@ namespace SeldatMRMS.Management.RobotManagent {
 
             try
             {
+                if(properties.IsConnected)
+                {
+                    setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_CONNECT);
+                }
+                else
+                {
+                    setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
+                }
 
               //  if (properties.IsConnected)
                 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using System.Windows;
 using DoorControllerService;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -76,11 +77,14 @@ namespace SeldatMRMS
 
             // StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
             StateForkLift = ForkLift.FORMAC_ROBOT_DESTROY;
-            RestoreOrderItem();
+
+           
         }
 
         public void RestoreOrderItem()
         {
+
+
             OrderItem _order = new OrderItem();
             _order.activeDate = order.activeDate;
             _order.bufferId = order.bufferId;
@@ -111,7 +115,7 @@ namespace SeldatMRMS
             _order.bufferId = order.bufferId;
             _order.status = StatusOrderResponseCode.PENDING;
 
-            deviceService.FindDeviceItem(_order.userName).AddOrder(_order);
+            deviceService.FindDeviceItem(_order.userName).AddOrderCreatePlan(_order);
         }
         
         public void Procedure(object ojb)
@@ -123,6 +127,7 @@ namespace SeldatMRMS
             TrafficManagementService Traffic = FlToBuf.Traffic;
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
             robot.ShowText(" Start -> " + procedureCode);
+          //  StateForkLift = ForkLift.FORBUF_IDLE;
             while (ProRun)
             {
                 switch (StateForkLift)
@@ -523,7 +528,19 @@ namespace SeldatMRMS
                         order.status = StatusOrderResponseCode.ROBOT_ERROR;
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         this.robot.DestroyRegistrySolvedForm();
-                 
+                        string msgtext = "Plan "+order.productDetailName+" Sẽ Được Thêm Lại ?";
+                        string txt = "Cảnh báo";
+
+                        MessageBoxButton button = MessageBoxButton.OKCancel;
+                        MessageBoxResult result = MessageBox.Show(msgtext, txt, button);
+                        switch (result)
+                        {
+                            case MessageBoxResult.OK:
+                                RestoreOrderItem();
+                                break;
+                            case MessageBoxResult.Cancel:
+                                break;
+                        }
                         FreePlanedBuffer();
                         break;
                     //////////////////////////////////////////////////////

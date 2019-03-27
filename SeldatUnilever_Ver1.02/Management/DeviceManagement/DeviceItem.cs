@@ -68,6 +68,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             TYPEREQUEST_CLOSE_FRONTDOOR_DELIVERY_PALLET = 8,
             TYPEREQUEST_OPEN_FRONTDOOR_RETURN_PALLET = 9,
             TYPEREQUEST_CLOSE_FRONTDOOR_RETURN_PALLET = 10,
+            TYPEREQUEST_CLEAR_FORLIFT_TO_BUFFER = 11
         }
         public enum TabletConTrol
         {
@@ -163,6 +164,19 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             {
                 PendingOrderList.Add(hasOrder);
                 OrderedItemList.Add(hasOrder);
+            }
+            catch { }
+        }
+        public void AddOrderCreatePlan(OrderItem order)
+        {
+            try
+            {
+                
+                if (Convert.ToInt32(CreatePlanBuffer(order)) > 0)
+                {
+                    PendingOrderList.Add(order);
+                    OrderedItemList.Add(order);
+                }
             }
             catch { }
         }

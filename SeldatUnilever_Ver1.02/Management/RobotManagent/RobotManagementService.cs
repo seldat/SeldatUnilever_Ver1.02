@@ -58,7 +58,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.WS = 3;
             prop1.Label = "Robot1";
             prop1.BatteryLevelRb = 40;
-            prop1.Url = "ws://192.168.1.121:9090";
+            prop1.Url = "ws://192.168.1.181:9090";
             prop1.ipMcuCtrl = "192.168.1.211";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 8;
@@ -366,7 +366,11 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void RemoveRobotUnityWaitTaskList(String NameID)
         {
-            RobotUnityWaitTaskList.Remove(NameID);
+            try
+            {
+                RobotUnityWaitTaskList.Remove(NameID);
+            }
+            catch { }
         }
         public void DestroyAllRobotUnity()
         {
@@ -393,22 +397,26 @@ namespace SeldatMRMS.Management.RobotManagent
                 
                 if (RobotUnityWaitTaskList.Count > 0)
                 {
-                    foreach (RobotUnity robot in RobotUnityWaitTaskList.Values)
-                    {
-
                     try
                     {
-                        if (robot.properties.IsConnected)
+                        foreach (RobotUnity robot in RobotUnityWaitTaskList.Values)
                         {
-                                result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
-                                if (robot.getBattery())
+
+                            try
+                            {
+                                if (robot.properties.IsConnected)
                                 {
-                                    RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                                    result = new ResultRobotReady() { robot = robot, onReristryCharge = robot.getBattery() };
+                                   /* if (robot.getBattery())
+                                    {
+                                        RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                                    }*/
                                 }
+                            }
+                            catch { Console.WriteLine("Error WaitTask In RobotManagement Service Remove Robot"); }
                         }
                     }
-                    catch { Console.WriteLine("Error WaitTask In RobotManagement Service Remove Robot"); }
-                    }
+                    catch {  }
                 }
       
             return result;
@@ -459,7 +467,11 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public void RemoveRobotUnityReadyList(String nameID)
         {
-            RobotUnityReadyList.Remove(nameID);
+            try
+            {
+                RobotUnityReadyList.Remove(nameID);
+            }
+            catch { }
         }
         public void StopAt(String nameID)
         {

@@ -369,8 +369,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
 
                 if (r.Index < HasRobotUnityinAreaValue)
                 {
-                    Console.WriteLine("-----------------" + goal.ToString());
-                    Console.WriteLine("--- "+ r.NameId + "--- "+ JsonConvert.SerializeObject(r.GetZone()).ToString());
+                   // Console.WriteLine("-----------------" + goal.ToString());
+                   // Console.WriteLine("--- "+ r.NameId + "--- "+ JsonConvert.SerializeObject(r.GetZone()).ToString());
                     if (ExtensionService.IsInPolygon(r.GetZone(), goal))
                     {
                         zoneName = r.NameId;

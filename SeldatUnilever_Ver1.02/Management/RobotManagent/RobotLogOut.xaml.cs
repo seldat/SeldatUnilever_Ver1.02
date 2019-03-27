@@ -41,7 +41,11 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                       //  this.Title = src;
                        // title = src;
                         txt_logout.AppendText(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt") +" ["+src+"] >> " + txt + Environment.NewLine);
-                        txt_logout.ScrollToEnd();
+                        try
+                        {
+                          //  txt_logout.ScrollToEnd();
+                        }
+                        catch { }
                         
                     });
             }

@@ -21,6 +21,13 @@ namespace SeldatMRMS.Management.RobotManagent
             PRO_FORKLIFT_TO_MACHINE,
             PRO_IDLE
         }
+        public enum RobotInModeCode
+        {
+            ROBOT_MODE_READY,
+            ROBOT_MODE_WAIT,
+            ROBOT_MODE_IDLE,
+        }
+        public RobotInModeCode robotInModeCode;
         public class ProcedureRegistryInRobotUnity
         {
             public ProcedureBufferToMachine pBM { get; set; }

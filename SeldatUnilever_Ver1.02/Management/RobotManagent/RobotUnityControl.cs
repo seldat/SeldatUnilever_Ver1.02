@@ -516,25 +516,25 @@ namespace SeldatMRMS.Management.RobotManagent
         int countGoal = 0;
         public bool ReachedGoal()
         {
-            if (countGoal ++ > 600)
+            if (countGoal ++ > 400)
             {
                 countGoal = 0;
-                Console.WriteLine("------------------------------  " + this.properties.NameId);
-                Console.WriteLine("Goal X=" + gx);
-                Console.WriteLine("Goal Y=" + gy);
+              //  Console.WriteLine("------------------------------  " + this.properties.NameId);
+               // Console.WriteLine("Goal X=" + gx);
+              //  Console.WriteLine("Goal Y=" + gy);
                 double _currentgoal_Ex = Math.Abs(Math.Abs(properties.pose.Position.X) - Math.Abs(gx));
                 double _currentgoal_Ey = Math.Abs(Math.Abs(properties.pose.Position.Y) - Math.Abs(gy));
-                Console.WriteLine("Current amcl X=" + properties.pose.Position.X);
-                Console.WriteLine("Current amcl Y=" + properties.pose.Position.Y);
-                Console.WriteLine("Error amcl X=" + _currentgoal_Ex);
-                Console.WriteLine("Error amcl Y=" + _currentgoal_Ey);
-                Console.WriteLine("VX=" + properties.pose.VFbx);
-                Console.WriteLine("VY=" + properties.pose.VFby);
+              //  Console.WriteLine("Current amcl X=" + properties.pose.Position.X);
+             //   Console.WriteLine("Current amcl Y=" + properties.pose.Position.Y);
+             //   Console.WriteLine("Error amcl X=" + _currentgoal_Ex);
+             //   Console.WriteLine("Error amcl Y=" + _currentgoal_Ey);
+             //   Console.WriteLine("VX=" + properties.pose.VFbx);
+              //  Console.WriteLine("VY=" + properties.pose.VFby);
                 double gxx = Math.Abs(gx);
                 double gyy = Math.Abs(gy);
                 if (gxx >= 8.50 && gxx <= 8.65 && gyy >= 11.12 && gyy <= 11.3) // truong hop dat biet
                 {
-                    Console.WriteLine("Truong hop dat biet");
+                   // Console.WriteLine("Truong hop dat biet");
                     if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
                     {
                         if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 4.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
@@ -591,6 +591,7 @@ namespace SeldatMRMS.Management.RobotManagent
             createRosTerms ();
             try
             {
+ 
                 Draw();
             }
             catch { }

@@ -68,6 +68,7 @@ namespace SeldatMRMS
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
             StateForkLift = state;
             ProForkLift = new Thread(this.Procedure);
+            procedureStatus = ProcedureStatus.PROC_ALIVE;
             ProForkLift.Start(this);
             ProRun = true;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -127,7 +128,7 @@ namespace SeldatMRMS
             TrafficManagementService Traffic = FlToBuf.Traffic;
             ForkLiftToMachineInfo flToMachineInfo = new ForkLiftToMachineInfo();
             robot.ShowText(" Start -> " + procedureCode);
-          //  StateForkLift = ForkLift.FORBUF_IDLE;
+         //  StateForkLift = ForkLift.FORBUF_IDLE;
             while (ProRun)
             {
                 switch (StateForkLift)
@@ -528,19 +529,8 @@ namespace SeldatMRMS
                         order.status = StatusOrderResponseCode.ROBOT_ERROR;
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         this.robot.DestroyRegistrySolvedForm();
-                        string msgtext = "Plan "+order.productDetailName+" Sẽ Được Thêm Lại ?";
-                        string txt = "Cảnh báo";
-
-                        MessageBoxButton button = MessageBoxButton.OKCancel;
-                        MessageBoxResult result = MessageBox.Show(msgtext, txt, button);
-                        switch (result)
-                        {
-                            case MessageBoxResult.OK:
-                                RestoreOrderItem();
-                                break;
-                            case MessageBoxResult.Cancel:
-                                break;
-                        }
+                        procedureStatus = ProcedureStatus.PROC_KILLED;
+                        RestoreOrderItem();
                         FreePlanedBuffer();
                         break;
                     //////////////////////////////////////////////////////

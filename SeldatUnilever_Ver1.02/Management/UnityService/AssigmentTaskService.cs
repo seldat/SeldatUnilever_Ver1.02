@@ -70,24 +70,26 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                     case ProcessAssignAnTaskWait.PROC_ANY_IDLE:
                         break;
                     case ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST:
-                        ResultRobotReady result = robotManageService.GetRobotUnityWaitTaskItem0();
-                        if (result != null)
+                        if (robotManageService.RobotUnityWaitTaskList.Count > 0)
                         {
-                            robot = result.robot;
-                            if (result.onReristryCharge)
+                            ResultRobotReady result = robotManageService.GetRobotUnityWaitTaskItem0();
+                            if (result != null)
                             {
-                                // registry charge procedure
-                                procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
-                                robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameId);
-                        }
-                            else
-                            {
-
-                                if (deviceItemsList.Count > 0)
+                                robot = result.robot;
+                                if (result.onReristryCharge)
                                 {
-                                    processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_HAS_ANTASK;
+                                    // registry charge procedure
+                                    procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
+                                    robotManageService.RemoveRobotUnityWaitTaskList(robot);
                                 }
-                                    
+                                else
+                                {
+                                    if (deviceItemsList.Count > 0)
+                                    {
+                                        processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_CHECK_HAS_ANTASK;
+                                    }
+
+                                }
                             }
                         }
                         break;
@@ -120,7 +122,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         break;
                 case ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY:
                         procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
-                        robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                        robotManageService.RemoveRobotUnityWaitTaskList(robot);
                         processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
                     break;
                 case ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK:
@@ -129,7 +131,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                         deviceItemsList[0].RemoveFirstOrder();
                         MoveElementToEnd(); // sort Task List
                         // xoa khoi list cho
-                        robotManageService.RemoveRobotUnityWaitTaskList(robot.properties.NameId);
+                        robotManageService.RemoveRobotUnityWaitTaskList(robot);
                         processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
                         break;
 
@@ -171,12 +173,13 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             break;
                         case ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST:
 
-
+                        if (robotManageService.RobotUnityReadyList.Count > 0)
+                        {
                             ResultRobotReady result = robotManageService.GetRobotUnityReadyItem0();
-                            if(result!=null)
+                            if (result != null)
                             {
                                 robot = result.robot;
-                                if(result.onReristryCharge)
+                                if (result.onReristryCharge)
                                 {
                                     // registry charge procedure
                                     procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_CHARGE, robot, null);
@@ -190,6 +193,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                     }
                                 }
                             }
+                        }
                             break;
                         case ProcessAssignTaskReady.PROC_READY_CHECK_HAS_ANTASK:
                             orderItem = Gettask();
@@ -217,11 +221,11 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             break;
                         case ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY:
 
-                            // kiem tra robot tai vung ready
-                            if(!trafficService.RobotIsInArea("READY",robot.properties.pose.Position))
+                        // kiem tra robot vẫn còn tai vung ready
+                             if(!trafficService.RobotIsInArea("READY",robot.properties.pose.Position))
                             {
-                                // xoa khoi list cho
-                                robotManageService.RemoveRobotUnityReadyList(robot.properties.NameId);
+                                    // xoa khoi list cho
+                                robotManageService.RemoveRobotUnityReadyList(robot);
                                 processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
                             }
 

@@ -99,7 +99,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     webSocket.OnOpen += (sender, e) => OnOpenedEvent();
                     webSocket.OnMessage += (sender, e) => recievedOperation((WebSocket)sender, e);
                     webSocket.Connect();
-
+                    
             }).Start(); 
         }
         public virtual void Dispose()
@@ -107,11 +107,11 @@ namespace SeldatMRMS.Management.RobotManagent
             if (webSocket != null)
             {
                 IsDisposed = true;
-
                 //webSocket.OnMessage -= (sender, e) => recievedOperation((WebSocket)sender, e);
                 webSocket.OnClose -= (sender, e) => OnClosedEvent((WebSocket)sender, e);
                 //webSocket.OnOpen -= (sender, e) => OnOpenedEvent();
-                 Close();
+                if(webSocket.IsAlive)
+                    Close();
                 webSocket = null;
             }
         }

@@ -47,6 +47,7 @@ namespace SeldatMRMS
             StateBufferToReturn = state;
             ProBuferToReturn = new Thread(this.Procedure);
             ProBuferToReturn.Start(this);
+            procedureStatus = ProcedureStatus.PROC_ALIVE;
             ProRun = true;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
         }

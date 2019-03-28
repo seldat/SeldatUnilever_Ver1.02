@@ -53,6 +53,7 @@ namespace SeldatMRMS
             StateBufferToMachine = state;
             ProBuferToMachine = new Thread(this.Procedure);
             ProBuferToMachine.Start(this);
+            procedureStatus = ProcedureStatus.PROC_ALIVE;
             ProRun = true;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
         }
@@ -378,6 +379,7 @@ namespace SeldatMRMS
                         //reset status pallet Faile H->Ws
                         UpdatePalletState(PalletStatus.W);
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
+                        procedureStatus = ProcedureStatus.PROC_KILLED;
                         FreeHoldBuffer();
                         //this.robot.DestroyRegistrySolvedForm();
                         break;

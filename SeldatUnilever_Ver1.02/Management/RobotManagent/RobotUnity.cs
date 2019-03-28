@@ -368,8 +368,8 @@ namespace SeldatMRMS.Management.RobotManagent {
                     DisposeProcedure();
                     TurnOnSupervisorTraffic(false);
                     this.PreProcedureAs = ProcedureControlAssign.PRO_READY;
-                    robotService.RemoveRobotUnityReadyList(this.properties.NameId);
-                    robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
+                    robotService.RemoveRobotUnityReadyList(this);
+                    robotService.RemoveRobotUnityWaitTaskList(this);
                     robotService.AddRobotUnityReadyList(this);
                     Draw();
                     break;
@@ -416,8 +416,8 @@ namespace SeldatMRMS.Management.RobotManagent {
             disconnectItem.IsEnabled = false;
             TurnOnSupervisorTraffic(false);
             properties.IsConnected = false;
-            robotService.RemoveRobotUnityReadyList(this.properties.NameId);
-            robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
+            robotService.RemoveRobotUnityReadyList(this);
+            robotService.RemoveRobotUnityWaitTaskList(this);
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
         }
         public void SetOnOffTrafficMenu(object sender, RoutedEventArgs e)
@@ -440,8 +440,8 @@ namespace SeldatMRMS.Management.RobotManagent {
                     DisposeProcedure();
                     TurnOnSupervisorTraffic(true);
                     this.PreProcedureAs = ProcedureControlAssign.PRO_IDLE;
-                    robotService.RemoveRobotUnityReadyList(this.properties.NameId);
-                    robotService.RemoveRobotUnityWaitTaskList(this.properties.NameId);
+                    robotService.RemoveRobotUnityReadyList(this);
+                    robotService.RemoveRobotUnityWaitTaskList(this);
                     robotService.AddRobotUnityWaitTaskList(this);
                     Draw();
                     break;

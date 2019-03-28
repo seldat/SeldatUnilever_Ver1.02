@@ -22,9 +22,14 @@ namespace SeldatMRMS {
         public RobotTaskDB robotTaskDB;
         public ReadyChargerProcedureDB readyChargerProcedureDB;
         public OrderItem order;
-
+        public ProcedureStatus procedureStatus;
         public const UInt32 TIME_OUT_OPEN_DOOR = 60000; /* ms */
         public const UInt32 TIME_OUT_CLOSE_DOOR = 60000; /* ms */
+        public enum ProcedureStatus
+        {
+            PROC_ALIVE,
+            PROC_KILLED
+        }
 
         public enum ProcedureCode {
             PROC_CODE_BUFFER_TO_MACHINE = 0,

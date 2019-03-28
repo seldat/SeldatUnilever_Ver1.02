@@ -15,6 +15,7 @@ namespace SeldatMRMS
 
         public void Register (ProcedureItemSelected ProcedureItem, RobotUnity robot, OrderItem orderItem) {
 
+            CleanUp();
             switch (ProcedureItem) {
                 case ProcedureItemSelected.PROCEDURE_FORLIFT_TO_BUFFER:
                     ProcedureForkLiftToBuffer procfb = new ProcedureForkLiftToBuffer (robot, doorService, trafficService);
@@ -137,6 +138,23 @@ namespace SeldatMRMS
         public void DisposeProcedure()
         {
 
+        }
+        protected void CleanUp()
+        {
+            if (RegisterProcedureItemList.Count > 0)
+            {
+                int index = 0;
+                do
+                {
+                    RegisterProcedureItem procR = RegisterProcedureItemList[index];
+                    if (procR.item.procedureStatus == ProcedureStatus.PROC_KILLED)
+                    {
+                        RegisterProcedureItemList.Remove(procR);
+                    }
+                    index++;
+
+                } while (RegisterProcedureItemList.Count < index && RegisterProcedureItemList.Count >0);
+            }
         }
         protected override void ReleaseProcedureItemHandler (Object item) {
             Task.Run (() => {

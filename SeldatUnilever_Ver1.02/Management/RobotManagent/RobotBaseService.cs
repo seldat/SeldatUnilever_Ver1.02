@@ -55,7 +55,7 @@ namespace SeldatMRMS.Management.RobotManagent
                     if (proRegistryInRobot.pBM != null)
                     {
                         proRegistryInRobot.pBM.Destroy();
-                        proRegistryInRobot.pBM = null;
+                       // proRegistryInRobot.pBM = null;
                     }
                  
                     if (proRegistryInRobot.pMR != null)

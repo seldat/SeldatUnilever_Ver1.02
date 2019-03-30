@@ -118,11 +118,13 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             }
                         break;
                 case ProcessAssignAnTaskWait.PROC_ANY_CHECK_ROBOT_GOTO_READY:
+                        robot.TurnOnSupervisorTraffic(true);
                         procedureService.Register(ProcedureItemSelected.PROCEDURE_ROBOT_TO_READY, robot, null);
                         robotManageService.RemoveRobotUnityWaitTaskList(robot);
                         processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
                     break;
                 case ProcessAssignAnTaskWait.PROC_ANY_ASSIGN_ANTASK:
+                        robot.TurnOnSupervisorTraffic(true);
                         SelectProcedureItem(robot, orderItem);
                         // xoa order đầu tiên trong danh sach devicelist[0] sau khi gán task
                         deviceItemsList[0].RemoveFirstOrder();
@@ -183,7 +185,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                                 }
                                 else
                                 {
-                                    MoveElementToEnd();
+                                    //
                                     if (deviceItemsList.Count > 0)
                                     {
                                         processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_HAS_ANTASK;
@@ -197,15 +199,17 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             if (orderItem != null)
                             {
                                 Console.WriteLine(processAssignTaskReady);
-                            orderItem.robot = robot.properties.Label;
-                            processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_SET_TRAFFIC_RISKAREA_ON;
+                                orderItem.robot = robot.properties.Label;
+                                processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_SET_TRAFFIC_RISKAREA_ON;
                             }
                             else
                             {
+                                MoveElementToEnd();
                                 processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
                             }
                             break;
                         case ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK:
+                            robot.TurnOnSupervisorTraffic(true);
                             Console.WriteLine(processAssignTaskReady);
                             SelectProcedureItem(robot, orderItem);
                             deviceItemsList[0].RemoveFirstOrder();

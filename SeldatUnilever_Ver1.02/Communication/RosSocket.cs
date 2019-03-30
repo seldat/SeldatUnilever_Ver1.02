@@ -49,10 +49,10 @@ namespace SeldatMRMS.Management.RobotManagent
                 try
                 {
                     Close();
-                    
+                    webSocket.Connect();
                 }
                 catch { }
-                webSocket.Connect();
+                
 
             }
         }

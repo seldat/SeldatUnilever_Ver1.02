@@ -28,6 +28,7 @@ namespace SeldatMRMS
         BufferToMachine StateBufferToMachine;
         Thread ProBuferToMachine;
         public RobotUnity robot;
+        bool onUpdatedPalletState = false;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
         private DeviceRegistrationService deviceService;
@@ -260,6 +261,7 @@ namespace SeldatMRMS
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToMa.UpdatePalletState(PalletStatus.F);
+                            onUpdatedPalletState = true;
                             //         rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                             robot.ShowText("BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
@@ -377,7 +379,9 @@ namespace SeldatMRMS
                         UpdateInformationInProc(this, ProcessStatus.F);
                         order.status = StatusOrderResponseCode.ROBOT_ERROR;
                         //reset status pallet Faile H->Ws
-                        UpdatePalletState(PalletStatus.W);
+                        if(!onUpdatedPalletState)
+                            UpdatePalletState(PalletStatus.W);
+                        
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         procedureStatus = ProcedureStatus.PROC_KILLED;
                         FreeHoldBuffer();

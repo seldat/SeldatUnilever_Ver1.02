@@ -338,6 +338,7 @@
                                                         AutoGenerateColumns="True"
                                                         Width="Auto"
                                                         FontSize="12">
+                            
                                                         <DataGrid.Columns >
                                                             <!--<DataGridTemplateColumn Width="*">
                                                                  <DataGridTemplateColumn.HeaderTemplate>

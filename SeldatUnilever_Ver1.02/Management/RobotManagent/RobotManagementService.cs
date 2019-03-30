@@ -53,7 +53,7 @@ namespace SeldatMRMS.Management.RobotManagent
 //#if false
             PropertiesRobotUnity prop1 = new PropertiesRobotUnity();
             prop1.NameId = "RSD" + RobotUnityRegistedList.Count;
-            prop1.L1 = 4;
+            prop1.L1 = 2.5;
             prop1.L2 = 4;
             prop1.WS = 3;
             prop1.Label = "Robot1";
@@ -89,7 +89,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             PropertiesRobotUnity prop2 = new PropertiesRobotUnity();
             prop2.NameId = "RSD" + RobotUnityRegistedList.Count;
-            prop2.L1 = 4;
+            prop2.L1 = 2.5;
             prop2.L2 = 4;
             prop2.WS = 3;
             prop2.Label = "Robot2";
@@ -122,7 +122,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             PropertiesRobotUnity prop3 = new PropertiesRobotUnity();
             prop3.NameId = "RSD" + RobotUnityRegistedList.Count;
-            prop3.L1 = 4;
+            prop3.L1 = 2.5;
             prop3.L2 = 4;
             prop3.WS = 3;
             prop3.Label = "Robot3";

@@ -125,8 +125,11 @@ namespace SeldatMRMS.Management.RobotManagent
 
             while (subscribers.Count > 0)
                 Unsubscribe(subscribers.First().Key);
-
-            webSocket.Close();
+            try
+            {
+                webSocket.Close();
+            }
+            catch { }
         }
         public delegate void ServiceHandler(object obj);
         public delegate void MessageHandler(Message message);

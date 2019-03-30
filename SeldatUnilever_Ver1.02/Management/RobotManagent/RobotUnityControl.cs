@@ -495,6 +495,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 return true;
             }
             catch {
+                
                 return false;
             }
         }
@@ -552,7 +553,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
                     if (Math.Abs(properties.pose.VFbx) < properties.errorVx )
                     {
-                        if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                        if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0.0 && _currentgoal_Ey >= 0.0)
                         {
                             properties.pose.VCtrlx = 0;
                             properties.pose.VCtrly = 0;
@@ -601,8 +602,8 @@ namespace SeldatMRMS.Management.RobotManagent
 
         protected override void OnClosedEvent (object sender, CloseEventArgs e) {
             //ConnectionStatusHandler(this, ConnectionStatus.CON_FAILED);
-            robotLogOut.ShowText(this.properties.Label,  "Disconnected to Ros Master");
-            robotLogOut.ShowText(this.properties.Label,  "Reconnecting...");
+          //  robotLogOut.ShowText(this.properties.Label,  "Disconnected to Ros Master");
+          //  robotLogOut.ShowText(this.properties.Label,  "Reconnecting...");
             properties.IsConnected = false;
             this.url = properties.URL;
             base.OnClosedEvent (sender, e);

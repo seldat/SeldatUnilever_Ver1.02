@@ -543,7 +543,14 @@ namespace SeldatMRMS
         }
         protected override void CheckUserHandleError(object obj)
         {
-            CheckUserHandleError(this);
+            try
+            {
+                CheckUserHandleError(this);
+            }
+            catch
+            {
+
+            }
         }
         public override void FinishStatesCallBack(Int32 message)
         {

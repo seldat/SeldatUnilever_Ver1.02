@@ -15,8 +15,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
 {
     public class AssigmentTaskService:TaskRounterService
     {
-        public Thread threadprocessAssignAnTaskWait;
-        public Thread threadprocessAssignTaskReady;
+       
         public AssigmentTaskService() { }
         public void FinishTask(String userName)
         {
@@ -28,16 +27,14 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             Alive = true;
             processAssignAnTaskWait = ProcessAssignAnTaskWait.PROC_ANY_GET_ANROBOT_IN_WAITTASKLIST;
             processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_GET_ANROBOT_INREADYLIST;
-            threadprocessAssignAnTaskWait=new Thread(AssignTask);
-            threadprocessAssignTaskReady=new Thread(AssignTaskAtReady);
+            Task threadprocessAssignAnTaskWait=new Task(AssignTask);
+            Task threadprocessAssignTaskReady =new Task(AssignTaskAtReady);
             threadprocessAssignAnTaskWait.Start();
             threadprocessAssignTaskReady.Start();
         }
         public void Dispose()
         {
             Alive = false;
-            threadprocessAssignAnTaskWait.Abort();
-            threadprocessAssignTaskReady.Abort();
         }
         public void AssignTask()
         {

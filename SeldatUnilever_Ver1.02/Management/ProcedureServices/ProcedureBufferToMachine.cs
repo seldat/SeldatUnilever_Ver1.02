@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
@@ -26,7 +27,7 @@ namespace SeldatMRMS
         }
         // DataBufferToMachine points;
         BufferToMachine StateBufferToMachine;
-        Thread ProBuferToMachine;
+        
         public RobotUnity robot;
         ResponseCommand resCmd;
         TrafficManagementService Traffic;
@@ -51,8 +52,8 @@ namespace SeldatMRMS
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_MACHINE;
             StateBufferToMachine = state;
-            ProBuferToMachine = new Thread(this.Procedure);
-            ProBuferToMachine.Start(this);
+            Task ProBuferToMachine = new Task(()=>this.Procedure(this));
+            ProBuferToMachine.Start();
             procedureStatus = ProcedureStatus.PROC_ALIVE;
             ProRun = true;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;

@@ -21,8 +21,8 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpServerRounter
         }
         public void listen()
         {
-            Task.Run(() =>
-            {
+            //Task.Run(() =>
+         //   {
                 listener = new TcpListener(port);
                 listener.Start();
                 while (is_active)
@@ -32,7 +32,7 @@ namespace SelDatUnilever_Ver1._00.Communication.HttpServerRounter
                     thread.Start();
                     Thread.Sleep(1);
                 }
-            });
+          //  });
         }
         public void Process()
         {

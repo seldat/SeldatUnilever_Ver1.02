@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using DoorControllerService;
 using Newtonsoft.Json;
@@ -34,7 +35,7 @@ namespace SeldatMRMS
         }
         // DataForkLiftToBuffer points;
         ForkLift StateForkLift;
-        Thread ProForkLift;
+      //  Thread ProForkLift;
         public RobotUnity robot;
         public DoorService door;
         ResponseCommand resCmd;
@@ -67,9 +68,10 @@ namespace SeldatMRMS
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
             StateForkLift = state;
-            ProForkLift = new Thread(this.Procedure);
+
+            Task ProForkLift = new Task(()=>this.Procedure(this));
             procedureStatus = ProcedureStatus.PROC_ALIVE;
-            ProForkLift.Start(this);
+            ProForkLift.Start();
             ProRun = true;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
         }

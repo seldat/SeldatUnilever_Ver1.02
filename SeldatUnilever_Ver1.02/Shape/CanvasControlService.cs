@@ -835,7 +835,7 @@ namespace SeldatMRMS
                     }
                 }
             }
-            catch { }
+            catch { Console.WriteLine("Error in ReloadListDeviceItems"); }
         }
 
     }

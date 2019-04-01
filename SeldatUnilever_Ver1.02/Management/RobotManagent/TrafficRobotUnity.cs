@@ -294,7 +294,8 @@ namespace SeldatMRMS.Management
                         }
                         else
                         {
-                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                           // SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                             // robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
                         }
                     }
@@ -369,7 +370,7 @@ namespace SeldatMRMS.Management
                     // giám sát an toàn
                   
                 }
-                catch { }
+                catch { Console.WriteLine("TrafficRobotUnity Error in TrafficUpdate"); }
                 Thread.Sleep(500);
             }
 

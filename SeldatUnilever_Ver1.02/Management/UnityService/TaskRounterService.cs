@@ -90,6 +90,8 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 try
                 {
                     item = deviceItemsList[0].GetOrder();
+                    if (item == null)
+                        return null;
                     if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
                     {
                         if (CheckAvailableFrontLineBuffer(item, false) != null)

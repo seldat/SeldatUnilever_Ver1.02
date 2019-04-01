@@ -311,7 +311,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             int index = -1;
             foreach (ZoneRegister z in ZoneRegisterList.Values)
             {
-                if (z.Index < 255) // kiem tra lai số 225
+                if (z.Index < 200) // kiem tra lai số 225
                 {
                     if (ExtensionService.IsInPolygon(z.GetZone(), p))
                     {

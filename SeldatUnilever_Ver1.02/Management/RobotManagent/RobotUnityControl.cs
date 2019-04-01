@@ -465,6 +465,7 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             catch
             {
+                Console.WriteLine("Robot Control Error SendPoseStamped");
                 return false;
             }
         }
@@ -479,6 +480,7 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             catch
             {
+                Console.WriteLine("Robot Control Error  SetSpeed");
                 return false;
             }
         }
@@ -495,7 +497,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 return true;
             }
             catch {
-                
+                Console.WriteLine("Robot Control Error SendCmdLineDetectionCtrl");
                 return false;
             }
         }
@@ -511,6 +513,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 return true;
             }
             catch {
+                Console.WriteLine("Robot Control Error SendCmdPosPallet");
                 return false;
             }
         }
@@ -579,6 +582,7 @@ namespace SeldatMRMS.Management.RobotManagent
                         return true;
                     }
                     catch {
+                    Console.WriteLine("Error Send SendCmdAreaPallet");
                         return false;
                 }
        
@@ -595,7 +599,9 @@ namespace SeldatMRMS.Management.RobotManagent
  
                 Draw();
             }
-            catch { }
+            catch {
+                Console.WriteLine("Robot Control Error Send OnOpenedEvent");
+            }
             
             //   ConnectionStatusHandler(this, ConnectionStatus.CON_OK);
         }

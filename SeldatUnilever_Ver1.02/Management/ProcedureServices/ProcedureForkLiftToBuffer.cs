@@ -315,6 +315,7 @@ namespace SeldatMRMS
                         {
                             if (true == ds.WaitClose(DoorService.DoorType.DOOR_BACK, TIME_OUT_CLOSE_DOOR))
                             {
+                                ds.LampOff(DoorService.DoorType.DOOR_FRONT);
                                 flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);
                                 if (flToMachineInfo == null)
                                 {

@@ -43,7 +43,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             int cntOrderNull=1;
             while (Alive)
             {
-                
+
 #if false
                 //procedureService.doorService.DoorMezzamineUp.Open(DoorType.DOOR_FRONT);
                 //Thread.Sleep(3000);
@@ -53,14 +53,18 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                 //Thread.Sleep(3000);
                 //procedureService.doorService.DoorMezzamineUp.Close(DoorType.DOOR_BACK);
                 //Thread.Sleep(3000);
-                procedureService.doorService.DoorMezzamineReturn.Open(DoorType.DOOR_FRONT);
-                Thread.Sleep(1000);
-                procedureService.doorService.DoorMezzamineReturn.Close(DoorType.DOOR_FRONT);
-                Thread.Sleep(1000);
-                procedureService.doorService.DoorMezzamineReturn.Open(DoorType.DOOR_BACK);
-                Thread.Sleep(1000);
-                procedureService.doorService.DoorMezzamineReturn.Close(DoorType.DOOR_BACK);
-                Thread.Sleep(1000);
+                //procedureService.doorService.DoorMezzamineReturn.Open(DoorType.DOOR_FRONT);
+                //Thread.Sleep(1000);
+                //procedureService.doorService.DoorMezzamineReturn.Close(DoorType.DOOR_FRONT);
+                //Thread.Sleep(1000);
+                //procedureService.doorService.DoorMezzamineReturn.Open(DoorType.DOOR_BACK);
+                //Thread.Sleep(1000);
+                //procedureService.doorService.DoorMezzamineReturn.Close(DoorType.DOOR_BACK);
+                //Thread.Sleep(1000);
+                procedureService.doorService.DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
+                Thread.Sleep(2000);
+                procedureService.doorService.DoorMezzamineUp.LampOff(DoorType.DOOR_FRONT);
+                Thread.Sleep(2000);
 #else
                 //Console.WriteLine(processAssignAnTaskWait);
                 switch (processAssignAnTaskWait)

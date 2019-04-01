@@ -241,6 +241,14 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, ErrorMessage = "" };
                         return statusOrderResponse;
                     }
+                    try
+                    {
+                        new DoorManagementService().DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("control lamp failed");
+                    }
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
                 {
@@ -298,10 +306,10 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.productDetailId = (int)results["productDetailId"];
                         order.productDetailName = (String)results["productDetailName"];
                         order.productId = (int)results["productId"];
-                       // order.planId = (int)results["planId"];
+                        // order.planId = (int)results["planId"];
                         order.deviceId = (int)results["deviceId"];
                         order.timeWorkId = 1;
-                       // order.activeDate = (string)DateTime.Now.ToString("yyyy-MM-dd");
+                        // order.activeDate = (string)DateTime.Now.ToString("yyyy-MM-dd");
                         // order.palletStatus = (String)results["palletStatus"];
                         String jsonDPst = (string)results["datapallet"][i];
                         JObject stuffPallet = JObject.Parse(jsonDPst);
@@ -314,7 +322,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         int directSub = (int)stuffPallet["pallet"]["dir_sub"];
                         int directOut = (int)stuffPallet["pallet"]["dir_out"];
                         int line_ord = (int)stuffPallet["pallet"]["line_ord"];
-                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = directOut,line_ord=line_ord };
+                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = directOut, line_ord = line_ord };
                         dynamic product = new JObject();
                         product.timeWorkId = order.timeWorkId;
                         product.activeDate = order.activeDate;
@@ -328,10 +336,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.status = StatusOrderResponseCode.PENDING;
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
-
-
                     }
-                   
+
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_MACHINE_TO_RETURN)
                 {
@@ -357,11 +363,11 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         int dir_out = (int)stuffPallet["pallet"]["dir_out"];
                         int line_ord = (int)stuffPallet["pallet"]["line_ord"];
                         order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
-                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub,directOut=dir_out ,line_ord=line_ord};
+                        order.palletAtMachine = new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = dir_out, line_ord = line_ord };
                         dynamic product = new JObject();
-                     //   product.timeWorkId = order.timeWorkId;
-                     //   product.activeDate = order.activeDate;
-                     //   product.productId = order.productId;
+                        //   product.timeWorkId = order.timeWorkId;
+                        //   product.activeDate = order.activeDate;
+                        //   product.productId = order.productId;
 
                         // chu y sua 
                         product.palletStatus = PalletStatus.F.ToString();
@@ -369,7 +375,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                         order.status = StatusOrderResponseCode.PENDING;
                         PendingOrderList.Add(order);
                         OrderedItemList.Add(order);
-                        
+
                     }
                 }
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_BUFFER_TO_RETURN)
@@ -401,7 +407,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     String userName = (String)results["userName"];
                     // kiểm tra quy trình và hủy task 
 
-                    foreach(OrderItem ord in PendingOrderList)
+                    foreach (OrderItem ord in PendingOrderList)
                     {
                         if (ord.userName.Equals(userName))
                             PendingOrderList.Remove(ord);
@@ -416,13 +422,14 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
 
                 }
-                else if(typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET)
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET)
                 {
                     // same deviceID forklift
                     try
                     {
-                        new DoorManagementService().DoorMezzamineUp.Open(DoorType.DOOR_FRONT);                    }
-                    catch(Exception e)
+                        new DoorManagementService().DoorMezzamineUp.Open(DoorType.DOOR_FRONT);
+                    }
+                    catch (Exception e)
                     {
                         Console.WriteLine("control door failed");
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };
@@ -436,7 +443,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     {
                         new DoorManagementService().DoorMezzamineUp.Close(DoorType.DOOR_FRONT);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         Console.WriteLine("control door failed");
                         statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_ERROR_DATA, ErrorMessage = e.Message };

@@ -49,7 +49,7 @@ namespace SeldatMRMS
             }
         }
 
-        protected List<RegisterProcedureItem> RegisterProcedureItemList = new List<RegisterProcedureItem>();
+      //  protected List<RegisterProcedureItem> RegisterProcedureItemList = new List<RegisterProcedureItem>();
         public RegisterProcedureService() { }
         public enum ProcedureItemSelected
         {

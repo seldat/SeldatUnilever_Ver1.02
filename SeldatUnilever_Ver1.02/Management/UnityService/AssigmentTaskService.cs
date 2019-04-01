@@ -43,6 +43,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             int cntOrderNull=1;
             while (Alive)
             {
+                
 #if false
                 //procedureService.doorService.DoorMezzamineUp.Open(DoorType.DOOR_FRONT);
                 //Thread.Sleep(3000);
@@ -165,6 +166,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             RobotUnity robot = null;
                 while (Alive)
                 {
+                
                     //Console.WriteLine(processAssignTaskReady);
                     switch (processAssignTaskReady)
                     {

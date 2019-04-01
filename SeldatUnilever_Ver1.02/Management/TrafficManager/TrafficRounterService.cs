@@ -306,15 +306,18 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
             return trz;
         }
-        public int FindIndexZoneRegister(Point p)
+        public int FindIndexZoneRegister(Point p) // nho hon vung OP
         {
             int index = -1;
             foreach (ZoneRegister z in ZoneRegisterList.Values)
             {
-                if (ExtensionService.IsInPolygon(z.GetZone(), p))
+                if (z.Index < 200)
                 {
-                    index = z.Index;
-                    break;
+                    if (ExtensionService.IsInPolygon(z.GetZone(), p))
+                    {
+                        index = z.Index;
+                        break;
+                    }
                 }
             }
             return index;
@@ -386,6 +389,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                     if (ExtensionService.IsInPolygon(ZoneRegisterList[zoneName].GetZone(), r.properties.pose.Position))
                     {
                         hasRobot = true;
+                        break;
                     }
                 }
             }
@@ -401,6 +405,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 if (ExtensionService.IsInPolygon(ZoneRegisterList[AreaName].GetZone(), r.properties.pose.Position))
                 {
                     hasRobot = true;
+                    break;
                 }
             }
             return hasRobot;

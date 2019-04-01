@@ -243,7 +243,7 @@ namespace SeldatMRMS.Management
              // robotLogOut.ShowTextTraffic(this.properties.Label + " =>" + TrafficBehaviorStateTracking + " " + robot.properties.Label);
             }
             //   else if (robot.FindHeaderIntersectsRiskAreaRightSide(this.TopHeader())|| robot.FindHeaderIntersectsRiskAreaRightSide(this.MiddleHeader())|| robot.FindHeaderIntersectsRiskAreaRightSide(this.BottomHeader()))
-            else if (robot.FindHeaderIntersectsRiskAreaRightSideCv(thCV) || robot.FindHeaderIntersectsRiskAreaRightSideCv(mhCV) || robot.FindHeaderIntersectsRiskAreaRightSideCv(bhCV) ||
+           /* else if (robot.FindHeaderIntersectsRiskAreaRightSideCv(thCV) || robot.FindHeaderIntersectsRiskAreaRightSideCv(mhCV) || robot.FindHeaderIntersectsRiskAreaRightSideCv(bhCV) ||
                 robot.FindHeaderIntersectsRiskAreaRightSideCv(mhCV1) || robot.FindHeaderIntersectsRiskAreaRightSideCv(mhCV2) || robot.FindHeaderIntersectsRiskAreaRightSideCv(mhCV3)
                 )
 
@@ -258,7 +258,7 @@ namespace SeldatMRMS.Management
             {
                 TrafficBehaviorStateTracking = TrafficBehaviorState.HEADER_TOUCH_SIDE;
              //robotLogOut.ShowTextTraffic(this.properties.Label + " =>" + TrafficBehaviorStateTracking + " " + robot.properties.Label);
-            }
+            }*/
        
 
         }
@@ -275,31 +275,30 @@ namespace SeldatMRMS.Management
                     // Find condition priority
                     // index level of road
                     // procedure Flag is set
-                    if (prioritLevel.IndexOnMainRoad == robot.prioritLevel.IndexOnMainRoad)
+
+                    if (prioritLevel.OnAuthorizedPriorityProcedure)
                     {
-                        if (robot.prioritLevel.OnAuthorizedPriorityProcedure)
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                        // SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                        //TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
+                        // robotModeFree = robot;
+                        //  robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
+                    }
+                    else
+                    {
+
+                        if (prioritLevel.IndexOnMainRoad < robot.prioritLevel.IndexOnMainRoad)
                         {
-                           // SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                           //TrafficBehaviorStateTracking = TrafficBehaviorState.MODE_FREE;
-                           // robotModeFree = robot;
-                          //  robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
+                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                            //  robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
                         }
                         else
                         {
                             SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                          // robotLogOut.ShowTextTraffic(this.properties.Label + " => NORMAL");
+                            // robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
                         }
                     }
-                    else if (prioritLevel.IndexOnMainRoad < robot.prioritLevel.IndexOnMainRoad)
-                    {
-                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                  //  robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
-                    }
-                    else
-                    {
-                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
-                    // robotLogOut.ShowTextTraffic(this.properties.Label + " => STOP");
-                    }
+
                     break;
                 case TrafficBehaviorState.HEADER_TOUCH_TAIL:
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);

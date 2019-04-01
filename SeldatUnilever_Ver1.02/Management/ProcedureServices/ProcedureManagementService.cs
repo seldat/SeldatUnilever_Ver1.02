@@ -25,7 +25,7 @@ namespace SeldatMRMS
                     RegisterProcedureItem itemprocfb = new RegisterProcedureItem () { item = procfb, robot = robot, procedureDataItems = profbDataItems };
                     procfb.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
                     procfb.ErrorProcedureHandler += ErrorApprearInProcedureItem;
-                    RegisterProcedureItemList.Add (itemprocfb);
+                    //RegisterProcedureItemList.Add (itemprocfb);
                     procfb.AssignAnOrder (orderItem);
                     robot.proRegistryInRobot.pFB = procfb;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
@@ -40,7 +40,7 @@ namespace SeldatMRMS
                     RegisterProcedureItem itemprocbm = new RegisterProcedureItem () { item = procbm, robot = robot, procedureDataItems = prcobmDataItems };
                     procbm.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
                     procbm.ErrorProcedureHandler += ErrorApprearInProcedureItem;
-                    RegisterProcedureItemList.Add (itemprocbm);
+                    //RegisterProcedureItemList.Add (itemprocbm);
                     procbm.AssignAnOrder (orderItem);
                     robot.proRegistryInRobot.pBM = procbm;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_MACHINE;
@@ -53,7 +53,7 @@ namespace SeldatMRMS
                     RegisterProcedureItem itemprocbr = new RegisterProcedureItem () { item = procbr, robot = robot, procedureDataItems = prcobrDataItems };
                     procbr.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
                     procbr.ErrorProcedureHandler += ErrorApprearInProcedureItem;
-                    RegisterProcedureItemList.Add (itemprocbr);
+                   // RegisterProcedureItemList.Add (itemprocbr);
                     procbr.AssignAnOrder (orderItem);
                     robot.proRegistryInRobot.pBR = procbr;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;
@@ -66,7 +66,7 @@ namespace SeldatMRMS
                     RegisterProcedureItem itemprocmr = new RegisterProcedureItem () { item = procmr, robot = robot, procedureDataItems = prcomrDataItems };
                     procmr.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
                     procmr.ErrorProcedureHandler += ErrorApprearInProcedureItem;
-                    RegisterProcedureItemList.Add (itemprocmr);
+                    //RegisterProcedureItemList.Add (itemprocmr);
                     procmr.AssignAnOrder (orderItem);
                     robot.proRegistryInRobot.pMR = procmr;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_MACHINE_TO_RETURN;
@@ -79,7 +79,7 @@ namespace SeldatMRMS
                     RegisterProcedureItem itemprocrg = new RegisterProcedureItem () { item = procrg, robot = robot, procedureDataItems = prorgDataItems };
                     procrg.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
                     procrg.ErrorProcedureHandler += ErrorApprearInProcedureItem;
-                    RegisterProcedureItemList.Add (itemprocrg);
+                   // RegisterProcedureItemList.Add (itemprocrg);
                     procrg.AssignAnOrder (orderItem);
                     procrg.Start ();
                     break;
@@ -90,7 +90,7 @@ namespace SeldatMRMS
                     RegisterProcedureItem itemprocrc = new RegisterProcedureItem () { item = procrc, robot = robot, procedureDataItems = procrcDataItems };
                     procrc.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
                     procrc.ErrorProcedureHandler += ErrorApprearInProcedureItem;
-                    RegisterProcedureItemList.Add (itemprocrc);
+                  //  RegisterProcedureItemList.Add (itemprocrc);
                     robot.proRegistryInRobot.pRC = procrc;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_CHARGE;
                     procrc.Start ();
@@ -102,7 +102,7 @@ namespace SeldatMRMS
                     RegisterProcedureItem itemprocrr = new RegisterProcedureItem () { item = procrr, robot = robot, procedureDataItems = procrrDataItems };
                     procrr.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
                     procrr.ErrorProcedureHandler += ErrorApprearInProcedureItem;
-                    RegisterProcedureItemList.Add (itemprocrr);
+                   // RegisterProcedureItemList.Add (itemprocrr);
                     robot.proRegistryInRobot.pRR = procrr;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_READY;
                     procrr.Start ();
@@ -114,7 +114,7 @@ namespace SeldatMRMS
                     RegisterProcedureItem itemprocRrr = new RegisterProcedureItem() { item = procRrr, robot = robot, procedureDataItems = procRrrDataItems };
                     procRrr.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
                     procRrr.ErrorProcedureHandler += ErrorApprearInProcedureItem;
-                    RegisterProcedureItemList.Add(itemprocRrr);
+                   // RegisterProcedureItemList.Add(itemprocRrr);
                     robot.proRegistryInRobot.pRR = procRrr;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_READY;
                     procRrr.Start();
@@ -141,7 +141,7 @@ namespace SeldatMRMS
         }
         protected void CleanUp()
         {
-            if (RegisterProcedureItemList.Count > 0)
+            /*if (RegisterProcedureItemList.Count > 0)
             {
                 int index = 0;
                 do
@@ -154,7 +154,7 @@ namespace SeldatMRMS
                     index++;
 
                 } while (RegisterProcedureItemList.Count < index && RegisterProcedureItemList.Count >0);
-            }
+            }*/
         }
         protected override void ReleaseProcedureItemHandler (Object item) {
             Task.Run (() => {
@@ -176,10 +176,10 @@ namespace SeldatMRMS
                     robotManagementService.AddRobotUnityWaitTaskList (robot);
                 }
 
-                var element = RegisterProcedureItemList.Find (e => e.item.procedureCode == procItem.procedureCode);
+            /*    var element = RegisterProcedureItemList.Find (e => e.item.procedureCode == procItem.procedureCode);
                 element.procedureDataItems.EndTime = DateTime.Now;
                 element.procedureDataItems.StatusProcedureDelivered = "OK";
-                RegisterProcedureItemList.Remove (element);
+                RegisterProcedureItemList.Remove (element);*/
                 
             });
         }

@@ -180,7 +180,7 @@ namespace SeldatMRMS
                         {
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY;
                             robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
                         }
@@ -191,7 +191,7 @@ namespace SeldatMRMS
                             if (false == Traffic.HasRobotUnityinArea(BfToMa.GetAnyPointInBuffer().Position))
                             {
                                 robot.SetTrafficAtCheckIn(false);
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(BfToMa.GetFrontLineBuffer()))
                                 {
                                     StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER;

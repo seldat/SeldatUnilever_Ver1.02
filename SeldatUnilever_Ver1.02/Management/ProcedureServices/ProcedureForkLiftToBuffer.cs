@@ -223,7 +223,7 @@ namespace SeldatMRMS
                         if (false == Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position))
                         {
                             robot.SetTrafficAtCheckIn(false);
-                            rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
+                            rb.UpdateRiskAraParams(4, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             if (rb.SendPoseStamped(ds.config.PointFrontLine))
                             {

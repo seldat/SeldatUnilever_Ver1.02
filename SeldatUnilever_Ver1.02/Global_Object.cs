@@ -57,6 +57,34 @@ namespace SeldatMRMS
 
 
         //#######################################
+        public static bool ServerAlive(string hostUri = "localhost", int portNumber = 8081)
+        {
+            //=====================================================
+            TcpClient tcpClient = new TcpClient();
+            try
+            {
+                tcpClient.Connect("localhost", 8081);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            //=====================================================
+            //try
+            //{
+            //    using (var client = new TcpClient(hostUri, portNumber))
+            //    {
+            //        return true;
+            //    }
+            //}
+            //catch (SocketException ex)
+            //{
+            //    return false;
+            //}
+            //=====================================================
+        }
+        //#######################################
         public static MusicPlayerOld musicPlayerOld = new MusicPlayerOld("ALARM.mp3");
         public static void PlayWarning()
         {
@@ -95,33 +123,7 @@ namespace SeldatMRMS
         //#######################################
 
         //#######################################
-        public static bool ServerAlive(string hostUri = "localhost", int portNumber = 8081)
-        {
-            //=====================================================
-            TcpClient tcpClient = new TcpClient();
-            try
-            {
-                tcpClient.Connect("localhost", 8081);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            //=====================================================
-            //try
-            //{
-            //    using (var client = new TcpClient(hostUri, portNumber))
-            //    {
-            //        return true;
-            //    }
-            //}
-            //catch (SocketException ex)
-            //{
-            //    return false;
-            //}
-            //=====================================================
-        }
+        
         public static Point LaserOriginalCoor = new Point(740,506);
       //  public static Point LaserOriginalCoor = new Point(740, 406);
         public static Point OriginPoint = new Point(0, 0);

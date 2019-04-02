@@ -130,7 +130,11 @@ namespace SeldatUnilever_Ver1._02
         {
             Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
-                canvasControlService.ReloadListDeviceItems();
+                try
+                {
+                    canvasControlService.ReloadListDeviceItems();
+                }
+                catch { Console.WriteLine("Error reload device list"); }
             }));
         }
 

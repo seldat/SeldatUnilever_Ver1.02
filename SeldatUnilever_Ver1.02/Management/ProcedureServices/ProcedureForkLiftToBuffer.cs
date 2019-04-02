@@ -532,7 +532,7 @@ namespace SeldatMRMS
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         this.robot.DestroyRegistrySolvedForm();
                         procedureStatus = ProcedureStatus.PROC_KILLED;
-                        RestoreOrderItem();
+                       // RestoreOrderItem();
                         FreePlanedBuffer();
                         break;
                     //////////////////////////////////////////////////////

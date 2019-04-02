@@ -389,12 +389,15 @@ namespace SeldatMRMS.Management.RobotManagent {
         private void ConnectMenu(object sender, RoutedEventArgs e)
         {
 
-            Dispose();
-            onBinding = true;
-            Start(properties.Url);
-            connectItem.IsEnabled = false;
-            disconnectItem.IsEnabled = true;
-            MessageBox.Show("Để robot có thể tiếp tục hãy add Robot vào Ready Mode hoặc TaskWait Mode !");
+            // Dispose();
+            if (!properties.IsConnected)
+            {
+                onBinding = true;
+                Start(properties.Url);
+                connectItem.IsEnabled = false;
+                disconnectItem.IsEnabled = true;
+                MessageBox.Show("Để robot có thể tiếp tục hãy add Robot vào Ready Mode hoặc TaskWait Mode !");
+            }
         }
        private void DisConnectMenu(object sender, RoutedEventArgs e)
         {

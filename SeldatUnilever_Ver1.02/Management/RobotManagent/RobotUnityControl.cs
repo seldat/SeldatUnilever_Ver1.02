@@ -308,16 +308,22 @@ namespace SeldatMRMS.Management.RobotManagent
         }
 
         private void AmclPoseHandler (Communication.Message message) {
-            GeometryPoseWithCovarianceStamped standardString = (GeometryPoseWithCovarianceStamped) message;
-            double posX = (double) standardString.pose.pose.position.x;
-            double posY = (double) standardString.pose.pose.position.y;
-            double posThetaZ = (double) standardString.pose.pose.orientation.z;
-            double posThetaW = (double) standardString.pose.pose.orientation.w;
-            double posTheta = (double) 2 * Math.Atan2 (posThetaZ, posThetaW);
-            properties.pose.Position = new Point (posX, posY);
-            properties.pose.AngleW = posTheta;
-            properties.pose.Angle = posTheta * 180 / Math.PI;
-           
+            try
+            {
+                GeometryPoseWithCovarianceStamped standardString = (GeometryPoseWithCovarianceStamped)message;
+                double posX = (double)standardString.pose.pose.position.x;
+                double posY = (double)standardString.pose.pose.position.y;
+                double posThetaZ = (double)standardString.pose.pose.orientation.z;
+                double posThetaW = (double)standardString.pose.pose.orientation.w;
+                double posTheta = (double)2 * Math.Atan2(posThetaZ, posThetaW);
+                properties.pose.Position = new Point(posX, posY);
+                properties.pose.AngleW = posTheta;
+                properties.pose.Angle = posTheta * 180 / Math.PI;
+            }
+            catch
+            {
+                Console.WriteLine(" Error in AMCL");
+            }
          
 
         }
@@ -329,7 +335,9 @@ namespace SeldatMRMS.Management.RobotManagent
                 FinishStatesCallBack(standard.data);
                
             }
-            catch { }
+            catch {
+                Console.WriteLine(" Error FinishedStatesHandler");
+            }
 
         }
         private void OdometryCallback(Communication.Message message)
@@ -593,10 +601,10 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.IsConnected = true;
            
             robotLogOut.ShowText(this.properties.Label,"Connected to Ros Master");
-            createRosTerms ();
+            
             try
             {
- 
+                createRosTerms();
                 Draw();
             }
             catch {

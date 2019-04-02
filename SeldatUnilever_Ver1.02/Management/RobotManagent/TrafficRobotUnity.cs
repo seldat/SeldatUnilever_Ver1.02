@@ -371,7 +371,7 @@ namespace SeldatMRMS.Management
                   
                 }
                 catch { Console.WriteLine("TrafficRobotUnity Error in TrafficUpdate"); }
-                Thread.Sleep(500);
+                Thread.Sleep(200);
             }
 
         }

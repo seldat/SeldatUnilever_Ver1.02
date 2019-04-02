@@ -365,7 +365,7 @@ namespace SeldatMRMS.Management
                         }
                         SupervisorTraffic();
                     }
-                    
+                    Draw();
 
                     // giám sát an toàn
                   

@@ -317,8 +317,8 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.pose.Position = new Point (posX, posY);
             properties.pose.AngleW = posTheta;
             properties.pose.Angle = posTheta * 180 / Math.PI;
-            Draw ();
-            TrafficUpdate();
+           
+         
 
         }
         private void FinishedStatesHandler (Communication.Message message) {
@@ -536,12 +536,12 @@ namespace SeldatMRMS.Management.RobotManagent
               //  Console.WriteLine("VY=" + properties.pose.VFby);
                 double gxx = Math.Abs(gx);
                 double gyy = Math.Abs(gy);
-                if (gxx >= 8.50 && gxx <= 8.65 && gyy >= 11.12 && gyy <= 11.3) // truong hop dat biet
+                if (gxx >= 7.0 && gxx <= 8.65 && gyy >= 10.5 && gyy <= 11.3) // truong hop dat biet
                 {
                    // Console.WriteLine("Truong hop dat biet");
                     if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
                     {
-                        if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 4.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                        if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
                         {
                             properties.pose.VCtrlx = 0;
                             properties.pose.VCtrly = 0;

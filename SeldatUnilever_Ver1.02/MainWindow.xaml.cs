@@ -24,6 +24,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatUnilever_Ver1._02
 {
@@ -394,6 +395,24 @@ namespace SeldatUnilever_Ver1._02
                 Player.PlayLooping();
             else
                 Player.Play();
+        }
+
+        private void Remove_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Reorder_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RemoveOrder_Click(object sender, RoutedEventArgs e)
+        {
+           // OrderItem orderItem = (sender as Button).DataContext as OrderItem;
+           // DeviceItem devI= unityService.deviceRegistrationService.deviceItemList.Find(e => (e.userName == orderItem.userName));
+
+
         }
     }
 }

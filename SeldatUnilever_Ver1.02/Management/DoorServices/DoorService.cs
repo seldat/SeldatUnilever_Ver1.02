@@ -22,6 +22,11 @@ namespace DoorControllerService
             RES_OPEN_DOOR, /*0x68 */
             CMD_CLOSE_DOOR, /*0x69 */
             RES_CLOSE_DOOR, /*0x6A */
+
+            CMD_ON_LAMP, /*0x6B */
+            RES_ON_LAMP, /*0x6C */
+            CMD_OFF_LAMP, /*0x6D */
+            RES_OFF_LAMP, /*0x6E */
         }
         public enum DoorId
         {
@@ -244,6 +249,38 @@ namespace DoorControllerService
             sw.Stop();
 #endif
             return result;
+        }
+
+        public bool LampOn(DoorType id)
+        {
+            bool ret = false;
+            byte[] dataSend = new byte[7];
+
+            dataSend[0] = 0xFA;
+            dataSend[1] = 0x55;
+            dataSend[2] = (byte)CmdDoor.CMD_ON_LAMP;
+            dataSend[3] = 0x05;
+            dataSend[4] = 0x00;
+            dataSend[5] = (byte)id;
+            dataSend[6] = CalChecksum(dataSend,4);
+            ret = this.Tranfer(dataSend);
+            return ret;
+        }
+
+        public bool LampOff(DoorType id)
+        {
+            bool ret = false;
+            byte[] dataSend = new byte[7];
+
+            dataSend[0] = 0xFA;
+            dataSend[1] = 0x55;
+            dataSend[2] = (byte)CmdDoor.CMD_OFF_LAMP;
+            dataSend[3] = 0x05;
+            dataSend[4] = 0x00;
+            dataSend[5] = (byte)id;
+            dataSend[6] = CalChecksum(dataSend, 4);
+            ret = this.Tranfer(dataSend);
+            return ret;
         }
     }
 }

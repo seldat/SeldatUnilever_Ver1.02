@@ -140,7 +140,7 @@ namespace DoorControllerService
 //        }
         public bool GetStatus(ref DataReceive data,DoorType id)
         {
-#if false
+#if true
             bool ret = true;
 #else
             bool ret = false;
@@ -159,7 +159,7 @@ namespace DoorControllerService
         }
         public bool Open(DoorType id)
         {
-#if false
+#if true
             bool ret = true;
 #else
             bool ret = false;
@@ -178,7 +178,7 @@ namespace DoorControllerService
         }
         public bool Close(DoorType id)
         {
-#if false
+#if true
             bool ret = true;
 #else
             bool ret = false;

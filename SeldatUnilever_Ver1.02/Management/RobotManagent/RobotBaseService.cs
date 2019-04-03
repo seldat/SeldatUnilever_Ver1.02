@@ -55,13 +55,13 @@ namespace SeldatMRMS.Management.RobotManagent
                     if (proRegistryInRobot.pBM != null)
                     {
                         proRegistryInRobot.pBM.Destroy();
-                       // proRegistryInRobot.pBM = null;
+                        //proRegistryInRobot.pBM = null;
                     }
                  
                     if (proRegistryInRobot.pMR != null)
                     {
                         proRegistryInRobot.pMR.Destroy();
-                        proRegistryInRobot.pMR = null;
+                       // proRegistryInRobot.pMR = null;
                     }
                     if (proRegistryInRobot.pFB != null)
                     {
@@ -71,17 +71,17 @@ namespace SeldatMRMS.Management.RobotManagent
                     if (proRegistryInRobot.pBR != null)
                     {
                         proRegistryInRobot.pBR.Destroy();
-                        proRegistryInRobot.pBR = null;
+                       // proRegistryInRobot.pBR = null;
                     }
                     if (proRegistryInRobot.pRC != null)
                     {
                         proRegistryInRobot.pRC.Destroy();
-                        proRegistryInRobot.pRC = null;
+                       // proRegistryInRobot.pRC = null;
                     }
                     if (proRegistryInRobot.pRR != null)
                     {
                         proRegistryInRobot.pRR.Destroy();
-                        proRegistryInRobot.pRR = null;
+                       // proRegistryInRobot.pRR = null;
                     }
         }
 

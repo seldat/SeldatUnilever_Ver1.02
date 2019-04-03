@@ -449,7 +449,7 @@ namespace SelDatUnilever_Ver1
                             }
                             catch
                             {
-
+                                Console.WriteLine("Error at GetInfoOfPalletBuffer overcome");
                             }
                         }
 
@@ -458,6 +458,7 @@ namespace SelDatUnilever_Ver1
             }
             catch
             {
+                Console.WriteLine("Error at GetInfoOfPalletBuffer");
                 return "";
             }
             return JsonConvert.SerializeObject(infoPallet);

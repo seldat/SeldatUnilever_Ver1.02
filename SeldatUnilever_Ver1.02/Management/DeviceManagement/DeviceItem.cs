@@ -402,7 +402,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     PendingOrderList.Add(order);
                     OrderedItemList.Add(order);
                 }
-                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR)
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR || typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR_FORLIFT_TO_BUFFER)
                 {
                     String userName = (String)results["userName"];
                     // kiểm tra quy trình và hủy task 

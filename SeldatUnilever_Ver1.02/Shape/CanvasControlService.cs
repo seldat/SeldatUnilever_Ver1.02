@@ -18,6 +18,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatMRMS
 {
@@ -791,6 +792,16 @@ namespace SeldatMRMS
 
         public void ReloadListOrderItems(DeviceItem temp)
         {
+            /*if(temp.OrderedItemList.Count>10)
+            {
+                foreach (OrderItem item in temp.OrderedItemList)
+                {
+                    if (item.status != StatusOrderResponseCode.PENDING)
+                    {
+                        temp.OrderedItemList.RemoveAt(0);
+                    }
+                }
+            }*/
             orderItemsList.Clear();
             foreach (DeviceItem.OrderItem order in temp.OrderedItemList)
             {

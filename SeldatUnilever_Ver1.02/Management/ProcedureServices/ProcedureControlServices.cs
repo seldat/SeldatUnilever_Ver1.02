@@ -305,7 +305,7 @@ namespace SeldatMRMS {
                     default:
                         break;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(500);
             }
             selectHandleError = SelectHandleError.CASE_ERROR_WAITTING;
         }

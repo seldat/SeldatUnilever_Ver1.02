@@ -455,21 +455,30 @@ namespace SeldatMRMS.Management.RobotManagent
 
             try
             {
-                GeometryPoseStamped data = new GeometryPoseStamped();
-                data.header.frame_id = "map";
-                data.pose.position.x = (float)pose.Position.X;
-                data.pose.position.y = (float)pose.Position.Y;
-                data.pose.position.z = 0;
-                double theta = pose.AngleW;
-                data.pose.orientation.z = (float)Math.Sin(theta / 2);
-                data.pose.orientation.w = (float)Math.Cos(theta / 2);
-                this.Publish(paramsRosSocket.publication_robotnavigation, data);
-                robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
-                // lưu vị trí đích đến
-                gx = data.pose.position.x;
-                gy = data.pose.position.y;
+                if (pose != null)
+                {
+                    GeometryPoseStamped data = new GeometryPoseStamped();
+                    data.header.frame_id = "map";
+                    data.pose.position.x = (float)pose.Position.X;
+                    data.pose.position.y = (float)pose.Position.Y;
+                    data.pose.position.z = 0;
+                    double theta = pose.AngleW;
+                    data.pose.orientation.z = (float)Math.Sin(theta / 2);
+                    data.pose.orientation.w = (float)Math.Cos(theta / 2);
 
-                return true;
+                    this.Publish(paramsRosSocket.publication_robotnavigation, data);
+                    robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
+                    // lưu vị trí đích đến
+                    gx = data.pose.position.x;
+                    gy = data.pose.position.y;
+
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Without Data SendPoseStamped");
+                    return false;
+                }
             }
             catch
             {
@@ -531,31 +540,34 @@ namespace SeldatMRMS.Management.RobotManagent
             if (countGoal ++ > 400)
             {
                 countGoal = 0;
-                Console.WriteLine("------------------------------  " + this.properties.NameId);
-                Console.WriteLine("Goal X=" + gx);
-                Console.WriteLine("Goal Y=" + gy);
+
                 double _currentgoal_Ex = Math.Abs(Math.Abs(properties.pose.Position.X) - Math.Abs(gx));
                 double _currentgoal_Ey = Math.Abs(Math.Abs(properties.pose.Position.Y) - Math.Abs(gy));
-               Console.WriteLine("Current amcl X=" + properties.pose.Position.X);
-               Console.WriteLine("Current amcl Y=" + properties.pose.Position.Y);
-               Console.WriteLine("Error amcl X=" + _currentgoal_Ex);
-               Console.WriteLine("Error amcl Y=" + _currentgoal_Ey);
-                Console.WriteLine("VX=" + properties.pose.VFbx);
-               Console.WriteLine("VY=" + properties.pose.VFby);
+               /* */
                 double gxx = Math.Abs(gx);
                 double gyy = Math.Abs(gy);
                 if (gxx >= 7.0 && gxx <= 8.65 && gyy >= 9.8 && gyy <= 11.0) // truong hop dat biet
                 {
-                    Console.WriteLine("Truong hop dat biet");
-                    if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
-                    {
+                    //robotLogOut.ShowText("", "Truong hop dat biet");
                        
                        // if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
                         if (_currentgoal_Ex <= 2.0 && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
                         {
+                            if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
+                            {
                                 properties.pose.VCtrlx = 0;
-                            properties.pose.VCtrly = 0;
-                            properties.pose.VCtrlw = 0;
+                                properties.pose.VCtrly = 0;
+                                properties.pose.VCtrlw = 0;
+                            robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
+                            robotLogOut.ShowText("", "Goal X=" + gx);
+                            robotLogOut.ShowText("", "Goal Y=" + gy);
+                            robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
+                            robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
+                            robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
+                            robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
+                            robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
+                            robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
+                            robotLogOut.ShowText("", "REACHED GOAL");
                             return true;
                         }
                     }
@@ -564,16 +576,27 @@ namespace SeldatMRMS.Management.RobotManagent
                 {
                     //&& Math.Abs(properties.pose.VCtrlx) <= 0.01 && Math.Abs(properties.pose.VCtrlw) <= 0.01
 
-                    if (Math.Abs(properties.pose.VFbx) < properties.errorVx )
-                    {
+
                         if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0.0 && _currentgoal_Ey >= 0.0)
                         {
-                            properties.pose.VCtrlx = 0;
-                            properties.pose.VCtrly = 0;
-                            properties.pose.VCtrlw = 0;
+                            if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
+                            {
+                                properties.pose.VCtrlx = 0;
+                                properties.pose.VCtrly = 0;
+                                properties.pose.VCtrlw = 0;
+                            robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
+                            robotLogOut.ShowText("", "Goal X=" + gx);
+                            robotLogOut.ShowText("", "Goal Y=" + gy);
+                            robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
+                            robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
+                            robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
+                            robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
+                            robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
+                            robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
+                            robotLogOut.ShowText("", "REACHED GOAL");
                             return true;
+                            }
                         }
-                    }
                 }
             }
 

@@ -322,9 +322,15 @@ namespace SeldatMRMS
                                     rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                     try
                                     {
-                                        rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true));
-                                        StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
-                                        robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
+                                        if (rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)))
+                                        {
+                                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
+                                            robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
+                                        }
+                                        else
+                                        {
+
+                                        }
                                     }
                                     catch { Console.WriteLine("Error at rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)); "); }
                                    

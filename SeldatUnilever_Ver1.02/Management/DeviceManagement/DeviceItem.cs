@@ -422,6 +422,32 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
 
                 }
+               /* else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR_FORLIFT_TO_BUFFER)
+                {
+                    String userName = (String)results["userName"];
+                    int productDetailId = (int)results["productDetailId"];
+
+                    // kiểm tra quy trình và hủy task 
+
+                    foreach (OrderItem ord in PendingOrderList)
+                    {
+                        if (ord.productDetailId == productDetailId)
+                        {
+                            PendingOrderList.Remove(ord);
+                            break;
+                        }
+                    }
+                    foreach (OrderItem ord in OrderedItemList)
+                    {
+                        if (ord.productDetailId == productDetailId)
+                            if (ord.status == StatusOrderResponseCode.PENDING)
+                            {
+                                ord.status = StatusOrderResponseCode.DESTROYED;
+                                break;
+                            }
+                    }
+
+                }*/
                 else if (typeReq == (int)TyeRequest.TYPEREQUEST_OPEN_FRONTDOOR_DELIVERY_PALLET)
                 {
                     // same deviceID forklift

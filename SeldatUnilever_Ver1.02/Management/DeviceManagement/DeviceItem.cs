@@ -87,6 +87,8 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         {
             public OrderItem() { }
             public String userName { get; set; }
+            public String robot { get; set; }
+            public StatusOrderResponseCode status { get; set; }
             private String OrderId { get; set; }
             public int planId { get; set; }
             public int deviceId;
@@ -98,8 +100,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             public TyeRequest typeReq { get; set; } // FL: ForkLift// BM: BUFFER MACHINE // PR: Pallet return
             public String activeDate;
             public String dateTime { get; set; }
-            public String robot { get; set; }
-            public StatusOrderResponseCode status { get; set; }
+
             public int timeWorkId;
             public String palletStatus;
             public int palletId;
@@ -243,7 +244,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     }
                     try
                     {
-                        new DoorManagementService().DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
+                       new DoorManagementService().DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
                     }
                     catch (Exception e)
                     {
@@ -402,7 +403,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     PendingOrderList.Add(order);
                     OrderedItemList.Add(order);
                 }
-                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR || typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR_FORLIFT_TO_BUFFER)
+                else if (typeReq == (int)TyeRequest.TYPEREQUEST_CLEAR)
                 {
                     String userName = (String)results["userName"];
                     // kiểm tra quy trình và hủy task 
@@ -500,6 +501,47 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
             return data.Result;
         }
+
+        public void RemoveCallBack(OrderItem item)
+        {
+            if(item.typeReq==TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
+            {
+                if (item.status == StatusOrderResponseCode.PENDING)
+                {
+                    PendingOrderList.Remove(item);
+                    OrderedItemList.Remove(item);
+                    FreePlanedBuffer(item);
+                }
+            }
+            else if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
+            {
+                if (item.status == StatusOrderResponseCode.PENDING)
+                {
+                    PendingOrderList.Remove(item);
+                    OrderedItemList.Remove(item);
+                }
+            }
+        }
+        public void ReorderCallBack(OrderItem item)
+        {
+            if (item.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
+            {
+                if (item.status == StatusOrderResponseCode.PENDING)
+                {
+                    PendingOrderList.Add(item);
+                    OrderedItemList.Add(item);
+                    CreatePlanBuffer(item);
+                }
+            }
+            else if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
+            {
+                if (item.status == StatusOrderResponseCode.PENDING)
+                {
+                    PendingOrderList.Add(item);
+                    OrderedItemList.Add(item);
+                }
+            }
+        }
         public String CreatePlanBuffer(OrderItem order)
         {
             dynamic product = new JObject();
@@ -512,6 +554,57 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             product.palletAmount = 1;
             String response = RequestDataProcedure(product.ToString(), Global_Object.url + "plan/createPlanPallet");
             return response;
+        }
+
+        public void FreePlanedBuffer(OrderItem order)
+        {
+            String url = Global_Object.url + "pallet/updatePalletStatus";
+            int _palletId = GetPalletId(order);
+            if (_palletId > 0)
+            {
+                dynamic product = new JObject();
+                product.palletId = _palletId;
+                product.planId = order.planId;
+                product.palletStatus = PalletStatus.F.ToString();
+                product.updUsrId = Global_Object.userLogin;
+                var data = RequestDataProcedure(product.ToString(), url);
+
+            }
+
+        }
+        public int GetPalletId(OrderItem order)
+        {
+            int palletId = -1;
+            try
+            {
+                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
+                {
+                    try
+                    {
+                        JArray results = JArray.Parse(collectionData);
+                        foreach (var result in results)
+                        {
+                                int temp_planId = (int)result["planId"];
+                                if (temp_planId == order.planId)
+                                {
+                                    var bufferResults = result["buffers"][0];
+                                    var palletInfo = bufferResults["pallets"][0];
+                                    palletId = (int)palletInfo["palletId"];
+                                    break;
+                                }
+                        }
+                       
+                    }
+                    catch { }
+
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Errror Get palletID");
+            }
+            return palletId;
         }
 
     }

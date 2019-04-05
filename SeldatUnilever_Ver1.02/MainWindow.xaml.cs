@@ -406,17 +406,34 @@ namespace SeldatUnilever_Ver1._02
 
         }
 
-        private void Reorder_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+   
 
         private void RemoveOrder_Click(object sender, RoutedEventArgs e)
         {
-           // OrderItem orderItem = (sender as Button).DataContext as OrderItem;
-           // DeviceItem devI= unityService.deviceRegistrationService.deviceItemList.Find(e => (e.userName == orderItem.userName));
+            OrderItem orderItem = (sender as Button).DataContext as OrderItem;
+            Task.Run(() => { 
+               
+                if (orderItem.status == StatusOrderResponseCode.PENDING)
+                {
+                    DeviceItem devI = unityService.deviceRegistrationService.deviceItemList.Find(item => item.userName == orderItem.userName);
+                    devI.RemoveCallBack(orderItem);
+                }
+            });
 
 
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            OrderItem orderItem = (sender as Button).DataContext as OrderItem;
+            Task.Run(() => {
+
+                if (orderItem.status == StatusOrderResponseCode.PENDING)
+                {
+                    DeviceItem devI = unityService.deviceRegistrationService.deviceItemList.Find(item => item.userName == orderItem.userName);
+                    devI.ReorderCallBack(orderItem);
+                }
+            });
         }
     }
 }

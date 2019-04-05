@@ -99,6 +99,7 @@ namespace SeldatMRMS.Management
         public void StartTraffic()
         {
             new Thread(TrafficUpdate).Start();
+       
         }
         public PriorityLevel prioritLevel;
         public void RegisteRobotInAvailable(Dictionary<String, RobotUnity> RobotUnitylistdc)
@@ -343,6 +344,10 @@ namespace SeldatMRMS.Management
             }
 
         }
+        public  void ReDrawRobotGrapphic()
+        {
+         
+        }
         public void TrafficUpdate()
         {
             while (true)
@@ -365,13 +370,11 @@ namespace SeldatMRMS.Management
                         }
                         SupervisorTraffic();
                     }
-                    Draw();
-
                     // giám sát an toàn
                   
                 }
                 catch { Console.WriteLine("TrafficRobotUnity Error in TrafficUpdate"); }
-                Thread.Sleep(700);
+                Thread.Sleep(100);
             }
 
         }

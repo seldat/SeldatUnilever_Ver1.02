@@ -86,7 +86,6 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
             OrderItem item = null;
             if (deviceItemsList.Count > 0)
             {
-               
                 try
                 {
                     item = deviceItemsList[0].GetOrder();
@@ -172,42 +171,74 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
         public Pose CheckAvailableFrontLineBuffer(OrderItem order, bool onPlandId = false)
         {
             Pose poseTemp = null;
-            String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
-            if (collectionData.Length > 0)
+            try
             {
-                JArray results = JArray.Parse(collectionData);
-                if (onPlandId)
+                String collectionData = RequestDataProcedure(order.dataRequest, Global_Object.url + "plan/getListPlanPallet");
+                if (collectionData.Length > 0)
                 {
-                    foreach (var result in results)
+                    JArray results = JArray.Parse(collectionData);
+                    if (onPlandId)
                     {
-                        int temp_planId = (int)result["planId"];
-                        if (temp_planId == order.planId)
+                        foreach (var result in results)
                         {
-                            var bufferResults = result["buffers"][0];
-                            var palletInfo = bufferResults["pallets"][0];
-                            JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                            double x = (double)stuff["line"]["x"];
-                            double y = (double)stuff["line"]["y"];
-                            double angle = (double)stuff["line"]["angle"];
-                            poseTemp = new Pose(x, y, angle);
-                            break;
+                            int temp_planId = (int)result["planId"];
+                            if (temp_planId == order.planId)
+                            {
+                                //var bufferResults = result["buffers"][0];
+                                foreach (var buffer in result["buffers"])
+                                {
+                                    if (buffer["pallets"].Count() > 0)
+                                    {
+                                        var palletInfo = buffer["pallets"][0];
+                                        JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                        double x = (double)stuff["line"]["x"];
+                                        double y = (double)stuff["line"]["y"];
+                                        double angle = (double)stuff["line"]["angle"];
+                                        poseTemp = new Pose(x, y, angle);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
 
+                                break;
+
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        var result = results[0];
+                        //var bufferResults = result["buffers"][0];
+                        foreach (var buffer in result["buffers"])
+                        {
+                            if (buffer["pallets"].Count() > 0)
+                            {
+                                //JObject stuff = JObject.Parse((String)buffer["pallets"][0]["dataPallet"]);
+                                var palletInfo = buffer["pallets"][0];
+                                JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
+                                double x = (double)stuff["line"]["x"];
+                                double y = (double)stuff["line"]["y"];
+                                double angle = (double)stuff["line"]["angle"];
+                                poseTemp = new Pose(x, y, angle);
+                                break;
+                            }
+                            else
+                            {
+                                continue;
+                            }
                         }
                     }
                 }
-                else
-                {
-                    var result = results[0];
-                    var bufferResults = result["buffers"][0];
-                    var palletInfo = bufferResults["pallets"][0];
-                    JObject stuff = JObject.Parse((String)palletInfo["dataPallet"]);
-                    double x = (double)stuff["line"]["x"];
-                    double y = (double)stuff["line"]["y"];
-                    double angle = (double)stuff["line"]["angle"];
-                    poseTemp = new Pose(x, y, angle);
-                }
+                //  Console.WriteLine(""+poseTemp.Position.ToString());
             }
-            //  Console.WriteLine(""+poseTemp.Position.ToString());
+            catch
+            {
+                Console.WriteLine("Error Front Line");
+            }
             return poseTemp;
         }
 

@@ -792,16 +792,20 @@ namespace SeldatMRMS
 
         public void ReloadListOrderItems(DeviceItem temp)
         {
-            /*if(temp.OrderedItemList.Count>10)
-            {
-                foreach (OrderItem item in temp.OrderedItemList)
+            try {
+                if (temp.OrderedItemList.Count > 5)
                 {
-                    if (item.status != StatusOrderResponseCode.PENDING)
+                    foreach (OrderItem item in temp.OrderedItemList)
                     {
-                        temp.OrderedItemList.RemoveAt(0);
+                        if (item.status != StatusOrderResponseCode.PENDING)
+                        {
+                            temp.OrderedItemList.RemoveAt(0);
+                            break;
+                        }
                     }
                 }
-            }*/
+            }
+            catch { }
             orderItemsList.Clear();
             foreach (DeviceItem.OrderItem order in temp.OrderedItemList)
             {

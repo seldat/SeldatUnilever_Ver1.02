@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -275,7 +276,13 @@ namespace SeldatMRMS.Management.RobotManagent {
             canvas.Children.Add(headerPoint2);
             canvas.Children.Add(headerPoint3);
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
-            Draw ();
+            Task drR = Task.Run(() => {
+                while(true)
+                {
+                    Draw();
+                    Task.Delay(500).Wait();
+                }
+            });
           //  robotLogOut.SetName(properties.Label);
 
         }

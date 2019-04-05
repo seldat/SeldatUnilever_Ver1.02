@@ -537,7 +537,7 @@ namespace SeldatMRMS.Management.RobotManagent
         int countGoal = 0;
         public bool ReachedGoal()
         {
-            if (countGoal ++ > 400)
+            if (countGoal ++ > 200)
             {
                 countGoal = 0;
 

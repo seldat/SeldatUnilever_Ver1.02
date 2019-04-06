@@ -382,7 +382,6 @@ namespace SeldatMRMS
                         //reset status pallet Faile H->Ws
                         if(!onUpdatedPalletState)
                             UpdatePalletState(PalletStatus.W);
-                        
                         selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
                         procedureStatus = ProcedureStatus.PROC_KILLED;
                         FreeHoldBuffer();

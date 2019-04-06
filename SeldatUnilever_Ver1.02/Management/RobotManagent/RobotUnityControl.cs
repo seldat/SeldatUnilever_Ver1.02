@@ -182,6 +182,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_batteryvol;
             public int publication_TestLaserError;
             public int publication_TestLaserWarning;
+            public int publication_killpid;
         }
 
         public struct LaserErrorCode {
@@ -281,6 +282,7 @@ namespace SeldatMRMS.Management.RobotManagent
             paramsRosSocket.publication_linedetectionctrl = this.Advertise ("/linedetectionctrl", "std_msgs/Int32");
             paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet", "std_msgs/Int32");
             paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet", "std_msgs/String");
+            paramsRosSocket.publication_killpid = this.Advertise("/key_press", "std_msgs/String");
             float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
             int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
             int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
@@ -432,6 +434,16 @@ namespace SeldatMRMS.Management.RobotManagent
             StandardString msg = new StandardString ();
             msg.data = cmd;
             this.Publish (paramsRosSocket.publication_TestLaserWarning, msg);
+        }
+        public void KillPID()
+        {
+            try
+            {
+                StandardString msg = new StandardString();
+                msg.data = "stop pid";
+                this.Publish(paramsRosSocket.publication_killpid, msg);
+            }
+            catch { MessageBox.Show("Kill PID error !"); }
         }
 
         public void FinishedStatesPublish (int message) {

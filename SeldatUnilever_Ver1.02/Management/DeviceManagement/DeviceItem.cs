@@ -571,7 +571,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
         {
             if (item.typeReq == TyeRequest.TYPEREQUEST_FORLIFT_TO_BUFFER)
             {
-                if (item.status == StatusOrderResponseCode.PENDING)
+                if (item.status == StatusOrderResponseCode.DESTROYED || item.status == StatusOrderResponseCode.NO_BUFFER_DATA || item.status == StatusOrderResponseCode.ROBOT_ERROR)
                 {
                     PendingOrderList.Add(item);
                     OrderedItemList.Add(item);
@@ -580,7 +580,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             }
             else if (item.typeReq == TyeRequest.TYPEREQUEST_BUFFER_TO_MACHINE)
             {
-                if (item.status == StatusOrderResponseCode.PENDING)
+               // if (item.status == StatusOrderResponseCode.PENDING)
                 {
                     PendingOrderList.Add(item);
                     OrderedItemList.Add(item);
@@ -632,7 +632,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                 {
                     JArray results = JArray.Parse(collectionData);
                     var result = results[0];
-                    String jsonDPst = (string)result["datapallet"];
+                    String jsonDPst = (string)result["dataPallet"];
                     JObject stuffPallet = JObject.Parse(jsonDPst);
                     double xx = (double)stuffPallet["line"]["x"];
                     double yy = (double)stuffPallet["line"]["y"];

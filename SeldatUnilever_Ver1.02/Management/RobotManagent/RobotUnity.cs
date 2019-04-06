@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -276,13 +277,13 @@ namespace SeldatMRMS.Management.RobotManagent {
             canvas.Children.Add(headerPoint2);
             canvas.Children.Add(headerPoint3);
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
-            Task drR = Task.Run(() => {
-                while(true)
+            new Thread(() => {
+                while (true)
                 {
                     Draw();
-                    Task.Delay(500).Wait();
+                    Thread.Sleep(700);
                 }
-            });
+            }).Start();
           //  robotLogOut.SetName(properties.Label);
 
         }
@@ -411,6 +412,7 @@ namespace SeldatMRMS.Management.RobotManagent {
 
                 DisposeProcedure();
                 Dispose();
+                KillPID();
                 MessageBox.Show("Đã Xóa Khỏi  Ready Mode hoặc TaskWait Mode !");
                 onBinding = false;
                 Reset();

@@ -113,7 +113,7 @@ namespace SeldatMRMS {
            FORMACH_ROBOT_WAITTING_CLOSE_GATE, // doi dong cong.
            FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE, // den dau line buffer, chuyen mode do line
            FORMACH_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE, // doi robot do line den pallet  va tha pallet
-           FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
+           //FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE, // doi robot di den dau line buffer.
            FORMACH_ROBOT_RELEASED, // trả robot về robotmanagement để nhận quy trình mới
         }
 

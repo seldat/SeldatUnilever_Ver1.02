@@ -141,7 +141,8 @@ namespace SeldatMRMS.Management.RobotManagent
             REQUEST_TURN_RIGHT = 1211,
             REQUEST_FORWARD_DIRECTION = 1212,
             REQUEST_GOBACK_FRONTLINE = 1213,
-            REQUEST_TURNOFF_PC = 1214
+            REQUEST_TURNOFF_PC = 1214,
+            REQUEST_DROPDOWN_PALLET = 1216
         }
 
         public enum ResponseCommand
@@ -156,7 +157,8 @@ namespace SeldatMRMS.Management.RobotManagent
             RESPONSE_FINISH_TURN_LEFT = 3210,
             RESPONSE_FINISH_TURN_RIGHT = 3211,
             RESPONSE_FINISH_GOBACK_FRONTLINE = 3213,
-            RESPONSE_ERROR = 3215
+            RESPONSE_ERROR = 3215,
+            RESPONSE_FINISH_DROPDOWN_PALLET = 3216 
         }
 
         public virtual void updateparams () { }

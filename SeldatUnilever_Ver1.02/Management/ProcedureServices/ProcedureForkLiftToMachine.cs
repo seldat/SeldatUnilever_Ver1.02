@@ -256,40 +256,25 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             //  if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
                             if (robot.ReachedGoal())
                             {
-                                robot.TurnOnCtrlSelfTraffic(false);
-                                rb.SendCmdAreaPallet(FlToMach.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_DOWN));
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+
+                                //robot.TurnOnCtrlSelfTraffic(false);
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_DROPDOWN_PALLET);
                                 StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE;
                                 robot.ShowText("FORMACH_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE");
                             }
                         }
                         catch (System.Exception)
                         {
-                            errorCode = ErrorCode.CAN_NOT_GET_DATA;
+                            errorCode = ErrorCode.DETECT_LINE_ERROR;
                             CheckUserHandleError(this);
                         }
                         break;
 
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_DROPDOWN_PALLET_MACHINE:
-                        if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
+                        if (resCmd == ResponseCommand.RESPONSE_FINISH_DROPDOWN_PALLET)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            // FlToMach.UpdatePalletState(PalletStatus.W);
-                            //   rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
-                            StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE;
-                            robot.ShowText("FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE");
-                        }
-                        else if (resCmd == ResponseCommand.RESPONSE_ERROR)
-                        {
-                            errorCode = ErrorCode.DETECT_LINE_ERROR;
-                            CheckUserHandleError(this);
-                        }
-                        break;
-                    case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE: // đợi
-                        if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
-                        {
-                            resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_RELEASED;
                             robot.ShowText("FORMACH_ROBOT_RELEASED");
                         }
@@ -299,6 +284,20 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             CheckUserHandleError(this);
                         }
                         break;
+                    //case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE: // đợi
+                    //    if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                    //    {
+                    //        resCmd = ResponseCommand.RESPONSE_NONE;
+                    //        rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                    //        StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_RELEASED;
+                    //        robot.ShowText("FORMACH_ROBOT_RELEASED");
+                    //    }
+                    //    else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                    //    {
+                    //        errorCode = ErrorCode.DETECT_LINE_ERROR;
+                    //        CheckUserHandleError(this);
+                    //    }
+                    //    break;
                     case ForkLiftToMachine.FORMACH_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
                         robot.TurnOnCtrlSelfTraffic(true);
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;

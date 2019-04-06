@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using SeldatMRMS.Management.RobotManagent;
+using SeldatUnilever_Ver1._02.Management.ProcedureServices;
 using static SeldatMRMS.DBProcedureService;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnity;
@@ -120,7 +121,7 @@ namespace SeldatMRMS
                     procRrr.Start();
                     break;
                 case ProcedureItemSelected.PROCEDURE_FORLIFT_TO_MACHINE:
-                    ProcedureForkLiftToBuffer procfm = new ProcedureForkLiftToBuffer(robot, doorService, trafficService);
+                    ProcedureForkLiftToMachine procfm = new ProcedureForkLiftToMachine(robot, doorService, trafficService);
                     ProcedureDataItems profmDataItems = new ProcedureDataItems();
                     profmDataItems.StartTaskTime = DateTime.Now;
                     RegisterProcedureItem itemprocfm = new RegisterProcedureItem() { item = procfm, robot = robot, procedureDataItems = profmDataItems };
@@ -128,7 +129,7 @@ namespace SeldatMRMS
                     procfm.ErrorProcedureHandler += ErrorApprearInProcedureItem;
                     //RegisterProcedureItemList.Add(itemprocfm);
                     procfm.AssignAnOrder(orderItem);
-                    robot.proRegistryInRobot.pFB = procfm;
+                    robot.proRegistryInRobot.pFM = procfm;
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
                     procfm.Start();
                     break;

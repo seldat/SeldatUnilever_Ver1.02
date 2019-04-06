@@ -9,6 +9,7 @@ using System.Threading;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
+using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
 
 namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
 {
@@ -48,6 +49,11 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
+            order.status = StatusOrderResponseCode.ROBOT_ERROR;
+            selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
+            this.robot.DestroyRegistrySolvedForm();
+            procedureStatus = ProcedureStatus.PROC_KILLED;
+            // RestoreOrderItem();
         }
         public void Procedure(object ojb)
         {

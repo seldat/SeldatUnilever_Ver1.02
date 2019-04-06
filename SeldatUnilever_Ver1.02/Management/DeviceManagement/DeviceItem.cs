@@ -69,7 +69,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
             TYPEREQUEST_OPEN_FRONTDOOR_RETURN_PALLET = 9,
             TYPEREQUEST_CLOSE_FRONTDOOR_RETURN_PALLET = 10,
             TYPEREQUEST_CLEAR_FORLIFT_TO_BUFFER = 11,
-            TYPEREQUEST_FORLIFT_TO_BUFFER_STJ = 12, // santao jujeng cap bottle
+            TYPEREQUEST_FORLIFT_TO_MACHINE = 12, // santao jujeng cap bottle
         }
         public enum TabletConTrol
         {
@@ -245,6 +245,51 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     try
                     {
                        new DoorManagementService().DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("control lamp failed");
+                    }
+                }
+                if (typeReq == (int)TyeRequest.TYPEREQUEST_FORLIFT_TO_MACHINE)
+                {
+                    OrderItem order = new OrderItem();
+                    order.typeReq = (TyeRequest)typeReq;
+                    order.userName = (String)results["userName"];
+                    order.productDetailId = (int)results["productDetailId"];
+                    order.productDetailName = (String)results["productDetailName"];
+                    order.productId = (int)results["productId"];
+                    order.planId = (int)results["planId"];
+                    order.deviceId = (int)results["deviceId"];
+                    order.timeWorkId = (int)results["timeWorkId"];
+                    order.activeDate = (string)results["activeDate"];
+                    // order.palletStatus = (String)results["palletStatus"];
+                    dynamic product = new JObject();
+                    product.timeWorkId = order.timeWorkId;
+                    product.activeDate = order.activeDate;
+                    product.productId = order.productId;
+                    product.productDetailId = order.productDetailId;
+
+                    // chu y sua 
+                    product.palletStatus = PalletStatus.P.ToString();
+                    order.dataRequest = product.ToString();
+                    order.status = StatusOrderResponseCode.PENDING;
+                    order.dateTime = (string)DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss tt");
+                    DataPallet datapallet = GetLineMachineInfo(order.deviceId);
+                    if (datapallet!=null)
+                    {
+                        order.palletAtMachine = datapallet;
+                        PendingOrderList.Add(order);
+                        OrderedItemList.Add(order);
+                    }
+                    else
+                    {
+                        statusOrderResponse = new StatusOrderResponse() { status = (int)StatusOrderResponseCode.ORDER_STATUS_RESPONSE_NOACCEPTED, ErrorMessage = "" };
+                        return statusOrderResponse;
+                    }
+                    try
+                    {
+                        new DoorManagementService().DoorMezzamineUp.LampOn(DoorType.DOOR_FRONT);
                     }
                     catch (Exception e)
                     {
@@ -571,6 +616,39 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
 
             }
 
+        }
+
+        public DataPallet GetLineMachineInfo(int deviceId)
+        {
+            try
+            {
+                dynamic product = new JObject();
+                product.deviceId = deviceId;
+                Pose poseTemp = null;
+                String collectionData = RequestDataProcedure(product.ToString(), Global_Object.url + "/device/getListDevicePallet");
+
+
+                if (collectionData.Length > 0)
+                {
+                    JArray results = JArray.Parse(collectionData);
+                    var result = results[0];
+                    String jsonDPst = (string)result["datapallet"];
+                    JObject stuffPallet = JObject.Parse(jsonDPst);
+                    double xx = (double)stuffPallet["line"]["x"];
+                    double yy = (double)stuffPallet["line"]["y"];
+                    double angle = (double)stuffPallet["line"]["angle"];
+                    int row = (int)stuffPallet["pallet"]["row"];
+                    int bay = (int)stuffPallet["pallet"]["bay"];
+                    int directMain = (int)stuffPallet["pallet"]["dir_main"];
+                    int directSub = (int)stuffPallet["pallet"]["dir_sub"];
+                    int directOut = (int)stuffPallet["pallet"]["dir_out"];
+                    int line_ord = (int)stuffPallet["pallet"]["line_ord"];
+                    return new DataPallet() { linePos = new Pose(xx, yy, angle), row = row, bay = bay, directMain = directMain, directSub = directSub, directOut = directOut, line_ord = line_ord };
+
+                }
+            }
+            catch { Console.WriteLine("Error in DeviceIte at GetLineMachineInfo"); }
+            return null;
         }
         public int GetPalletId(OrderItem order)
         {

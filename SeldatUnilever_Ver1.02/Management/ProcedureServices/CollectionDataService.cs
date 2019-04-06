@@ -155,6 +155,7 @@ namespace SelDatUnilever_Ver1
             }
             return palletId;
         }
+       
         public String RequestDataProcedure(String dataReq, String url)
         {
             //String url = Global_Object.url+"plan/getListPlanPallet";
@@ -406,6 +407,7 @@ namespace SelDatUnilever_Ver1
         {
             return order.palletAtMachine.linePos;
         }
+
 
         public Pose GetCheckInReturn()
         {

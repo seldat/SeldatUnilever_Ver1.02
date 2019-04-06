@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeldatUnilever_Ver1._02.Management.ProcedureServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,7 @@ namespace SeldatMRMS.Management.RobotManagent
             public ProcedureBufferToMachine pBM { get; set; }
             public ProcedureBufferToReturn pBR { get; set; }
             public ProcedureForkLiftToBuffer pFB { get; set; }
+            public ProcedureForkLiftToMachine pFM { get; set; }
             public ProcedureMachineToReturn pMR { get; set; }
             public ProcedureRobotToCharger pRC { get; set; }
             public ProcedureRobotToReady pRR { get; set; }
@@ -67,6 +69,11 @@ namespace SeldatMRMS.Management.RobotManagent
                     {
                         proRegistryInRobot.pFB.Destroy();
                       // proRegistryInRobot.pFB = null;
+                    }
+                    if (proRegistryInRobot.pFM != null)
+                    {
+                        proRegistryInRobot.pFM.Destroy();
+                        // proRegistryInRobot.pFB = null;
                     }
                     if (proRegistryInRobot.pBR != null)
                     {

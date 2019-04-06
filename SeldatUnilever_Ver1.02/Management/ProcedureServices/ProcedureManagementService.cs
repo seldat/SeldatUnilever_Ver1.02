@@ -119,19 +119,19 @@ namespace SeldatMRMS
                     robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_READY;
                     procRrr.Start();
                     break;
-                    //case ProcedureItemSelected.PROCEDURE_FORLIFT_TO_MACHINE:
-                    //    ProcedureForkLiftToBuffer procfm = new ProcedureForkLiftToBuffer(robot, doorService, trafficService);
-                    //    ProcedureDataItems profmDataItems = new ProcedureDataItems();
-                    //    profmDataItems.StartTaskTime = DateTime.Now;
-                    //    RegisterProcedureItem itemprocfm = new RegisterProcedureItem() { item = procfm, robot = robot, procedureDataItems = profmDataItems };
-                    //    procfm.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
-                    //    procfm.ErrorProcedureHandler += ErrorApprearInProcedureItem;
-                    //    RegisterProcedureItemList.Add(itemprocfm);
-                    //    procfm.AssignAnOrder(orderItem);
-                    //    robot.proRegistryInRobot.pFB = procfm;
-                    //    robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
-                    //    procfm.Start();
-                    //    break;
+                case ProcedureItemSelected.PROCEDURE_FORLIFT_TO_MACHINE:
+                    ProcedureForkLiftToBuffer procfm = new ProcedureForkLiftToBuffer(robot, doorService, trafficService);
+                    ProcedureDataItems profmDataItems = new ProcedureDataItems();
+                    profmDataItems.StartTaskTime = DateTime.Now;
+                    RegisterProcedureItem itemprocfm = new RegisterProcedureItem() { item = procfm, robot = robot, procedureDataItems = profmDataItems };
+                    procfm.ReleaseProcedureHandler += ReleaseProcedureItemHandler;
+                    procfm.ErrorProcedureHandler += ErrorApprearInProcedureItem;
+                    //RegisterProcedureItemList.Add(itemprocfm);
+                    procfm.AssignAnOrder(orderItem);
+                    robot.proRegistryInRobot.pFB = procfm;
+                    robot.ProcedureRobotAssigned = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
+                    procfm.Start();
+                    break;
             }
         }
 

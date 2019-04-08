@@ -24,6 +24,7 @@ namespace SeldatMRMS.Management.RobotManagent {
         Ellipse headerPoint2;
         Ellipse headerPoint3;
         Path safetyArea;
+        Ellipse circleArea;
         double angle = 0.0f;
         public Point org = new Point (600, 350);
         public double rad = 0;
@@ -277,6 +278,10 @@ namespace SeldatMRMS.Management.RobotManagent {
             canvas.Children.Add(headerPoint2);
             canvas.Children.Add(headerPoint3);
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
+
+            circleArea = new Ellipse();
+            circleArea.Stroke = new SolidColorBrush(Colors.Black);
+            canvas.Children.Add(circleArea);
             new Thread(() => {
                 while (true)
                 {
@@ -494,8 +499,14 @@ namespace SeldatMRMS.Management.RobotManagent {
 
                          props.rbRotateTransform.Angle = -properties.pose.Angle;
                          Point cPoint = Global_Object.CoorCanvas(properties.pose.Position);
+                         Console.WriteLine("Robot : " + cPoint.X + " / " + cPoint.Y);
+                         //props.rbTranslate = new TranslateTransform(cPoint.X, cPoint.Y);
+
                          props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
-                         props.rbTransformGroup.Children[1] = props.rbTranslate;
+                         Console.WriteLine("----------");
+                       //  Console.WriteLine("Translate : " + props.rbTranslate.X + " / "+ props.rbTranslate.Y);
+
+                       props.rbTransformGroup.Children[1] = props.rbTranslate;
                          //Render Status
                          props.contentRotateTransform.Angle = (properties.pose.Angle);
                          props.contentTranslate = new TranslateTransform(0, 0);
@@ -528,6 +539,11 @@ namespace SeldatMRMS.Management.RobotManagent {
                          props.rbID.Content = properties.pose.Position.X.ToString("0");
                          props.rbTask.Content = properties.pose.Position.Y.ToString("0");
 
+                         circleArea.Width = 2 * DfWSCv;
+                         circleArea.Height = 2 * DfWSCv;
+                         TranslateTransform tr= new TranslateTransform(cPoint.X - (2* DfWSCv / 2), cPoint.Y - (2* DfWSCv / 2));
+                         circleArea.RenderTransform = tr;
+               
 
                      }));
                 }

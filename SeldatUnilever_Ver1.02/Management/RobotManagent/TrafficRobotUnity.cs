@@ -128,11 +128,12 @@ namespace SeldatMRMS.Management
                     // bool onTouch= FindHeaderIntersectsFullRiskArea(this.TopHeader()) | FindHeaderIntersectsFullRiskArea(this.MiddleHeader()) | FindHeaderIntersectsFullRiskArea(this.BottomHeader());
                     // bool onTouch = r.FindHeaderIntersectsFullRiskAreaCv(thCV) | r.FindHeaderIntersectsFullRiskAreaCv(mdCV) | r.FindHeaderIntersectsFullRiskAreaCv(bhCV);
 
-                    bool onTouch = r.FindHeaderIntersectsFullRiskAreaCv(mdCV);
+                    bool onTouch = r.FindHeaderTouchCircleArea(mdCV,2*DfWSCv);
 
                     if (onTouch)
                     {
                         //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                         robot = r;
                         break;
                     }
@@ -400,11 +401,11 @@ namespace SeldatMRMS.Management
                 else if (numMode==2)
                 {
                     RobotUnity robot = CheckIntersection();
-                    if (robot != null)
+                   /* if (robot != null)
                     {
                         DetectTouchedPosition(robot);
                         TrafficBehavior(robot);
-                    }
+                    }*/
                 }
 
             }

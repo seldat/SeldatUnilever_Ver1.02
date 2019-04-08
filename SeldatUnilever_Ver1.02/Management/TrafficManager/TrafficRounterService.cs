@@ -96,8 +96,14 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 return new Point[4] { Point1, Point2, Point3, Point4 };
             }
         }
+        public class RobotRegistryInArea
+        {
+            public RobotUnity robot;
+            public String nameArea;
+        }
         public Dictionary<String, ZoneRegister> ZoneRegisterList = new Dictionary<string, ZoneRegister>();
         public Dictionary<String, RiskZoneRegister> RiskZoneRegisterList = new Dictionary<string, RiskZoneRegister>();
+        public List<RobotRegistryInArea> robotRegistryList = new List<RobotRegistryInArea>();
         public ConfigureRiskZone configureRiskZone;
         public ConfigureArea configureArea;
         public TrafficRounterService()
@@ -387,6 +393,40 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 {
                     
                     if (ExtensionService.IsInPolygon(ZoneRegisterList[zoneName].GetZone(), r.properties.pose.Position))
+                    {
+                        hasRobot = true;
+                        break;
+                    }
+                }
+            }
+            catch { }
+            return hasRobot;
+        }
+
+        public bool HasRobotRegistriedUnityinArea(Point goal)
+        {
+            String zoneName = "";
+            bool hasRobot = false;
+            foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
+            {
+
+                if (r.Index < HasRobotUnityinAreaValue)
+                {
+                    // Console.WriteLine("-----------------" + goal.ToString());
+                    // Console.WriteLine("--- "+ r.NameId + "--- "+ JsonConvert.SerializeObject(r.GetZone()).ToString());
+                    if (ExtensionService.IsInPolygon(r.GetZone(), goal))
+                    {
+                        zoneName = r.NameId;
+                        break;
+                    }
+                }
+            }
+            try
+            {
+                foreach (RobotRegistryInArea r in robotRegistryList) // xác định robot có trong khu vực
+                {
+
+                    if (zoneName.Equals(r.nameArea))
                     {
                         hasRobot = true;
                         break;

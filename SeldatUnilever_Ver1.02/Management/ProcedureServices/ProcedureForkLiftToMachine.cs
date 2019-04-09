@@ -229,7 +229,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
                         try
                         {
-                            if (true == ds.WaitClose(DoorService.DoorType.DOOR_BACK, TIME_OUT_CLOSE_DOOR))
+                            if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
                             {
                                 robot.TurnOnCtrlSelfTraffic(true);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;

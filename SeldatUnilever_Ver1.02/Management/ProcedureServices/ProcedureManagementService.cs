@@ -197,7 +197,7 @@ namespace SeldatMRMS
 
             } else {
                 // lưu lại giá trị order
-                RestoreOrderItem (procItem.order);
+               // RestoreOrderItem (procItem.order);
             }
            
             //SolvedProblem pSP = new SolvedProblem(item);

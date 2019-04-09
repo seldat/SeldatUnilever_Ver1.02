@@ -313,7 +313,7 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
                         try
                         {
-                            if (true == ds.WaitClose(DoorService.DoorType.DOOR_BACK, TIME_OUT_CLOSE_DOOR))
+                            if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
                             {
                                 ds.LampOff(DoorService.DoorType.DOOR_FRONT);
                                 flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);

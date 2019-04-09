@@ -77,6 +77,7 @@ namespace SeldatMRMS.Management.RobotManagent {
         MenuItem startItem = new MenuItem();
         MenuItem pauseItem = new MenuItem();
         MenuItem connectItem = new MenuItem();
+        MenuItem retryconnectItem = new MenuItem();
         MenuItem disconnectItem = new MenuItem();
         MenuItem turnOnOffItem = new MenuItem();
         MenuItem addReadyListItem = new MenuItem();
@@ -126,6 +127,10 @@ namespace SeldatMRMS.Management.RobotManagent {
             connectItem.Click += ConnectMenu;
             connectItem.IsEnabled = true;
 
+            retryconnectItem.Header = "ReConnect";
+            retryconnectItem.Click += ReConnectMenu;
+            retryconnectItem.IsEnabled = true;
+
             disconnectItem.Header = "Disconnect";
             disconnectItem.Click += DisConnectMenu;
             disconnectItem.IsEnabled = false;
@@ -143,6 +148,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             border.ContextMenu.Items.Add(logOutItem);
 
             border.ContextMenu.Items.Add(connectItem);
+            border.ContextMenu.Items.Add(retryconnectItem);
             border.ContextMenu.Items.Add(disconnectItem);
             border.ContextMenu.Items.Add(turnOnOffItem);
 
@@ -399,7 +405,14 @@ namespace SeldatMRMS.Management.RobotManagent {
             robotLogOut.ShowText(this.properties.Label,text);
            
         }
-        private void ConnectMenu(object sender, RoutedEventArgs e)
+        private void ReConnectMenu(object sender, RoutedEventArgs e)
+        {
+            if(webSocket!=null)
+            {
+                webSocket.Connect();
+            }
+        }
+            private void ConnectMenu(object sender, RoutedEventArgs e)
         {
 
             // Dispose();
@@ -499,11 +512,11 @@ namespace SeldatMRMS.Management.RobotManagent {
 
                          props.rbRotateTransform.Angle = -properties.pose.Angle;
                          Point cPoint = Global_Object.CoorCanvas(properties.pose.Position);
-                         Console.WriteLine("Robot : " + cPoint.X + " / " + cPoint.Y);
+                        // Console.WriteLine("Robot : " + cPoint.X + " / " + cPoint.Y);
                          //props.rbTranslate = new TranslateTransform(cPoint.X, cPoint.Y);
 
                          props.rbTranslate = new TranslateTransform(cPoint.X - (border.Width / 2), cPoint.Y - (border.Height / 2));
-                         Console.WriteLine("----------");
+                       //  Console.WriteLine("----------");
                        //  Console.WriteLine("Translate : " + props.rbTranslate.X + " / "+ props.rbTranslate.Y);
 
                        props.rbTransformGroup.Children[1] = props.rbTranslate;

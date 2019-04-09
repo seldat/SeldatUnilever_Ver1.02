@@ -123,14 +123,17 @@ namespace SeldatMRMS.Management
                 foreach (RobotUnity r in RobotUnityRiskList.Values)
                 {
                     Point thCV = TopHeaderCv();
-                    Point mdCV = MiddleHeaderCv();
+                    Point mdCV0 = MiddleHeaderCv();
+                    Point mdCV1 = MiddleHeaderCv1();
+                    Point mdCV2 = MiddleHeaderCv2();
                     Point bhCV = BottomHeaderCv();
                     // bool onTouch= FindHeaderIntersectsFullRiskArea(this.TopHeader()) | FindHeaderIntersectsFullRiskArea(this.MiddleHeader()) | FindHeaderIntersectsFullRiskArea(this.BottomHeader());
                     // bool onTouch = r.FindHeaderIntersectsFullRiskAreaCv(thCV) | r.FindHeaderIntersectsFullRiskAreaCv(mdCV) | r.FindHeaderIntersectsFullRiskAreaCv(bhCV);
 
-                    bool onTouch = r.FindHeaderTouchCircleArea(mdCV,2*DfWSCv);
-
-                    if (onTouch)
+                    bool onTouch0 = r.FindHeaderTouchCircleArea(mdCV0,2*DfWSCv);
+                    bool onTouch1 = r.FindHeaderTouchCircleArea(mdCV1, 2 * DfWSCv);
+                    bool onTouch2 = r.FindHeaderTouchCircleArea(mdCV2, 2 * DfWSCv);
+                    if (onTouch0 || onTouch1 || onTouch2)
                     {
                         //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);

@@ -42,18 +42,28 @@ namespace SeldatMRMS.Management.RobotManagent
         #region Public
         private bool IsDisposed = false;
         protected bool onBinding = true;
+        public int timeOutReConnection = 0;
         protected virtual void OnClosedEvent(object sender, CloseEventArgs e)
         {
-            if (!IsDisposed)
+            if (timeOutReConnection++<10)
             {
-                try
+                if (!IsDisposed)
                 {
-                    Close();
-                    webSocket.Connect();
-                }
-                catch { }
-                
 
+                    try
+                    {
+                        Close();
+                        webSocket.Connect();
+                    }
+                    catch { }
+
+
+                }
+                else
+                {
+                    timeOutReConnection = 0;
+                    Dispose();
+                }
             }
         }
         protected virtual void OnOpenedEvent() { }
@@ -104,15 +114,22 @@ namespace SeldatMRMS.Management.RobotManagent
         }
         public virtual void Dispose()
         {
-            if (webSocket != null)
+            try
             {
-                IsDisposed = true;
-                //webSocket.OnMessage -= (sender, e) => recievedOperation((WebSocket)sender, e);
-                webSocket.OnClose -= (sender, e) => OnClosedEvent((WebSocket)sender, e);
-                //webSocket.OnOpen -= (sender, e) => OnOpenedEvent();
-                if(webSocket.IsAlive)
-                    Close();
-                webSocket = null;
+                if (webSocket != null)
+                {
+                    IsDisposed = true;
+                    //webSocket.OnMessage -= (sender, e) => recievedOperation((WebSocket)sender, e);
+                    webSocket.OnClose -= (sender, e) => OnClosedEvent((WebSocket)sender, e);
+                    //webSocket.OnOpen -= (sender, e) => OnOpenedEvent();
+                    if (webSocket.IsAlive)
+                        Close();
+                    webSocket = null;
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Error Dispose in RosSocket !!");
             }
         }
         public void Close()

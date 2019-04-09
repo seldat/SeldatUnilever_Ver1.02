@@ -555,8 +555,8 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 countGoal = 0;
 
-                double _currentgoal_Ex = Math.Abs(Math.Abs(properties.pose.Position.X) - Math.Abs(gx));
-                double _currentgoal_Ey = Math.Abs(Math.Abs(properties.pose.Position.Y) - Math.Abs(gy));
+                double _currentgoal_Ex = Math.Abs(properties.pose.Position.X-gx);
+                double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y-gy);
                /* */
                 double gxx = Math.Abs(gx);
                 double gyy = Math.Abs(gy);

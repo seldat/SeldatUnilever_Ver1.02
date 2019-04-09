@@ -522,7 +522,7 @@ namespace SeldatMRMS.Management.RobotManagent {
                          PathFigure pF = new PathFigure();
                          pF.StartPoint = TopHeaderCv();
 
-                         // pF.StartPoint = new Point(TopHeader().X * 10, TopHeader().Y * 10);
+                        // pF.StartPoint = new Point(TopHeader().X * 10, TopHeader().Y * 10);
                          LineSegment pp = new LineSegment();
 
                          pF.Segments.Add(new LineSegment() { Point = BottomHeaderCv() });
@@ -570,7 +570,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             L2Cv = proR.L2* properties.Scale;
             WSCv = proR.WS* properties.Scale;
             DistInterCv = proR.DistInter*properties.Scale;         
-            Draw ();
+            //Draw ();
 
         }
     }

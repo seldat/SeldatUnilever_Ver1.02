@@ -265,6 +265,7 @@ namespace SeldatMRMS {
             ProcedureControlServices p = (ProcedureControlServices)obj;
             Debug (obj,"ErrorCode -> " + getStringError(p.errorCode));
             robot.RegistrySolvedForm(this);
+            selectHandleError = SelectHandleError.CASE_ERROR_EXIT;
             while (keepRun)
             {
                 switch (selectHandleError)
@@ -293,7 +294,8 @@ namespace SeldatMRMS {
                         // Global_Object.StopWarning ();
                         robot.border.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
                             new Action(delegate () {
-                                robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_WAIT_FIX);
+                                robot.setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_ERROR);
+
                             }));
                         order.status = StatusOrderResponseCode.ROBOT_ERROR;
                         robot.PreProcedureAs = robot.ProcedureAs;

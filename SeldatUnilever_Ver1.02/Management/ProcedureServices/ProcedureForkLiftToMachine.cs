@@ -46,6 +46,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public void Destroy()
         {
+            order.status = StatusOrderResponseCode.ROBOT_ERROR;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
@@ -168,8 +169,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         else
                         {
-                            errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                            CheckUserHandleError(this);
+                            //errorCode = ErrorCode.CONNECT_DOOR_ERROR;
+                           // CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
@@ -180,8 +181,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         else
                         {
-                            errorCode = ErrorCode.OPEN_DOOR_ERROR;
-                            CheckUserHandleError(this);
+                            StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_CAME_GATE_POSITION;
+
+                            //errorCode = ErrorCode.OPEN_DOOR_ERROR;
+                            // CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao gap hang
@@ -216,8 +219,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             }
                             else
                             {
-                                errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                                CheckUserHandleError(this);
+                               // errorCode = ErrorCode.CONNECT_DOOR_ERROR;
+                               // CheckUserHandleError(this);
                             }
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -239,8 +242,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             }
                             else
                             {
-                                errorCode = ErrorCode.CLOSE_DOOR_ERROR;
-                                CheckUserHandleError(this);
+                                // errorCode = ErrorCode.CLOSE_DOOR_ERROR;
+                                // CheckUserHandleError(this);
                             }
                         }
                         catch (System.Exception)
@@ -301,6 +304,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case ForkLiftToMachine.FORMACH_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
                         robot.TurnOnCtrlSelfTraffic(true);
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
+                        order.status = StatusOrderResponseCode.FINISHED;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);
                         // } else {

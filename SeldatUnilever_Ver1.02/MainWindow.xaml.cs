@@ -413,11 +413,9 @@ namespace SeldatUnilever_Ver1._02
             OrderItem orderItem = (sender as Button).DataContext as OrderItem;
             Task.Run(() => { 
                
-                if (orderItem.status == StatusOrderResponseCode.PENDING)
-                {
+               
                     DeviceItem devI = unityService.deviceRegistrationService.deviceItemList.Find(item => item.userName == orderItem.userName);
                     devI.RemoveCallBack(orderItem);
-                }
             });
 
 
@@ -428,11 +426,8 @@ namespace SeldatUnilever_Ver1._02
             OrderItem orderItem = (sender as Button).DataContext as OrderItem;
             Task.Run(() => {
 
-                if (orderItem.status == StatusOrderResponseCode.PENDING)
-                {
                     DeviceItem devI = unityService.deviceRegistrationService.deviceItemList.Find(item => item.userName == orderItem.userName);
                     devI.ReorderCallBack(orderItem);
-                }
             });
         }
     }

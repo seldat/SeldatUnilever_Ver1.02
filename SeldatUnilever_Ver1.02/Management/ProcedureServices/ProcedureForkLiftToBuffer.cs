@@ -250,8 +250,8 @@ namespace SeldatMRMS
                         }
                         else
                         {
-                            errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                            CheckUserHandleError(this);
+                           // errorCode = ErrorCode.CONNECT_DOOR_ERROR;
+                           // CheckUserHandleError(this);
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
@@ -262,8 +262,9 @@ namespace SeldatMRMS
                         }
                         else
                         {
-                            errorCode = ErrorCode.OPEN_DOOR_ERROR;
-                            CheckUserHandleError(this);
+                            StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
+                            // errorCode = ErrorCode.OPEN_DOOR_ERROR;
+                            // CheckUserHandleError(this);
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao gap hang
@@ -300,8 +301,8 @@ namespace SeldatMRMS
                             }
                             else
                             {
-                                errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                                CheckUserHandleError(this);
+                               // errorCode = ErrorCode.CONNECT_DOOR_ERROR;
+                               // CheckUserHandleError(this);
                             }
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
@@ -344,8 +345,9 @@ namespace SeldatMRMS
                             }
                             else
                             {
-                                errorCode = ErrorCode.CLOSE_DOOR_ERROR;
-                                CheckUserHandleError(this);
+                               // StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
+                                // errorCode = ErrorCode.CLOSE_DOOR_ERROR;
+                                // CheckUserHandleError(this);
                             }
                         }
                         catch (System.Exception)

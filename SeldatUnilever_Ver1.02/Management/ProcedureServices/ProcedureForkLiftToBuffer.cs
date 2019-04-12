@@ -12,6 +12,7 @@ using SeldatMRMS.Management.DoorServices;
 using SeldatMRMS.Management.RobotManagent;
 using SeldatMRMS.Management.TrafficManager;
 using SelDatUnilever_Ver1._00.Management.DeviceManagement;
+using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
@@ -243,28 +244,19 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
-                        if (ds.Open(DoorService.DoorType.DOOR_BACK))
-                        {
-                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_OPEN_DOOR;
-                            robot.ShowText("FORBUF_ROBOT_WAITTING_OPEN_DOOR");
-                        }
-                        else
-                        {
-                           // errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                           // CheckUserHandleError(this);
-                        }
+                        ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                        StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_OPEN_DOOR;
+                        robot.ShowText("FORBUF_ROBOT_WAITTING_OPEN_DOOR");
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
-                        if (true == ds.WaitOpen(DoorService.DoorType.DOOR_BACK, TIME_OUT_OPEN_DOOR))
+                        RetState ret = ds.checkOpen(DoorService.DoorType.DOOR_BACK);
+                        if (RetState.DOOR_CTRL_SUCCESS == ret)
                         {
                             StateForkLift = ForkLift.FORBUF_ROBOT_OPEN_DOOR_SUCCESS;
                             robot.ShowText("FORBUF_ROBOT_OPEN_DOOR_SUCCESS");
                         }
-                        else
-                        {
+                        else if (RetState.DOOR_CTRL_ERROR == ret) {
                             StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
-                            // errorCode = ErrorCode.OPEN_DOOR_ERROR;
-                            // CheckUserHandleError(this);
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao gap hang
@@ -294,16 +286,10 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            if (ds.Close(DoorService.DoorType.DOOR_BACK))
-                            {
-                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE;
-                                robot.ShowText("FORBUF_ROBOT_WAITTING_CLOSE_GATE");
-                            }
-                            else
-                            {
-                               // errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                               // CheckUserHandleError(this);
-                            }
+                            ds.LampOff(DoorService.DoorType.DOOR_FRONT);
+                            ds.closeDoor(DoorService.DoorType.DOOR_BACK);
+                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE;
+                            robot.ShowText("FORBUF_ROBOT_WAITTING_CLOSE_GATE");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -314,41 +300,42 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
                         try
                         {
-                            if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
+                            //if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
+                            //{
+                                
+                            flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);
+                            if (flToMachineInfo == null)
                             {
-                                ds.LampOff(DoorService.DoorType.DOOR_FRONT);
-                                flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);
-                                if (flToMachineInfo == null)
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                                try
                                 {
-                                    rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                    try
+                                    if (rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)))
                                     {
-                                        if (rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)))
-                                        {
-                                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
-                                            robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
-                                        }
-                                        else
-                                        {
-
-                                        }
+                                        StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER;
+                                        robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER");
                                     }
-                                    catch { Console.WriteLine("Error at rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)); "); }
-                                   
-                                }
-                                else {
+                                    else
+                                    {
 
-                                    FreePlanedBuffer();
-                                    StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE;
-                                    robot.ShowText("FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE");
+                                    }
+                                }
+                                catch {
+                                    Console.WriteLine("Error at rb.SendPoseStamped(FlToBuf.GetCheckInBuffer(true)); ");
                                 }
                             }
-                            else
-                            {
-                               // StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
-                                // errorCode = ErrorCode.CLOSE_DOOR_ERROR;
-                                // CheckUserHandleError(this);
+                            else {
+
+                                FreePlanedBuffer();
+                                StateForkLift = ForkLift.FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE;
+                                robot.ShowText("FORMAC_ROBOT_GOTO_FRONTLINE_MACHINE");
                             }
+                            //}
+                            //else
+                            //{
+                            //   // StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
+                            //    // errorCode = ErrorCode.CLOSE_DOOR_ERROR;
+                            //    // CheckUserHandleError(this);
+                            //}
                         }
                         catch (System.Exception)
                         {
@@ -358,8 +345,8 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
                        // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if (robot.ReachedGoal())
-                            {
+                        if (robot.ReachedGoal())
+                        {
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;

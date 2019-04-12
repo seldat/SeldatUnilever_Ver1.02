@@ -174,16 +174,16 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_EmergencyRobot;
             public int publication_ctrlrobotdriving;
             public int publication_robotnavigation;
-            public int publication_linedetectionctrl;
+            //public int publication_linedetectionctrl;
             public int publication_checkAliveTimeOut;
-            public int publication_postPallet;
-            public int publication_cmdAreaPallet;
+            //public int publication_postPallet;
+            //public int publication_cmdAreaPallet;
 
             /*of chau test*/
-            public int publication_finishedStates;
-            public int publication_batteryvol;
-            public int publication_TestLaserError;
-            public int publication_TestLaserWarning;
+            //public int publication_finishedStates;
+            //public int publication_batteryvol;
+            //public int publication_TestLaserError;
+            //public int publication_TestLaserWarning;
             public int publication_killpid;
         }
 
@@ -275,19 +275,19 @@ namespace SeldatMRMS.Management.RobotManagent
             msg.data = 1234;
             this.Publish(paramsRosSocket.publication_checkAliveTimeOut, msg);
         }
-        public void createRosTerms () {
+        public void createRosTerms() {
             int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler,100);
             paramsRosSocket.publication_ctrlrobotdriving = this.Advertise ("/ctrlRobotDriving", "std_msgs/Int32");
             int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler,100);
             paramsRosSocket.publication_robotnavigation = this.Advertise ("/robot_navigation", "geometry_msgs/PoseStamped");
             paramsRosSocket.publication_checkAliveTimeOut = this.Advertise ("/checkAliveTimeOut", "std_msgs/Int32");
-            paramsRosSocket.publication_linedetectionctrl = this.Advertise ("/linedetectionctrl", "std_msgs/Int32");
-            paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet", "std_msgs/Int32");
-            paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet", "std_msgs/String");
+            //paramsRosSocket.publication_linedetectionctrl = this.Advertise ("/linedetectionctrl", "std_msgs/Int32");
+            //paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet", "std_msgs/Int32");
+            //paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet", "std_msgs/String");
             paramsRosSocket.publication_killpid = this.Advertise("/key_press", "std_msgs/String");
             float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
-            int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
-            int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
+            //int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
+            //int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
             int subscription_Odom= this.Subscribe("/odom", "nav_msgs/Odometry", OdometryCallback, 100);
             int subscription_Navi = this.Subscribe("/cmd_vel_mux/input/navi", "geometry_msgs/Twist", NaviCallback, 100);
 
@@ -360,83 +360,83 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.pose.VCtrlw = standard.angular.z;
         }
 
-        private void AGVLaserErrorHandler (Communication.Message message) {
-          /*  StandardString standard = (StandardString) message;
-            LaserErrorCode er = new LaserErrorCode ();
-            bool tamddd = standard.data[0].Equals('1');
-            try
-            {
-                if (standard.data[0].Equals('1')) {
-                    er.LaserErrorConnect = true;
-                } else {
-                    er.LaserErrorConnect = false;
-                }
-                if (standard.data[1].Equals ('1')) {
-                    er.LaserErrorShutdown = true;
-                } else {
-                    er.LaserErrorShutdown = false;
-                }
-                if (standard.data[2].Equals ('1')) {
-                    er.LaserErrorLostSpeed = true;
-                } else {
-                    er.LaserErrorLostSpeed = false;
-                }
-                if (standard.data[3].Equals ('1')) {
-                    er.LaserErrorLostPath = true;
-                } else {
-                    er.LaserErrorLostPath = false;
-                }
-            } catch (System.Exception) {
-               // Console.WriteLine ("Cannot parse error laser");
-            }
-            // AGVLaserErrorCallBack (er);*/
-        }
+        //private void AGVLaserErrorHandler (Communication.Message message) {
+        //  /*  StandardString standard = (StandardString) message;
+        //    LaserErrorCode er = new LaserErrorCode ();
+        //    bool tamddd = standard.data[0].Equals('1');
+        //    try
+        //    {
+        //        if (standard.data[0].Equals('1')) {
+        //            er.LaserErrorConnect = true;
+        //        } else {
+        //            er.LaserErrorConnect = false;
+        //        }
+        //        if (standard.data[1].Equals ('1')) {
+        //            er.LaserErrorShutdown = true;
+        //        } else {
+        //            er.LaserErrorShutdown = false;
+        //        }
+        //        if (standard.data[2].Equals ('1')) {
+        //            er.LaserErrorLostSpeed = true;
+        //        } else {
+        //            er.LaserErrorLostSpeed = false;
+        //        }
+        //        if (standard.data[3].Equals ('1')) {
+        //            er.LaserErrorLostPath = true;
+        //        } else {
+        //            er.LaserErrorLostPath = false;
+        //        }
+        //    } catch (System.Exception) {
+        //       // Console.WriteLine ("Cannot parse error laser");
+        //    }
+        //    // AGVLaserErrorCallBack (er);*/
+        //}
 
-        private void AGVLaserWarningHandler (Communication.Message message) {
-           /* StandardString standard = (StandardString) message;
-            LaserWarningCode war = new LaserWarningCode ();
-            try {
-                if (standard.data[0].Equals ('1')) {
-                    war.LaserWarningObstacle = true;
-                } else {
-                    war.LaserWarningObstacle = false;
-                }
-                if (standard.data[1].Equals ('1')) {
-                    war.LaserWarningLowBattey = true;
-                } else {
-                    war.LaserWarningLowBattey = false;
-                }
-                if (standard.data[2].Equals ('1')) {
-                    war.LaserWarningCharging = true;
-                } else {
-                    war.LaserWarningCharging = false;
-                }
-                if (standard.data[3].Equals ('1')) {
-                    war.LaserWarningHazardoes = true;
-                } else {
-                    war.LaserWarningHazardoes = false;
-                }
-                if (standard.data[4].Equals ('1')) {
-                    war.LaserWarningHazardoes = true;
-                } else {
-                    war.LaserWarningHazardoes = false;
-                }
-            } catch (System.Exception) {
-              //  Console.WriteLine ("Cannot parse warning laser");
-            }
-            // AGVLaserWarningCallBack (war);*/
-        }
+        //private void AGVLaserWarningHandler (Communication.Message message) {
+        //   /* StandardString standard = (StandardString) message;
+        //    LaserWarningCode war = new LaserWarningCode ();
+        //    try {
+        //        if (standard.data[0].Equals ('1')) {
+        //            war.LaserWarningObstacle = true;
+        //        } else {
+        //            war.LaserWarningObstacle = false;
+        //        }
+        //        if (standard.data[1].Equals ('1')) {
+        //            war.LaserWarningLowBattey = true;
+        //        } else {
+        //            war.LaserWarningLowBattey = false;
+        //        }
+        //        if (standard.data[2].Equals ('1')) {
+        //            war.LaserWarningCharging = true;
+        //        } else {
+        //            war.LaserWarningCharging = false;
+        //        }
+        //        if (standard.data[3].Equals ('1')) {
+        //            war.LaserWarningHazardoes = true;
+        //        } else {
+        //            war.LaserWarningHazardoes = false;
+        //        }
+        //        if (standard.data[4].Equals ('1')) {
+        //            war.LaserWarningHazardoes = true;
+        //        } else {
+        //            war.LaserWarningHazardoes = false;
+        //        }
+        //    } catch (System.Exception) {
+        //      //  Console.WriteLine ("Cannot parse warning laser");
+        //    }
+        //    // AGVLaserWarningCallBack (war);*/
+        //}
 
-        public void TestLaserError (String cmd) {
-            StandardString msg = new StandardString ();
-            msg.data = cmd;
-            this.Publish (paramsRosSocket.publication_TestLaserError, msg);
-        }
-        public void TestLaserWarning (String cmd) {
-            StandardString msg = new StandardString ();
-            msg.data = cmd;
-            this.Publish (paramsRosSocket.publication_TestLaserWarning, msg);
-        }
+        //public void TestLaserError (String cmd) {
+        //    StandardString msg = new StandardString ();
+        //    msg.data = cmd;
+        //    this.Publish (paramsRosSocket.publication_TestLaserError, msg);
+        //}
+        //public void TestLaserWarning (String cmd) {
+        //    StandardString msg = new StandardString ();
+        //    msg.data = cmd;
+        //    this.Publish (paramsRosSocket.publication_TestLaserWarning, msg);
+        //}
         public void KillPID()
         {
             try
@@ -448,17 +448,17 @@ namespace SeldatMRMS.Management.RobotManagent
             catch { MessageBox.Show("Kill PID error !"); }
         }
 
-        public void FinishedStatesPublish (int message) {
-            StandardInt32 msg = new StandardInt32 ();
-            msg.data = message;
-            this.Publish (paramsRosSocket.publication_finishedStates, msg);
-        }
+        //public void FinishedStatesPublish (int message) {
+        //    StandardInt32 msg = new StandardInt32 ();
+        //    msg.data = message;
+        //    this.Publish (paramsRosSocket.publication_finishedStates, msg);
+        //}
 
-        public void BatteryPublish (float message) {
-            StandardFloat32 msg = new StandardFloat32 ();
-            msg.data = message;
-            this.Publish (paramsRosSocket.publication_batteryvol, msg);
-        }
+        //public void BatteryPublish (float message) {
+        //    StandardFloat32 msg = new StandardFloat32 ();
+        //    msg.data = message;
+        //    this.Publish (paramsRosSocket.publication_batteryvol, msg);
+        //}
         public virtual void UpdateProperties(PropertiesRobotUnity proR)
         {
             properties = proR;
@@ -516,38 +516,38 @@ namespace SeldatMRMS.Management.RobotManagent
             }
         }
 
-        public bool SendCmdLineDetectionCtrl (RequestCommandLineDetect cmd) {
+        //public bool SendCmdLineDetectionCtrl (RequestCommandLineDetect cmd) {
 
-            try
-            {
-                StandardInt32 msg = new StandardInt32();
-                msg.data = Convert.ToInt32(cmd);
-                this.Publish(paramsRosSocket.publication_linedetectionctrl, msg);
-                robotLogOut.ShowText(this.properties.Label, "SendCmdLineDetectionCtrl => " + msg.data);
+        //    try
+        //    {
+        //        StandardInt32 msg = new StandardInt32();
+        //        msg.data = Convert.ToInt32(cmd);
+        //        this.Publish(paramsRosSocket.publication_linedetectionctrl, msg);
+        //        robotLogOut.ShowText(this.properties.Label, "SendCmdLineDetectionCtrl => " + msg.data);
 
-                return true;
-            }
-            catch {
-                Console.WriteLine("Robot Control Error SendCmdLineDetectionCtrl");
-                return false;
-            }
-        }
+        //        return true;
+        //    }
+        //    catch {
+        //        Console.WriteLine("Robot Control Error SendCmdLineDetectionCtrl");
+        //        return false;
+        //    }
+        //}
 
-        public bool SendCmdPosPallet (RequestCommandPosPallet cmd) {
-            try
-            {
-                StandardInt32 msg = new StandardInt32();
-                msg.data = Convert.ToInt32(cmd);
-                this.Publish(paramsRosSocket.publication_postPallet, msg);
-                robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
+        //public bool SendCmdPosPallet (RequestCommandPosPallet cmd) {
+        //    try
+        //    {
+        //        StandardInt32 msg = new StandardInt32();
+        //        msg.data = Convert.ToInt32(cmd);
+        //        this.Publish(paramsRosSocket.publication_postPallet, msg);
+        //        robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
 
-                return true;
-            }
-            catch {
-                Console.WriteLine("Robot Control Error SendCmdPosPallet");
-                return false;
-            }
-        }
+        //        return true;
+        //    }
+        //    catch {
+        //        Console.WriteLine("Robot Control Error SendCmdPosPallet");
+        //        return false;
+        //    }
+        //}
         int countGoal = 0;
         public bool ReachedGoal()
         {
@@ -616,25 +616,25 @@ namespace SeldatMRMS.Management.RobotManagent
 
             return false;
         }
-        public bool SendCmdAreaPallet (String cmd) {
+        //public bool SendCmdAreaPallet (String cmd) {
 
    
-                    try
-                    {
-                        StandardString msg = new StandardString();
-                        msg.data = cmd;
-                        Console.WriteLine(cmd);
-                        this.Publish(paramsRosSocket.publication_cmdAreaPallet, msg);
-                        robotLogOut.ShowText(this.properties.Label, "SendCmdAreaPallet => " + msg.data);
-                        return true;
-                    }
-                    catch {
-                    Console.WriteLine("Error Send SendCmdAreaPallet");
-                        return false;
-                }
+        //            try
+        //            {
+        //                StandardString msg = new StandardString();
+        //                msg.data = cmd;
+        //                Console.WriteLine(cmd);
+        //                this.Publish(paramsRosSocket.publication_cmdAreaPallet, msg);
+        //                robotLogOut.ShowText(this.properties.Label, "SendCmdAreaPallet => " + msg.data);
+        //                return true;
+        //            }
+        //            catch {
+        //            Console.WriteLine("Error Send SendCmdAreaPallet");
+        //                return false;
+        //        }
        
            
-        }
+        //}
 
         protected override void OnOpenedEvent () {
             properties.IsConnected = true;

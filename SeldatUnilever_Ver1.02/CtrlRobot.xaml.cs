@@ -30,49 +30,49 @@ namespace SeldatUnilever_Ver1._02
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(2000);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(2000);
         }
 
         private void CmdPalletUp_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3203);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3203);
         }
 
         private void CmdPalletDown_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3204);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3204);
         }
 
         private void CmdBackFrontLine_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3213);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3213);
         }
 
         private void CmdBatLevel_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.BatteryPublish(float.Parse(txtBat.Text));
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.BatteryPublish(float.Parse(txtBat.Text));
         }
 
         private void CmdError_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3215);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3215);
         }
 
         private void CmdGetInCharger_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3206);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3206);
         }
 
         private void CmdGetOutCharger_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3207);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3207);
             // String tamp = "1001";
             // rms.RobotUnityRegistedList.ElementAt(0).Value.TestLaserError(tamp);
         }
 
         private void LineCamePoint_Click(object sender, RoutedEventArgs e)
         {
-            rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3205);
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3205);
             // String tamp = "11010";
             // rms.RobotUnityRegistedList.ElementAt(0).Value.TestLaserWarning(tamp);
         }

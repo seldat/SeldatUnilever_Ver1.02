@@ -44,6 +44,8 @@
                                         Binding="{Binding Path=Dir_Out, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Detail" 
                                         Binding="{Binding Path=Detail, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header=" ZonesCheckGoInside" 
+                                        Binding="{Binding Path= ZonesCheckGoInside, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                     <DataGridTemplateColumn Header="Fixed" x:Name="btnFixed">
                         <DataGridTemplateColumn.CellTemplate>

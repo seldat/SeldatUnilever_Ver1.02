@@ -91,6 +91,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             public TrafficRobotUnity.BrDirection Dir_Out { get => _Dir_Out; set { _Dir_Out = value; RaisePropertyChanged("Dir_Out"); } }
             public String _Detail;
             public String Detail { get => _Detail; set { _Detail = value; RaisePropertyChanged("Detail"); } }
+            private String _ZonesCheckGoInside="";
+            public String ZonesCheckGoInside { get => _ZonesCheckGoInside; set { _ZonesCheckGoInside = value; RaisePropertyChanged("ZonesCheckGoInside"); } }
             public Point[] GetZone()
             {
                 return new Point[4] { Point1, Point2, Point3, Point4 };
@@ -341,7 +343,7 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
             return amout;
         }
-        public String DetermineRobotUnityinArea(Point position)
+        public String DetermineArea(Point position)
         {
             String zoneName = "";
             foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến

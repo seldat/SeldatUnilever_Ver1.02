@@ -35,6 +35,22 @@ namespace SeldatMRMS.Management
             SLOW_DOWN,
             NORMAL_SPEED
         }
+        public class RobotRegistryToWorkingBufferZone
+        {
+            public String WorkingZone { get; set; }
+            public bool onRobotGoingOutZone = false;
+            public RobotRegistryToWorkingBufferZone() { }
+            public void Release()
+            {
+                WorkingZone = "";
+                onRobotGoingOutZone = false;
+            }
+            public void SetZone(String namez)
+            {
+                WorkingZone = namez;
+                onRobotGoingOutZone = true;
+            }
+        }
         // public enum MvDirection{
         //     INCREASE_X = 0,
         // 	INCREASE_Y,
@@ -87,12 +103,14 @@ namespace SeldatMRMS.Management
         private RobotUnity robotModeFree;
         private const double DistanceToSetSlowDown = 80; // sau khi dừng robot phai doi khoan cach len duoc tren 8m thi robot bat dau hoat dong lai bình thuong 8m
         private const double DistanceToSetNormalSpeed = 12; // sau khi dừng robot phai doi khoan cach len duoc tren 8m thi robot bat dau hoat dong lai bình thuong 12m
+        public RobotRegistryToWorkingBufferZone robotRegistryToWorkingZone;
         public TrafficRobotUnity() : base()
         {
             TurnOnSupervisorTraffic(false);
             TurnOnCtrlSelfTraffic(true);
             RobotUnitylist = new List<RobotUnity>();
             prioritLevel = new PriorityLevel();
+            robotRegistryToWorkingZone = new RobotRegistryToWorkingBufferZone();
 
 
         }
@@ -418,52 +436,64 @@ namespace SeldatMRMS.Management
             }
         }
 
-        // public Boolean CheckZoneReady(Pose point){
-        // 	/*hien thuc giup em*/
-        // 	return true;
-        // }
+        // Finding has any Robot in Zone that Robot is going to come
+        public bool FindAndRegistryWorkingZone(Point anyPoint)
+        {
+            bool hasRobot = false;
+            String nameZone = trafficManagementService.DetermineArea(anyPoint);
+            if(nameZone!="")
+            {
+                foreach(RobotUnity r in RobotUnitylist )
+                {
+                    if(r.robotRegistryToWorkingZone.WorkingZone.Equals(nameZone))
+                    {
+                        hasRobot = true;
+                        break;
+                    }
+                }
+            }
+            return false;
+        }
+        // set zonename Robot will working
+        public void SetWorkingZone(String nameZone)
+        {
+            robotRegistryToWorkingZone.SetZone(nameZone);
+        }
+        // release zonename Robot out
+        public void ReleaseWorkingZone()
+        {
+            robotRegistryToWorkingZone.Release();
+        }
+        // ứng xử tai check in buffer với bắt vị trí anypoint
+        public bool CheckInBufferBehavior(Point anyPoint)
+        {
+            if (FindAndRegistryWorkingZone(anyPoint))
+                return false;
+            else
+            {
+                String nameZone = trafficManagementService.DetermineArea(anyPoint);
+                SetWorkingZone(nameZone);
+                return true;
+            }
+        }
+        // check đường nhỏ qua đường lớn giao với các buffer
+        public bool CheckRobotFromRoadToHighStreetLevel1(Point point)
+        {
+            String nameZone = trafficManagementService.DetermineArea(point);
+            String[] checkedZoneNames = trafficManagementService.ZoneRegisterList[nameZone].ZonesCheckGoInside.Split(',');
+            // check có robot đi ngang qua đường lớn
+            // check robot đi ra buffer
+            return true;
+        }
+        // check robot buffer đi ra đường lớn
+        public bool CheckRobotFromRoadToHighStreetLevel2(Point point)
+        {
+            String nameZone = trafficManagementService.DetermineArea(point);
+            String[] checkedZoneNames = trafficManagementService.ZoneRegisterList[nameZone].ZonesCheckGoInside.Split(',');
+            // check có robot đi qua và yêu cầu robot trong đường lớn dừng
+            return true;
+        }
 
-        // public Boolean CheckPointDetectLine(PointDetect p, RobotUnity rb)
-        // {
-        //     Boolean ret = false;
-        //     switch (p.mvDir)
-        //     {
-        //         case MvDirection.INCREASE_X:
-        //             if(rb.properties.pose.Position.X > p.p.X){
-        //                 ret = true;
-        //             }
-        //             else{
-        //                 ret = false;
-        //             }
-        //             break;
-        //         case MvDirection.INCREASE_Y:
-        //             if(rb.properties.pose.Position.Y > p.p.Y){
-        //                 ret = true;
-        //             }
-        //             else{
-        //                 ret = false;
-        //             }
-        //             break;
-        //         case MvDirection.DECREASE_X:
-        //             if(rb.properties.pose.Position.X < p.p.X){
-        //                 ret = true;
-        //             }
-        //             else{
-        //                 ret = false;
-        //             }
-        //             break;
-        //         case MvDirection.DECREASE_Y:
-        //             if(rb.properties.pose.Position.Y < p.p.Y){
-        //                 ret = true;
-        //             }
-        //             else{
-        //                 ret = false;
-        //             }
-        //             break;
-        //         default:
-        //             break;
-        //     }
-        //     return ret;
-        // }
+
     }
 }

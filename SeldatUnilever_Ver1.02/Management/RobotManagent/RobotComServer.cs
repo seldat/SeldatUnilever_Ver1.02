@@ -3,8 +3,8 @@ using System;
 using SeldatMRMS.Communication;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Threading;
 using System.Diagnostics;
+using System.Threading;
 
 namespace SeldatUnilever_Ver1._02.Management.RobotManagent
 {
@@ -33,8 +33,8 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         }
 
         private enum rts {
-            TYPE_RTS_POSE_CHECKIN = 1,
-            TYPE_RTS_BATTERY,
+            TYPE_RTS_FINISH_STATE = 1,
+            TYPE_RTS_POSE_CHECKIN,
             TYPE_RTS_DISPLAY_INFO
         }
 
@@ -43,20 +43,30 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             public int pubServerResToRb;
         }
 
-        public PubTopic serverPub;
-        public String dataSend;
-        public bool waitRes;
-        private const UInt32 TIME_OUT_WAT_RESPONSE = 2000;
+        private PubTopic serverPub;
+        private Int32 preTypeSend;
+        private bool waitRes;
+        private const UInt32 TIME_OUT_WAT_RESPONSE = 5000;
+        private const UInt32 NUM_TRY_SEND_TO_RB = 1000;
+        private UInt32 numResendData;
+        private Pose pointCheckInConfirm;
 
         public RobotComServer() {
             this.waitRes = false;
+            this.serverPub = new PubTopic();
+            this.preTypeSend = 0;
+            this.numResendData = 0;
+        }
+
+        public Pose getPointCheckInConfirm() {
+            return pointCheckInConfirm;   
         }
 
         private void InitTopic() {
             serverPub.pubServerSendToRb = this.Advertise("/ServerSendToRb", "std_msgs/String");
             serverPub.pubServerResToRb = this.Advertise("/ServerResToRb", "std_msgs/String");
-            int subRbSendToServer = this.Subscribe("/RbSendToServer", "std_msgs/String", RbSendToServerCallback, 100);
-            int subRbResToServer = this.Subscribe("/RbResToServer", "std_msgs/String", RbResToServerCallback, 100);
+            int subRbSendToServer = this.Subscribe("/RbSendToServer", "std_msgs/String", RbSendToServerCallback, 10);
+            int subRbResToServer = this.Subscribe("/RbResToServer", "std_msgs/String", RbResToServerCallback, 10);
         }
 
         private void ResStatus(Int32 typeData, Int32 Status) {
@@ -101,6 +111,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
 
             data.TypeData = (Int32)str.TYPE_STR_LINEDETECTIONCTRL;
             data.Data = (Int32)cmd;
+            preTypeSend = data.TypeData;
 
             String jData = JsonConvert.SerializeObject(data);
 
@@ -118,6 +129,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
 
             data.TypeData = (Int32)str.TYPE_STR_POSPALLET;
             data.Data = (Int32)cmd;
+            preTypeSend = data.TypeData;
 
             String jData = JsonConvert.SerializeObject(data);
 
@@ -135,6 +147,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
 
             data.TypeData = (Int32)str.TYPE_STR_CMDAREAPALLET;
             data.Data = cmd;
+            preTypeSend = data.TypeData;
 
             String jData = JsonConvert.SerializeObject(data);
 
@@ -153,10 +166,20 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             Stopwatch et = new Stopwatch();
             et.Start();
             while (this.waitRes) {
-                if (et.ElapsedMilliseconds >= TIME_OUT_WAT_RESPONSE) {
-                    ret = false;
-                    this.waitRes = false;
-                }  
+                if (et.ElapsedMilliseconds >= TIME_OUT_WAT_RESPONSE)
+                {
+                    et.Restart();
+                    this.ServerPubToRb(mes);
+                    this.numResendData++;
+                    if (this.numResendData >= NUM_TRY_SEND_TO_RB)
+                    {
+                        ret = false;
+                        this.waitRes = false;
+                    }
+                }
+                else {
+                    Thread.Sleep(20);
+                }
             }
             return ret;
         }
@@ -165,28 +188,32 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         {
             /*json = {
                 "TypeData": "1",
-		        "Data": "abcdxyz
+          "Data": "abcdxyz
             }"*/
-            StandardString mesg = (StandardString) message;
+            StandardString mesg = (StandardString)message;
             try
             {
                 JObject jRet = JObject.Parse(mesg.data);
                 rts typeData = (rts)(Int32)jRet["TypeData"];
-
                 switch (typeData)
                 {
-                    case rts.TYPE_RTS_POSE_CHECKIN:
-                        this.ResStatus((Int32)rts.TYPE_RTS_POSE_CHECKIN,(Int32)Comres.RES_SUCCESS);
+                    case rts.TYPE_RTS_FINISH_STATE:
+                        this.FinishedStatesHandler((Int32)jRet["Data"]);
+                        this.ResStatus((Int32)rts.TYPE_RTS_FINISH_STATE, (Int32)Comres.RES_SUCCESS);
                         break;
-                    case rts.TYPE_RTS_BATTERY:
-                        this.ResStatus((Int32)rts.TYPE_RTS_BATTERY,(Int32)Comres.RES_SUCCESS);
+                    case rts.TYPE_RTS_POSE_CHECKIN:
+                        double x = (double)jRet["Data"]["x"];
+                        double y = (double)jRet["Data"]["y"];
+                        this.pointCheckInConfirm = new Pose(x, y, 0);
+                        this.ResStatus((Int32)rts.TYPE_RTS_POSE_CHECKIN, (Int32)Comres.RES_SUCCESS);
                         break;
                     case rts.TYPE_RTS_DISPLAY_INFO:
-                        this.ResStatus((Int32)rts.TYPE_RTS_POSE_CHECKIN,(Int32)Comres.RES_SUCCESS);
+                        String info = (String)jRet["Data"];
+                        this.ResStatus((Int32)rts.TYPE_RTS_DISPLAY_INFO, (Int32)Comres.RES_SUCCESS);
                         break;
                     default:
                         break;
-                }    
+                }
             }
             catch (System.Exception e)
             {
@@ -208,8 +235,12 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                 JStructDataInt jData = new JStructDataInt();
                 jData.TypeData = (Int32)jRet["TypeData"];
                 jData.Data = (Int32)jRet["Data"];
-                if (jData.Data == (Int32)Comres.RES_SUCCESS) {
-                    this.waitRes = false;
+                if (jData.Data == (Int32)Comres.RES_SUCCESS)
+                {
+                    if(preTypeSend == jData.TypeData)
+                    {
+                        this.waitRes = false;
+                    }
                 }
             }
             catch (System.Exception e)
@@ -219,7 +250,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         }
 
         protected override void OnOpenedEvent() {
-            this.InitTopic(); 
+            this.InitTopic();
             base.OnOpenedEvent();
         }
     }       

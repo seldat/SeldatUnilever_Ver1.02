@@ -181,7 +181,7 @@ namespace SeldatMRMS.Management.RobotManagent
 
             /*of chau test*/
             //public int publication_finishedStates;
-            //public int publication_batteryvol;
+            public int publication_batteryvol;
             //public int publication_TestLaserError;
             //public int publication_TestLaserWarning;
             public int publication_killpid;
@@ -275,10 +275,10 @@ namespace SeldatMRMS.Management.RobotManagent
             msg.data = 1234;
             this.Publish(paramsRosSocket.publication_checkAliveTimeOut, msg);
         }
-        public void createRosTerms() {
+        public void createRosTerms () {
             int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler,100);
             paramsRosSocket.publication_ctrlrobotdriving = this.Advertise ("/ctrlRobotDriving", "std_msgs/Int32");
-            int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler,100);
+            //int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler,100);
             paramsRosSocket.publication_robotnavigation = this.Advertise ("/robot_navigation", "geometry_msgs/PoseStamped");
             paramsRosSocket.publication_checkAliveTimeOut = this.Advertise ("/checkAliveTimeOut", "std_msgs/Int32");
             //paramsRosSocket.publication_linedetectionctrl = this.Advertise ("/linedetectionctrl", "std_msgs/Int32");
@@ -292,7 +292,7 @@ namespace SeldatMRMS.Management.RobotManagent
             int subscription_Navi = this.Subscribe("/cmd_vel_mux/input/navi", "geometry_msgs/Twist", NaviCallback, 100);
 
             //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
-            //paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
+            paramsRosSocket.publication_batteryvol = this.Advertise("/RbResToServer", "std_msgs/String");
             //   paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
             //  paramsRosSocket.publication_TestLaserWarning = this.Advertise ("/AGV_LaserWarning", "std_msgs/String");
         }
@@ -331,18 +331,16 @@ namespace SeldatMRMS.Management.RobotManagent
          
 
         }
-        private void FinishedStatesHandler (Communication.Message message) {
+        protected void FinishedStatesHandler (Int32 message) {
             try
             {
-                StandardInt32 standard = (StandardInt32)message;
-                robotLogOut.ShowText(this.properties.Label,"Finished State [" + standard.data + "]");
-                FinishStatesCallBack(standard.data);
-               
+                //StandardInt32 standard = (StandardInt32)message;
+                robotLogOut.ShowText(this.properties.Label,"Finished State [" + message + "]");
+                FinishStatesCallBack(message);
             }
             catch {
                 Console.WriteLine(" Error FinishedStatesHandler");
             }
-
         }
         private void OdometryCallback(Communication.Message message)
         {
@@ -454,11 +452,12 @@ namespace SeldatMRMS.Management.RobotManagent
         //    this.Publish (paramsRosSocket.publication_finishedStates, msg);
         //}
 
-        //public void BatteryPublish (float message) {
-        //    StandardFloat32 msg = new StandardFloat32 ();
-        //    msg.data = message;
-        //    this.Publish (paramsRosSocket.publication_batteryvol, msg);
-        //}
+        public void BatteryPublish(String message)
+        {
+            StandardString msg = new StandardString();
+            msg.data = message;
+            this.Publish(paramsRosSocket.publication_batteryvol, msg);
+        }
         public virtual void UpdateProperties(PropertiesRobotUnity proR)
         {
             properties = proR;
@@ -549,22 +548,23 @@ namespace SeldatMRMS.Management.RobotManagent
         //    }
         //}
         int countGoal = 0;
-        public bool ReachedGoal()
+        public bool ReachedGoal(Pose point = null)
         {
             if (countGoal ++ > 200)
             {
                 countGoal = 0;
-
-                double _currentgoal_Ex = Math.Abs(properties.pose.Position.X-gx);
-                double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y-gy);
-               /* */
-                double gxx = Math.Abs(gx);
-                double gyy = Math.Abs(gy);
-                if (gxx >= 7.0 && gxx <= 8.65 && gyy >= 9.8 && gyy <= 11.0) // truong hop dat biet
+                if (point == null)
                 {
-                    //robotLogOut.ShowText("", "Truong hop dat biet");
-                       
-                       // if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                    double _currentgoal_Ex = Math.Abs(properties.pose.Position.X - gx);
+                    double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y - gy);
+                    /* */
+                    double gxx = Math.Abs(gx);
+                    double gyy = Math.Abs(gy);
+                    if (gxx >= 7.0 && gxx <= 8.65 && gyy >= 9.8 && gyy <= 11.0) // truong hop dat biet
+                    {
+                        //robotLogOut.ShowText("", "Truong hop dat biet");
+
+                        // if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
                         if (_currentgoal_Ex <= 2.0 && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
                         {
                             if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
@@ -572,23 +572,23 @@ namespace SeldatMRMS.Management.RobotManagent
                                 properties.pose.VCtrlx = 0;
                                 properties.pose.VCtrly = 0;
                                 properties.pose.VCtrlw = 0;
-                            robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
-                            robotLogOut.ShowText("", "Goal X=" + gx);
-                            robotLogOut.ShowText("", "Goal Y=" + gy);
-                            robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
-                            robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
-                            robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
-                            robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
-                            robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
-                            robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
-                            robotLogOut.ShowText("", "REACHED GOAL");
-                            return true;
+                                robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
+                                robotLogOut.ShowText("", "Goal X=" + gx);
+                                robotLogOut.ShowText("", "Goal Y=" + gy);
+                                robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
+                                robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
+                                robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
+                                robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
+                                robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
+                                robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
+                                robotLogOut.ShowText("", "REACHED GOAL");
+                                return true;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    //&& Math.Abs(properties.pose.VCtrlx) <= 0.01 && Math.Abs(properties.pose.VCtrlw) <= 0.01
+                    else
+                    {
+                        //&& Math.Abs(properties.pose.VCtrlx) <= 0.01 && Math.Abs(properties.pose.VCtrlw) <= 0.01
 
 
                         if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0.0 && _currentgoal_Ey >= 0.0)
@@ -598,22 +598,25 @@ namespace SeldatMRMS.Management.RobotManagent
                                 properties.pose.VCtrlx = 0;
                                 properties.pose.VCtrly = 0;
                                 properties.pose.VCtrlw = 0;
-                            robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
-                            robotLogOut.ShowText("", "Goal X=" + gx);
-                            robotLogOut.ShowText("", "Goal Y=" + gy);
-                            robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
-                            robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
-                            robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
-                            robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
-                            robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
-                            robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
-                            robotLogOut.ShowText("", "REACHED GOAL");
-                            return true;
+                                robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
+                                robotLogOut.ShowText("", "Goal X=" + gx);
+                                robotLogOut.ShowText("", "Goal Y=" + gy);
+                                robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
+                                robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
+                                robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
+                                robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
+                                robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
+                                robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
+                                robotLogOut.ShowText("", "REACHED GOAL");
+                                return true;
                             }
                         }
+                    }
+                }
+                else {
+                    /*Them phan xu ly khi co toa do tryen vao*/
                 }
             }
-
             return false;
         }
         //public bool SendCmdAreaPallet (String cmd) {

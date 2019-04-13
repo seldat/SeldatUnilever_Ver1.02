@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 
 namespace SeldatUnilever_Ver1._02
 {
@@ -41,16 +42,19 @@ namespace SeldatUnilever_Ver1._02
         private void CmdPalletDown_Click(object sender, RoutedEventArgs e)
         {
             //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3204);
+            rms.RobotUnityRegistedList.ElementAt(0).Value.SendCmdLineDetectionCtrl(RequestCommandLineDetect.REQUEST_LINEDETECT_PALLETUP);
         }
 
         private void CmdBackFrontLine_Click(object sender, RoutedEventArgs e)
         {
             //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3213);
+            rms.RobotUnityRegistedList.ElementAt(0).Value.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
         }
 
         private void CmdBatLevel_Click(object sender, RoutedEventArgs e)
         {
-            //rms.RobotUnityRegistedList.ElementAt(0).Value.BatteryPublish(float.Parse(txtBat.Text));
+            //rms.RobotUnityRegistedList.ElementAt(0).Value.BatteryPublish("ngocchau");
+            rms.RobotUnityRegistedList.ElementAt(0).Value.SendCmdAreaPallet("anchau");
         }
 
         private void CmdError_Click(object sender, RoutedEventArgs e)

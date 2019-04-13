@@ -279,7 +279,7 @@ namespace SeldatMRMS.Management.RobotManagent
             int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler,100);
             paramsRosSocket.publication_ctrlrobotdriving = this.Advertise ("/ctrlRobotDriving", "std_msgs/Int32");
             //int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler,100);
-            paramsRosSocket.publication_robotnavigation = this.Advertise ("/robot_navigation", "geometry_msgs/PoseStamped");
+            //paramsRosSocket.publication_robotnavigation = this.Advertise ("/robot_navigation", "geometry_msgs/PoseStamped");
             paramsRosSocket.publication_checkAliveTimeOut = this.Advertise ("/checkAliveTimeOut", "std_msgs/Int32");
             //paramsRosSocket.publication_linedetectionctrl = this.Advertise ("/linedetectionctrl", "std_msgs/Int32");
             //paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet", "std_msgs/Int32");
@@ -462,43 +462,43 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             properties = proR;
         }
-        double gx;
-        double gy;
-        public bool SendPoseStamped (Pose pose) {
+        protected double gx;
+        protected double gy;
+        //public bool SendPoseStamped (Pose pose) {
 
-            try
-            {
-                if (pose != null)
-                {
-                    GeometryPoseStamped data = new GeometryPoseStamped();
-                    data.header.frame_id = "map";
-                    data.pose.position.x = (float)pose.Position.X;
-                    data.pose.position.y = (float)pose.Position.Y;
-                    data.pose.position.z = 0;
-                    double theta = pose.AngleW;
-                    data.pose.orientation.z = (float)Math.Sin(theta / 2);
-                    data.pose.orientation.w = (float)Math.Cos(theta / 2);
+        //    try
+        //    {
+        //        if (pose != null)
+        //        {
+        //            GeometryPoseStamped data = new GeometryPoseStamped();
+        //            data.header.frame_id = "map";
+        //            data.pose.position.x = (float)pose.Position.X;
+        //            data.pose.position.y = (float)pose.Position.Y;
+        //            data.pose.position.z = 0;
+        //            double theta = pose.AngleW;
+        //            data.pose.orientation.z = (float)Math.Sin(theta / 2);
+        //            data.pose.orientation.w = (float)Math.Cos(theta / 2);
 
-                    this.Publish(paramsRosSocket.publication_robotnavigation, data);
-                    robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
-                    // lưu vị trí đích đến
-                    gx = data.pose.position.x;
-                    gy = data.pose.position.y;
+        //            this.Publish(paramsRosSocket.publication_robotnavigation, data);
+        //            robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
+        //            // lưu vị trí đích đến
+        //            gx = data.pose.position.x;
+        //            gy = data.pose.position.y;
 
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("Without Data SendPoseStamped");
-                    return false;
-                }
-            }
-            catch
-            {
-                Console.WriteLine("Robot Control Error SendPoseStamped");
-                return false;
-            }
-        }
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("Without Data SendPoseStamped");
+        //            return false;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        Console.WriteLine("Robot Control Error SendPoseStamped");
+        //        return false;
+        //    }
+        //}
         public bool SetSpeed (RobotSpeedLevel robotspeed) {
 
             try
@@ -548,74 +548,78 @@ namespace SeldatMRMS.Management.RobotManagent
         //    }
         //}
         int countGoal = 0;
-        public bool ReachedGoal(Pose point = null)
+        public bool ReachedGoal(Pose gPose = null)
         {
+            double gxx = 0;
+            double gyy = 0;
             if (countGoal ++ > 200)
             {
                 countGoal = 0;
-                if (point == null)
-                {
-                    double _currentgoal_Ex = Math.Abs(properties.pose.Position.X - gx);
-                    double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y - gy);
-                    /* */
-                    double gxx = Math.Abs(gx);
-                    double gyy = Math.Abs(gy);
-                    if (gxx >= 7.0 && gxx <= 8.65 && gyy >= 9.8 && gyy <= 11.0) // truong hop dat biet
-                    {
-                        //robotLogOut.ShowText("", "Truong hop dat biet");
 
-                        // if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
-                        if (_currentgoal_Ex <= 2.0 && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
-                        {
-                            if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
-                            {
-                                properties.pose.VCtrlx = 0;
-                                properties.pose.VCtrly = 0;
-                                properties.pose.VCtrlw = 0;
-                                robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
-                                robotLogOut.ShowText("", "Goal X=" + gx);
-                                robotLogOut.ShowText("", "Goal Y=" + gy);
-                                robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
-                                robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
-                                robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
-                                robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
-                                robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
-                                robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
-                                robotLogOut.ShowText("", "REACHED GOAL");
-                                return true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //&& Math.Abs(properties.pose.VCtrlx) <= 0.01 && Math.Abs(properties.pose.VCtrlw) <= 0.01
-
-
-                        if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0.0 && _currentgoal_Ey >= 0.0)
-                        {
-                            if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
-                            {
-                                properties.pose.VCtrlx = 0;
-                                properties.pose.VCtrly = 0;
-                                properties.pose.VCtrlw = 0;
-                                robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
-                                robotLogOut.ShowText("", "Goal X=" + gx);
-                                robotLogOut.ShowText("", "Goal Y=" + gy);
-                                robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
-                                robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
-                                robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
-                                robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
-                                robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
-                                robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
-                                robotLogOut.ShowText("", "REACHED GOAL");
-                                return true;
-                            }
-                        }
-                    }
+                double _currentgoal_Ex = Math.Abs(properties.pose.Position.X - gx);
+                double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y - gy);
+                /* */
+                if(gPose != null) {
+                    gxx = Math.Abs(gPose.Position.X);
+                    gyy = Math.Abs(gPose.Position.Y);
                 }
                 else {
-                    /*Them phan xu ly khi co toa do tryen vao*/
+                    gxx = Math.Abs(gx);
+                    gyy = Math.Abs(gy);
                 }
+
+                //if (gxx >= 7.0 && gxx <= 8.65 && gyy >= 9.8 && gyy <= 11.0) // truong hop dat biet
+                //{
+                //    //robotLogOut.ShowText("", "Truong hop dat biet");
+
+                //    // if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                //    if (_currentgoal_Ex <= 2.0 && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                //    {
+                //        if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
+                //        {
+                //            properties.pose.VCtrlx = 0;
+                //            properties.pose.VCtrly = 0;
+                //            properties.pose.VCtrlw = 0;
+                //            robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
+                //            robotLogOut.ShowText("", "Goal X=" + gx);
+                //            robotLogOut.ShowText("", "Goal Y=" + gy);
+                //            robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
+                //            robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
+                //            robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
+                //            robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
+                //            robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
+                //            robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
+                //            robotLogOut.ShowText("", "REACHED GOAL");
+                //            return true;
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                    //&& Math.Abs(properties.pose.VCtrlx) <= 0.01 && Math.Abs(properties.pose.VCtrlw) <= 0.01
+
+
+                if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0.0 && _currentgoal_Ey >= 0.0)
+                {
+                    if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
+                    {
+                        properties.pose.VCtrlx = 0;
+                        properties.pose.VCtrly = 0;
+                        properties.pose.VCtrlw = 0;
+                        robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
+                        robotLogOut.ShowText("", "Goal X=" + gx);
+                        robotLogOut.ShowText("", "Goal Y=" + gy);
+                        robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
+                        robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
+                        robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
+                        robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
+                        robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
+                        robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
+                        robotLogOut.ShowText("", "REACHED GOAL");
+                        return true;
+                    }
+                }
+                //}
             }
             return false;
         }

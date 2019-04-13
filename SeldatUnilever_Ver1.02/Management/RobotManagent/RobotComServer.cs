@@ -29,7 +29,8 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         private enum str {
             TYPE_STR_LINEDETECTIONCTRL = 1,
             TYPE_STR_POSPALLET,
-            TYPE_STR_CMDAREAPALLET
+            TYPE_STR_CMDAREAPALLET,
+            TYPE_STR_SET_GOAL
         }
 
         private enum rts {
@@ -42,6 +43,17 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             public int pubServerSendToRb;
             public int pubServerResToRb;
         }
+        private class PCheckIn
+        {
+            public PCheckIn(bool fNewPCI = false, Pose pointCheckInConfirm = null) {
+                this.fNewPCI = fNewPCI;
+                this.pointCheckInConfirm = pointCheckInConfirm;
+            }
+            public bool fNewPCI;
+            public Pose pointCheckInConfirm;
+        }
+
+        PCheckIn pCI;
 
         private PubTopic serverPub;
         private Int32 preTypeSend;
@@ -49,17 +61,22 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         private const UInt32 TIME_OUT_WAT_RESPONSE = 5000;
         private const UInt32 NUM_TRY_SEND_TO_RB = 1000;
         private UInt32 numResendData;
-        private Pose pointCheckInConfirm;
+
+
 
         public RobotComServer() {
             this.waitRes = false;
             this.serverPub = new PubTopic();
             this.preTypeSend = 0;
             this.numResendData = 0;
+            this.pCI = new PCheckIn();
         }
 
+        public bool checkNewPci() {
+            return pCI.fNewPCI;
+        }
         public Pose getPointCheckInConfirm() {
-            return pointCheckInConfirm;   
+            return pCI.pointCheckInConfirm;   
         }
 
         private void InitTopic() {
@@ -102,6 +119,56 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             {
                 Console.WriteLine("ServerResToRb fail");
             }
+        }
+
+        public bool SendPoseStamped(Pose pose)
+        {
+            bool ret = false;
+            try
+            {
+                if (pose != null)
+                {
+                    JStructDataString dt = new JStructDataString();
+
+                    dt.TypeData = (Int32)str.TYPE_STR_SET_GOAL;
+                    GeometryPoseStamped data = new GeometryPoseStamped();
+                    data.header.frame_id = "map";
+                    data.pose.position.x = (float)pose.Position.X;
+                    data.pose.position.y = (float)pose.Position.Y;
+                    data.pose.position.z = 0;
+                    double theta = pose.AngleW;
+                    data.pose.orientation.z = (float)Math.Sin(theta / 2);
+                    data.pose.orientation.w = (float)Math.Cos(theta / 2);
+
+                    robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
+                    dt.Data = JsonConvert.SerializeObject(data).ToString();
+                    Console.WriteLine(dt.Data);
+                    preTypeSend = dt.TypeData;
+
+                    String jData = JsonConvert.SerializeObject(dt);
+
+                    ret = this.SendToRb(jData);
+
+
+                    // lưu vị trí đích đến
+                    gx = data.pose.position.x;
+                    gy = data.pose.position.y;
+
+                    this.pCI.fNewPCI = false;
+                    ret = true;
+                }
+                else
+                {
+                    Console.WriteLine("Without Data SendPoseStamped");
+                    ret = false;
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Robot Control Error SendPoseStamped");
+                ret = false;
+            }
+            return ret;
         }
 
         public bool SendCmdLineDetectionCtrl(RequestCommandLineDetect cmd)
@@ -204,7 +271,8 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                     case rts.TYPE_RTS_POSE_CHECKIN:
                         double x = (double)jRet["Data"]["x"];
                         double y = (double)jRet["Data"]["y"];
-                        this.pointCheckInConfirm = new Pose(x, y, 0);
+                        this.pCI.pointCheckInConfirm = new Pose(x, y, 0);
+                        this.pCI.fNewPCI = true;
                         this.ResStatus((Int32)rts.TYPE_RTS_POSE_CHECKIN, (Int32)Comres.RES_SUCCESS);
                         break;
                     case rts.TYPE_RTS_DISPLAY_INFO:

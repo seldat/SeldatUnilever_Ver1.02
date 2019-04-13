@@ -37,6 +37,7 @@ namespace SeldatUnilever_Ver1._02
         private void CmdPalletUp_Click(object sender, RoutedEventArgs e)
         {
             //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3203);
+            rms.RobotUnityRegistedList.ElementAt(0).Value.SendPoseStamped(new Pose(1.1, 1.02, 0.6));
         }
 
         private void CmdPalletDown_Click(object sender, RoutedEventArgs e)

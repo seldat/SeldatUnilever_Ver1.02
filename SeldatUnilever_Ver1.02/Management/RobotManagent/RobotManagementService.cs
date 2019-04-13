@@ -196,7 +196,7 @@ namespace SeldatMRMS.Management.RobotManagent
             trafficManagementService.RegistryRobotList(RobotUnityRegistedList);
 
             //
-            r1.Start(prop1.Url);
+            //r1.Start(prop1.Url);
             //  r2.Start(prop2.Url);
             //  r3.Start(prop3.Url);
 

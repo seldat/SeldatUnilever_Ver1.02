@@ -32,6 +32,16 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             ZONE_RDSTR=200
             
         }
+        public enum TypeZone
+        {
+
+            HIGHWAY,
+            BUFFER,
+            ROAD,
+            READY,
+            OPZ // Operation Zone
+
+        }
         public ListCollectionView Grouped_PropertiesTrafficZoneList { get; private set; }
         public List<ZoneRegister> PropertiesTrafficZoneList;
         public ListCollectionView Grouped_PropertiesRiskZoneList { get; private set; }
@@ -75,8 +85,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
         {
             private String _NameId;
             public String NameId { get => _NameId; set { _NameId = value; RaisePropertyChanged("NameId"); } }
-            private String _TypeZone;
-            public String TypeZone { get => _TypeZone; set { _TypeZone = value; RaisePropertyChanged("TypeZone"); } }
+            private TypeZone _Type;
+            public TypeZone Type { get => _Type; set { _Type = value; RaisePropertyChanged("Type"); } }
             private int _Index;
             public int Index { get => _Index; set { _Index = value; RaisePropertyChanged("Index"); } }
             private Point _Point1;
@@ -93,6 +103,22 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             public String Detail { get => _Detail; set { _Detail = value; RaisePropertyChanged("Detail"); } }
             private String _ZonesCheckGoInside="";
             public String ZonesCheckGoInside { get => _ZonesCheckGoInside; set { _ZonesCheckGoInside = value; RaisePropertyChanged("ZonesCheckGoInside"); } }
+            private double _Radius_S; // small
+            public double Radius_S { get => _Radius_S; set { _Radius_S = value; RaisePropertyChanged("Radius_S"); } }
+            private double _Radius_B; // blue
+            public double Radius_B { get => _Radius_B; set { _Radius_B = value; RaisePropertyChanged("Radius_B"); } }
+            private double _Radius_Y; // yellow
+            public double Radius_Y { get => _Radius_Y; set { _Radius_Y= value; RaisePropertyChanged("Radius_Y"); } }
+            private double _L1;
+            public double L1 { get => _L1; set { _L1 = value; RaisePropertyChanged("L1"); } }
+            private double _L2;
+            public double L2 { get => _L2; set { _L2 = value; RaisePropertyChanged("L2"); } }
+            private double _WS;
+            public double WS { get => _WS; set { _WS = value; RaisePropertyChanged("WS"); } }
+            private double _distance;
+            public double distance { get => _distance; set { _distance = value; RaisePropertyChanged("Distance"); } }
+            private double _Speed;
+            public double Speed { get => _Speed; set { _Speed = value; RaisePropertyChanged("Speed"); } }
             public Point[] GetZone()
             {
                 return new Point[4] { Point1, Point2, Point3, Point4 };

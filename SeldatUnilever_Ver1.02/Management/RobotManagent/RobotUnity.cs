@@ -531,6 +531,7 @@ namespace SeldatMRMS.Management.RobotManagent {
                          headerPoint2.RenderTransform = new TranslateTransform(MiddleHeaderCv2().X - 2.5, MiddleHeaderCv2().Y - 1);
                          headerPoint3.RenderTransform = new TranslateTransform(MiddleHeaderCv3().X - 2.5, MiddleHeaderCv3().Y - 1);
 
+
                          PathGeometry pgeometry = new PathGeometry();
                          PathFigure pF = new PathFigure();
                          pF.StartPoint = TopHeaderCv();

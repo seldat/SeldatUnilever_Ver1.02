@@ -14,6 +14,15 @@ namespace SeldatMRMS.Management
 {
     public class TrafficRobotUnity : RobotUnityService
     {
+        public enum RobotBahaviorAtAnyPlace
+        {
+            ROBOT_PLACE_ROAD,
+            ROBOT_PLACE_HIGHWAY,
+            ROBOT_PLACE_BUFFER,
+            ROBOT_PLACE_HIGHWAY_DETECTLINE,
+            ROBOT_PLACE_HIGHWAY_READY,
+            ROBOT_PLACE_IDLE
+        }
         public class PriorityLevel
         {
             public PriorityLevel()
@@ -97,6 +106,8 @@ namespace SeldatMRMS.Management
         private List<RobotUnity> RobotUnitylist;
         public bool onFlagSupervisorTraffic;
         public bool onFlagSelfTraffic;
+        public bool onFlagSafeYellowcircle = false;
+        public bool onFlagDetectLine = false;
         private Dictionary<String, RobotUnity> RobotUnityRiskList = new Dictionary<string, RobotUnity>();
         private TrafficBehaviorState TrafficBehaviorStateTracking;
         private TrafficManagementService trafficManagementService;
@@ -148,9 +159,9 @@ namespace SeldatMRMS.Management
                     // bool onTouch= FindHeaderIntersectsFullRiskArea(this.TopHeader()) | FindHeaderIntersectsFullRiskArea(this.MiddleHeader()) | FindHeaderIntersectsFullRiskArea(this.BottomHeader());
                     // bool onTouch = r.FindHeaderIntersectsFullRiskAreaCv(thCV) | r.FindHeaderIntersectsFullRiskAreaCv(mdCV) | r.FindHeaderIntersectsFullRiskAreaCv(bhCV);
 
-                    bool onTouch0 = r.FindHeaderTouchCircleArea(mdCV0,2*DfWSCv);
-                    bool onTouch1 = r.FindHeaderTouchCircleArea(mdCV1, 2 * DfWSCv);
-                    bool onTouch2 = r.FindHeaderTouchCircleArea(mdCV2, 2 * DfWSCv);
+                    bool onTouch0 = r.FindHeaderInsideCircleArea(mdCV0,2*DfWSCv);
+                    bool onTouch1 = r.FindHeaderInsideCircleArea(mdCV1, 2 * DfWSCv);
+                    bool onTouch2 = r.FindHeaderInsideCircleArea(mdCV2, 2 * DfWSCv);
                     if (onTouch0 || onTouch1 || onTouch2)
                     {
                         //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");
@@ -493,7 +504,104 @@ namespace SeldatMRMS.Management
             // check có robot đi qua và yêu cầu robot trong đường lớn dừng
             return true;
         }
+        // kiểm tra vong tròn an toàn quyết định điều khiển giao thông theo nguyên tắt
+        // + vòng tròn nhỏ an toàn được mở on trong trường hợp robot nằm trên đường chính
+        // + vòng tròn xanh tượng trưng xin vào đường chính từ đường nhỏ giao với đường chính, nếu có robot nào xuất hiện trong vòng tròn nhỏ robot vẽ vòng tròn xnh phải đứng lại ưu tiên cho robot khác làm việc
+        // + vòng tròn vàng mức ưu tiên cai nhất, nó xuất hiện và được vẻ ra khi robot trong khu vực đường lớn giao và đang làm nhiệm vụ dò line. robot nào xu61t hiện trong vòng tròn này buột phải ngưng mọi hoạt động
+
+        public void RobotBehavior()
+        {
+            RobotBahaviorAtAnyPlace robotBahaviorAtAnyPlace= RobotBahaviorAtAnyPlace.ROBOT_PLACE_IDLE;
+            // check chính nó có nằm  trong vòng tròn vàng không
+            if (CheckYellowCircle())
+            {
+                
+            }
+            else
+            {
+                String nameZone = trafficManagementService.DetermineArea(properties.pose.Position);
+                if(nameZone.Equals("HIGHWAY") && onFlagDetectLine==false)
+                {
+                    robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY;
+                }
+                if (nameZone.Equals("HIGHWAY") && onFlagDetectLine == true)
+                {
+                   robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE; ;
+                }
+                if (nameZone.Equals("ROAD"))
+                {
+                    robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD;
+                }
+                if (nameZone.Equals("BUFFER"))
+                {
+                    robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER;
+                }
+            }
+           
+            switch(robotBahaviorAtAnyPlace)
+            {
+                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY:
+                    SetSafeYellowcircle(false);
+                    // mở vòng tròn nhỏ vá kiểm tra va chạm
+                    CheckIntersection();
+                    break;
+                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD:
+                    // kiem tra vong tròn xanh
+                    break;
+                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE:
+                    SetSafeYellowcircle(true);
 
 
+                    break;
+                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER:
+                    // tắt vòng tròn nhỏ
+                    break;
+            }
+        }
+        public void CheckBlueCircle()
+        {
+            foreach(RobotUnity r in RobotUnitylist)
+            {
+                if (prioritLevel.IndexOnMainRoad== r.prioritLevel.IndexOnMainRoad)
+                {
+                    // va chạm vòng tròn an toàn nhỏ ra quyết định ngưng robot
+                    CheckIntersection();
+                }
+                else
+                {
+                    // kiểm tra có robot nào nằm trong vòng tròn an toàn này kg?
+                    if (FindHeaderInsideCircleArea(r.MiddleHeaderCv(), new Point(0, 0), 10))
+                    {
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                        break;
+                    }
+                }
+            }
+        }
+        public bool CheckYellowCircle()
+        {
+            bool flagInsideYellowCircle = false;
+            foreach (RobotUnity r in RobotUnitylist)
+            {
+                // kiểm tra có robot nó có nằm trong vòng tròn vàng nào không nếu có ngưng
+                if (onFlagSafeYellowcircle)
+                {
+                    if (r.FindHeaderInsideCircleArea(MiddleHeaderCv(), new Point(0, 0), 10))
+                    {
+                        flagInsideYellowCircle = true;
+                        break;
+                    }
+                }
+            }
+            return flagInsideYellowCircle;
+        }
+        public void SetSafeYellowcircle(bool flagonoff)
+        {
+            onFlagSafeYellowcircle = flagonoff;
+        }
+        public void SetStatusDetectLine(bool flagonoff)
+        {
+            onFlagDetectLine = flagonoff;
+        }
     }
 }

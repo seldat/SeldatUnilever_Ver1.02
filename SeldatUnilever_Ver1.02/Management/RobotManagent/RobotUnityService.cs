@@ -304,10 +304,19 @@ namespace SeldatMRMS.Management.RobotManagent
         {
             return ExtensionService.IsInPolygon(RiskAreaRightSideCv(), p);
         }
-        public bool FindHeaderTouchCircleArea(Point pheader,double r)
+        public bool FindHeaderInsideCircleArea(Point pheader,double r)
         {
             Point ccPoint = Global_Object.CoorCanvas(properties.pose.Position);
             double leftSideEq = (pheader.X - ccPoint.X) * (pheader.X - ccPoint.X) + (pheader.Y - ccPoint.Y) * (pheader.Y - ccPoint.Y);
+            if (Math.Sqrt(leftSideEq) <= r)
+                return true;
+            else
+                return false;
+        }
+        public bool FindHeaderInsideCircleArea(Point pheader,Point center, double r)
+        {
+            Point ccPoint = Global_Object.CoorCanvas(properties.pose.Position);
+            double leftSideEq = (pheader.X - center.X) * (pheader.X - center.X) + (pheader.Y - center.Y) * (pheader.Y - center.Y);
             if (Math.Sqrt(leftSideEq) <= r)
                 return true;
             else

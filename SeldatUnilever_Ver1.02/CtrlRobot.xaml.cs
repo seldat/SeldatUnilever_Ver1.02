@@ -49,7 +49,7 @@ namespace SeldatUnilever_Ver1._02
         private void CmdBackFrontLine_Click(object sender, RoutedEventArgs e)
         {
             //rms.RobotUnityRegistedList.ElementAt(0).Value.FinishedStatesPublish(3213);
-            rms.RobotUnityRegistedList.ElementAt(0).Value.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
+            rms.RobotUnityRegistedList.ElementAt(0).Value.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_RIGHT);
         }
 
         private void CmdBatLevel_Click(object sender, RoutedEventArgs e)

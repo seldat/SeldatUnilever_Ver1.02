@@ -519,20 +519,20 @@ namespace SeldatMRMS.Management
             }
             else
             {
-                String nameZone = trafficManagementService.DetermineArea(properties.pose.Position);
-                if(nameZone.Equals("HIGHWAY") && onFlagDetectLine==false)
+                TypeZone _type = trafficManagementService.GetTypeZone(properties.pose.Position);
+                if(_type.Equals("HIGHWAY") && onFlagDetectLine==false)
                 {
                     robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY;
                 }
-                if (nameZone.Equals("HIGHWAY") && onFlagDetectLine == true)
+                if (_type.Equals("HIGHWAY") && onFlagDetectLine == true)
                 {
                    robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE; ;
                 }
-                if (nameZone.Equals("ROAD"))
+                if (_type.Equals("ROAD"))
                 {
                     robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD;
                 }
-                if (nameZone.Equals("BUFFER"))
+                if (_type.Equals("BUFFER"))
                 {
                     robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER;
                 }

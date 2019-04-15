@@ -34,12 +34,12 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
         }
         public enum TypeZone
         {
-
+            IDLE,
             HIGHWAY,
             BUFFER,
             ROAD,
             READY,
-            OPZ // Operation Zone
+            OPZ, // Operation Zone
 
         }
         public ListCollectionView Grouped_PropertiesTrafficZoneList { get; private set; }
@@ -382,6 +382,20 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
                 }
             }
             return zoneName;
+        }
+        public TypeZone GetTypeZone(Point position)
+        {
+            TypeZone _type=TypeZone.IDLE;
+            foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
+            {
+
+                if (ExtensionService.IsInPolygon(r.GetZone(), position))
+                {
+                    _type= r.Type;
+                    break;
+                }
+            }
+            return _type;
         }
         public TrafficRobotUnity.BrDirection GetDirDirection_Zone(Point p)
         {

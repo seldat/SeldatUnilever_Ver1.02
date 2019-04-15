@@ -44,6 +44,12 @@
                                         Binding="{Binding Path=Point4, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="DIR-OUT" 
                                         Binding="{Binding Path=Dir_Out, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="Radius_S" 
+                                        Binding="{Binding Path=Radius_S, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="Radius_B" 
+                                        Binding="{Binding Path=Radius_B, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="Radius_Y" 
+                                        Binding="{Binding Path=Radius_Y, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="L1" 
                                         Binding="{Binding Path=L1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="L2" 
@@ -56,9 +62,6 @@
                                         Binding="{Binding Path=Speed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Detail" 
                                         Binding="{Binding Path=Detail, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <DataGridTextColumn Width="*" Header=" ZonesCheckGoInside" 
-                                        Binding="{Binding Path= ZonesCheckGoInside, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
                     <DataGridTemplateColumn Header="Fixed" x:Name="btnFixed">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

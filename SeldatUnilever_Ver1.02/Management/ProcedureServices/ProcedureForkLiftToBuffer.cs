@@ -143,7 +143,7 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_GOTO_CHECKIN_GATE: //gui toa do di den khu vuc checkin cong
                         if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                         {
-                            if (false == Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position))
+                            if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
                             {
                                 if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_LEFT))
                                 {

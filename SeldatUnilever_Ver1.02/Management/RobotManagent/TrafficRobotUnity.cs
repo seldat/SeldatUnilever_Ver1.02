@@ -509,14 +509,14 @@ namespace SeldatMRMS.Management
         public bool CheckInZoneBehavior(Point anyPoint)
         {
             if (anyPoint == null)
-                return false;
+                return true; // un available
             if (FindRobotInWorkingZone(anyPoint))
-                return false;
+                return true;
             else
             {
                 String nameZone = trafficManagementService.DetermineArea(anyPoint);
                 SetWorkingZone(nameZone);
-                return true;
+                return false; // available
             }
         }
         public bool CheckRobotWorkinginReady()

@@ -208,8 +208,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
-                       // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if ( robot.ReachedGoal())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if ( robot.ReachedGoal())
                         {
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -234,8 +234,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE:
-                        //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if ( robot.ReachedGoal())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        //if ( robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -344,18 +344,18 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
-                                                                             // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if (rb.checkNewPci())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        //if (rb.checkNewPci())
+                        //{
+                        //    if (robot.ReachedGoal(rb.getPointCheckInConfirm()))
                         {
-                            if (robot.ReachedGoal(rb.getPointCheckInConfirm()))
-                            {
-                                robot.SetTrafficAtCheckIn(true);
-                                resCmd = ResponseCommand.RESPONSE_NONE;
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY;
-                                robot.ShowText("FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY");
-                            }
+                            robot.SetTrafficAtCheckIn(true);
+                            resCmd = ResponseCommand.RESPONSE_NONE;
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY;
+                            robot.ShowText("FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY");
                         }
+                        //}
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try
@@ -382,9 +382,9 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         try
                         {
-                          //  if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                                if (robot.ReachedGoal())
-                                {
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                                //if (robot.ReachedGoal())
+                            {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 if (rb.SendCmdAreaPallet(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true)))
                                 {
@@ -467,8 +467,8 @@ namespace SeldatMRMS
                     case ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
                         try
                         {
-                            //  if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if (robot.ReachedGoal())
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                                //if (robot.ReachedGoal())
                             {
                                 robot.TurnOnCtrlSelfTraffic(false);
                                 if (rb.SendCmdAreaPallet(flToMachineInfo.infoPallet))

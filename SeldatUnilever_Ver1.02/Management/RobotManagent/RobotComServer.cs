@@ -1,4 +1,5 @@
-﻿using SeldatMRMS.Management.RobotManagent;
+﻿//#define USE_POSE_CONFIRM
+using SeldatMRMS.Management.RobotManagent;
 using System;
 using SeldatMRMS.Communication;
 using Newtonsoft.Json;
@@ -43,6 +44,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             public int pubServerSendToRb;
             public int pubServerResToRb;
         }
+#if USE_POSE_CONFIRM
         private class PCheckIn
         {
             public PCheckIn(bool fNewPCI = false, Pose pointCheckInConfirm = null) {
@@ -54,7 +56,8 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         }
 
         PCheckIn pCI;
-
+#endif
+        public event Action<int> FinishStatesCallBack;
         private PubTopic serverPub;
         private Int32 preTypeSend;
         private bool waitRes;
@@ -69,16 +72,18 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             this.serverPub = new PubTopic();
             this.preTypeSend = 0;
             this.numResendData = 0;
+#if USE_POSE_CONFIRM
             this.pCI = new PCheckIn();
+#endif
         }
-
+#if USE_POSE_CONFIRM
         public bool checkNewPci() {
             return pCI.fNewPCI;
         }
         public Pose getPointCheckInConfirm() {
             return pCI.pointCheckInConfirm;   
         }
-
+#endif
         private void InitTopic() {
             serverPub.pubServerSendToRb = this.Advertise("/ServerSendToRb", "std_msgs/String");
             serverPub.pubServerResToRb = this.Advertise("/ServerResToRb", "std_msgs/String");
@@ -153,8 +158,9 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                     // lưu vị trí đích đến
                     gx = data.pose.position.x;
                     gy = data.pose.position.y;
-
+#if USE_POSE_CONFIRM
                     this.pCI.fNewPCI = false;
+#endif
                     ret = true;
                 }
                 else
@@ -269,10 +275,12 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
                         this.ResStatus((Int32)rts.TYPE_RTS_FINISH_STATE, (Int32)Comres.RES_SUCCESS);
                         break;
                     case rts.TYPE_RTS_POSE_CHECKIN:
+#if USE_POSE_CONFIRM
                         double x = (double)jRet["Data"]["x"];
                         double y = (double)jRet["Data"]["y"];
                         this.pCI.pointCheckInConfirm = new Pose(x, y, 0);
                         this.pCI.fNewPCI = true;
+#endif
                         this.ResStatus((Int32)rts.TYPE_RTS_POSE_CHECKIN, (Int32)Comres.RES_SUCCESS);
                         break;
                     case rts.TYPE_RTS_DISPLAY_INFO:
@@ -314,6 +322,20 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             catch (System.Exception e)
             {
                 Console.WriteLine(e);
+            }
+        }
+
+        private void FinishedStatesHandler(Int32 message)
+        {
+            try
+            {
+                Console.WriteLine("FinishedStatesHandler :{0}", message);
+                robotLogOut.ShowText(this.properties.Label, "Finished State [" + message + "]");
+                FinishStatesCallBack(message);
+            }
+            catch
+            {
+                Console.WriteLine(" Error FinishedStatesHandler");
             }
         }
 

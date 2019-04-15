@@ -173,19 +173,19 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
-                        if (rb.checkNewPci())
+                        //if (rb.checkNewPci())
+                        //{
+                        //    bool onComePoint = robot.ReachedGoal(rb.getPointCheckInConfirm());
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        //if (onComePoint)
                         {
-                            bool onComePoint = robot.ReachedGoal(rb.getPointCheckInConfirm());
-                            // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && onComePoint==true )
-                            if (onComePoint)
-                            {
-                                robot.SetTrafficAtCheckIn(true);
-                                resCmd = ResponseCommand.RESPONSE_NONE;
-                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                                StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY;
-                                robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
-                            }
+                            robot.SetTrafficAtCheckIn(true);
+                            resCmd = ResponseCommand.RESPONSE_NONE;
+                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                            StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY;
+                            robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
                         }
+                        //}
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try
@@ -210,9 +210,9 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         try
                         {
-                            bool onComePoint2 = robot.ReachedGoal();
-                            // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if (onComePoint2)
+                            //bool onComePoint2 = robot.ReachedGoal();
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (onComePoint2)
                             {
                                 robot.TurnOnCtrlSelfTraffic(false);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
@@ -304,9 +304,9 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET:
                         try
                         {
-                            bool onComePoint3 = robot.ReachedGoal();
-                            //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if (onComePoint3)
+                            //bool onComePoint3 = robot.ReachedGoal();
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (onComePoint3)
                             {
                                 robot.TurnOnCtrlSelfTraffic(false);
                                 if (rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_DOWN)))

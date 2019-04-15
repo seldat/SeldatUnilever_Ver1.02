@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿//#define USE_POSE_CONFIRM
+using Newtonsoft.Json;
 using SeldatMRMS.Communication;
 using SeldatUnilever_Ver1._02.Management.RobotManagent;
 using SelDatUnilever_Ver1._00.Management;
@@ -16,10 +17,10 @@ namespace SeldatMRMS.Management.RobotManagent
 
     public class RobotUnityControl : RosSocket
     {
-        
-        public event Action<int> FinishStatesCallBack;
-        public event Action<LaserErrorCode> AGVLaserErrorCallBack;
-        public event Action<LaserWarningCode> AGVLaserWarningCallBack;
+
+        //public event Action<int> FinishStatesCallBack;
+        //public event Action<LaserErrorCode> AGVLaserErrorCallBack;
+        //public event Action<LaserWarningCode> AGVLaserWarningCallBack;
         public event Action<Pose, Object> PoseHandler;
         public event Action<Object, ConnectionStatus> ConnectionStatusHandler;
         private Timer timerCheckKeepAlive;
@@ -331,17 +332,6 @@ namespace SeldatMRMS.Management.RobotManagent
          
 
         }
-        protected void FinishedStatesHandler (Int32 message) {
-            try
-            {
-                //StandardInt32 standard = (StandardInt32)message;
-                robotLogOut.ShowText(this.properties.Label,"Finished State [" + message + "]");
-                FinishStatesCallBack(message);
-            }
-            catch {
-                Console.WriteLine(" Error FinishedStatesHandler");
-            }
-        }
         private void OdometryCallback(Communication.Message message)
         {
             NavigationOdometry standard = (NavigationOdometry)message;
@@ -547,6 +537,8 @@ namespace SeldatMRMS.Management.RobotManagent
         //        return false;
         //    }
         //}
+
+#if USE_POSE_CONFIRM
         int countGoal = 0;
         public bool ReachedGoal(Pose gPose = null)
         {
@@ -556,17 +548,16 @@ namespace SeldatMRMS.Management.RobotManagent
             {
                 countGoal = 0;
 
-                double _currentgoal_Ex = Math.Abs(properties.pose.Position.X - gx);
-                double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y - gy);
                 /* */
                 if(gPose != null) {
-                    gxx = Math.Abs(gPose.Position.X);
-                    gyy = Math.Abs(gPose.Position.Y);
+                    gx = gPose.Position.X;
+                    gy = gPose.Position.Y;
                 }
-                else {
-                    gxx = Math.Abs(gx);
-                    gyy = Math.Abs(gy);
-                }
+                gxx = Math.Abs(gx);
+                gyy = Math.Abs(gy);
+
+                double _currentgoal_Ex = Math.Abs(properties.pose.Position.X - gx);
+                double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y - gy);
 
                 //if (gxx >= 7.0 && gxx <= 8.65 && gyy >= 9.8 && gyy <= 11.0) // truong hop dat biet
                 //{
@@ -596,7 +587,7 @@ namespace SeldatMRMS.Management.RobotManagent
                 //}
                 //else
                 //{
-                    //&& Math.Abs(properties.pose.VCtrlx) <= 0.01 && Math.Abs(properties.pose.VCtrlw) <= 0.01
+                //&& Math.Abs(properties.pose.VCtrlx) <= 0.01 && Math.Abs(properties.pose.VCtrlw) <= 0.01
 
 
                 if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0.0 && _currentgoal_Ey >= 0.0)
@@ -623,6 +614,7 @@ namespace SeldatMRMS.Management.RobotManagent
             }
             return false;
         }
+#endif
         //public bool SendCmdAreaPallet (String cmd) {
 
    

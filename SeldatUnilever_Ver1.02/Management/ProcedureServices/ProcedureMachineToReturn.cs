@@ -126,8 +126,8 @@ namespace SeldatMRMS
                     case MachineToReturn.MACRET_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
                         try
                         {
-                            //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if (robot.ReachedGoal())
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_UP)))
@@ -198,8 +198,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN: // dang di
-                        //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if (robot.ReachedGoal())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -231,8 +231,8 @@ namespace SeldatMRMS
                     case MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_RETURN: // dang di
                         try
                         {
-                           // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if ( robot.ReachedGoal())
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                                //if ( robot.ReachedGoal())
                             {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
 

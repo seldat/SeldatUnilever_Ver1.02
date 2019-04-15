@@ -129,8 +129,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
-                        // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if (robot.ReachedGoal())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (robot.ReachedGoal())
                         {
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -153,8 +153,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE:
-                        //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if (robot.ReachedGoal())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        //if (robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -241,8 +241,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
                         try
                         {
-                            //  if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if (robot.ReachedGoal())
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (robot.ReachedGoal())
                             {
 
                                 //robot.TurnOnCtrlSelfTraffic(false);

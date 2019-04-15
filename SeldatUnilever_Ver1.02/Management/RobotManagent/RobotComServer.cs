@@ -57,7 +57,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
 
         PCheckIn pCI;
 #endif
-
+        public event Action<int> FinishStatesCallBack;
         private PubTopic serverPub;
         private Int32 preTypeSend;
         private bool waitRes;
@@ -322,6 +322,20 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
             catch (System.Exception e)
             {
                 Console.WriteLine(e);
+            }
+        }
+
+        private void FinishedStatesHandler(Int32 message)
+        {
+            try
+            {
+                Console.WriteLine("FinishedStatesHandler :{0}", message);
+                robotLogOut.ShowText(this.properties.Label, "Finished State [" + message + "]");
+                FinishStatesCallBack(message);
+            }
+            catch
+            {
+                Console.WriteLine(" Error FinishedStatesHandler");
             }
         }
 

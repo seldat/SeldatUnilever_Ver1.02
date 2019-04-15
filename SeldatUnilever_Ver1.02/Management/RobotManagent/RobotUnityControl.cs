@@ -17,8 +17,8 @@ namespace SeldatMRMS.Management.RobotManagent
 
     public class RobotUnityControl : RosSocket
     {
-        
-        public event Action<int> FinishStatesCallBack;
+
+        //public event Action<int> FinishStatesCallBack;
         //public event Action<LaserErrorCode> AGVLaserErrorCallBack;
         //public event Action<LaserWarningCode> AGVLaserWarningCallBack;
         public event Action<Pose, Object> PoseHandler;
@@ -331,17 +331,6 @@ namespace SeldatMRMS.Management.RobotManagent
             }
          
 
-        }
-        protected void FinishedStatesHandler (Int32 message) {
-            try
-            {
-                //StandardInt32 standard = (StandardInt32)message;
-                robotLogOut.ShowText(this.properties.Label,"Finished State [" + message + "]");
-                FinishStatesCallBack(message);
-            }
-            catch {
-                Console.WriteLine(" Error FinishedStatesHandler");
-            }
         }
         private void OdometryCallback(Communication.Message message)
         {

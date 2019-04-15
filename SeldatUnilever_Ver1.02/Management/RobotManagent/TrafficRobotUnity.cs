@@ -417,12 +417,12 @@ namespace SeldatMRMS.Management
                             WSCv = rZR.WS* properties.Scale;
                             DistInterCv = rZR.distance * properties.Scale;
 
-                            Radius_S = rZR.Radius_S;
-                            Radius_B = rZR.Radius_B;
-                            Radius_Y = rZR.Radius_Y;
-                            Center_S = rZR.Center_S;
-                            Center_B = rZR.Center_B;
-                            Center_Y = rZR.Center_Y;
+                            Radius_S = rZR.Radius_S* properties.Scale;
+                            Radius_B = rZR.Radius_B* properties.Scale;
+                            Radius_Y = rZR.Radius_Y* properties.Scale;
+                            Center_S = rZR.Center_S* properties.Scale;
+                            Center_B = rZR.Center_B* properties.Scale;
+                            Center_Y = rZR.Center_Y* properties.Scale;
 
 
                             //UpdateRiskAraParams(rZR.L1, rZR.L2, rZR.WS, rZR.distance);

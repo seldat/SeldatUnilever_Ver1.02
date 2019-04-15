@@ -72,6 +72,9 @@ namespace SeldatMRMS.Management.RobotManagent
             RobotUnity r1 = new RobotUnity();
             r1.Initialize(this.canvas);
             r1.UpdateProperties(prop1);
+
+            r1.Radius_S = 40;
+            
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);

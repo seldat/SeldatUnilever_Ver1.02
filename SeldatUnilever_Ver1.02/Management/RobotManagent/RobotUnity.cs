@@ -553,9 +553,11 @@ namespace SeldatMRMS.Management.RobotManagent {
                          props.rbID.Content = properties.pose.Position.X.ToString("0");
                          props.rbTask.Content = properties.pose.Position.Y.ToString("0");
 
-                         circleArea.Width = 2 * DfWSCv;
-                         circleArea.Height = 2 * DfWSCv;
-                         TranslateTransform tr= new TranslateTransform(cPoint.X - (2* DfWSCv / 2), cPoint.Y - (2* DfWSCv / 2));
+                         circleArea.Width = 2 * Radius_S;
+                         circleArea.Height = 2 * Radius_S;
+
+                         Point cc = CenterOnLineCv(30);
+                         TranslateTransform tr= new TranslateTransform(cc.X - (2* Radius_S / 2), cc.Y - (2* Radius_S / 2));
                          circleArea.RenderTransform = tr;
                
 

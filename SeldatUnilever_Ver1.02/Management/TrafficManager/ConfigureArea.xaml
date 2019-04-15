@@ -58,8 +58,6 @@
                                         Binding="{Binding Path=Center_Y, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="L1" 
                                         Binding="{Binding Path=L1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <DataGridTextColumn Width="*" Header="L1" 
-                                        Binding="{Binding Path=L1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="L2" 
                                         Binding="{Binding Path=L2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="WS" 

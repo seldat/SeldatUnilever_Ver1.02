@@ -51,6 +51,13 @@ namespace SeldatMRMS.Management.RobotManagent
         public double DfWSCv = 50;//60
         public double DfDistInterCv = 40;
 
+        public double Radius_S;
+        public double Radius_B;
+        public double Radius_Y;
+        public double Center_S;
+        public double Center_B;
+        public double Center_Y;
+
         public RobotUnityService()
         {
         }
@@ -303,6 +310,26 @@ namespace SeldatMRMS.Management.RobotManagent
         public bool FindHeaderIntersectsRiskAreaRightSideCv(Point p)
         {
             return ExtensionService.IsInPolygon(RiskAreaRightSideCv(), p);
+        }
+
+        // Tìm vị trí trọng tâm của đường tròn từ 2 điểm. tính từ tâm robot. nếu dc=0 tâm vòng tròn tại tâm robot
+        public virtual Point BottomHeaderCenterCv(double dc)//TopHeaderCv()// 
+        {
+            double AngleW = -properties.pose.AngleW;
+            double x = Global_Object.CoorCanvas(properties.pose.Position).X + Math.Sqrt((Math.Abs(dc) * Math.Abs(dc)) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Cos(AngleW + Math.Atan2(-WSCv / 2, dc));
+            double y = Global_Object.CoorCanvas(properties.pose.Position).Y + Math.Sqrt(Math.Abs(dc) * Math.Abs(dc) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Sin(AngleW + Math.Atan2(-WSCv / 2, dc));
+            return new Point(x, y);
+        }
+        public virtual Point TopHeaderCenterCv(double dc)//BottomHeaderCv()
+        {
+            double AngleW = -properties.pose.AngleW;
+            double x = Global_Object.CoorCanvas(properties.pose.Position).X + Math.Sqrt(Math.Abs(dc) * Math.Abs(dc) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Cos(AngleW + Math.Atan2(WSCv / 2, dc));
+            double y = Global_Object.CoorCanvas(properties.pose.Position).Y + Math.Sqrt(Math.Abs(dc) * Math.Abs(dc) + Math.Abs(WSCv / 2) * Math.Abs(WSCv / 2)) * Math.Sin(AngleW + Math.Atan2(WSCv / 2, dc));
+            return new Point(x, y);
+        }
+        public virtual Point CenterOnLineCv(double dc)//BottomHeaderCv()
+        {
+            return new Point((BottomHeaderCenterCv(dc).X+ TopHeaderCenterCv(dc).X)/2.0, (BottomHeaderCenterCv(dc).Y + TopHeaderCenterCv(dc).Y) / 2.0);
         }
         public bool FindHeaderInsideCircleArea(Point pheader,double r)
         {

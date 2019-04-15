@@ -46,10 +46,18 @@
                                         Binding="{Binding Path=Dir_Out, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Radius_S" 
                                         Binding="{Binding Path=Radius_S, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="Center_S" 
+                                        Binding="{Binding Path=Center_S, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Radius_B" 
                                         Binding="{Binding Path=Radius_B, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="Center_B" 
+                                        Binding="{Binding Path=Center_B, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="Radius_Y" 
                                         Binding="{Binding Path=Radius_Y, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="Center_Y" 
+                                        Binding="{Binding Path=Center_Y, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="L1" 
+                                        Binding="{Binding Path=L1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="L1" 
                                         Binding="{Binding Path=L1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Width="*" Header="L2" 

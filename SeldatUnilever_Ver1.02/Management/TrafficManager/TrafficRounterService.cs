@@ -105,10 +105,16 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             public String ZonesCheckGoInside { get => _ZonesCheckGoInside; set { _ZonesCheckGoInside = value; RaisePropertyChanged("ZonesCheckGoInside"); } }
             private double _Radius_S; // small
             public double Radius_S { get => _Radius_S; set { _Radius_S = value; RaisePropertyChanged("Radius_S"); } }
+            private double _Center_S; // small
+            public double Center_S { get => _Center_S; set { _Center_S = value; RaisePropertyChanged("Center_S"); } }
             private double _Radius_B; // blue
             public double Radius_B { get => _Radius_B; set { _Radius_B = value; RaisePropertyChanged("Radius_B"); } }
+            private double _Center_B; // small
+            public double Center_B { get => _Center_B; set { _Center_B = value; RaisePropertyChanged("Center_B"); } }
             private double _Radius_Y; // yellow
             public double Radius_Y { get => _Radius_Y; set { _Radius_Y= value; RaisePropertyChanged("Radius_Y"); } }
+            private double _Center_Y; // small
+            public double Center_Y { get => _Center_Y; set { _Center_Y = value; RaisePropertyChanged("Center_Y"); } }
             private double _L1;
             public double L1 { get => _L1; set { _L1 = value; RaisePropertyChanged("L1"); } }
             private double _L2;
@@ -307,23 +313,20 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             con.Close();
         }*/
 
-        public RiskZoneRegister FindRiskZone(Point p,IndexZoneDefaultFind index,bool ignore)// sử dụng với chỉ số mặt định sẽ được bỏ qua
+        public ZoneRegister Find(Point p,double min, double max)// sử dụng với chỉ số mặt định sẽ được bỏ qua
         {
-            RiskZoneRegister trz = null;
-            foreach (var rz in RiskZoneRegisterList.Values)
+            ZoneRegister trz = null;
+            foreach (var rz in ZoneRegisterList.Values)
             {
-                if((int)index==rz.Index)
+                if(rz.Index>=min && rz.Index<=max)
                 {
-                    if(ignore)
+                    if (ExtensionService.IsInPolygon(rz.GetZone(), p))
                     {
-                        continue;
+                        trz = rz;
+                        break;
                     }
                 }
-                if (ExtensionService.IsInPolygon(rz.GetZone(), p))
-                {
-                    trz = rz;
-                    break;
-                }
+
             }
             return trz;
         }

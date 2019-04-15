@@ -144,30 +144,33 @@ namespace SeldatMRMS.Management
         {
             this.trafficManagementService = trafficManagementService;
         }
-        public RobotUnity CheckIntersection()
+        public RobotUnity CheckIntersection(bool turnon)
         {
             RobotUnity robot = null;
-            if (RobotUnityRiskList.Count > 0)
+            if (turnon)
             {
-                foreach (RobotUnity r in RobotUnityRiskList.Values)
+                if (RobotUnityRiskList.Count > 0)
                 {
-                    Point thCV = TopHeaderCv();
-                    Point mdCV0 = MiddleHeaderCv();
-                    Point mdCV1 = MiddleHeaderCv1();
-                    Point mdCV2 = MiddleHeaderCv2();
-                    Point bhCV = BottomHeaderCv();
-                    // bool onTouch= FindHeaderIntersectsFullRiskArea(this.TopHeader()) | FindHeaderIntersectsFullRiskArea(this.MiddleHeader()) | FindHeaderIntersectsFullRiskArea(this.BottomHeader());
-                    // bool onTouch = r.FindHeaderIntersectsFullRiskAreaCv(thCV) | r.FindHeaderIntersectsFullRiskAreaCv(mdCV) | r.FindHeaderIntersectsFullRiskAreaCv(bhCV);
-
-                    bool onTouch0 = r.FindHeaderInsideCircleArea(mdCV0,2*DfWSCv);
-                    bool onTouch1 = r.FindHeaderInsideCircleArea(mdCV1, 2 * DfWSCv);
-                    bool onTouch2 = r.FindHeaderInsideCircleArea(mdCV2, 2 * DfWSCv);
-                    if (onTouch0 || onTouch1 || onTouch2)
+                    foreach (RobotUnity r in RobotUnityRiskList.Values)
                     {
-                        //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");
-                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                        robot = r;
-                        break;
+                        Point thCV = TopHeaderCv();
+                        Point mdCV0 = MiddleHeaderCv();
+                        Point mdCV1 = MiddleHeaderCv1();
+                        Point mdCV2 = MiddleHeaderCv2();
+                        Point bhCV = BottomHeaderCv();
+                        // bool onTouch= FindHeaderIntersectsFullRiskArea(this.TopHeader()) | FindHeaderIntersectsFullRiskArea(this.MiddleHeader()) | FindHeaderIntersectsFullRiskArea(this.BottomHeader());
+                        // bool onTouch = r.FindHeaderIntersectsFullRiskAreaCv(thCV) | r.FindHeaderIntersectsFullRiskAreaCv(mdCV) | r.FindHeaderIntersectsFullRiskAreaCv(bhCV);
+
+                        bool onTouch0 = r.FindHeaderInsideCircleArea(mdCV0, 2 * WSCv);
+                        bool onTouch1 = r.FindHeaderInsideCircleArea(mdCV1, 2 * WSCv);
+                        bool onTouch2 = r.FindHeaderInsideCircleArea(mdCV2, 2 * WSCv);
+                        if (onTouch0 || onTouch1 || onTouch2)
+                        {
+                            //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");
+                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                            robot = r;
+                            break;
+                        }
                     }
                 }
             }
@@ -392,10 +395,29 @@ namespace SeldatMRMS.Management
                     {
                        
                         // cập nhật vùng riskzone // update vùng risk area cho robot
-                        RiskZoneRegister rZR = trafficManagementService.FindRiskZone(properties.pose.Position, IndexZoneDefaultFind.ZONE_OP, true);
+                        ZoneRegister rZR = trafficManagementService.Find(properties.pose.Position,0,200);
                         if (rZR != null)
                         {
-                            UpdateRiskAraParams(rZR.L1, rZR.L2, rZR.WS, rZR.distance);
+                            properties.L1 = rZR.L1;
+                            properties.L2 = rZR.L2;
+                            properties.WS = rZR.WS;
+                            properties.DistInter =rZR.distance;
+                            
+
+                            L1Cv = rZR.L1 * properties.Scale;
+                            L2Cv = rZR.L2 * properties.Scale;
+                            WSCv = rZR.WS* properties.Scale;
+                            DistInterCv = rZR.distance * properties.Scale;
+
+                            Radius_S = rZR.Radius_S;
+                            Radius_B = rZR.Radius_B;
+                            Radius_Y = rZR.Radius_Y;
+                            Center_S = rZR.Center_S;
+                            Center_B = rZR.Center_B;
+                            Center_Y = rZR.Center_Y;
+
+
+                            //UpdateRiskAraParams(rZR.L1, rZR.L2, rZR.WS, rZR.distance);
                         }
                         else
                         {
@@ -432,7 +454,7 @@ namespace SeldatMRMS.Management
                 }
                 else if (numMode==2)
                 {
-                    RobotUnity robot = CheckIntersection();
+                    RobotUnity robot = CheckIntersection(true);
                    /* if (robot != null)
                     {
                         DetectTouchedPosition(robot);
@@ -543,17 +565,16 @@ namespace SeldatMRMS.Management
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY:
                     SetSafeYellowcircle(false);
                     // mở vòng tròn nhỏ vá kiểm tra va chạm
-                    CheckIntersection();
+                    CheckIntersection(true);
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD:
                     // kiem tra vong tròn xanh
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE:
                     SetSafeYellowcircle(true);
-
-
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER:
+                    CheckIntersection(false);
                     // tắt vòng tròn nhỏ
                     break;
             }
@@ -565,12 +586,13 @@ namespace SeldatMRMS.Management
                 if (prioritLevel.IndexOnMainRoad== r.prioritLevel.IndexOnMainRoad)
                 {
                     // va chạm vòng tròn an toàn nhỏ ra quyết định ngưng robot
-                    CheckIntersection();
+                    CheckIntersection(true);
                 }
                 else
                 {
                     // kiểm tra có robot nào nằm trong vòng tròn an toàn này kg?
-                    if (FindHeaderInsideCircleArea(r.MiddleHeaderCv(), new Point(0, 0), 10))
+                    Point cB = CenterOnLineCv(Center_B);
+                    if (FindHeaderInsideCircleArea(r.MiddleHeaderCv(), cB, Radius_B))
                     {
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                         break;
@@ -586,7 +608,8 @@ namespace SeldatMRMS.Management
                 // kiểm tra có robot nó có nằm trong vòng tròn vàng nào không nếu có ngưng
                 if (onFlagSafeYellowcircle)
                 {
-                    if (r.FindHeaderInsideCircleArea(MiddleHeaderCv(), new Point(0, 0), 10))
+                    Point cY = CenterOnLineCv(Center_Y);
+                    if (r.FindHeaderInsideCircleArea(MiddleHeaderCv(),cY, Radius_Y))
                     {
                         flagInsideYellowCircle = true;
                         break;

@@ -47,17 +47,17 @@ namespace SeldatMRMS.Management
         public class RobotRegistryToWorkingBufferZone
         {
             public String WorkingZone { get; set; }
-            public bool onRobotGoingOutZone = false;
+            public bool onRobotGoingInsideZone = false;
             public RobotRegistryToWorkingBufferZone() { }
             public void Release()
             {
                 WorkingZone = "";
-                onRobotGoingOutZone = false;
+                onRobotGoingInsideZone = false;
             }
             public void SetZone(String namez)
             {
                 WorkingZone = namez;
-                onRobotGoingOutZone = true;
+                onRobotGoingInsideZone = true;
             }
         }
         // public enum MvDirection{

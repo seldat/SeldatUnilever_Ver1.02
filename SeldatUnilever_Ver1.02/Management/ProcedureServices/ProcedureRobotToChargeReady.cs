@@ -12,6 +12,7 @@ using SelDatUnilever_Ver1._00.Management.ChargerCtrl;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnity;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
+using static SeldatMRMS.Management.TrafficRobotUnity;
 using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
 using static SelDatUnilever_Ver1._00.Management.ComSocket.RouterComPort;
 using static SelDatUnilever_Ver1._00.Management.DeviceManagement.DeviceItem;
@@ -72,6 +73,7 @@ namespace SeldatMRMS
 
         public void Start(RobotGoToCharge state = RobotGoToCharge.ROBCHAR_ROBOT_GOTO_CHARGER)
         {
+            robot.robotTag = RobotStatus.CHARGING;
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_CHARGE;
             StateRobotToCharge = state;
@@ -84,6 +86,7 @@ namespace SeldatMRMS
         public void Destroy()
         {
             // StateRobotToCharge = RobotGoToCharge.ROBCHAR_ROBOT_RELEASED;
+            robot.robotTag = RobotStatus.IDLE;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
@@ -369,6 +372,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToCharge.ROBCHAR_ROBOT_RELEASED:
+                        robot.robotTag = RobotStatus.IDLE;
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_CHARGE;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);
@@ -440,6 +444,7 @@ namespace SeldatMRMS
         public void Start(RobotGoToReady state = RobotGoToReady.ROBREA_ROBOT_GOTO_FRONTLINE_READYSTATION)
         {
             errorCode = ErrorCode.RUN_OK;
+            robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_READY;
             StateRobotGoToReady = state;
             ProRobotToReady = new Thread(this.Procedure);
@@ -451,6 +456,7 @@ namespace SeldatMRMS
         public void Destroy()
         {
             // StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
+            robot.robotTag = RobotStatus.IDLE;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
@@ -514,6 +520,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_RELEASED:
+                        robot.robotTag = RobotStatus.IDLE;
                         robot.TurnOnSupervisorTraffic(false);
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
                         // if (errorCode == ErrorCode.RUN_OK) {

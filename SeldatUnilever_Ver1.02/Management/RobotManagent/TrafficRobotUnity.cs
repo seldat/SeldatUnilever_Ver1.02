@@ -44,11 +44,18 @@ namespace SeldatMRMS.Management
             SLOW_DOWN,
             NORMAL_SPEED
         }
-        public class RobotRegistryToWorkingBufferZone
+        public enum RobotStatus
+        {
+            WORKING,
+            CHARGING,
+            READY,
+            IDLE
+        }
+        public class RobotRegistryToWorkingZone
         {
             public String WorkingZone { get; set; }
             public bool onRobotGoingInsideZone = false;
-            public RobotRegistryToWorkingBufferZone() { }
+            public RobotRegistryToWorkingZone() { }
             public void Release()
             {
                 WorkingZone = "";
@@ -114,14 +121,15 @@ namespace SeldatMRMS.Management
         private RobotUnity robotModeFree;
         private const double DistanceToSetSlowDown = 80; // sau khi dừng robot phai doi khoan cach len duoc tren 8m thi robot bat dau hoat dong lai bình thuong 8m
         private const double DistanceToSetNormalSpeed = 12; // sau khi dừng robot phai doi khoan cach len duoc tren 8m thi robot bat dau hoat dong lai bình thuong 12m
-        public RobotRegistryToWorkingBufferZone robotRegistryToWorkingZone;
+        public RobotRegistryToWorkingZone robotRegistryToWorkingZone;
+        public RobotStatus robotTag;
         public TrafficRobotUnity() : base()
         {
             TurnOnSupervisorTraffic(false);
             TurnOnCtrlSelfTraffic(true);
             RobotUnitylist = new List<RobotUnity>();
             prioritLevel = new PriorityLevel();
-            robotRegistryToWorkingZone = new RobotRegistryToWorkingBufferZone();
+            robotRegistryToWorkingZone = new RobotRegistryToWorkingZone();
 
 
         }
@@ -470,7 +478,7 @@ namespace SeldatMRMS.Management
         }
 
         // Finding has any Robot in Zone that Robot is going to come
-        public bool FindAndRegistryWorkingZone(Point anyPoint)
+        public bool FindRobotInWorkingZone(Point anyPoint)
         {
             bool hasRobot = false;
             String nameZone = trafficManagementService.DetermineArea(anyPoint);
@@ -497,10 +505,12 @@ namespace SeldatMRMS.Management
         {
             robotRegistryToWorkingZone.Release();
         }
-        // ứng xử tai check in buffer với bắt vị trí anypoint
-        public bool CheckInBufferBehavior(Point anyPoint)
+        // ứng xử tai check in zone với bắt vị trí anypoint
+        public bool CheckInZoneBehavior(Point anyPoint)
         {
-            if (FindAndRegistryWorkingZone(anyPoint))
+            if (anyPoint == null)
+                return false;
+            if (FindRobotInWorkingZone(anyPoint))
                 return false;
             else
             {
@@ -509,22 +519,21 @@ namespace SeldatMRMS.Management
                 return true;
             }
         }
-        // check đường nhỏ qua đường lớn giao với các buffer
-        public bool CheckRobotFromRoadToHighStreetLevel1(Point point)
+        public bool CheckRobotWorkinginReady()
         {
-            String nameZone = trafficManagementService.DetermineArea(point);
-            String[] checkedZoneNames = trafficManagementService.ZoneRegisterList[nameZone].ZonesCheckGoInside.Split(',');
-            // check có robot đi ngang qua đường lớn
-            // check robot đi ra buffer
-            return true;
-        }
-        // check robot buffer đi ra đường lớn
-        public bool CheckRobotFromRoadToHighStreetLevel2(Point point)
-        {
-            String nameZone = trafficManagementService.DetermineArea(point);
-            String[] checkedZoneNames = trafficManagementService.ZoneRegisterList[nameZone].ZonesCheckGoInside.Split(',');
-            // check có robot đi qua và yêu cầu robot trong đường lớn dừng
-            return true;
+            bool hasRobotWorking = false;
+            foreach(RobotUnity robot in RobotUnitylist)
+            {
+                if(trafficManagementService.DetermineArea(robot.properties.pose.Position).Equals(TypeZone.READY))
+                {
+                    if(robot.robotTag==RobotStatus.WORKING)
+                    {
+                        hasRobotWorking = true;
+                        break;
+                    }
+                }
+            }
+            return hasRobotWorking;
         }
         // kiểm tra vong tròn an toàn quyết định điều khiển giao thông theo nguyên tắt
         // + vòng tròn nhỏ an toàn được mở on trong trường hợp robot nằm trên đường chính

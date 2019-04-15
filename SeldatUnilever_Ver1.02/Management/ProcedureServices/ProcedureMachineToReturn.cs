@@ -40,6 +40,7 @@ namespace SeldatMRMS
         public void Start(MachineToReturn state = MachineToReturn.MACRET_ROBOT_GOTO_FRONTLINE_MACHINE)
         {
             errorCode = ErrorCode.RUN_OK;
+            robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_RETURN;
             StateMachineToReturn = state;
             ProMachineToReturn = new Thread(this.Procedure);
@@ -49,6 +50,7 @@ namespace SeldatMRMS
         }
         public void Destroy()
         {
+            robot.robotTag = RobotStatus.IDLE;
             // StateMachineToReturn = MachineToReturn.MACRET_ROBOT_RELEASED;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
@@ -211,7 +213,7 @@ namespace SeldatMRMS
                     case MachineToReturn.MACRET_ROBOT_CAME_CHECKIN_RETURN: // đã đến vị trí
                         try
                         {
-                            if (false == Traffic.HasRobotUnityinArea(BfToRe.GetFrontLineReturn().Position))
+                            if (false == robot.CheckInZoneBehavior(BfToRe.GetFrontLineReturn().Position))
                             {
                                 rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -310,6 +312,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case MachineToReturn.MACRET_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.robotTag = RobotStatus.IDLE;
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_MACHINE_TO_RETURN;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);

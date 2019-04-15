@@ -51,6 +51,7 @@ namespace SeldatMRMS
         public void Start(BufferToMachine state = BufferToMachine.BUFMAC_ROBOT_GOTO_CHECKIN_BUFFER)
         {
             errorCode = ErrorCode.RUN_OK;
+            robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_MACHINE;
             StateBufferToMachine = state;
             Task ProBuferToMachine = new Task(()=>this.Procedure(this));
@@ -58,9 +59,11 @@ namespace SeldatMRMS
             procedureStatus = ProcedureStatus.PROC_ALIVE;
             ProRun = true;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
+            
         }
         public void Destroy()
         {
+            robot.robotTag = RobotStatus.IDLE;
             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_DESTROY;
         }
 
@@ -190,7 +193,7 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try
                         {
-                            if (false == Traffic.HasRobotUnityinArea(BfToMa.GetAnyPointInBuffer().Position))
+                            if (false == robot.CheckInZoneBehavior(BfToMa.GetAnyPointInBuffer().Position))
                             {
                                 robot.SetTrafficAtCheckIn(false);
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -363,6 +366,9 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        // Release WorkinZone Robot
+                        robot.robotTag = RobotStatus.IDLE;
+                        robot.ReleaseWorkingZone();
                         robot.TurnOnCtrlSelfTraffic(true);
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_MACHINE;
                         // if (errorCode == ErrorCode.RUN_OK) {
@@ -376,6 +382,7 @@ namespace SeldatMRMS
                         order.status = StatusOrderResponseCode.FINISHED;
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_DESTROY:
+                        robot.ReleaseWorkingZone();
                         // StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;
                         robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
                         ProRun = false;

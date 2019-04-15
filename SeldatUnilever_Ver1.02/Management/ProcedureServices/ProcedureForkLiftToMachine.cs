@@ -38,6 +38,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         public void Start(ForkLiftToMachine state = ForkLiftToMachine.FORMACH_ROBOT_GOTO_CHECKIN_GATE)
         {
             errorCode = ErrorCode.RUN_OK;
+            robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
             StateForkLiftToMachine = state;
             ProForkLiftToMachine = new Thread(this.Procedure);
@@ -47,6 +48,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public void Destroy()
         {
+            robot.robotTag = RobotStatus.IDLE;
+            robot.ReleaseWorkingZone();
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
@@ -142,7 +145,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
                                                                            // robot.ShowText( "FORMACH_ROBOT_WAITTING_GOTO_GATE ===> FLAG " + Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position));
-                        if (false == Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position))
+                        if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
                         {
                             robot.SetTrafficAtCheckIn(false);
                             rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
@@ -287,6 +290,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     //    }
                     //    break;
                     case ForkLiftToMachine.FORMACH_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.robotTag = RobotStatus.IDLE;
+                        robot.ReleaseWorkingZone();
                         robot.TurnOnCtrlSelfTraffic(true);
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
                         order.status = StatusOrderResponseCode.FINISHED;

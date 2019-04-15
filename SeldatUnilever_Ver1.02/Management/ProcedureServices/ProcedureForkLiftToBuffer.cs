@@ -66,6 +66,7 @@ namespace SeldatMRMS
         public void Start(ForkLift state = ForkLift.FORBUF_ROBOT_GOTO_CHECKIN_GATE)
         {
             // public void Start (ForkLiftToBuffer state = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED) {
+            robot.robotTag = RobotStatus.WORKING;
             errorCode = ErrorCode.RUN_OK;
             robot.ProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_BUFFER;
             StateForkLift = state;
@@ -78,7 +79,7 @@ namespace SeldatMRMS
         }
         public void Destroy()
         {
-
+            robot.robotTag = RobotStatus.IDLE;
             // StateForkLiftToBuffer = ForkLiftToBuffer.FORBUF_ROBOT_RELEASED;
             StateForkLift = ForkLift.FORMAC_ROBOT_DESTROY;
 
@@ -221,7 +222,7 @@ namespace SeldatMRMS
                         break;
                     case ForkLift.FORBUF_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
                                                                           // robot.ShowText( "FORBUF_ROBOT_WAITTING_GOTO_GATE ===> FLAG " + Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position));
-                        if (false == Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position))
+                        if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
                         {
                             robot.SetTrafficAtCheckIn(false);
                             rb.UpdateRiskAraParams(4, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
@@ -360,7 +361,7 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try
                         {
-                            if (false == Traffic.HasRobotUnityinArea(FlToBuf.GetAnyPointInBuffer(true).Position))
+                            if (false == robot.CheckInZoneBehavior(FlToBuf.GetAnyPointInBuffer(true).Position))
                             {
                                 robot.SetTrafficAtCheckIn(false);
                                 // createPlanBuffer();
@@ -516,6 +517,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORMAC_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.robotTag = RobotStatus.IDLE;
+                        robot.ReleaseWorkingZone();
                         robot.TurnOnCtrlSelfTraffic(true);
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_FORKLIFT_TO_MACHINE;
                         // if (errorCode == ErrorCode.RUN_OK) {
@@ -529,6 +532,7 @@ namespace SeldatMRMS
                         order.status = StatusOrderResponseCode.FINISHED;
                         break;
                     case ForkLift.FORMAC_ROBOT_DESTROY: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.ReleaseWorkingZone();
                         robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
                         ProRun = false;
                         UpdateInformationInProc(this, ProcessStatus.F);

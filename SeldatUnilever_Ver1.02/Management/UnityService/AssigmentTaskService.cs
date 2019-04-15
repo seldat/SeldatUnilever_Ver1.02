@@ -219,12 +219,15 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             }
                             break;
                         case ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK:
-                            robot.TurnOnSupervisorTraffic(true);
-                            Console.WriteLine(processAssignTaskReady);
-                            SelectProcedureItem(robot, orderItem);
-                            deviceItemsList[0].RemoveFirstOrder();
-                            MoveElementToEnd(); // sort Task List
-                            processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
+                            if (robot.CheckRobotWorkinginReady())
+                            {
+                                robot.TurnOnSupervisorTraffic(true);
+                                Console.WriteLine(processAssignTaskReady);
+                                SelectProcedureItem(robot, orderItem);
+                                deviceItemsList[0].RemoveFirstOrder();
+                                MoveElementToEnd(); // sort Task List
+                                processAssignTaskReady = ProcessAssignTaskReady.PROC_READY_CHECK_ROBOT_OUTSIDEREADY;
+                            }
                             break;
                         case ProcessAssignTaskReady.PROC_READY_SET_TRAFFIC_RISKAREA_ON:
                             robot.TurnOnSupervisorTraffic(true);

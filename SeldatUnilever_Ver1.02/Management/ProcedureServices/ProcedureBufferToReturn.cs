@@ -43,6 +43,7 @@ namespace SeldatMRMS
         public void Start(BufferToReturn state = BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_BUFFER)
         {
             errorCode = ErrorCode.RUN_OK;
+            robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;
             StateBufferToReturn = state;
             ProBuferToReturn = new Thread(this.Procedure);
@@ -54,6 +55,8 @@ namespace SeldatMRMS
         public void Destroy()
         {
             // StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+            robot.robotTag = RobotStatus.IDLE;
+            robot.ReleaseWorkingZone();
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
@@ -145,7 +148,7 @@ namespace SeldatMRMS
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try
                         {
-                            if (false == Traffic.HasRobotUnityinArea(BfToRe.GetAnyPointInBuffer().Position))
+                            if (false == robot.CheckInZoneBehavior(BfToRe.GetAnyPointInBuffer().Position))
                             {
                                 robot.SetTrafficAtCheckIn(true);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -266,7 +269,7 @@ namespace SeldatMRMS
                     case BufferToReturn.BUFRET_ROBOT_CAME_CHECKIN_RETURN: // đã đến vị trí
                         try
                         {
-                            if (false == Traffic.HasRobotUnityinArea(BfToRe.GetFrontLineReturn().Position))
+                            if (false == robot.CheckInZoneBehavior(BfToRe.GetFrontLineReturn().Position))
                             {
                                 rb.UpdateRiskAraParams(40, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -345,6 +348,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.robotTag = RobotStatus.IDLE;
+                        robot.ReleaseWorkingZone();
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);

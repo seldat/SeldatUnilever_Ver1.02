@@ -50,6 +50,7 @@ namespace SeldatMRMS
         public void Start(ReturnToGate state = ReturnToGate.RETGATE_ROBOT_WAITTING_GOTO_CHECKIN_RETURN)
         {
             errorCode = ErrorCode.RUN_OK;
+            robot.robotTag = RobotStatus.WORKING;
             robot.ProcedureAs = ProcedureControlAssign.PRO_RETURN_TO_GATE;
             StateReturnToGate = state;
             ProReturnToGate = new Thread(this.Procedure);
@@ -60,6 +61,7 @@ namespace SeldatMRMS
         public void Destroy()
         {
             // StateReturnToGate = ReturnToGate.RETGATE_ROBOT_RELEASED;
+            robot.robotTag = RobotStatus.IDLE;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
             UpdateInformationInProc(this, ProcessStatus.F);
@@ -322,6 +324,7 @@ namespace SeldatMRMS
                         break;
 
                     case ReturnToGate.RETGATE_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.robotTag = RobotStatus.IDLE;
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_RETURN_TO_GATE;
                         // if (errorCode == ErrorCode.RUN_OK) {
                         ReleaseProcedureHandler(this);

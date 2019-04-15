@@ -81,7 +81,7 @@ namespace SeldatMRMS
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                             {
-                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE))
+                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_RIGHT))
                                 {
                                     Stopwatch sw = new Stopwatch();
                                     sw.Start();
@@ -220,7 +220,6 @@ namespace SeldatMRMS
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToRe.UpdatePalletState(PalletStatus.F);
-                            // rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                             robot.ShowText("BUFRET_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
                         }
@@ -323,7 +322,6 @@ namespace SeldatMRMS
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToRe.UpdatePalletState(PalletStatus.W);
-                            //  rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_FRONTLINE;
                             robot.ShowText("BUFRET_ROBOT_WAITTING_GOTO_FRONTLINE");
                         }

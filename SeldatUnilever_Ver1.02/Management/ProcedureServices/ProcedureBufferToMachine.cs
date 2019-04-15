@@ -173,16 +173,18 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
-
-                        bool onComePoint = robot.ReachedGoal();
-                       // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && onComePoint==true )
-                        if (onComePoint)
+                        if (rb.checkNewPci())
                         {
-                            robot.SetTrafficAtCheckIn(true);
-                            resCmd = ResponseCommand.RESPONSE_NONE;
-                            //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                            StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY;
-                            robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
+                            bool onComePoint = robot.ReachedGoal(rb.getPointCheckInConfirm());
+                            // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && onComePoint==true )
+                            if (onComePoint)
+                            {
+                                robot.SetTrafficAtCheckIn(true);
+                                resCmd = ResponseCommand.RESPONSE_NONE;
+                                //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY;
+                                robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
+                            }
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao

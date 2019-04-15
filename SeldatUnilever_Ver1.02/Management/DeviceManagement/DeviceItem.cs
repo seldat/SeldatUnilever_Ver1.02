@@ -499,7 +499,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     // same deviceID forklift
                     try
                     {
-                        new DoorManagementService().DoorMezzamineUp.Open(DoorType.DOOR_FRONT);
+                        new DoorManagementService().DoorMezzamineUp.openDoor(DoorType.DOOR_FRONT);
                     }
                     catch (Exception e)
                     {
@@ -513,7 +513,7 @@ namespace SelDatUnilever_Ver1._00.Management.DeviceManagement
                     // same deviceID forklift
                     try
                     {
-                        new DoorManagementService().DoorMezzamineUp.Close(DoorType.DOOR_FRONT);
+                        new DoorManagementService().DoorMezzamineUp.closeDoor(DoorType.DOOR_FRONT);
                     }
                     catch (Exception e)
                     {

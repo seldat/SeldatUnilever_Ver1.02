@@ -199,7 +199,7 @@ namespace SeldatMRMS
                         break;
                     case MachineToReturn.MACRET_ROBOT_GOTO_CHECKIN_RETURN: // dang di
                         //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if ( robot.ReachedGoal())
+                        if (robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;

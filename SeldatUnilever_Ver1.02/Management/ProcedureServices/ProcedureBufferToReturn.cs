@@ -130,13 +130,16 @@ namespace SeldatMRMS
                         break;
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
                         //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if ( robot.ReachedGoal())
+                        if (rb.checkNewPci())
+                        {
+                            if (robot.ReachedGoal(rb.getPointCheckInConfirm()))
                             {
-                            robot.SetTrafficAtCheckIn(true);
-                            resCmd = ResponseCommand.RESPONSE_NONE;
-                            rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
-                            StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY;
-                            robot.ShowText("BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY");
+                                robot.SetTrafficAtCheckIn(true);
+                                resCmd = ResponseCommand.RESPONSE_NONE;
+                                rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
+                                StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY;
+                                robot.ShowText("BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY");
+                            }
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
@@ -162,9 +165,9 @@ namespace SeldatMRMS
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         try
                         {
-                         //   if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                                if ( robot.ReachedGoal())
-                                {
+                            //   if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
+                            if (robot.ReachedGoal())
+                            {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP)))
                                 {
@@ -251,8 +254,8 @@ namespace SeldatMRMS
                         break;
                     case BufferToReturn.BUFRET_ROBOT_GOTO_CHECKIN_RETURN: // dang di
                         //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if ( robot.ReachedGoal())
-                            {
+                        if (robot.ReachedGoal())
+                        {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             rb.UpdateRiskAraParams(0, rb.properties.L2, rb.properties.WS, rb.properties.DistInter);

@@ -174,16 +174,16 @@ namespace SeldatMRMS.Management.RobotManagent
             public int publication_EmergencyRobot;
             public int publication_ctrlrobotdriving;
             public int publication_robotnavigation;
-            public int publication_linedetectionctrl;
+            //public int publication_linedetectionctrl;
             public int publication_checkAliveTimeOut;
-            public int publication_postPallet;
-            public int publication_cmdAreaPallet;
+            //public int publication_postPallet;
+            //public int publication_cmdAreaPallet;
 
             /*of chau test*/
-            public int publication_finishedStates;
+            //public int publication_finishedStates;
             public int publication_batteryvol;
-            public int publication_TestLaserError;
-            public int publication_TestLaserWarning;
+            //public int publication_TestLaserError;
+            //public int publication_TestLaserWarning;
             public int publication_killpid;
         }
 
@@ -278,21 +278,21 @@ namespace SeldatMRMS.Management.RobotManagent
         public void createRosTerms () {
             int subscription_robotInfo = this.Subscribe ("/amcl_pose", "geometry_msgs/PoseWithCovarianceStamped", AmclPoseHandler,100);
             paramsRosSocket.publication_ctrlrobotdriving = this.Advertise ("/ctrlRobotDriving", "std_msgs/Int32");
-            int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler,100);
-            paramsRosSocket.publication_robotnavigation = this.Advertise ("/robot_navigation", "geometry_msgs/PoseStamped");
+            //int subscription_finishedStates = this.Subscribe ("/finishedStates", "std_msgs/Int32", FinishedStatesHandler,100);
+            //paramsRosSocket.publication_robotnavigation = this.Advertise ("/robot_navigation", "geometry_msgs/PoseStamped");
             paramsRosSocket.publication_checkAliveTimeOut = this.Advertise ("/checkAliveTimeOut", "std_msgs/Int32");
-            paramsRosSocket.publication_linedetectionctrl = this.Advertise ("/linedetectionctrl", "std_msgs/Int32");
-            paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet", "std_msgs/Int32");
-            paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet", "std_msgs/String");
+            //paramsRosSocket.publication_linedetectionctrl = this.Advertise ("/linedetectionctrl", "std_msgs/Int32");
+            //paramsRosSocket.publication_postPallet = this.Advertise ("/pospallet", "std_msgs/Int32");
+            //paramsRosSocket.publication_cmdAreaPallet = this.Advertise ("/cmdAreaPallet", "std_msgs/String");
             paramsRosSocket.publication_killpid = this.Advertise("/key_press", "std_msgs/String");
             float subscription_publication_batteryvol = this.Subscribe ("/battery_vol", "std_msgs/Int32", BatteryVolHandler);
-            int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
-            int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
+            //int subscription_AGV_LaserError = this.Subscribe ("/stm_error", "std_msgs/String", AGVLaserErrorHandler);
+            //int subscription_AGV_LaserWarning = this.Subscribe ("/stm_warning", "std_msgs/String", AGVLaserWarningHandler);
             int subscription_Odom= this.Subscribe("/odom", "nav_msgs/Odometry", OdometryCallback, 100);
             int subscription_Navi = this.Subscribe("/cmd_vel_mux/input/navi", "geometry_msgs/Twist", NaviCallback, 100);
 
             //paramsRosSocket.publication_finishedStates = this.Advertise ("/finishedStates", "std_msgs/Int32");
-            //paramsRosSocket.publication_batteryvol = this.Advertise ("/battery_vol", "std_msgs/Float32");
+            paramsRosSocket.publication_batteryvol = this.Advertise("/RbResToServer", "std_msgs/String");
             //   paramsRosSocket.publication_TestLaserError = this.Advertise ("/AGV_LaserError", "std_msgs/String");
             //  paramsRosSocket.publication_TestLaserWarning = this.Advertise ("/AGV_LaserWarning", "std_msgs/String");
         }
@@ -331,18 +331,16 @@ namespace SeldatMRMS.Management.RobotManagent
          
 
         }
-        private void FinishedStatesHandler (Communication.Message message) {
+        protected void FinishedStatesHandler (Int32 message) {
             try
             {
-                StandardInt32 standard = (StandardInt32)message;
-                robotLogOut.ShowText(this.properties.Label,"Finished State [" + standard.data + "]");
-                FinishStatesCallBack(standard.data);
-               
+                //StandardInt32 standard = (StandardInt32)message;
+                robotLogOut.ShowText(this.properties.Label,"Finished State [" + message + "]");
+                FinishStatesCallBack(message);
             }
             catch {
                 Console.WriteLine(" Error FinishedStatesHandler");
             }
-
         }
         private void OdometryCallback(Communication.Message message)
         {
@@ -360,83 +358,83 @@ namespace SeldatMRMS.Management.RobotManagent
             properties.pose.VCtrlw = standard.angular.z;
         }
 
-        private void AGVLaserErrorHandler (Communication.Message message) {
-          /*  StandardString standard = (StandardString) message;
-            LaserErrorCode er = new LaserErrorCode ();
-            bool tamddd = standard.data[0].Equals('1');
-            try
-            {
-                if (standard.data[0].Equals('1')) {
-                    er.LaserErrorConnect = true;
-                } else {
-                    er.LaserErrorConnect = false;
-                }
-                if (standard.data[1].Equals ('1')) {
-                    er.LaserErrorShutdown = true;
-                } else {
-                    er.LaserErrorShutdown = false;
-                }
-                if (standard.data[2].Equals ('1')) {
-                    er.LaserErrorLostSpeed = true;
-                } else {
-                    er.LaserErrorLostSpeed = false;
-                }
-                if (standard.data[3].Equals ('1')) {
-                    er.LaserErrorLostPath = true;
-                } else {
-                    er.LaserErrorLostPath = false;
-                }
-            } catch (System.Exception) {
-               // Console.WriteLine ("Cannot parse error laser");
-            }
-            // AGVLaserErrorCallBack (er);*/
-        }
+        //private void AGVLaserErrorHandler (Communication.Message message) {
+        //  /*  StandardString standard = (StandardString) message;
+        //    LaserErrorCode er = new LaserErrorCode ();
+        //    bool tamddd = standard.data[0].Equals('1');
+        //    try
+        //    {
+        //        if (standard.data[0].Equals('1')) {
+        //            er.LaserErrorConnect = true;
+        //        } else {
+        //            er.LaserErrorConnect = false;
+        //        }
+        //        if (standard.data[1].Equals ('1')) {
+        //            er.LaserErrorShutdown = true;
+        //        } else {
+        //            er.LaserErrorShutdown = false;
+        //        }
+        //        if (standard.data[2].Equals ('1')) {
+        //            er.LaserErrorLostSpeed = true;
+        //        } else {
+        //            er.LaserErrorLostSpeed = false;
+        //        }
+        //        if (standard.data[3].Equals ('1')) {
+        //            er.LaserErrorLostPath = true;
+        //        } else {
+        //            er.LaserErrorLostPath = false;
+        //        }
+        //    } catch (System.Exception) {
+        //       // Console.WriteLine ("Cannot parse error laser");
+        //    }
+        //    // AGVLaserErrorCallBack (er);*/
+        //}
 
-        private void AGVLaserWarningHandler (Communication.Message message) {
-           /* StandardString standard = (StandardString) message;
-            LaserWarningCode war = new LaserWarningCode ();
-            try {
-                if (standard.data[0].Equals ('1')) {
-                    war.LaserWarningObstacle = true;
-                } else {
-                    war.LaserWarningObstacle = false;
-                }
-                if (standard.data[1].Equals ('1')) {
-                    war.LaserWarningLowBattey = true;
-                } else {
-                    war.LaserWarningLowBattey = false;
-                }
-                if (standard.data[2].Equals ('1')) {
-                    war.LaserWarningCharging = true;
-                } else {
-                    war.LaserWarningCharging = false;
-                }
-                if (standard.data[3].Equals ('1')) {
-                    war.LaserWarningHazardoes = true;
-                } else {
-                    war.LaserWarningHazardoes = false;
-                }
-                if (standard.data[4].Equals ('1')) {
-                    war.LaserWarningHazardoes = true;
-                } else {
-                    war.LaserWarningHazardoes = false;
-                }
-            } catch (System.Exception) {
-              //  Console.WriteLine ("Cannot parse warning laser");
-            }
-            // AGVLaserWarningCallBack (war);*/
-        }
+        //private void AGVLaserWarningHandler (Communication.Message message) {
+        //   /* StandardString standard = (StandardString) message;
+        //    LaserWarningCode war = new LaserWarningCode ();
+        //    try {
+        //        if (standard.data[0].Equals ('1')) {
+        //            war.LaserWarningObstacle = true;
+        //        } else {
+        //            war.LaserWarningObstacle = false;
+        //        }
+        //        if (standard.data[1].Equals ('1')) {
+        //            war.LaserWarningLowBattey = true;
+        //        } else {
+        //            war.LaserWarningLowBattey = false;
+        //        }
+        //        if (standard.data[2].Equals ('1')) {
+        //            war.LaserWarningCharging = true;
+        //        } else {
+        //            war.LaserWarningCharging = false;
+        //        }
+        //        if (standard.data[3].Equals ('1')) {
+        //            war.LaserWarningHazardoes = true;
+        //        } else {
+        //            war.LaserWarningHazardoes = false;
+        //        }
+        //        if (standard.data[4].Equals ('1')) {
+        //            war.LaserWarningHazardoes = true;
+        //        } else {
+        //            war.LaserWarningHazardoes = false;
+        //        }
+        //    } catch (System.Exception) {
+        //      //  Console.WriteLine ("Cannot parse warning laser");
+        //    }
+        //    // AGVLaserWarningCallBack (war);*/
+        //}
 
-        public void TestLaserError (String cmd) {
-            StandardString msg = new StandardString ();
-            msg.data = cmd;
-            this.Publish (paramsRosSocket.publication_TestLaserError, msg);
-        }
-        public void TestLaserWarning (String cmd) {
-            StandardString msg = new StandardString ();
-            msg.data = cmd;
-            this.Publish (paramsRosSocket.publication_TestLaserWarning, msg);
-        }
+        //public void TestLaserError (String cmd) {
+        //    StandardString msg = new StandardString ();
+        //    msg.data = cmd;
+        //    this.Publish (paramsRosSocket.publication_TestLaserError, msg);
+        //}
+        //public void TestLaserWarning (String cmd) {
+        //    StandardString msg = new StandardString ();
+        //    msg.data = cmd;
+        //    this.Publish (paramsRosSocket.publication_TestLaserWarning, msg);
+        //}
         public void KillPID()
         {
             try
@@ -448,58 +446,59 @@ namespace SeldatMRMS.Management.RobotManagent
             catch { MessageBox.Show("Kill PID error !"); }
         }
 
-        public void FinishedStatesPublish (int message) {
-            StandardInt32 msg = new StandardInt32 ();
-            msg.data = message;
-            this.Publish (paramsRosSocket.publication_finishedStates, msg);
-        }
+        //public void FinishedStatesPublish (int message) {
+        //    StandardInt32 msg = new StandardInt32 ();
+        //    msg.data = message;
+        //    this.Publish (paramsRosSocket.publication_finishedStates, msg);
+        //}
 
-        public void BatteryPublish (float message) {
-            StandardFloat32 msg = new StandardFloat32 ();
+        public void BatteryPublish(String message)
+        {
+            StandardString msg = new StandardString();
             msg.data = message;
-            this.Publish (paramsRosSocket.publication_batteryvol, msg);
+            this.Publish(paramsRosSocket.publication_batteryvol, msg);
         }
         public virtual void UpdateProperties(PropertiesRobotUnity proR)
         {
             properties = proR;
         }
-        double gx;
-        double gy;
-        public bool SendPoseStamped (Pose pose) {
+        protected double gx;
+        protected double gy;
+        //public bool SendPoseStamped (Pose pose) {
 
-            try
-            {
-                if (pose != null)
-                {
-                    GeometryPoseStamped data = new GeometryPoseStamped();
-                    data.header.frame_id = "map";
-                    data.pose.position.x = (float)pose.Position.X;
-                    data.pose.position.y = (float)pose.Position.Y;
-                    data.pose.position.z = 0;
-                    double theta = pose.AngleW;
-                    data.pose.orientation.z = (float)Math.Sin(theta / 2);
-                    data.pose.orientation.w = (float)Math.Cos(theta / 2);
+        //    try
+        //    {
+        //        if (pose != null)
+        //        {
+        //            GeometryPoseStamped data = new GeometryPoseStamped();
+        //            data.header.frame_id = "map";
+        //            data.pose.position.x = (float)pose.Position.X;
+        //            data.pose.position.y = (float)pose.Position.Y;
+        //            data.pose.position.z = 0;
+        //            double theta = pose.AngleW;
+        //            data.pose.orientation.z = (float)Math.Sin(theta / 2);
+        //            data.pose.orientation.w = (float)Math.Cos(theta / 2);
 
-                    this.Publish(paramsRosSocket.publication_robotnavigation, data);
-                    robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
-                    // lưu vị trí đích đến
-                    gx = data.pose.position.x;
-                    gy = data.pose.position.y;
+        //            this.Publish(paramsRosSocket.publication_robotnavigation, data);
+        //            robotLogOut.ShowText(this.properties.Label, "Send Pose => " + JsonConvert.SerializeObject(data).ToString());
+        //            // lưu vị trí đích đến
+        //            gx = data.pose.position.x;
+        //            gy = data.pose.position.y;
 
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("Without Data SendPoseStamped");
-                    return false;
-                }
-            }
-            catch
-            {
-                Console.WriteLine("Robot Control Error SendPoseStamped");
-                return false;
-            }
-        }
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("Without Data SendPoseStamped");
+        //            return false;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        Console.WriteLine("Robot Control Error SendPoseStamped");
+        //        return false;
+        //    }
+        //}
         public bool SetSpeed (RobotSpeedLevel robotspeed) {
 
             try
@@ -516,125 +515,133 @@ namespace SeldatMRMS.Management.RobotManagent
             }
         }
 
-        public bool SendCmdLineDetectionCtrl (RequestCommandLineDetect cmd) {
+        //public bool SendCmdLineDetectionCtrl (RequestCommandLineDetect cmd) {
 
-            try
-            {
-                StandardInt32 msg = new StandardInt32();
-                msg.data = Convert.ToInt32(cmd);
-                this.Publish(paramsRosSocket.publication_linedetectionctrl, msg);
-                robotLogOut.ShowText(this.properties.Label, "SendCmdLineDetectionCtrl => " + msg.data);
+        //    try
+        //    {
+        //        StandardInt32 msg = new StandardInt32();
+        //        msg.data = Convert.ToInt32(cmd);
+        //        this.Publish(paramsRosSocket.publication_linedetectionctrl, msg);
+        //        robotLogOut.ShowText(this.properties.Label, "SendCmdLineDetectionCtrl => " + msg.data);
 
-                return true;
-            }
-            catch {
-                Console.WriteLine("Robot Control Error SendCmdLineDetectionCtrl");
-                return false;
-            }
-        }
+        //        return true;
+        //    }
+        //    catch {
+        //        Console.WriteLine("Robot Control Error SendCmdLineDetectionCtrl");
+        //        return false;
+        //    }
+        //}
 
-        public bool SendCmdPosPallet (RequestCommandPosPallet cmd) {
-            try
-            {
-                StandardInt32 msg = new StandardInt32();
-                msg.data = Convert.ToInt32(cmd);
-                this.Publish(paramsRosSocket.publication_postPallet, msg);
-                robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
+        //public bool SendCmdPosPallet (RequestCommandPosPallet cmd) {
+        //    try
+        //    {
+        //        StandardInt32 msg = new StandardInt32();
+        //        msg.data = Convert.ToInt32(cmd);
+        //        this.Publish(paramsRosSocket.publication_postPallet, msg);
+        //        robotLogOut.ShowText(this.properties.Label, "SendCmdPosPallet => " + msg.data);
 
-                return true;
-            }
-            catch {
-                Console.WriteLine("Robot Control Error SendCmdPosPallet");
-                return false;
-            }
-        }
+        //        return true;
+        //    }
+        //    catch {
+        //        Console.WriteLine("Robot Control Error SendCmdPosPallet");
+        //        return false;
+        //    }
+        //}
         int countGoal = 0;
-        public bool ReachedGoal()
+        public bool ReachedGoal(Pose gPose = null)
         {
+            double gxx = 0;
+            double gyy = 0;
             if (countGoal ++ > 200)
             {
                 countGoal = 0;
 
-                double _currentgoal_Ex = Math.Abs(properties.pose.Position.X-gx);
-                double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y-gy);
-               /* */
-                double gxx = Math.Abs(gx);
-                double gyy = Math.Abs(gy);
-                if (gxx >= 7.0 && gxx <= 8.65 && gyy >= 9.8 && gyy <= 11.0) // truong hop dat biet
-                {
-                    //robotLogOut.ShowText("", "Truong hop dat biet");
-                       
-                       // if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
-                        if (_currentgoal_Ex <= 2.0 && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
-                        {
-                            if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
-                            {
-                                properties.pose.VCtrlx = 0;
-                                properties.pose.VCtrly = 0;
-                                properties.pose.VCtrlw = 0;
-                            robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
-                            robotLogOut.ShowText("", "Goal X=" + gx);
-                            robotLogOut.ShowText("", "Goal Y=" + gy);
-                            robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
-                            robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
-                            robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
-                            robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
-                            robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
-                            robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
-                            robotLogOut.ShowText("", "REACHED GOAL");
-                            return true;
-                        }
-                    }
+                double _currentgoal_Ex = Math.Abs(properties.pose.Position.X - gx);
+                double _currentgoal_Ey = Math.Abs(properties.pose.Position.Y - gy);
+                /* */
+                if(gPose != null) {
+                    gxx = Math.Abs(gPose.Position.X);
+                    gyy = Math.Abs(gPose.Position.Y);
                 }
-                else
-                {
+                else {
+                    gxx = Math.Abs(gx);
+                    gyy = Math.Abs(gy);
+                }
+
+                //if (gxx >= 7.0 && gxx <= 8.65 && gyy >= 9.8 && gyy <= 11.0) // truong hop dat biet
+                //{
+                //    //robotLogOut.ShowText("", "Truong hop dat biet");
+
+                //    // if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                //    if (_currentgoal_Ex <= 2.0 && _currentgoal_Ey <= 5.5 && _currentgoal_Ex >= 0 && _currentgoal_Ey >= 0)
+                //    {
+                //        if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
+                //        {
+                //            properties.pose.VCtrlx = 0;
+                //            properties.pose.VCtrly = 0;
+                //            properties.pose.VCtrlw = 0;
+                //            robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
+                //            robotLogOut.ShowText("", "Goal X=" + gx);
+                //            robotLogOut.ShowText("", "Goal Y=" + gy);
+                //            robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
+                //            robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
+                //            robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
+                //            robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
+                //            robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
+                //            robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
+                //            robotLogOut.ShowText("", "REACHED GOAL");
+                //            return true;
+                //        }
+                //    }
+                //}
+                //else
+                //{
                     //&& Math.Abs(properties.pose.VCtrlx) <= 0.01 && Math.Abs(properties.pose.VCtrlw) <= 0.01
 
 
-                        if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0.0 && _currentgoal_Ey >= 0.0)
-                        {
-                            if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
-                            {
-                                properties.pose.VCtrlx = 0;
-                                properties.pose.VCtrly = 0;
-                                properties.pose.VCtrlw = 0;
-                            robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
-                            robotLogOut.ShowText("", "Goal X=" + gx);
-                            robotLogOut.ShowText("", "Goal Y=" + gy);
-                            robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
-                            robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
-                            robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
-                            robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
-                            robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
-                            robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
-                            robotLogOut.ShowText("", "REACHED GOAL");
-                            return true;
-                            }
-                        }
-                }
-            }
-
-            return false;
-        }
-        public bool SendCmdAreaPallet (String cmd) {
-
-   
-                    try
+                if (_currentgoal_Ex <= properties.errorDx && _currentgoal_Ey <= properties.errorDy && _currentgoal_Ex >= 0.0 && _currentgoal_Ey >= 0.0)
+                {
+                    if (Math.Abs(properties.pose.VFbx) < properties.errorVx)
                     {
-                        StandardString msg = new StandardString();
-                        msg.data = cmd;
-                        Console.WriteLine(cmd);
-                        this.Publish(paramsRosSocket.publication_cmdAreaPallet, msg);
-                        robotLogOut.ShowText(this.properties.Label, "SendCmdAreaPallet => " + msg.data);
+                        properties.pose.VCtrlx = 0;
+                        properties.pose.VCtrly = 0;
+                        properties.pose.VCtrlw = 0;
+                        robotLogOut.ShowText("", "------------------------------  " + this.properties.NameId);
+                        robotLogOut.ShowText("", "Goal X=" + gx);
+                        robotLogOut.ShowText("", "Goal Y=" + gy);
+                        robotLogOut.ShowText("", "Current amcl X=" + properties.pose.Position.X);
+                        robotLogOut.ShowText("", "Current amcl Y=" + properties.pose.Position.Y);
+                        robotLogOut.ShowText("", "Error amcl X=" + _currentgoal_Ex);
+                        robotLogOut.ShowText("", "Error amcl Y=" + _currentgoal_Ey);
+                        robotLogOut.ShowText("", "VX=" + properties.pose.VFbx);
+                        robotLogOut.ShowText("", "VY=" + properties.pose.VFby);
+                        robotLogOut.ShowText("", "REACHED GOAL");
                         return true;
                     }
-                    catch {
-                    Console.WriteLine("Error Send SendCmdAreaPallet");
-                        return false;
                 }
+                //}
+            }
+            return false;
+        }
+        //public bool SendCmdAreaPallet (String cmd) {
+
+   
+        //            try
+        //            {
+        //                StandardString msg = new StandardString();
+        //                msg.data = cmd;
+        //                Console.WriteLine(cmd);
+        //                this.Publish(paramsRosSocket.publication_cmdAreaPallet, msg);
+        //                robotLogOut.ShowText(this.properties.Label, "SendCmdAreaPallet => " + msg.data);
+        //                return true;
+        //            }
+        //            catch {
+        //            Console.WriteLine("Error Send SendCmdAreaPallet");
+        //                return false;
+        //        }
        
            
-        }
+        //}
 
         protected override void OnOpenedEvent () {
             properties.IsConnected = true;

@@ -6,6 +6,7 @@ using SeldatMRMS.Management.TrafficManager;
 using System;
 using System.Diagnostics;
 using System.Threading;
+using static DoorControllerService.DoorService;
 using static SeldatMRMS.Management.RobotManagent.RobotBaseService;
 using static SeldatMRMS.Management.RobotManagent.RobotUnityControl;
 using static SeldatMRMS.Management.TrafficRobotUnity;
@@ -162,29 +163,20 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
-                        if (ds.Open(DoorService.DoorType.DOOR_BACK))
-                        {
-                            StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_OPEN_DOOR;
-                            robot.ShowText("FORMACH_ROBOT_WAITTING_OPEN_DOOR");
-                        }
-                        else
-                        {
-                            //errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                           // CheckUserHandleError(this);
-                        }
+                        ds.openDoor(DoorService.DoorType.DOOR_BACK);
+                        StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_OPEN_DOOR;
+                        robot.ShowText("FORMACH_ROBOT_WAITTING_OPEN_DOOR");
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_OPEN_DOOR: //doi mo cong
-                        if (true == ds.WaitOpen(DoorService.DoorType.DOOR_BACK, TIME_OUT_OPEN_DOOR))
+                        RetState ret = ds.checkOpen(DoorService.DoorType.DOOR_BACK);
+                        if (ret == RetState.DOOR_CTRL_SUCCESS)
                         {
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_OPEN_DOOR_SUCCESS;
                             robot.ShowText("FORMACH_ROBOT_OPEN_DOOR_SUCCESS");
                         }
-                        else
+                        else if (ret == RetState.DOOR_CTRL_ERROR)
                         {
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_CAME_GATE_POSITION;
-
-                            //errorCode = ErrorCode.OPEN_DOOR_ERROR;
-                            // CheckUserHandleError(this);
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_OPEN_DOOR_SUCCESS: // mo cua thang cong ,gui toa do line de robot di vao gap hang
@@ -212,16 +204,9 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            if (ds.Close(DoorService.DoorType.DOOR_BACK))
-                            {
-                                StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CLOSE_GATE;
-                                robot.ShowText("FORMACH_ROBOT_WAITTING_CLOSE_GATE");
-                            }
-                            else
-                            {
-                               // errorCode = ErrorCode.CONNECT_DOOR_ERROR;
-                               // CheckUserHandleError(this);
-                            }
+                            ds.closeDoor(DoorService.DoorType.DOOR_BACK);
+                            StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CLOSE_GATE;
+                            robot.ShowText("FORMACH_ROBOT_WAITTING_CLOSE_GATE");
                         }
                         else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                         {
@@ -232,19 +217,19 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CLOSE_GATE: // doi dong cong.
                         try
                         {
-                            if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
-                            {
-                                robot.TurnOnCtrlSelfTraffic(true);
-                                rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
-                                rb.SendPoseStamped(FlToMach.GetFrontLineMachine());
-                                StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
-                                robot.ShowText("FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
-                            }
-                            else
-                            {
-                                // errorCode = ErrorCode.CLOSE_DOOR_ERROR;
-                                // CheckUserHandleError(this);
-                            }
+                            //if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
+                            //{
+                            robot.TurnOnCtrlSelfTraffic(true);
+                            rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
+                            rb.SendPoseStamped(FlToMach.GetFrontLineMachine());
+                            StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE;
+                            robot.ShowText("FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE");
+                            //}
+                            //else
+                            //{
+                            //    // errorCode = ErrorCode.CLOSE_DOOR_ERROR;
+                            //    // CheckUserHandleError(this);
+                            //}
                         }
                         catch (System.Exception)
                         {

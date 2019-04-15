@@ -1,11 +1,6 @@
-﻿using SeldatMRMS.Communication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
-using SeldatMRMS.Management.RobotManagent;
+using SeldatUnilever_Ver1._02.Management.RobotManagent;
 /*L1=10
 L2=5
 H=6
@@ -33,7 +28,7 @@ plot([0 X3],[0 Y3],'.g-')*/
 namespace SeldatMRMS.Management.RobotManagent
 {
 
-    public class RobotUnityService : RobotUnityControl
+    public class RobotUnityService : RobotComServer
     {
 
         public double DistInterCv;

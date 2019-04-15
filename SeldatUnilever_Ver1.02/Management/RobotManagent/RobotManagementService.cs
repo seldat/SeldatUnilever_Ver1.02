@@ -58,7 +58,7 @@ namespace SeldatMRMS.Management.RobotManagent
             prop1.WS = 3;
             prop1.Label = "Robot1";
             prop1.BatteryLevelRb = 40;
-            prop1.Url = "ws://192.168.1.181:9090";
+            prop1.Url = "ws://192.168.80.148:9090";
             prop1.ipMcuCtrl = "192.168.1.211";
             prop1.portMcuCtrl = 8081;
             prop1.DistInter = 8;
@@ -76,10 +76,10 @@ namespace SeldatMRMS.Management.RobotManagent
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
 
-            
+
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
-         //   AddRobotUnityReadyList(r1);
+            //   AddRobotUnityReadyList(r1);
             r1.RegistryRobotService(this);
 
             r1.TurnOnSupervisorTraffic(false);
@@ -195,10 +195,10 @@ namespace SeldatMRMS.Management.RobotManagent
             // add robot trong traffic quản lý
             trafficManagementService.RegistryRobotList(RobotUnityRegistedList);
 
-           //
-          //  r1.Start(prop1.Url);
-          //  r2.Start(prop2.Url);
-          //  r3.Start(prop3.Url);
+            //
+            //r1.Start(prop1.Url);
+            //  r2.Start(prop2.Url);
+            //  r3.Start(prop3.Url);
 
         }
         public void Initialize()

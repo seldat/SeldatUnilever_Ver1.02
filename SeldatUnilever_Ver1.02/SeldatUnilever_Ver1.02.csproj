@@ -279,6 +279,7 @@
       <DependentUpon>ConfigureRobotUnity.xaml</DependentUpon>
     </Compile>
     <Compile Include="Management\RobotManagent\RobotBaseService.cs" />
+    <Compile Include="Management\RobotManagent\RobotComServer.cs" />
     <Compile Include="Management\RobotManagent\RobotLogOut.xaml.cs">
       <DependentUpon>RobotLogOut.xaml</DependentUpon>
     </Compile>
@@ -656,7 +657,6 @@
   <ItemGroup>
     <Folder Include="Log\" />
     <Folder Include="Management\OrderService\" />
-    <Folder Include="Management\RobotManagent\old\" />
     <Folder Include="Management\Store\" />
   </ItemGroup>
   <ItemGroup>

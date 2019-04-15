@@ -23,8 +23,6 @@ namespace SeldatMRMS {
         public ReadyChargerProcedureDB readyChargerProcedureDB;
         public OrderItem order;
         public ProcedureStatus procedureStatus;
-        public const UInt32 TIME_OUT_OPEN_DOOR = 5000; /* ms */
-        public const UInt32 TIME_OUT_CLOSE_DOOR = 5000; /* ms */
         public enum ProcedureStatus
         {
             PROC_ALIVE,

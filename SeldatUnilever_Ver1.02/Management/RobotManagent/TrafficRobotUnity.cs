@@ -53,9 +53,12 @@ namespace SeldatMRMS.Management
         }
         public class RobotRegistryToWorkingZone
         {
-            public String WorkingZone { get; set; }
+            public String WorkingZone;
             public bool onRobotGoingInsideZone = false;
-            public RobotRegistryToWorkingZone() { }
+            public RobotRegistryToWorkingZone() {
+                WorkingZone = "";
+                onRobotGoingInsideZone = false;
+            }
             public void Release()
             {
                 WorkingZone = "";

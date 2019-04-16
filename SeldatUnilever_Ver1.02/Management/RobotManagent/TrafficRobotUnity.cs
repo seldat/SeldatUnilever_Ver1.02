@@ -115,6 +115,7 @@ namespace SeldatMRMS.Management
         public bool onFlagSelfTraffic;
         public bool onFlagSafeYellowcircle = false;
         public bool onFlagSafeBluecircle = false;
+        public bool onFlagSafeSmallcircle = false;
         public bool onFlagDetectLine = false;
         private Dictionary<String, RobotUnity> RobotUnityRiskList = new Dictionary<string, RobotUnity>();
         private TrafficBehaviorState TrafficBehaviorStateTracking;
@@ -155,6 +156,7 @@ namespace SeldatMRMS.Management
         }
         public RobotUnity CheckIntersection(bool turnon)
         {
+            onFlagSafeSmallcircle = turnon;
             RobotUnity robot = null;
             if (turnon)
             {
@@ -386,11 +388,11 @@ namespace SeldatMRMS.Management
                 onFlagSupervisorTraffic = false;
                 UpdateRiskAraParams(0, DfL2, DfWS, DfDistanceInter);
             }
-            else
+           /* else
             {
                 onFlagSupervisorTraffic = true;
                 UpdateRiskAraParams(DfL1, DfL2, DfWS, DfDistanceInter);
-            }
+            }*/
 
         }
         public  void ReDrawRobotGrapphic()
@@ -596,6 +598,7 @@ namespace SeldatMRMS.Management
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE:
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(true);
+                    SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER:
                     SetSafeBluecircle(false);
@@ -604,7 +607,7 @@ namespace SeldatMRMS.Management
                     break;
             }
         }
-        public void CheckBlueCircle()
+        public void CheckBlueCircle() // khi robot bặt vòng tròn xanh. chính nó phải ngưng nếu dò ra có robot nào trong vùng vòng tròn này ngược lại với vòng tròn vàng
         {
             foreach(RobotUnity r in RobotUnitylist)
             {
@@ -629,7 +632,7 @@ namespace SeldatMRMS.Management
                 }
             }
         }
-        public bool CheckYellowCircle()
+        public bool CheckYellowCircle() // khi robot bặt vòng tròn vàng. tất cả robot khác ngưng nếu dò ra có robot nào trong vùng vòng tròn này
         {
             bool flagInsideYellowCircle = false;
             foreach (RobotUnity r in RobotUnitylist)

@@ -15,6 +15,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using static SelDatUnilever_Ver1._00.Management.ChargerCtrl.ChargerCtrl;
+using static SelDatUnilever_Ver1._00.Management.TrafficManager.TrafficRounterService;
 
 namespace SeldatMRMS.Management.RobotManagent {
     public class RobotUnity : RobotBaseService {
@@ -372,7 +373,12 @@ namespace SeldatMRMS.Management.RobotManagent {
         private void ChangeToolTipContent (object sender, ToolTipEventArgs e) {
             try
             {
-                border.ToolTip = properties.Label;
+                TypeZone typezone = trafficManagementService.GetTypeZone(properties.pose.Position, 0, 200);
+                double angle = -properties.pose.Angle;
+                Point position = Global_Object.CoorLaser(properties.pose.Position);
+                border.ToolTip = "Name: "+properties.Label + Environment.NewLine + "Zone: "+typezone +
+                    Environment.NewLine +"Location: "+ position.X.ToString("0.00") + " / " +
+                    position.Y.ToString("0.00") + " / " + angle.ToString("0.00");
             }
             catch { }
         }

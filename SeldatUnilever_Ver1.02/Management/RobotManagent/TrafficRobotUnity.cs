@@ -119,7 +119,7 @@ namespace SeldatMRMS.Management
        
         private Dictionary<String, RobotUnity> RobotUnityRiskList = new Dictionary<string, RobotUnity>();
         private TrafficBehaviorState TrafficBehaviorStateTracking;
-        private TrafficManagementService trafficManagementService;
+        protected TrafficManagementService trafficManagementService;
         private RobotUnity robotModeFree;
         private const double DistanceToSetSlowDown = 80; // sau khi dừng robot phai doi khoan cach len duoc tren 8m thi robot bat dau hoat dong lai bình thuong 8m
         private const double DistanceToSetNormalSpeed = 12; // sau khi dừng robot phai doi khoan cach len duoc tren 8m thi robot bat dau hoat dong lai bình thuong 12m
@@ -178,13 +178,13 @@ namespace SeldatMRMS.Management
                         if (onTouch0 || onTouch1 || onTouch2)
                         {
                             //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");
-                           // SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                             robot = r;
                             break;
                         }
                         else
                         {
-                          //  SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                         }
                     }
                 }

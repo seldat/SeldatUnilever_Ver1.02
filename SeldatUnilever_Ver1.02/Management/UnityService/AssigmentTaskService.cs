@@ -219,7 +219,7 @@ namespace SelDatUnilever_Ver1._00.Management.UnityService
                             }
                             break;
                         case ProcessAssignTaskReady.PROC_READY_ASSIGN_ANTASK:
-                            if (robot.CheckRobotWorkinginReady())
+                            if (!robot.CheckRobotWorkinginReady())
                             {
                                 robot.TurnOnSupervisorTraffic(true);
                                 Console.WriteLine(processAssignTaskReady);

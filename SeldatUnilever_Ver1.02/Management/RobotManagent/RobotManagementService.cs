@@ -74,7 +74,9 @@ namespace SeldatMRMS.Management.RobotManagent
             r1.UpdateProperties(prop1);
 
             r1.Radius_S = 40;
-            
+            r1.Radius_B = 40;
+            r1.Radius_Y = 40;
+
             r1.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r1.properties);
             RobotUnityRegistedList.Add(r1.properties.NameId, r1);
@@ -120,8 +122,11 @@ namespace SeldatMRMS.Management.RobotManagent
             r2.RegistryRobotService(this);
 
             r2.TurnOnSupervisorTraffic(false);
+            r2.Radius_S = 40;
+            r2.Radius_B = 40;
+            r2.Radius_Y = 40;
 
-//#endif
+            //#endif
 
             PropertiesRobotUnity prop3 = new PropertiesRobotUnity();
             prop3.NameId = "RSD" + RobotUnityRegistedList.Count;
@@ -147,7 +152,11 @@ namespace SeldatMRMS.Management.RobotManagent
             r3.ConnectionStatusHandler += ConnectionStatusHandler;
             PropertiesRobotUnity_List.Add(r3.properties);
             RobotUnityRegistedList.Add(r3.properties.NameId, r3);
-         //   r3.Start(prop3.Url);
+
+            r3.Radius_S = 40;
+            r3.Radius_B = 40;
+            r3.Radius_Y = 40;
+            //   r3.Start(prop3.Url);
             // đăng ký robot list to many robot quan trong
             // AddRobotUnityReadyList(r1);
             //AddRobotUnityReadyList(r3);

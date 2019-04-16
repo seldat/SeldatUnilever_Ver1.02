@@ -584,8 +584,8 @@ namespace SeldatMRMS.Management.RobotManagent {
 
                          if (onFlagSafeYellowcircle)
                          {
-                             YellowCircleArea.Width = 2 * Radius_S;
-                             YellowCircleArea.Height = 2 * Radius_S;
+                             YellowCircleArea.Width = 2 * Radius_Y;
+                             YellowCircleArea.Height = 2 * Radius_Y;
 
                              Point cc = CenterOnLineCv(30);
                              TranslateTransform tr = new TranslateTransform(cc.X - (2 * Radius_Y / 2), cc.Y - (2 * Radius_Y / 2));
@@ -603,8 +603,8 @@ namespace SeldatMRMS.Management.RobotManagent {
 
                          if (onFlagSafeBluecircle)
                          {
-                             BlueCircleArea.Width = 2 * Radius_S;
-                             BlueCircleArea.Height = 2 * Radius_S;
+                             BlueCircleArea.Width = 2 * Radius_B;
+                             BlueCircleArea.Height = 2 * Radius_B;
 
                              Point cc = CenterOnLineCv(30);
                              TranslateTransform tr = new TranslateTransform(cc.X - (2 * Radius_B / 2), cc.Y - (2 * Radius_B / 2));

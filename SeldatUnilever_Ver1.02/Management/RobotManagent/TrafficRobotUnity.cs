@@ -116,7 +116,7 @@ namespace SeldatMRMS.Management
         public bool onFlagSafeYellowcircle = false;
         public bool onFlagSafeBluecircle = false;
         public bool onFlagSafeSmallcircle = false;
-        public bool onFlagDetectLine = false;
+       
         private Dictionary<String, RobotUnity> RobotUnityRiskList = new Dictionary<string, RobotUnity>();
         private TrafficBehaviorState TrafficBehaviorStateTracking;
         private TrafficManagementService trafficManagementService;
@@ -178,13 +178,13 @@ namespace SeldatMRMS.Management
                         if (onTouch0 || onTouch1 || onTouch2)
                         {
                             //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");
-                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                           // SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                             robot = r;
                             break;
                         }
                         else
                         {
-                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                          //  SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                         }
                     }
                 }
@@ -314,7 +314,7 @@ namespace SeldatMRMS.Management
        
 
         }
-        public void TrafficBehavior(RobotUnity robot)
+     /*   public void TrafficBehavior(RobotUnity robot)
         {
             switch (TrafficBehaviorStateTracking)
             {
@@ -368,13 +368,32 @@ namespace SeldatMRMS.Management
                     break;
 
             }
-        }
+        }*/
         public void TurnOnSupervisorTraffic(bool onflagtraffic)
         {
             onFlagSupervisorTraffic = onflagtraffic;
             if(!onflagtraffic)
-            { 
-                UpdateRiskAraParams(0, 0, 0, 0);
+            {
+                properties.L1 = 0;
+                properties.L2 = 0;
+                properties.WS = 0;
+                properties.DistInter = 0;
+
+
+                L1Cv = 0;
+                L2Cv = 0;
+                WSCv = 0;
+                DistInterCv =0;
+
+                Radius_S = 0;
+                Radius_B = 0;
+                Radius_Y = 0;
+                onFlagSafeSmallcircle = false;
+
+            }
+            else
+            {
+                onFlagSafeSmallcircle = true;
             }
         }
         public void TurnOnCtrlSelfTraffic(bool _onflagSelftraffic)
@@ -551,28 +570,29 @@ namespace SeldatMRMS.Management
         public void RobotBehavior()
         {
             RobotBahaviorAtAnyPlace robotBahaviorAtAnyPlace= RobotBahaviorAtAnyPlace.ROBOT_PLACE_IDLE;
-                TypeZone _type = trafficManagementService.GetTypeZone(properties.pose.Position);
-                if(_type.Equals("HIGHWAY") && onFlagDetectLine==false)
+                TypeZone _type = trafficManagementService.GetTypeZone(properties.pose.Position,0,200);
+           // onFlagDetectLine = true;
+                if (_type== TypeZone.HIGHWAY && onFlagDetectLine==false)
                 {
                     robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY;
                 }
-                if (_type.Equals("HIGHWAY") && onFlagDetectLine == true)
+                if (_type == TypeZone.HIGHWAY && onFlagDetectLine == true)
                 {
                    robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE; ;
                 }
-                if (_type.Equals("ROAD"))
+                if (_type == TypeZone.ROAD)
                 {
                     SetSafeBluecircle(true);
                     robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD;
                 }
-                if (_type.Equals("BUFFER"))
+                if (_type == TypeZone.BUFFER)
                 {
                     robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER;
                 }
              switch(robotBahaviorAtAnyPlace)
             {
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_IDLE:
-                    SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                  //  SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY:
                     SetSafeBluecircle(false);
@@ -592,7 +612,7 @@ namespace SeldatMRMS.Management
                     CheckBlueCircle();
                     if (CheckYellowCircle())
                     {
-                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                       SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                     }
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE:

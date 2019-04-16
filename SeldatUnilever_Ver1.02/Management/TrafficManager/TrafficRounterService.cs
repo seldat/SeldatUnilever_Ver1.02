@@ -386,16 +386,18 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
             return zoneName;
         }
-        public TypeZone GetTypeZone(Point position)
+        public TypeZone GetTypeZone(Point position,int min,int max)
         {
             TypeZone _type=TypeZone.IDLE;
             foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
             {
-
-                if (ExtensionService.IsInPolygon(r.GetZone(), position))
+                if (r.Index >= min && r.Index <= max)
                 {
-                    _type= r.Type;
-                    break;
+                    if (ExtensionService.IsInPolygon(r.GetZone(), position))
+                    {
+                        _type = r.Type;
+                        break;
+                    }
                 }
             }
             return _type;

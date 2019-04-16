@@ -26,6 +26,7 @@ namespace SeldatMRMS.Management.RobotManagent
         private Timer timerCheckKeepAlive;
         public RobotLogOut robotLogOut;
         private const float delBatterry = 2;
+        public bool onFlagDetectLine = false;
         public class Pose
         {
             public Pose(Point p, double Angle) // Angle gốc

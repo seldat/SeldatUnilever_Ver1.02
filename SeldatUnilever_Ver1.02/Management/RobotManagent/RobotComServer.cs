@@ -215,6 +215,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
 
         public bool SendCmdAreaPallet(String cmd)
         {
+            //onFlagDetectLine = true;
             bool ret = false;
             JStructDataString data = new JStructDataString();
 

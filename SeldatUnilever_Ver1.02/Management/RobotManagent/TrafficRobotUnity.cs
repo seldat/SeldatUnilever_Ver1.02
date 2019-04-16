@@ -114,6 +114,7 @@ namespace SeldatMRMS.Management
         public bool onFlagSupervisorTraffic;
         public bool onFlagSelfTraffic;
         public bool onFlagSafeYellowcircle = false;
+        public bool onFlagSafeBluecircle = false;
         public bool onFlagDetectLine = false;
         private Dictionary<String, RobotUnity> RobotUnityRiskList = new Dictionary<string, RobotUnity>();
         private TrafficBehaviorState TrafficBehaviorStateTracking;
@@ -178,6 +179,10 @@ namespace SeldatMRMS.Management
                             SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                             robot = r;
                             break;
+                        }
+                        else
+                        {
+                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                         }
                     }
                 }
@@ -431,7 +436,8 @@ namespace SeldatMRMS.Management
                         {
                             UpdateRiskAraParams(DfL1, DfL2, DfWS, DfDistanceInter);
                         }
-                        SupervisorTraffic();
+                        //SupervisorTraffic();
+                        RobotBehavior();
                     }
                     // giám sát an toàn
                   
@@ -441,7 +447,7 @@ namespace SeldatMRMS.Management
             }
 
         }
-        protected override void SupervisorTraffic()
+       /* protected override void SupervisorTraffic()
         {
             if (onFlagSelfTraffic)
             {
@@ -463,11 +469,11 @@ namespace SeldatMRMS.Management
                 else if (numMode==2)
                 {
                     RobotUnity robot = CheckIntersection(true);
-                   /* if (robot != null)
-                    {
-                        DetectTouchedPosition(robot);
-                        TrafficBehavior(robot);
-                    }*/
+                   // if (robot != null)
+                   // {
+                   //     DetectTouchedPosition(robot);
+                   //     TrafficBehavior(robot);
+                   // }
                 }
 
             }
@@ -475,7 +481,7 @@ namespace SeldatMRMS.Management
             {
                 SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
             }
-        }
+        }*/
 
         // Finding has any Robot in Zone that Robot is going to come
         public bool FindRobotInWorkingZone(Point anyPoint)
@@ -543,13 +549,6 @@ namespace SeldatMRMS.Management
         public void RobotBehavior()
         {
             RobotBahaviorAtAnyPlace robotBahaviorAtAnyPlace= RobotBahaviorAtAnyPlace.ROBOT_PLACE_IDLE;
-            // check chính nó có nằm  trong vòng tròn vàng không
-            if (CheckYellowCircle())
-            {
-                
-            }
-            else
-            {
                 TypeZone _type = trafficManagementService.GetTypeZone(properties.pose.Position);
                 if(_type.Equals("HIGHWAY") && onFlagDetectLine==false)
                 {
@@ -561,28 +560,45 @@ namespace SeldatMRMS.Management
                 }
                 if (_type.Equals("ROAD"))
                 {
+                    SetSafeBluecircle(true);
                     robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD;
                 }
                 if (_type.Equals("BUFFER"))
                 {
                     robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER;
                 }
-            }
-           
-            switch(robotBahaviorAtAnyPlace)
+             switch(robotBahaviorAtAnyPlace)
             {
+                case RobotBahaviorAtAnyPlace.ROBOT_PLACE_IDLE:
+                    SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY:
+                    SetSafeBluecircle(false);
                     SetSafeYellowcircle(false);
-                    // mở vòng tròn nhỏ vá kiểm tra va chạm
-                    CheckIntersection(true);
+                    if (CheckYellowCircle())
+                    {
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    }
+                    else
+                    {
+                        // mở vòng tròn nhỏ vá kiểm tra va chạm
+                        CheckIntersection(true);
+                    }
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD:
                     // kiem tra vong tròn xanh
+                    CheckBlueCircle();
+                    if (CheckYellowCircle())
+                    {
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    }
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE:
+                    SetSafeBluecircle(false);
                     SetSafeYellowcircle(true);
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER:
+                    SetSafeBluecircle(false);
                     CheckIntersection(false);
                     // tắt vòng tròn nhỏ
                     break;
@@ -606,6 +622,10 @@ namespace SeldatMRMS.Management
                         SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
                         break;
                     }
+                    else
+                    {
+                        SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                    }
                 }
             }
         }
@@ -615,7 +635,7 @@ namespace SeldatMRMS.Management
             foreach (RobotUnity r in RobotUnitylist)
             {
                 // kiểm tra có robot nó có nằm trong vòng tròn vàng nào không nếu có ngưng
-                if (onFlagSafeYellowcircle)
+                if (r.onFlagSafeYellowcircle)
                 {
                     Point cY = CenterOnLineCv(Center_Y);
                     if (r.FindHeaderInsideCircleArea(MiddleHeaderCv(),cY, Radius_Y))
@@ -631,7 +651,11 @@ namespace SeldatMRMS.Management
         {
             onFlagSafeYellowcircle = flagonoff;
         }
-        public void SetStatusDetectLine(bool flagonoff)
+        public void SetSafeBluecircle(bool flagonoff)
+        {
+            onFlagSafeBluecircle = flagonoff;
+        }
+        public void SwitchToDetectLine(bool flagonoff)
         {
             onFlagDetectLine = flagonoff;
         }

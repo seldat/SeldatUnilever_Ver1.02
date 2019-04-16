@@ -48,6 +48,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
         }
         public void Destroy()
         {
+            robot.SwitchToDetectLine(false);
             robot.robotTag = RobotStatus.IDLE;
             robot.ReleaseWorkingZone();
             order.status = StatusOrderResponseCode.ROBOT_ERROR;
@@ -133,6 +134,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             //if (robot.ReachedGoal())
                         {
+                            
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -157,6 +159,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         //if (robot.ReachedGoal())
                         {
+                            robot.SwitchToDetectLine(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_CAME_GATE_POSITION;
@@ -203,6 +206,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
+                            robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             ds.closeDoor(DoorService.DoorType.DOOR_BACK);
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CLOSE_GATE;
@@ -244,7 +248,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             //if (robot.ReachedGoal())
                             {
-
+                               
                                 //robot.TurnOnCtrlSelfTraffic(false);
                                 //rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                                 rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_DROPDOWN_PALLET);
@@ -287,6 +291,7 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     //    }
                     //    break;
                     case ForkLiftToMachine.FORMACH_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.SwitchToDetectLine(false);
                         robot.robotTag = RobotStatus.IDLE;
                         robot.ReleaseWorkingZone();
                         robot.TurnOnCtrlSelfTraffic(true);

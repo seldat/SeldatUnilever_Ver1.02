@@ -55,6 +55,7 @@ namespace SeldatMRMS
         public void Destroy()
         {
             // StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
+            robot.SwitchToDetectLine(false);
             robot.robotTag = RobotStatus.IDLE;
             robot.ReleaseWorkingZone();
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -171,6 +172,7 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             //if (robot.ReachedGoal())
                             {
+                                robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_UP)))
                                 {
@@ -234,6 +236,7 @@ namespace SeldatMRMS
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
+                                robot.SwitchToDetectLine(false);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                                 if (rb.SendPoseStamped(BfToRe.GetCheckInReturn()))
@@ -291,6 +294,7 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                                 //if (robot.ReachedGoal())
                             {
+                                robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 if (rb.SendCmdAreaPallet(BfToRe.GetInfoOfPalletReturn(PistonPalletCtrl.PISTON_PALLET_DOWN)))
                                 {
@@ -334,6 +338,7 @@ namespace SeldatMRMS
                     case BufferToReturn.BUFRET_ROBOT_WAITTING_GOTO_FRONTLINE:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
+                            robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateBufferToReturn = BufferToReturn.BUFRET_ROBOT_RELEASED;
@@ -346,6 +351,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToReturn.BUFRET_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.SwitchToDetectLine(false);
                         robot.robotTag = RobotStatus.IDLE;
                         robot.ReleaseWorkingZone();
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_BUFFER_TO_RETURN;

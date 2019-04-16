@@ -230,6 +230,7 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         //if ( robot.ReachedGoal())
                         {
+                            robot.SwitchToDetectLine(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
                             StateForkLift = ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION;
@@ -237,6 +238,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_CAME_GATE_POSITION: // da den khu vuc cong , gui yeu cau mo cong.
+          ;
                         ds.openDoor(DoorService.DoorType.DOOR_BACK);
                         StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_OPEN_DOOR;
                         robot.ShowText("FORBUF_ROBOT_WAITTING_OPEN_DOOR");
@@ -295,7 +297,7 @@ namespace SeldatMRMS
                         {
                             //if (true == ds.Close(DoorService.DoorType.DOOR_BACK))
                             //{
-                                
+                            robot.SwitchToDetectLine(false);
                             flToMachineInfo = GetPriorityTaskForkLiftToMachine(order.productId);
                             if (flToMachineInfo == null)
                             {
@@ -378,6 +380,7 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                                 //if (robot.ReachedGoal())
                             {
+                                robot.SwitchToDetectLine(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 if (rb.SendCmdAreaPallet(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true)))
                                 {
@@ -413,6 +416,7 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER: // đợi
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
+                            robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateForkLift = ForkLift.FORBUF_ROBOT_RELEASED;
@@ -463,6 +467,7 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                                 //if (robot.ReachedGoal())
                             {
+                                robot.SwitchToDetectLine(true);
                                 robot.TurnOnCtrlSelfTraffic(false);
                                 if (rb.SendCmdAreaPallet(flToMachineInfo.infoPallet))
                                 {
@@ -497,6 +502,7 @@ namespace SeldatMRMS
                     case ForkLift.FORMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_MACHINE: // đợi
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
+                            robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateForkLift = ForkLift.FORMAC_ROBOT_RELEASED;
@@ -509,6 +515,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORMAC_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.SwitchToDetectLine(false);
                         robot.robotTag = RobotStatus.IDLE;
                         robot.ReleaseWorkingZone();
                         robot.TurnOnCtrlSelfTraffic(true);
@@ -524,6 +531,7 @@ namespace SeldatMRMS
                         order.status = StatusOrderResponseCode.FINISHED;
                         break;
                     case ForkLift.FORMAC_ROBOT_DESTROY: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.SwitchToDetectLine(false);
                         robot.ReleaseWorkingZone();
                         robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
                         ProRun = false;

@@ -217,6 +217,9 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             //if (onComePoint2)
                             {
+                                // 
+
+                                robot.SwitchToDetectLine(true);
                                 robot.TurnOnCtrlSelfTraffic(false);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -282,6 +285,7 @@ namespace SeldatMRMS
                         {
                             if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                             {
+                                robot.SwitchToDetectLine(false);
                                 robot.TurnOnCtrlSelfTraffic(true);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
@@ -310,6 +314,7 @@ namespace SeldatMRMS
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             //if (onComePoint3)
                             {
+                                robot.SwitchToDetectLine(true);
                                 robot.TurnOnCtrlSelfTraffic(false);
                                 if (rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_DOWN)))
                                 {
@@ -352,6 +357,7 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE:
                         if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                         {
+                            robot.SwitchToDetectLine(false);
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;
@@ -364,6 +370,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_RELEASED: // trả robot về robotmanagement để nhận quy trình mới
+                        robot.SwitchToDetectLine(false);
                         // Release WorkinZone Robot
                         robot.robotTag = RobotStatus.IDLE;
                         robot.ReleaseWorkingZone();
@@ -380,6 +387,7 @@ namespace SeldatMRMS
                         order.status = StatusOrderResponseCode.FINISHED;
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_DESTROY:
+                        robot.SwitchToDetectLine(false);
                         robot.ReleaseWorkingZone();
                         // StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_RELEASED;
                         robot.prioritLevel.OnAuthorizedPriorityProcedure = false;

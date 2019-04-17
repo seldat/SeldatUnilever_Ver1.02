@@ -159,35 +159,37 @@ namespace SeldatMRMS.Management
         }
         public RobotUnity CheckIntersection(bool turnon)
         {
-            onFlagSafeSmallcircle = turnon;
-            RobotUnity robot = null;
+            RobotUnity robot = null; 
             if (turnon)
             {
                 if (RobotUnityRiskList.Count > 0)
                 {
                     foreach (RobotUnity r in RobotUnityRiskList.Values)
                     {
-                        Point thCV = TopHeaderCv();
-                        Point mdCV0 = MiddleHeaderCv();
-                        Point mdCV1 = MiddleHeaderCv1();
-                        Point mdCV2 = MiddleHeaderCv2();
-                        Point bhCV = BottomHeaderCv();
-                        // bool onTouch= FindHeaderIntersectsFullRiskArea(this.TopHeader()) | FindHeaderIntersectsFullRiskArea(this.MiddleHeader()) | FindHeaderIntersectsFullRiskArea(this.BottomHeader());
-                        // bool onTouch = r.FindHeaderIntersectsFullRiskAreaCv(thCV) | r.FindHeaderIntersectsFullRiskAreaCv(mdCV) | r.FindHeaderIntersectsFullRiskAreaCv(bhCV);
+                        if (r.onFlagSafeSmallcircle)
+                        {
+                            Point thCV = TopHeaderCv();
+                            Point mdCV0 = MiddleHeaderCv();
+                            Point mdCV1 = MiddleHeaderCv1();
+                            Point mdCV2 = MiddleHeaderCv2();
+                            Point bhCV = BottomHeaderCv();
+                            // bool onTouch= FindHeaderIntersectsFullRiskArea(this.TopHeader()) | FindHeaderIntersectsFullRiskArea(this.MiddleHeader()) | FindHeaderIntersectsFullRiskArea(this.BottomHeader());
+                            // bool onTouch = r.FindHeaderIntersectsFullRiskAreaCv(thCV) | r.FindHeaderIntersectsFullRiskAreaCv(mdCV) | r.FindHeaderIntersectsFullRiskAreaCv(bhCV);
 
-                        bool onTouch0 = r.FindHeaderInsideCircleArea(mdCV0, 2 * WSCv);
-                        bool onTouch1 = r.FindHeaderInsideCircleArea(mdCV1, 2 * WSCv);
-                        bool onTouch2 = r.FindHeaderInsideCircleArea(mdCV2, 2 * WSCv);
-                        if (onTouch0 || onTouch1 || onTouch2)
-                        {
-                            //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");
-                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
-                            robot = r;
-                            break;
-                        }
-                        else
-                        {
-                            SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                            bool onTouch0 = r.FindHeaderInsideCircleArea(mdCV0, 2 * WSCv);
+                            bool onTouch1 = r.FindHeaderInsideCircleArea(mdCV1, 2 * WSCv);
+                            bool onTouch2 = r.FindHeaderInsideCircleArea(mdCV2, 2 * WSCv);
+                            if (onTouch0 || onTouch1 || onTouch2)
+                            {
+                                //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");
+                                SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                                robot = r;
+                                break;
+                            }
+                            else
+                            {
+                                SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                            }
                         }
                     }
                 }
@@ -405,11 +407,11 @@ namespace SeldatMRMS.Management
         }
         public void SetTrafficAtCheckIn(bool onset) // khi robot tai check in
         {
-            if (onset)
+           /* if (onset)
             {
                 onFlagSupervisorTraffic = false;
                 UpdateRiskAraParams(0, DfL2, DfWS, DfDistanceInter);
-            }
+            }*/
            /* else
             {
                 onFlagSupervisorTraffic = true;
@@ -574,7 +576,7 @@ namespace SeldatMRMS.Management
         {
             RobotBahaviorAtAnyPlace robotBahaviorAtAnyPlace= RobotBahaviorAtAnyPlace.ROBOT_PLACE_IDLE;
                 TypeZone _type = trafficManagementService.GetTypeZone(properties.pose.Position,0,200);
-           // onFlagDetectLine = true;
+                //onFlagDetectLine = true;
                 if (_type== TypeZone.HIGHWAY && onFlagDetectLine==false)
                 {
                     robotBahaviorAtAnyPlace = RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY;
@@ -595,9 +597,11 @@ namespace SeldatMRMS.Management
              switch(robotBahaviorAtAnyPlace)
             {
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_IDLE:
-                  //  SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    //  SetSpeed(RobotSpeedLevel.ROBOT_SPEED_STOP);
+                    SetSafeSmallcircle(true);
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY:
+                    SetSafeSmallcircle(true);
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(false);
                     if (CheckYellowCircle())
@@ -612,6 +616,7 @@ namespace SeldatMRMS.Management
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_ROAD:
                     // kiem tra vong tròn xanh
+                    SetSafeSmallcircle(true);
                     CheckBlueCircle();
                     if (CheckYellowCircle())
                     {
@@ -619,11 +624,13 @@ namespace SeldatMRMS.Management
                     }
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_HIGHWAY_DETECTLINE:
+                    SetSafeSmallcircle(true);
                     SetSafeBluecircle(false);
                     SetSafeYellowcircle(true);
                     SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                     break;
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER:
+                    SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);
                     CheckIntersection(false);
                     // tắt vòng tròn nhỏ
@@ -680,6 +687,10 @@ namespace SeldatMRMS.Management
         public void SetSafeBluecircle(bool flagonoff)
         {
             onFlagSafeBluecircle = flagonoff;
+        }
+        public void SetSafeSmallcircle(bool flagonoff)
+        {
+            onFlagSafeSmallcircle = flagonoff;
         }
         public void SwitchToDetectLine(bool flagonoff)
         {

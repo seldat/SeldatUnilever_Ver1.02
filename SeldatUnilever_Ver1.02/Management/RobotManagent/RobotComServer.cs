@@ -215,7 +215,7 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
 
         public bool SendCmdAreaPallet(String cmd)
         {
-            //onFlagDetectLine = true;
+            onFlagDetectLine = true;
             bool ret = false;
             JStructDataString data = new JStructDataString();
 
@@ -330,6 +330,8 @@ namespace SeldatUnilever_Ver1._02.Management.RobotManagent
         {
             try
             {
+                if ((int)ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE == message)
+                    onFlagDetectLine = false;
                 Console.WriteLine("FinishedStatesHandler :{0}", message);
                 robotLogOut.ShowText(this.properties.Label, "Finished State [" + message + "]");
                 FinishStatesCallBack(message);

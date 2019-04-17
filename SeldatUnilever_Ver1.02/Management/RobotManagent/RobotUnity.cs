@@ -297,7 +297,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             canvas.Children.Add(BlueCircleArea);
 
             YellowCircleArea = new Ellipse();
-            YellowCircleArea.Stroke = new SolidColorBrush(Colors.Yellow);
+            YellowCircleArea.Stroke = new SolidColorBrush(Colors.GreenYellow);
             canvas.Children.Add(YellowCircleArea);
             new Thread(() => {
                 while (true)

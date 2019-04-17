@@ -556,7 +556,7 @@ namespace SeldatMRMS.Management
             bool hasRobotWorking = false;
             foreach(RobotUnity robot in RobotUnitylist)
             {
-                if(trafficManagementService.DetermineArea(robot.properties.pose.Position).Equals(TypeZone.READY))
+                if(trafficManagementService.GetTypeZone(robot.properties.pose.Position,0,200)==TypeZone.READY)
                 {
                     if(robot.robotTag==RobotStatus.WORKING)
                     {

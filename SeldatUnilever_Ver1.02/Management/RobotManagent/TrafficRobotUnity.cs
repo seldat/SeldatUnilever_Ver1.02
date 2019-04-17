@@ -525,7 +525,24 @@ namespace SeldatMRMS.Management
                     }
                 }
             }
-            return false;
+            return hasRobot;
+        }
+        public RobotUnity DetermineRobotInWorkingZone(Point anyPoint)
+        {
+            RobotUnity robot = null;
+            String nameZone = trafficManagementService.DetermineArea(anyPoint);
+            if (nameZone != "")
+            {
+                foreach (RobotUnity r in RobotUnitylist)
+                {
+                    if (r.robotRegistryToWorkingZone.WorkingZone.Equals(nameZone))
+                    {
+                        robot = r;
+                        break;
+                    }
+                }
+            }
+            return robot;
         }
         // set zonename Robot will working
         public void SetWorkingZone(String nameZone)
@@ -546,10 +563,45 @@ namespace SeldatMRMS.Management
                 return true;
             else
             {
-                String nameZone = trafficManagementService.DetermineArea(anyPoint);
-                SetWorkingZone(nameZone);
-                return false; // available
+                String nameZone = trafficManagementService.DetermineArea(anyPoint,0,200);
+                if (nameZone != "")
+                {
+                    SetWorkingZone(nameZone);
+                    return false; // available
+                }
+                return true;
             }
+        }
+        public bool CheckInGateFromReadyZoneBehavior(Point anyPoint)
+        {
+            bool reg = true;
+            if (anyPoint == null)
+                return true; // un available
+            RobotUnity robot = DetermineRobotInWorkingZone(anyPoint);
+            if (robot!=null)
+            {
+                if(trafficManagementService.HasRobotUnityinArea("GATE_CHECKOUT",robot))
+                {
+                    return true;
+                }
+                else
+                {
+                    robotRegistryToWorkingZone.Release();
+                    reg = false;
+                }
+                
+            }
+            if(reg)
+            {
+                String nameZone = trafficManagementService.DetermineArea(anyPoint, 0, 200);
+                if (nameZone != "")
+                {
+                    SetWorkingZone(nameZone);
+                    return false; // available
+                }
+
+            }
+            return true;
         }
         public bool CheckRobotWorkinginReady()
         {
@@ -632,6 +684,7 @@ namespace SeldatMRMS.Management
                 case RobotBahaviorAtAnyPlace.ROBOT_PLACE_BUFFER:
                     SetSafeSmallcircle(false);
                     SetSafeBluecircle(false);
+                    SetSafeYellowcircle(false);
                     CheckIntersection(false);
                     // tắt vòng tròn nhỏ
                     break;

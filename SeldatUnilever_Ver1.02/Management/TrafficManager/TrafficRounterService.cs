@@ -40,6 +40,8 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             ROAD,
             READY,
             OPZ, // Operation Zone
+            GATE_CHECKOUT,
+            GATE_CHECKINT,
 
         }
         public ListCollectionView Grouped_PropertiesTrafficZoneList { get; private set; }
@@ -386,6 +388,22 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
             return zoneName;
         }
+        public String DetermineArea(Point position,int min, int max)
+        {
+            String zoneName = "";
+            foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
+            {
+                if (r.Index >= min && r.Index <= max)
+                {
+                    if (ExtensionService.IsInPolygon(r.GetZone(), position))
+                    {
+                        zoneName = r.NameId;
+                        break;
+                    }
+                }
+            }
+            return zoneName;
+        }
         public TypeZone GetTypeZone(Point position,int min,int max)
         {
             TypeZone _type=TypeZone.IDLE;
@@ -416,14 +434,14 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
             return dir;
         }
-        public bool HasRobotUnityinArea(Point goal)
+        public bool HasRobotUnityinArea(Point goal,int min,int max)
         {
             String zoneName = "";
             bool hasRobot = false;
             foreach (var r in ZoneRegisterList.Values) // xác định khu vực đến
             {
 
-                if (r.Index < HasRobotUnityinAreaValue)
+                if (r.Index >=min && r.Index<=max)
                 {
                    // Console.WriteLine("-----------------" + goal.ToString());
                    // Console.WriteLine("--- "+ r.NameId + "--- "+ JsonConvert.SerializeObject(r.GetZone()).ToString());
@@ -497,7 +515,15 @@ namespace SelDatUnilever_Ver1._00.Management.TrafficManager
             }
             return hasRobot;
         }
-
+        public bool HasRobotUnityinArea(String AreaName,RobotUnity robot)
+        {
+            bool hasRobot = false;
+            if (ExtensionService.IsInPolygon(ZoneRegisterList[AreaName].GetZone(), robot.properties.pose.Position))
+             {
+                    hasRobot = true;
+             }
+            return hasRobot;
+        }
         public bool RobotIsInArea(String AreaName, Point position)
         {
             bool ret = false;

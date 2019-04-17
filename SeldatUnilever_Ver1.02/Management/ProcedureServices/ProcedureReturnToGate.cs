@@ -136,7 +136,7 @@ namespace SeldatMRMS
                     case ReturnToGate.RETGATE_ROBOT_WAITTING_ZONE_RETURN_READY: // doi khu vuc buffer san sang de di vao
                         try
                         {
-                            if (false == Traffic.HasRobotUnityinArea(ReToGate.GetFrontLineReturn().Position))
+                            if (false == robot.CheckInZoneBehavior(ReToGate.GetFrontLineReturn().Position))
                             {
                                 if (rb.SendPoseStamped(ReToGate.GetFrontLineReturn()))
                                 {
@@ -229,7 +229,7 @@ namespace SeldatMRMS
                         }
                         break;
                     case ReturnToGate.RETGATE_ROBOT_CAME_CHECKIN_GATE: // đã đến vị trí, kiem tra va cho khu vuc cong san sang de di vao.
-                        if (false == Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position))
+                        if (false == robot.CheckInZoneBehavior(ds.config.PointFrontLine.Position))
                         {
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = false;
                             if (rb.SendPoseStamped(ds.config.PointFrontLine))

@@ -456,6 +456,9 @@ namespace SeldatMRMS
         public void Destroy()
         {
             // StateRobotGoToReady = RobotGoToReady.ROBREA_ROBOT_RELEASED;
+            robot.SetSafeYellowcircle(false);
+            robot.SetSafeBluecircle(false);
+            robot.SetSafeSmallcircle(false);
             robot.robotTag = RobotStatus.IDLE;
             robot.prioritLevel.OnAuthorizedPriorityProcedure = false;
             ProRun = false;
@@ -521,6 +524,9 @@ namespace SeldatMRMS
                         break;
                     case RobotGoToReady.ROBREA_ROBOT_RELEASED:
                         robot.robotTag = RobotStatus.IDLE;
+                        robot.SetSafeYellowcircle(false);
+                        robot.SetSafeBluecircle(false);
+                        robot.SetSafeSmallcircle(false);
                         robot.TurnOnSupervisorTraffic(false);
                         rb.PreProcedureAs = ProcedureControlAssign.PRO_READY;
                         // if (errorCode == ErrorCode.RUN_OK) {

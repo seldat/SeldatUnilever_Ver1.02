@@ -464,6 +464,7 @@ namespace SeldatMRMS.Management.RobotManagent {
             properties.IsConnected = false;
             robotService.RemoveRobotUnityReadyList(this);
             robotService.RemoveRobotUnityWaitTaskList(this);
+            robotRegistryToWorkingZone.Release();
             setColorRobotStatus(RobotStatusColorCode.ROBOT_STATUS_DISCONNECT);
         }
         public void SetOnOffTrafficMenu(object sender, RoutedEventArgs e)

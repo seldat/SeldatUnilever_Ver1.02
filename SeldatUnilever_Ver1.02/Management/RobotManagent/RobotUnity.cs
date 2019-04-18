@@ -376,9 +376,14 @@ namespace SeldatMRMS.Management.RobotManagent {
                 TypeZone typezone = trafficManagementService.GetTypeZone(properties.pose.Position, 0, 200);
                 double angle = -properties.pose.Angle;
                 Point position = Global_Object.CoorLaser(properties.pose.Position);
-                border.ToolTip = "Name: "+properties.Label + Environment.NewLine + "Zone: "+typezone +
-                    Environment.NewLine +"Location: "+ position.X.ToString("0.00") + " / " +
-                    position.Y.ToString("0.00") + " / " + angle.ToString("0.00");
+                border.ToolTip = "Name: " + properties.Label + Environment.NewLine + "Zone: " + typezone +
+                    Environment.NewLine + "Location: " + position.X.ToString("0.00") + " / " +
+                    position.Y.ToString("0.00") + " / " + angle.ToString("0.00") + Environment.NewLine +
+                    "Working Zone:" + robotRegistryToWorkingZone.WorkingZone +
+                    "Radius _S"+ Radius_S + Environment.NewLine+
+                    "Radius _Y" + Radius_Y + Environment.NewLine + 
+                    "Radius _B" + Radius_B + Environment.NewLine  ; 
+                    ;
             }
             catch { }
         }

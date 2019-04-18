@@ -162,11 +162,11 @@ namespace SeldatMRMS.Management
             RobotUnity robot = null; 
             if (turnon)
             {
-                if (RobotUnityRiskList.Count > 0)
+                if (RobotUnitylist.Count > 0)
                 {
-                    foreach (RobotUnity r in RobotUnityRiskList.Values)
+                    foreach (RobotUnity r in RobotUnitylist)
                     {
-                        if (r.onFlagSafeSmallcircle)
+                        //if (r.onFlagSafeSmallcircle)
                         {
                             Point thCV = TopHeaderCv();
                             Point mdCV0 = MiddleHeaderCv();
@@ -188,7 +188,7 @@ namespace SeldatMRMS.Management
                             }
                             else
                             {
-                                SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
+                               // SetSpeed(RobotSpeedLevel.ROBOT_SPEED_NORMAL);
                             }
                         }
                     }
@@ -513,7 +513,7 @@ namespace SeldatMRMS.Management
         public bool FindRobotInWorkingZone(Point anyPoint)
         {
             bool hasRobot = false;
-            String nameZone = trafficManagementService.DetermineArea(anyPoint);
+            String nameZone = trafficManagementService.DetermineArea(anyPoint,0,200);
             if(nameZone!="")
             {
                 foreach(RobotUnity r in RobotUnitylist )
@@ -530,7 +530,7 @@ namespace SeldatMRMS.Management
         public RobotUnity DetermineRobotInWorkingZone(Point anyPoint)
         {
             RobotUnity robot = null;
-            String nameZone = trafficManagementService.DetermineArea(anyPoint);
+            String nameZone = trafficManagementService.DetermineArea(anyPoint,0,200);
             if (nameZone != "")
             {
                 foreach (RobotUnity r in RobotUnitylist)
@@ -685,11 +685,12 @@ namespace SeldatMRMS.Management
         {
             foreach(RobotUnity r in RobotUnitylist)
             {
-                if (prioritLevel.IndexOnMainRoad== r.prioritLevel.IndexOnMainRoad)
+                if ( r.prioritLevel.IndexOnMainRoad >=prioritLevel.IndexOnMainRoad )
                 {
                     // va chạm vòng tròn an toàn nhỏ ra quyết định ngưng robot
                     CheckIntersection(true);
                 }
+
                 else
                 {
                     // kiểm tra có robot nào nằm trong vòng tròn an toàn này kg?

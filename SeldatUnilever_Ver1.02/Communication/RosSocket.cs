@@ -45,8 +45,6 @@ namespace SeldatMRMS.Management.RobotManagent
         public int timeOutReConnection = 0;
         protected virtual void OnClosedEvent(object sender, CloseEventArgs e)
         {
-            if (timeOutReConnection++<10)
-            {
                 if (!IsDisposed)
                 {
 
@@ -59,12 +57,6 @@ namespace SeldatMRMS.Management.RobotManagent
 
 
                 }
-                else
-                {
-                    timeOutReConnection = 0;
-                    Dispose();
-                }
-            }
         }
         protected virtual void OnOpenedEvent() { }
         public String url { get; set; }
@@ -144,7 +136,8 @@ namespace SeldatMRMS.Management.RobotManagent
                 Unsubscribe(subscribers.First().Key);
             try
             {
-                webSocket.Close();
+                if(webSocket.IsAlive)
+                     webSocket.Close();
             }
             catch { }
         }

@@ -176,9 +176,9 @@ namespace SeldatMRMS.Management
                             // bool onTouch= FindHeaderIntersectsFullRiskArea(this.TopHeader()) | FindHeaderIntersectsFullRiskArea(this.MiddleHeader()) | FindHeaderIntersectsFullRiskArea(this.BottomHeader());
                             // bool onTouch = r.FindHeaderIntersectsFullRiskAreaCv(thCV) | r.FindHeaderIntersectsFullRiskAreaCv(mdCV) | r.FindHeaderIntersectsFullRiskAreaCv(bhCV);
 
-                            bool onTouch0 = r.FindHeaderInsideCircleArea(mdCV0, 2 * WSCv);
-                            bool onTouch1 = r.FindHeaderInsideCircleArea(mdCV1, 2 * WSCv);
-                            bool onTouch2 = r.FindHeaderInsideCircleArea(mdCV2, 2 * WSCv);
+                            bool onTouch0 = r.FindHeaderInsideCircleArea(mdCV0, 2 * Radius_S);
+                            bool onTouch1 = r.FindHeaderInsideCircleArea(mdCV1, 2 * Radius_S);
+                            bool onTouch2 = r.FindHeaderInsideCircleArea(mdCV2, 2 * Radius_S);
                             if (onTouch0 || onTouch1 || onTouch2)
                             {
                                 //  robotLogOut.ShowTextTraffic(r.properties.Label+" => CheckIntersection");
@@ -574,24 +574,15 @@ namespace SeldatMRMS.Management
         }
         public bool CheckInGateFromReadyZoneBehavior(Point anyPoint)
         {
-            bool reg = true;
             if (anyPoint == null)
                 return true; // un available
             RobotUnity robot = DetermineRobotInWorkingZone(anyPoint);
             if (robot!=null)
             {
-                if(trafficManagementService.HasRobotUnityinArea("GATE_CHECKOUT",robot))
-                {
-                    return true;
-                }
-                else
-                {
-                    robotRegistryToWorkingZone.Release();
-                    reg = false;
-                }
+                return true;
                 
             }
-            if(reg)
+            else
             {
                 String nameZone = trafficManagementService.DetermineArea(anyPoint, 0, 200);
                 if (nameZone != "")

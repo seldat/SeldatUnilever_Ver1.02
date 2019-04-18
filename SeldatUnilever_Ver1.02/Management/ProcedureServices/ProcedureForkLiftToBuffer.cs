@@ -339,6 +339,11 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
+
+                        if (!Traffic.HasRobotUnityinArea("GATE_CHECKOUT", robot))
+                        {
+                            robot.ReleaseWorkingZone();
+                        }
                         if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                         //if (rb.checkNewPci())
                         //{
@@ -464,6 +469,10 @@ namespace SeldatMRMS
                     case ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
                         try
                         {
+                            if (!Traffic.HasRobotUnityinArea("GATE_CHECKOUT", robot))
+                            {
+                                robot.ReleaseWorkingZone();
+                            }
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                                 //if (robot.ReachedGoal())
                             {

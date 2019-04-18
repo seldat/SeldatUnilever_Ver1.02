@@ -245,6 +245,10 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
                         try
                         {
+                            if (!Traffic.HasRobotUnityinArea("GATE_CHECKOUT", robot) )
+                            {
+                                robot.ReleaseWorkingZone();
+                            }
                             if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
                             //if (robot.ReachedGoal())
                             {

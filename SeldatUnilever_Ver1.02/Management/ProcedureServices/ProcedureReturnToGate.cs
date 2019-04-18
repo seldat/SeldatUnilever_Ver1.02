@@ -83,7 +83,7 @@ namespace SeldatMRMS
                         {
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                             {
-                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE))
+                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_RIGHT))
                                 {
                                     Stopwatch sw = new Stopwatch();
                                     sw.Start();
@@ -187,7 +187,6 @@ namespace SeldatMRMS
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             ReToGate.UpdatePalletState(PalletStatus.F);
-                            //  rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_RETURN;
                             robot.ShowText("RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_RETURN");
                         }
@@ -283,7 +282,6 @@ namespace SeldatMRMS
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             // ReToGate.UpdatePalletState(PalletStatus.W);
-                            //  rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateReturnToGate = ReturnToGate.RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
                             robot.ShowText("RETGATE_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE");
                         }

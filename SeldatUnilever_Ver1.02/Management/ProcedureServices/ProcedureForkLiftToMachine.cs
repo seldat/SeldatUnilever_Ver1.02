@@ -74,50 +74,48 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case ForkLiftToMachine.FORMACH_ROBOT_GOTO_CHECKIN_GATE: //gui toa do di den khu vuc checkin cong
                         if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                         {
-                            rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
-                            Stopwatch sw = new Stopwatch();
-                            sw.Start();
-                            do
+                            if (false == Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position))
                             {
-                                if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_LEFT))
                                 {
-                                    resCmd = ResponseCommand.RESPONSE_NONE;
-                                    if (Traffic.RobotIsInArea("OPA4", rb.properties.pose.Position))
+                                    Stopwatch sw = new Stopwatch();
+                                    sw.Start();
+                                    do
                                     {
-                                        rb.SendPoseStamped(ds.config.PointFrontLine);
-                                        StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_CAME_CHECKIN_GATE;
-                                        robot.ShowText("FORMACH_ROBOT_CAME_CHECKIN_GATE");
-                                    }
-                                    else
-                                    {
-                                        rb.SendPoseStamped(ds.config.PointCheckInGate);
-                                        StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
-                                        robot.ShowText("FORMACH_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
-                                    }
-                                    break;
+                                        if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                        {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
+                                            if (rb.SendPoseStamped(ds.config.PointFrontLine))
+                                            {
+                                                StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE;
+                                                robot.ShowText("FORMACH_ROBOT_WAITTING_GOTO_GATE");
+                                            }
+                                            break;
+                                        }
+                                        else if (resCmd == ResponseCommand.RESPONSE_ERROR)
+                                        {
+                                            errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                            CheckUserHandleError(this);
+                                            break;
+                                        }
+                                        if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
+                                        {
+                                            errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                            CheckUserHandleError(this);
+                                            break;
+                                        }
+                                        Thread.Sleep(100);
+                                    } while (true);
+                                    sw.Stop();
                                 }
-                                else if (resCmd == ResponseCommand.RESPONSE_ERROR)
-                                {
-                                    errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                    CheckUserHandleError(this);
-                                    break;
-                                }
-                                if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
-                                {
-                                    errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                    CheckUserHandleError(this);
-                                    break;
-                                }
-                                Thread.Sleep(100);
-                            } while (true);
-                            sw.Stop();
+                            }
                         }
                         else
                         {
                             if (Traffic.RobotIsInArea("OPA4", rb.properties.pose.Position))
                             {
                                 rb.SendPoseStamped(ds.config.PointFrontLine);
-                                StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_CAME_CHECKIN_GATE;
+                                StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE;
                                 robot.ShowText("FORMACH_ROBOT_CAME_CHECKIN_GATE");
                             }
                             else
@@ -129,8 +127,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
-                        // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if (robot.ReachedGoal())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (robot.ReachedGoal())
                         {
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -153,8 +151,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         }
                         break;
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOTO_GATE:
-                        //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if (robot.ReachedGoal())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        //if (robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -190,7 +188,6 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             // FlToMach.UpdatePalletState(PalletStatus.F);
-                            //   rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateForkLiftToMachine = ForkLiftToMachine.FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE;
                             robot.ShowText("FORMACH_ROBOT_WAITTING_GOBACK_FRONTLINE_GATE");
                         }
@@ -241,8 +238,8 @@ namespace SeldatUnilever_Ver1._02.Management.ProcedureServices
                     case ForkLiftToMachine.FORMACH_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
                         try
                         {
-                            //  if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if (robot.ReachedGoal())
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (robot.ReachedGoal())
                             {
 
                                 //robot.TurnOnCtrlSelfTraffic(false);

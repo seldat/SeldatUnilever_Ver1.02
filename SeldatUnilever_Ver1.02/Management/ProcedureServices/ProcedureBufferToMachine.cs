@@ -123,7 +123,7 @@ namespace SeldatMRMS
                             if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                             {
 
-                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE))
+                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_RIGHT))
                                 {
                                     Stopwatch sw = new Stopwatch();
                                     sw.Start();
@@ -173,10 +173,11 @@ namespace SeldatMRMS
                         }
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
-
-                        bool onComePoint = robot.ReachedGoal();
-                       // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && onComePoint==true )
-                        if (onComePoint)
+                        //if (rb.checkNewPci())
+                        //{
+                        //    bool onComePoint = robot.ReachedGoal(rb.getPointCheckInConfirm());
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        //if (onComePoint)
                         {
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -184,6 +185,7 @@ namespace SeldatMRMS
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY;
                             robot.ShowText("BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY");
                         }
+                        //}
                         break;
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try
@@ -208,9 +210,9 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         try
                         {
-                            bool onComePoint2 = robot.ReachedGoal();
-                            // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if (onComePoint2)
+                            //bool onComePoint2 = robot.ReachedGoal();
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (onComePoint2)
                             {
                                 robot.TurnOnCtrlSelfTraffic(false);
                                 resCmd = ResponseCommand.RESPONSE_NONE;
@@ -263,7 +265,6 @@ namespace SeldatMRMS
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             BfToMa.UpdatePalletState(PalletStatus.F);
                             onUpdatedPalletState = true;
-                            //         rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER;
                             robot.ShowText("BUFMAC_ROBOT_WAITTING_GOBACK_FRONTLINE_BUFFER");
                         }
@@ -302,9 +303,9 @@ namespace SeldatMRMS
                     case BufferToMachine.BUFMAC_ROBOT_GOTO_FRONTLINE_DROPDOWN_PALLET:
                         try
                         {
-                            bool onComePoint3 = robot.ReachedGoal();
-                            //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if (onComePoint3)
+                            //bool onComePoint3 = robot.ReachedGoal();
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if (onComePoint3)
                             {
                                 robot.TurnOnCtrlSelfTraffic(false);
                                 if (rb.SendCmdAreaPallet(BfToMa.GetInfoOfPalletMachine(PistonPalletCtrl.PISTON_PALLET_DOWN)))
@@ -336,7 +337,6 @@ namespace SeldatMRMS
                         if (resCmd == ResponseCommand.RESPONSE_LINEDETECT_PALLETDOWN)
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
-                            //rb.SendCmdPosPallet (RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE);
                             StateBufferToMachine = BufferToMachine.BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE;
                             robot.ShowText("BUFMAC_ROBOT_WAITTING_GOTO_FRONTLINE");
                         }

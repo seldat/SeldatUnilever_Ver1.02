@@ -142,48 +142,40 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_GOTO_CHECKIN_GATE: //gui toa do di den khu vuc checkin cong
                         if (rb.PreProcedureAs == ProcedureControlAssign.PRO_READY)
                         {
-                            if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE))
+                            if (false == Traffic.HasRobotUnityinArea(ds.config.PointFrontLine.Position))
                             {
-                                Stopwatch sw = new Stopwatch();
-                                sw.Start();
-                                do
+                                if (rb.SendCmdPosPallet(RequestCommandPosPallet.REQUEST_GOBACK_FRONTLINE_TURN_LEFT))
                                 {
-                                    if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
+                                    Stopwatch sw = new Stopwatch();
+                                    sw.Start();
+                                    do
                                     {
-                                        resCmd = ResponseCommand.RESPONSE_NONE;
-                                        if (Traffic.RobotIsInArea("OPA4", rb.properties.pose.Position))
+                                        if (resCmd == ResponseCommand.RESPONSE_FINISH_GOBACK_FRONTLINE)
                                         {
+                                            resCmd = ResponseCommand.RESPONSE_NONE;
                                             if (rb.SendPoseStamped(ds.config.PointFrontLine))
                                             {
-                                                StateForkLift = ForkLift.FORBUF_ROBOT_CAME_CHECKIN_GATE;
-                                                robot.ShowText("FORBUF_ROBOT_CAME_CHECKIN_GATE");
+                                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE;
+                                                robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_GATE");
                                             }
+                                            break;
                                         }
-                                        else
+                                        else if (resCmd == ResponseCommand.RESPONSE_ERROR)
                                         {
-                                            if (rb.SendPoseStamped(ds.config.PointCheckInGate))
-                                            {
-                                                StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE;
-                                                robot.ShowText("FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE");
-                                            }
+                                            errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                            CheckUserHandleError(this);
+                                            break;
                                         }
-                                        break;
-                                    }
-                                    else if (resCmd == ResponseCommand.RESPONSE_ERROR)
-                                    {
-                                        errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        CheckUserHandleError(this);
-                                        break;
-                                    }
-                                    if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
-                                    {
-                                        errorCode = ErrorCode.DETECT_LINE_ERROR;
-                                        CheckUserHandleError(this);
-                                        break;
-                                    }
-                                    Thread.Sleep(100);
-                                } while (true);
-                                sw.Stop();
+                                        if (sw.ElapsedMilliseconds > TIME_OUT_WAIT_GOTO_FRONTLINE)
+                                        {
+                                            errorCode = ErrorCode.DETECT_LINE_ERROR;
+                                            CheckUserHandleError(this);
+                                            break;
+                                        }
+                                        Thread.Sleep(100);
+                                    } while (true);
+                                    sw.Stop();
+                                }
                             }
                         }
                         else
@@ -208,8 +200,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_GATE:
-                       // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if ( robot.ReachedGoal())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                            //if ( robot.ReachedGoal())
                         {
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -234,8 +226,8 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_GATE:
-                        //if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if ( robot.ReachedGoal())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        //if ( robot.ReachedGoal())
                         {
                             resCmd = ResponseCommand.RESPONSE_NONE;
                             rb.prioritLevel.OnAuthorizedPriorityProcedure = true;
@@ -344,8 +336,10 @@ namespace SeldatMRMS
                         }
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_GOTO_CHECKIN_BUFFER: // doi robot di den khu vuc checkin cua vung buffer
-                       // if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                        if (robot.ReachedGoal())
+                        if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                        //if (rb.checkNewPci())
+                        //{
+                        //    if (robot.ReachedGoal(rb.getPointCheckInConfirm()))
                         {
                             robot.SetTrafficAtCheckIn(true);
                             resCmd = ResponseCommand.RESPONSE_NONE;
@@ -353,6 +347,7 @@ namespace SeldatMRMS
                             StateForkLift = ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY;
                             robot.ShowText("FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY");
                         }
+                        //}
                         break;
                     case ForkLift.FORBUF_ROBOT_WAITTING_ZONE_BUFFER_READY: // doi khu vuc buffer san sang de di vao
                         try
@@ -379,9 +374,9 @@ namespace SeldatMRMS
                     case ForkLift.FORBUF_ROBOT_WAITTING_CAME_FRONTLINE_BUFFER:
                         try
                         {
-                          //  if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                                if (robot.ReachedGoal())
-                                {
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                                //if (robot.ReachedGoal())
+                            {
                                 resCmd = ResponseCommand.RESPONSE_NONE;
                                 if (rb.SendCmdAreaPallet(FlToBuf.GetInfoOfPalletBuffer(PistonPalletCtrl.PISTON_PALLET_DOWN, true)))
                                 {
@@ -464,8 +459,8 @@ namespace SeldatMRMS
                     case ForkLift.FORMAC_ROBOT_WAITTING_CAME_FRONTLINE_MACHINE:
                         try
                         {
-                            //  if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT && robot.ReachedGoal())
-                            if (robot.ReachedGoal())
+                            if (resCmd == ResponseCommand.RESPONSE_LASER_CAME_POINT)
+                                //if (robot.ReachedGoal())
                             {
                                 robot.TurnOnCtrlSelfTraffic(false);
                                 if (rb.SendCmdAreaPallet(flToMachineInfo.infoPallet))

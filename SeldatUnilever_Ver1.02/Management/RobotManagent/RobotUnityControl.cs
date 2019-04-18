@@ -140,9 +140,10 @@ namespace SeldatMRMS.Management.RobotManagent
             REQUEST_TURN_LEFT = 1210,
             REQUEST_TURN_RIGHT = 1211,
             REQUEST_FORWARD_DIRECTION = 1212,
-            REQUEST_GOBACK_FRONTLINE = 1213,
+            REQUEST_GOBACK_FRONTLINE_TURN_RIGHT = 1213,
             REQUEST_TURNOFF_PC = 1214,
-            REQUEST_DROPDOWN_PALLET = 1216
+            REQUEST_DROPDOWN_PALLET = 1216,
+            REQUEST_GOBACK_FRONTLINE_TURN_LEFT = 1217,
         }
 
         public enum ResponseCommand
